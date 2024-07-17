@@ -153,6 +153,20 @@ function CustomerCreate() {
                 />
               </Form.Item>
             </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                    <Form.Item
+                      label="ที่อยู่"
+                      name="address"
+                      rules={[
+                        {
+                          required: true,
+                          message: "กรุณากรอกที่อยู่ !",
+                        },
+                      ]}
+                    >
+                      <Input.TextArea />
+                    </Form.Item>
+                  </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label="เพศ"

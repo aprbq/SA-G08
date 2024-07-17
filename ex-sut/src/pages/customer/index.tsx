@@ -66,7 +66,11 @@ function Customers() {
       dataIndex: "age",
       key: "age",
     },
-
+    {
+      title: "ที่อยู่",
+      dataIndex: "address",
+      key: "address",
+    },
     {
       title: "เพศ",
       key: "gender",

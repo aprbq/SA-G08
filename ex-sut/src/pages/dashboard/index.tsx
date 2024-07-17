@@ -32,6 +32,11 @@ const columns: ColumnsType<DataType> = [
     key: "email",
   },
   {
+    title: "ที่อยู่",
+    dataIndex: "address",
+    key: "address",
+  },
+  {
     title: "เบอร์โทร",
     dataIndex: "Phone",
     key: "phone",
