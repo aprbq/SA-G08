@@ -12,7 +12,7 @@ type Employee struct {
 	Email string
 	FirstName string
 	LastName string
-	gender string
+	Gender string
 	Role string
 
 	Member []Member `gorm:"foreignKey:EmployeeID"`
