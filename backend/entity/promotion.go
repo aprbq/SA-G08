@@ -1,22 +1,24 @@
 package entity
 
 import (
-
 	"time"
+
 	"gorm.io/gorm"
 )
 
 type Promotion struct {
 	gorm.Model
 	PromotionName string
-	Description string
-	StartDate time.Time
-	End_Date time.Time
-	PointsAdded int
-	PointsUse int
+	Description   string
+	StartDate     time.Time
+	End_Date      time.Time
+	PointsAdded   int
+	PointsUse     int
 	DiscountValue int
-	DiscountType string
-	Status string
+	DiscountType  string
+	Status        string
+
+	PointsTransactions []PointsTransactions `gorm:"foreignKey:PromotionID"`
 
 	OrderID *uint
 	Order   Order `gorm:"foriegnKey:OrderID"`
@@ -26,5 +28,4 @@ type Promotion struct {
 
 	EmployeeID *uint
 	Employee   Employee `gorm:"foriegnKey:EmployeeID"`
-
 }
