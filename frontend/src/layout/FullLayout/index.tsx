@@ -73,10 +73,10 @@ const FullLayout: React.FC = () => {
               />
             </div>
             <Menu
-              theme="dark"
+              theme="light"
               defaultSelectedKeys={[page ? page : "dashboard"]}
               mode="inline"
-              style={{ backgroundColor: "#745F47" }}
+              className="custom-menu"
             >
               <Menu.Item
                 key="dashboard"

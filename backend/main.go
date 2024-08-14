@@ -6,6 +6,8 @@ import (
     "example.com/sa-67-example/config"
     "example.com/sa-67-example/controller/genders"
     "example.com/sa-67-example/controller/users"
+	"example.com/sa-67-example/controller/ingredients"
+	"example.com/sa-67-example/controller/class"
     "example.com/sa-67-example/middlewares"
 	"example.com/sa-67-example/entity"
 	"gorm.io/driver/sqlite"
@@ -40,10 +42,15 @@ func main() {
 		 router.GET("/users", users.GetAll)
 		 router.GET("/user/:id", users.Get)
 		 router.DELETE("/user/:id", users.Delete)
+
+		 router.PUT("/ingredient/:id", ingredients.Update)
+        router.GET("/ingredient", ingredients.GetAll)
+        router.GET("/ingredient/:id", ingredients.Get)
+        router.DELETE("/ingredient/:id", ingredients.Delete)
 	 }
  
 	 r.GET("/genders", genders.GetAll)
- 
+	 r.GET("/class", class.GetAll)
 	 r.GET("/", func(c *gin.Context) {
 		 c.String(http.StatusOK, "API RUNNING... PORT: %s", PORT)
 	 })
@@ -53,7 +60,7 @@ func main() {
 
 
 	// Migrate the schema
-	db.AutoMigrate(&entity.Employee{}, &entity.Class{}, &entity.Category{},
+	db.AutoMigrate(&entity.Genders{},&entity.Users{}, &entity.Employee{},&entity.Class{}, &entity.Category{},
 		&entity.Payments{}, &entity.Member{}, &entity.Menu{},&entity.Ingredients{},
 		&entity.MenuIngredient{}, &entity.Order{}, &entity.OrderItem{},
 		&entity.OrderHasMenu{}, &entity.Condition{}, &entity.Promotion{},

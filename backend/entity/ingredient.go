@@ -16,9 +16,9 @@ type Ingredients struct {
 	Supplier  	string 	  	`json:"supplier"`
 	ExpDate  	time.Time 	`json:"exp_date"` 
 
-	ClassID  	uint     	
-	Class    	*Class   	`gorm:"foreignKey: ClassID"`
+	ClassID  	uint		`json:"class_id"`
+	Class    	*Class   	`gorm:"foreignKey:ClassID"`
 
-	EmployeeID *uint
-	Employee   Employee `gorm:"foriegnKey:EmployeeID"`
+	UsersID 	uint		`json:"users_id"`
+	Users    	*Users   	`gorm:"foreignKey:UsersID"`
 }

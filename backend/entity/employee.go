@@ -19,6 +19,6 @@ type Employee struct {
 	Promotion []Promotion `gorm:"foreignKey:EmployeeID"`
 	Order []Order `gorm:"foreignKey:EmployeeID"`
 	Menu []Menu `gorm:"foreignKey:EmployeeID"`
-	Ingredients []Ingredients `gorm:"foreignKey:EmployeeID"`
+	//Ingredients []Ingredients `gorm:"foreignKey:EmployeeID"`
 
 }

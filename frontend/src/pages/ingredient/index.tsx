@@ -14,8 +14,6 @@ function Ingredients() {
   const myId = localStorage.getItem("id");
 
   const columns: ColumnsType<IngredientInterface> = [
-
-
     {
       title: "ลำดับ",
       dataIndex: "ID",
@@ -41,6 +39,7 @@ function Ingredients() {
     },
     {
       title: "ราคาต่อหน่วย",
+      dataIndex: "unit_price",
       key: "unit_price",
     },
     {
@@ -69,32 +68,37 @@ function Ingredients() {
       render: (record) => (
         <>
           <Button
+          onClick={() => navigate(`/ingredient/edit/${record.ID}`)}
             type="primary"
+            style={{ 
+              backgroundColor: "#A28B73", 
+              color: "#F8EDED" 
+            }}
             icon={<EditOutlined />}
-            onClick={() => navigate(`/ingredient/edit/${record.ID}`)}
           >
             แก้ไขข้อมูล
           </Button>
         </>
       ),
     },
+
     {
-        title: "",
-        render: (record) => (
-          <>
-            {myId == record?.ID ? (
-              <></>
-            ) : (
-              <Button
-                type="dashed"
-                danger
-                icon={<DeleteOutlined />}
-                onClick={() => deleteIngredientsById(record.ID)}
-              ></Button>
-            )}
-          </>
-        ),
-      },
+      title: "",
+      render: (record) => (
+        <>
+          {myId == record?.ID ? (
+            <></>
+          ) : (
+            <Button
+              type="dashed"
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => deleteIngredientsById(record.ID)}
+            ></Button>
+          )}
+        </>
+      ),
+    },
   ];
 
   const deleteIngredientsById = async (id: string) => {

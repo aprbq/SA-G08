@@ -58,3 +58,15 @@ body {
   width: 100%;
 
 }
+
+.custom-menu {
+  background-color: #745F47; /* สีของ bg */
+}
+
+.custom-menu .ant-menu-item {
+  color: #FFFFFF; /* เปลี่ยนสีฟอนต์ในเมนูทั้งหมด */
+}
+
+.custom-menu .ant-menu-item-selected {
+  color: #3C3C3B; /* สีฟอนต์เมื่อถูกเลือก */
+}
