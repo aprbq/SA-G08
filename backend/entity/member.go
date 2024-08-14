@@ -19,7 +19,7 @@ type Member struct {
 	Points int
 	Status string
 
-	pointstransactions []pointstransactions `gorm:"foreignKey:MemberID"`
+	PointsTransactions []PointsTransactions `gorm:"foreignKey:MemberID"`
 	EmployeeID *uint
 	Employee   Employee `gorm:"foriegnKey:EmployeeID"`
 }
