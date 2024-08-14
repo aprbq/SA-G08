@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message } from "antd";
-import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetIngredients, DeleteIngredientsById } from "../../services/https/index";
 import { IngredientInterface } from "../../interfaces/Ingre";
@@ -87,8 +87,8 @@ function Ingredients() {
         <>
           <Button
             type="primary"
-            icon={<DeleteOutlined />}
-            onClick={() => navigate(`/customer/edit/${record.ID}`)}
+            icon={<EditOutlined />}
+            onClick={() => navigate(`/ingredient/edit/${record.ID}`)}
           >
             แก้ไขข้อมูล
           </Button>
