@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "../../App.css";
-import { UserOutlined, DashboardOutlined , BoxPlotOutlined} from "@ant-design/icons";
+import { UserOutlined, DashboardOutlined , ShoppingOutlined} from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme, Button, message } from "antd";
 import logo from "../../assets/logo.png";
 import Dashboard from "../../pages/dashboard";
@@ -97,7 +97,7 @@ const FullLayout: React.FC = () => {
                 onClick={() => setCurrentPage("ingredient")}
               >
                 <Link to="/ingredient">
-                  <BoxPlotOutlined />
+                  <ShoppingOutlined />
                   <span>วัตถุดิบ</span>
                 </Link>
               </Menu.Item>
