@@ -1,5 +1,7 @@
 import { UsersInterface } from "../../interfaces/IUser";
 import { SignInInterface } from "../../interfaces/SignIn";
+import { IngredientInterface } from "../../interfaces/Ingre";
+
 import axios from "axios";
 
 const apiUrl = "http://localhost:8000";
@@ -55,6 +57,42 @@ async function CreateUser(data: UsersInterface) {
     .catch((e) => e.response);
 }
 
+// Ingredients
+async function GetIngredients() {
+  return await axios
+    .get(`${apiUrl}/ingredient`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function GetIngredientsById(id: string) {
+  return await axios
+    .get(`${apiUrl}/ingredient/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function UpdateIngredientsById(id: string, data: IngredientInterface) {
+  return await axios
+    .put(`${apiUrl}/ingredient/${id}`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function DeleteIngredientsById(id: string) {
+  return await axios
+    .delete(`${apiUrl}/ingredient/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function CreateIngredients(data: IngredientInterface) {
+  return await axios
+    .post(`${apiUrl}/signupingre`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 export {
   SignIn,
   GetUsers,
@@ -62,4 +100,9 @@ export {
   UpdateUsersById,
   DeleteUsersById,
   CreateUser,
+  GetIngredients,
+  GetIngredientsById,
+  UpdateIngredientsById,
+  DeleteIngredientsById,
+  CreateIngredients,
 };

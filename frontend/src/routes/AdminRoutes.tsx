@@ -8,6 +8,9 @@ const Dashboard = Loadable(lazy(() => import("../pages/dashboard")));
 const Customer = Loadable(lazy(() => import("../pages/customer")));
 const CreateCustomer = Loadable(lazy(() => import("../pages/customer/create")));
 const EditCustomer = Loadable(lazy(() => import("../pages/customer/edit")));
+const Ingredient = Loadable(lazy(() => import("../pages/ingredient")));
+const CreateIngredient = Loadable(lazy(() => import("../pages/ingredient/create")));
+const EditIngredient = Loadable(lazy(() => import("../pages/ingredient/edit")));
 
 const AdminRoutes = (isLoggedIn: boolean): RouteObject => {
   return {
@@ -32,6 +35,23 @@ const AdminRoutes = (isLoggedIn: boolean): RouteObject => {
           {
             path: "/customer/edit/:id",
             element: <EditCustomer />,
+          },
+        ],
+      },
+      {
+        path: "ingredient",
+        children: [
+          {
+            path: "",
+            element: <Ingredient />,
+          },
+          {
+            path: "create",
+            element: <CreateIngredient />,
+          },
+          {
+            path: "edit/:id",
+            element: <EditIngredient />,
           },
         ],
       },
