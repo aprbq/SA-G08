@@ -1,6 +1,7 @@
 import { UsersInterface } from "../../interfaces/IUser";
 import { SignInInterface } from "../../interfaces/SignIn";
 import { IngredientInterface } from "../../interfaces/Ingre";
+import { PromotionInterface } from "../../interfaces/Promotion";
 
 import axios from "axios";
 
@@ -92,6 +93,41 @@ async function CreateIngredients(data: IngredientInterface) {
     .then((res) => res)
     .catch((e) => e.response);
 }
+// Promotion
+async function GetPromotion() {
+  return await axios
+    .get(`${apiUrl}/promotion`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function GetPromotionById(id: string) {
+  return await axios
+    .get(`${apiUrl}/promotion/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function UpdatePromotionById(id: string, data: PromotionInterface) {
+  return await axios
+    .put(`${apiUrl}/promotion/${id}`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function DeletePromotionById(id: string) {
+  return await axios
+    .delete(`${apiUrl}/promotion/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function CreatePromotion(data: PromotionInterface) {
+  return await axios
+    .post(`${apiUrl}/signuppromotion`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 
 export {
   SignIn,
@@ -105,4 +141,9 @@ export {
   UpdateIngredientsById,
   DeleteIngredientsById,
   CreateIngredients,
+  GetPromotion,
+  GetPromotionById,
+  UpdatePromotionById,
+  DeletePromotionById,
+  CreatePromotion,
 };

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message } from "antd";
 import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetIngredients, DeleteIngredientsById } from "../../services/https/index";
+import { GetPromotion, DeletePromotionById } from "../../services/https/index";
 import { PromotionInterface } from "../../interfaces/Promotion";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
@@ -71,7 +71,7 @@ function Promotion() {
           <Button
             type="primary"
             icon={<EditOutlined />}
-            onClick={() => navigate(`/ingredient/edit/${record.ID}`)}
+            onClick={() => navigate(`/promotion/edit/${record.ID}`)}
           >
             แก้ไขข้อมูล
           </Button>
@@ -89,7 +89,7 @@ function Promotion() {
                 type="dashed"
                 danger
                 icon={<DeleteOutlined />}
-                onClick={() => deleteIngredientsById(record.ID)}
+                onClick={() => deletePromotionById(record.ID)}
               ></Button>
             )}
           </>
@@ -97,15 +97,15 @@ function Promotion() {
       },
   ];
 
-  const deleteIngredientsById = async (id: string) => {
-    let res = await DeleteIngredientsById(id);
+  const deletePromotionById = async (id: string) => {
+    let res = await DeletePromotionById(id);
 
     if (res.status == 200) {
       messageApi.open({
         type: "success",
         content: res.data.message,
       });
-      await getIngredients();
+      await getPromotion();
     } else {
       messageApi.open({
         type: "error",
@@ -114,12 +114,12 @@ function Promotion() {
     }
   };
 
-  const getIngredients = async () => {
-    let res = await GetIngredients();
+  const getPromotion = async () => {
+    let res = await GetPromotion();
     if (res.status == 200) {
-      setIngredients(res.data);
+      setPromotion(res.data);
     } else {
-      setIngredients([]);
+      setPromotion([]);
       messageApi.open({
         type: "error",
         content: res.data.error,
@@ -128,7 +128,7 @@ function Promotion() {
   };
 
   useEffect(() => {
-    getIngredients();
+    getPromotion();
   }, []);
 
   return (
@@ -136,7 +136,7 @@ function Promotion() {
       {contextHolder}
       <Row>
         <Col span={12}>
-          <h2>จัดการวัตถุดิบ</h2>
+          <h2>จัดการโปรโมชั่น</h2>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
@@ -160,4 +160,4 @@ function Promotion() {
     </>
   );
 }
-export default Ingredients;
+export default Promotion;
