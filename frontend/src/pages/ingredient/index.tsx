@@ -78,7 +78,6 @@ function Ingredients() {
         </>
       ),
     },
-
     {
         title: "",
         render: (record) => (
@@ -96,7 +95,6 @@ function Ingredients() {
           </>
         ),
       },
-      
   ];
 
   const deleteIngredientsById = async (id: string) => {
