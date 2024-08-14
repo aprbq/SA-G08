@@ -12,5 +12,5 @@ type Orderitem struct {
 	OrderID *uint
 	Order   Order `gorm:"foriegnKey:OrderID"`
 
-	
+	OrderHasItem []OrderHasItem `gorm:"foreignKey:OrderitemID"`
 }
