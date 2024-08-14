@@ -15,7 +15,6 @@ type Member struct {
 	Gender string
 	StartDate time.Time
 	EndtDate time.Time
-	MembershipType string
 	Points int
 	Status string
 
