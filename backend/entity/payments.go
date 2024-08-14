@@ -8,9 +8,9 @@ import (
 
 type Payments struct {
 	gorm.Model
-	Payment_Date time.Time
-	Payment_Amount float32
-	Payment_Method string
+	PaymentDate time.Time
+	PaymentAmount float32
+	PaymentMethod string
 
 	Order []Order `gorm:"foreignKey:PaymentID"`
 

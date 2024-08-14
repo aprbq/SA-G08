@@ -2,15 +2,15 @@ package entity
 
 import "gorm.io/gorm"
 
-type Orderitem struct {
+type OrderItem struct {
 	gorm.Model
-	quantity  int
-	total_item float32
+	Quantity  int
+	TotalItem float32
 	
 
 	
 	OrderID *uint
 	Order   Order `gorm:"foriegnKey:OrderID"`
 
-	OrderHasItem []OrderHasItem `gorm:"foreignKey:OrderitemID"`
+	OrderHasMenu []OrderHasMenu `gorm:"foreignKey:OrderItemID"`
 }

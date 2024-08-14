@@ -7,12 +7,12 @@ import (
 
 type Order struct {
 	gorm.Model
-	Order_Date time.Time
+	OrderDate time.Time
 	
 	
 
 	PaymentID *uint
-	Payments   Payments `gorm:"foriegnKey:Payment_ID"`
+	Payments   Payments `gorm:"foriegnKey:PaymentID"`
 
 	PromotionID *uint
 	Promotion   Promotion `gorm:"foriegnKey:PromotionID"`
