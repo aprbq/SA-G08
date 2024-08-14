@@ -2,7 +2,7 @@ package entity
 
 import "gorm.io/gorm"
 
-type Order_item struct {
+type Orderitem struct {
 	gorm.Model
 	quantity  int
 	total_item float32
