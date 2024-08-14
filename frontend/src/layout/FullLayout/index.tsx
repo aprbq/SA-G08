@@ -51,6 +51,7 @@ const FullLayout: React.FC = () => {
             flexDirection: "column",
             justifyContent: "space-between",
             height: "100%",
+            background: "#745F47"
           }}
         >
           <div>
@@ -77,7 +78,6 @@ const FullLayout: React.FC = () => {
               <Menu.Item
                 key="dashboard"
                 onClick={() => setCurrentPage("dashboard")}
-                style={{ backgroundColor: "#8C6855", color: "#E7DAC9" }}
               >
                 <Link to="/">
                   <DashboardOutlined />
@@ -116,15 +116,28 @@ const FullLayout: React.FC = () => {
 
             </Menu>
           </div>
-
-          <Button onClick={Logout} style={{ margin: 4 ,}}>
-            ออกจากระบบ
-          </Button>
         </div>
       </Sider>
 
       <Layout>
-        <Header style={{ padding: 0, backgroundColor: "#948979" }} />
+        <Header style={{ 
+            padding: "0 16px", 
+            backgroundColor: "#CEC8B6", 
+            display: "flex", 
+            justifyContent: "space-between", 
+            alignItems: "center" 
+          }}
+        >
+          <div />
+          <Button 
+            onClick={Logout} 
+            style={{ 
+              backgroundColor: "#2C2C2C", 
+              color: "#F8EDED" 
+            }}>
+            ออกจากระบบ
+          </Button>
+        </Header>
         <Content style={{ margin: "0 16px" }}>
           <Breadcrumb style={{ margin: "16px 0" }} />
           <div
