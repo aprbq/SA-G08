@@ -15,23 +15,6 @@ function Ingredients() {
 
   const columns: ColumnsType<IngredientInterface> = [
 
-    {
-      title: "",
-      render: (record) => (
-        <>
-          {myId == record?.ID ? (
-            <></>
-          ) : (
-            <Button
-              type="dashed"
-              danger
-              icon={<DeleteOutlined />}
-              onClick={() => deleteIngredientsById(record.ID)}
-            ></Button>
-          )}
-        </>
-      ),
-    },
 
     {
       title: "ลำดับ",
@@ -95,6 +78,25 @@ function Ingredients() {
         </>
       ),
     },
+
+    {
+        title: "",
+        render: (record) => (
+          <>
+            {myId == record?.ID ? (
+              <></>
+            ) : (
+              <Button
+                type="dashed"
+                danger
+                icon={<DeleteOutlined />}
+                onClick={() => deleteIngredientsById(record.ID)}
+              ></Button>
+            )}
+          </>
+        ),
+      },
+      
   ];
 
   const deleteIngredientsById = async (id: string) => {
