@@ -1,0 +1,25 @@
+package entity
+
+import (
+	"time"
+	"gorm.io/gorm"
+)
+
+type Member struct {
+	gorm.Model
+	FristName string
+	LastName string
+	Email string
+	PhoneNumber string
+	DateOfBirth time.Time
+	Gender string
+	StartDate time.Time
+	EndtDate time.Time
+	MembershipType string
+	Points int
+	Status string
+
+	pointstransactions []pointstransactions `gorm:"foreignKey:MemberID"`
+	EmployeeID *uint
+	Employee   Employee `gorm:"foriegnKey:EmployeeID"`
+}
