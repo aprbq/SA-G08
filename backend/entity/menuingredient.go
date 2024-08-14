@@ -9,5 +9,5 @@ type MenuIngredient struct {
 	IngredientsID *uint
 	Ingredients   Ingredients `gorm:"foriegnKey:IngredientsID"`
 
-	
+	Menu []Menu `gorm:"foreignKey:MenuIngredientID"`
 }
