@@ -65,6 +65,11 @@ function Promotion() {
         render: (record) => <>{record?.class?.class}</>,
     },
     {
+    title: "สถานะ",
+    key: "Status",
+    render: (record) => <>{record?.class?.class}</>,
+    },
+    {
       title: "",
       render: (record) => (
         <>

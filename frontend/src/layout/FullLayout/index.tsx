@@ -23,9 +23,6 @@ const FullLayout: React.FC = () => {
 
   const [collapsed, setCollapsed] = useState(false);
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
 
   const setCurrentPage = (val: string) => {
     localStorage.setItem("page", val);
@@ -40,12 +37,13 @@ const FullLayout: React.FC = () => {
   };
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "100vh",background: "#745F47"}}>
       {contextHolder}
       <Sider
         collapsible
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
+        style={{ background: "#745F47" }}
       >
         <div
           style={{
@@ -74,10 +72,12 @@ const FullLayout: React.FC = () => {
               theme="dark"
               defaultSelectedKeys={[page ? page : "dashboard"]}
               mode="inline"
+              style={{ backgroundColor: "#745F47" }}
             >
               <Menu.Item
                 key="dashboard"
                 onClick={() => setCurrentPage("dashboard")}
+                style={{ backgroundColor: "#8C6855", color: "#E7DAC9" }}
               >
                 <Link to="/">
                   <DashboardOutlined />
@@ -117,21 +117,22 @@ const FullLayout: React.FC = () => {
             </Menu>
           </div>
 
-          <Button onClick={Logout} style={{ margin: 4 }}>
+          <Button onClick={Logout} style={{ margin: 4 ,}}>
             ออกจากระบบ
           </Button>
         </div>
       </Sider>
 
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }} />
+        <Header style={{ padding: 0, backgroundColor: "#948979" }} />
         <Content style={{ margin: "0 16px" }}>
           <Breadcrumb style={{ margin: "16px 0" }} />
           <div
             style={{
               padding: 24,
               minHeight: "100%",
-              background: colorBgContainer,
+              background: "#CAB69F",
+
             }}
           >
             <Routes>
@@ -142,11 +143,13 @@ const FullLayout: React.FC = () => {
               <Route path="/ingredient" element={<Ingredient />} />
               <Route path="/ingredient/create" element={<IngredientCreate />} />
               <Route path="/ingredient/edit/:id" element={<IngredientEdit />} />
-              <Route path="/promotion" element={<Promotion />} />//promotion เด๋วมาทำต่อ
+              <Route path="/promotion" element={<Promotion />} />
+              <Route path="/promotion/create" element={<PromotionCreate />} />
+              <Route path="/promotion/edit/:id" element={<PromotionEdit />} />
             </Routes>
           </div>
         </Content>
-        <Footer style={{ textAlign: "center" }}>
+        <Footer style={{ textAlign: "center", backgroundColor: "#948979", color: "#5B4C43" }}>
           System Analysis and Design 1/67
         </Footer>
       </Layout>
