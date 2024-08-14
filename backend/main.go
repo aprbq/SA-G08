@@ -13,5 +13,9 @@ func main() {
 	}
 
 	// Migrate the schema
-	db.AutoMigrate(&entity.Promotion{}, &entity.Employee{}, &entity.Condition{}, &entity.Class{}, &entity.Ingredients{})
+	db.AutoMigrate(&entity.Employee{}, &entity.Class{}, &entity.Category{},
+		&entity.Payments{}, &entity.Member{}, &entity.Menu{},&entity.Ingredients{},
+		&entity.MenuIngredient{}, &entity.Order{}, &entity.OrderItem{},
+		&entity.OrderHasMenu{}, &entity.Condition{}, &entity.Promotion{},
+		&entity.PointsTransactions{})
 }

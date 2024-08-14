@@ -11,8 +11,8 @@ type Order struct {
 	
 	
 
-	PaymentID *uint
-	Payments   Payments `gorm:"foriegnKey:PaymentID"`
+	PaymentsID *uint
+	Payments   Payments `gorm:"foriegnKey:PaymentsID"`
 
 	PromotionID *uint
 	Promotion   Promotion `gorm:"foriegnKey:PromotionID"`

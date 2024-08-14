@@ -10,7 +10,7 @@ type PointsTransactions struct {
 	TransactionstDate time.Time
 	PointsUsed int
 	PointsAdd int
-	description string
+	Description string
 	MemberID *uint
 	Member   Member `gorm:"foriegnKey:MemberID"`
 	PromotionID *uint

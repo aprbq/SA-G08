@@ -4,15 +4,10 @@ import "gorm.io/gorm"
 
 type OrderHasMenu struct {
 	gorm.Model
-	
-	
 
-	
-	OrderitemID *uint
+	OrderItemID *uint
 	OrderItem   OrderItem `gorm:"foriegnKey:OrderItemID"`
 
 	MenuID *uint
 	Menu   Menu `gorm:"foriegnKey:MenuID"`
-
-	
 }

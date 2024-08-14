@@ -12,7 +12,7 @@ type Payments struct {
 	PaymentAmount float32
 	PaymentMethod string
 
-	Order []Order `gorm:"foreignKey:PaymentID"`
+	Order []Order `gorm:"foreignKey:PaymentsID"`
 
 	
 }
