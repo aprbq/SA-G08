@@ -1,4 +1,4 @@
-export interface OrderItemnInterface {
+export interface OrderItemInterface {
     ID?:            number;
     Quantity ?:     string;
     TotalItem ?:    string;
