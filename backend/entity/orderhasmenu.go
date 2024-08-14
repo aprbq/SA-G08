@@ -2,14 +2,14 @@ package entity
 
 import "gorm.io/gorm"
 
-type OrderHasItem struct {
+type OrderHasMenu struct {
 	gorm.Model
 	
 	
 
 	
 	OrderitemID *uint
-	Orderitem   Orderitem `gorm:"foriegnKey:OrderitemID"`
+	OrderItem   OrderItem `gorm:"foriegnKey:OrderItemID"`
 
 	MenuID *uint
 	Menu   Menu `gorm:"foriegnKey:MenuID"`
