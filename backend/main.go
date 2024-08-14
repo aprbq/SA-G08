@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/sa-67-example/entity"
+	"github.com/SA-G08/entity"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -13,5 +13,5 @@ func main() {
 	}
 
 	// Migrate the schema
-	db.AutoMigrate(&entity.Promotion{})
+	db.AutoMigrate(&entity.Promotion{}, &entity.Employee{}, &entity.Condition{})
 }
