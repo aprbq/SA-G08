@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "../../App.css";
-import { UserOutlined, DashboardOutlined } from "@ant-design/icons";
+import { UserOutlined, DashboardOutlined , BoxPlotOutlined} from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme, Button, message } from "antd";
 import logo from "../../assets/logo.png";
 import Dashboard from "../../pages/dashboard";
 import Customer from "../../pages/customer";
 import CustomerCreate from "../../pages/customer/create";
 import CustomerEdit from "../../pages/customer/edit";
+import Ingredient from "../../pages/ingredient";
+import IngredientCreate from "../../pages/ingredient/create";
+import IngredientEdit from "../../pages/ingredient/edit";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -88,6 +91,17 @@ const FullLayout: React.FC = () => {
                   <span>ข้อมูลสมาชิก</span>
                 </Link>
               </Menu.Item>
+
+              <Menu.Item
+                key="ingredient"
+                onClick={() => setCurrentPage("ingredient")}
+              >
+                <Link to="/ingredient">
+                  <BoxPlotOutlined />
+                  <span>วัตถุดิบ</span>
+                </Link>
+              </Menu.Item>
+
             </Menu>
           </div>
 
@@ -113,6 +127,9 @@ const FullLayout: React.FC = () => {
               <Route path="/customer" element={<Customer />} />
               <Route path="/customer/create" element={<CustomerCreate />} />
               <Route path="/customer/edit/:id" element={<CustomerEdit />} />
+              <Route path="/ingredient" element={<Ingredient />} />
+              <Route path="/ingredient/create" element={<IngredientCreate />} />
+              <Route path="/ingredient/edit/:id" element={<IngredientEdit />} />
             </Routes>
           </div>
         </Content>
