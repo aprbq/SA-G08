@@ -14,4 +14,10 @@ type Employee struct {
 	LastName string
 	Role string
 
+	Member []Member `gorm:"foreignKey:EmployeeID"`
+	Promotion []Promotion `gorm:"foreignKey:EmployeeID"`
+	Order []Order `gorm:"foreignKey:EmployeeID"`
+	Memnu []Memnu `gorm:"foreignKey:EmployeeID"`
+	Ingredient []Ingredient `gorm:"foreignKey:EmployeeID"`
+
 }
