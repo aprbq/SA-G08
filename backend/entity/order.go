@@ -19,7 +19,5 @@ type Order struct {
 
 	EmployeeID *uint
 	Employee   Employee `gorm:"foriegnKey:EmployeeID"`
-
-	//Promotion []Promotion `gorm:"foreignKey:OrderID"`
 	
 }

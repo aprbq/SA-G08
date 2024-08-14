@@ -23,5 +23,5 @@ type Menu struct {
 
 	Condition []Condition `gorm:"foreignKey:MenuID"`
 
-	Orderitem []OrderItem `gorm:"foreignKey:MenuID"`
+	OrderItem []OrderItem `gorm:"foreignKey:MenuID"`
 }
