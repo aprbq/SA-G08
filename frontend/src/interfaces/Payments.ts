@@ -1,4 +1,4 @@
-export interface PromotionInterface {
+export interface PaymentsInterface {
     ID?:                number;
     PaymentDate?:       string;
     PaymentAmount?:     string;

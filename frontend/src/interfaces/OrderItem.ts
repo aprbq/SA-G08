@@ -1,4 +1,4 @@
-export interface PromotionInterface {
+export interface OrderItemnInterface {
     ID?:            number;
     Quantity ?:     string;
     TotalItem ?:    string;
