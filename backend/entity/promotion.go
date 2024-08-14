@@ -20,8 +20,7 @@ type Promotion struct {
 
 	PointsTransactions []PointsTransactions `gorm:"foreignKey:PromotionID"`
 
-	OrderID *uint
-	Order   Order `gorm:"foriegnKey:OrderID"`
+	Order []Order `gorm:"foreignKey:PromotionID"`
 
 	ConditionID *uint
 	Condition   Condition `gorm:"foriegnKey:ConditionID"`
