@@ -11,10 +11,10 @@ type Promotion struct {
 	PromotionName string
 	Description   string
 	StartDate     time.Time
-	EndDate      time.Time
+	EndDate       time.Time
 	PointsAdded   int
 	PointsUse     int
-	DiscountValue int
+	DiscountValue float32
 	DiscountType  string
 	Status        string
 
