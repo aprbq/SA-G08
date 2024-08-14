@@ -44,7 +44,7 @@ function MenuEdit() {
         content: "ไม่พบข้อมูลวัตถุดิบ",
       });
       setTimeout(() => {
-        navigate("/Menu");
+        navigate("/menu");
       }, 2000);
     }
   };
@@ -61,7 +61,7 @@ function MenuEdit() {
         content: res.data.message,
       });
       setTimeout(() => {
-        navigate("/Menu");
+        navigate("/menu");
       }, 2000);
     } else {
       messageApi.open({
@@ -242,7 +242,7 @@ function MenuEdit() {
             <Col style={{ marginTop: "40px" }}>
               <Form.Item>
                 <Space>
-                  <Link to="/Menu">
+                  <Link to="/menu">
                     <Button htmlType="button" style={{ marginRight: "10px" }}>
                       ย้อนกลับ
                     </Button>

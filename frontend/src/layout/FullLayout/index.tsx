@@ -11,6 +11,9 @@ import CustomerEdit from "../../pages/customer/edit";
 import Ingredient from "../../pages/ingredient";
 import IngredientCreate from "../../pages/ingredient/create";
 import IngredientEdit from "../../pages/ingredient/edit";
+import Menus from "../../pages/menu";
+import MenuCreate from "../../pages/menu/create";
+import MenuEdit from "../../pages/menu/edit";
 import Promotion from "../../pages/promotion";
 import PromotionCreate from "../../pages/promotion/create";
 import PromotionEdit from "../../pages/promotion/edit";
@@ -94,7 +97,15 @@ const FullLayout: React.FC = () => {
                   <span>ข้อมูลสมาชิก</span>
                 </Link>
               </Menu.Item>
-
+              <Menu.Item
+                key="menu"
+                onClick={() => setCurrentPage("menu")}
+              >
+                <Link to="/menus">
+                  <ShoppingOutlined />
+                  <span>เมนู</span>
+                </Link>
+              </Menu.Item>
               <Menu.Item
                 key="ingredient"
                 onClick={() => setCurrentPage("ingredient")}
@@ -153,6 +164,9 @@ const FullLayout: React.FC = () => {
               <Route path="/customer" element={<Customer />} />
               <Route path="/customer/create" element={<CustomerCreate />} />
               <Route path="/customer/edit/:id" element={<CustomerEdit />} />
+              <Route path="/menus" element={<Menus />} />
+              <Route path="/menu/create" element={<MenuCreate />} />
+              <Route path="/menu/edit/:id" element={<MenuEdit />} />
               <Route path="/ingredient" element={<Ingredient />} />
               <Route path="/ingredient/create" element={<IngredientCreate />} />
               <Route path="/ingredient/edit/:id" element={<IngredientEdit />} />

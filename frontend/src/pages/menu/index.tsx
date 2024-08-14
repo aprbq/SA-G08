@@ -7,9 +7,9 @@ import { MenuInterface } from "../../interfaces/Menu";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 
-function Menu() {
+function Menus() {
   const navigate = useNavigate();
-  const [menu , setMenu] = useState<MenuInterface[]>([]);
+  const [ingredients , setMenu] = useState<MenuInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const myId = localStorage.getItem("id");
 
@@ -23,29 +23,34 @@ function Menu() {
     },
 
     {
-      title: "ชื่อเมนู",
-      dataIndex: "name",
-      key: "name",
+      title: "ชื่อ",
+      dataIndex: "PromotionName",
+      key: "PromotionName",
     },
+
     {
-      title: "ราคา",
-      dataIndex: "price",
-      key: "price",
-    },
-    {
-      title: "ประเภท",
-      key: "class",
-      render: (record) => <>{record?.class?.class}</>,
-    },
-    {
-      title: "จำนวน",
-      dataIndex: "quantity",
-      key: "quantity",
+      title: "คำอธิบาย",
+      dataIndex: "Description",
+      key: "Description",
     },
 
     
     
-
+    {
+        title: "จำนวน",
+        dataIndex: "DiscountValue",
+        key: "DiscountValue",
+    },
+    {
+        title: "ประเภท",
+        key: "DiscountType",
+        render: (record) => <>{record?.class?.class}</>,
+    },
+    {
+    title: "สถานะ",
+    key: "Status",
+    render: (record) => <>{record?.class?.class}</>,
+    },
     {
       title: "",
       render: (record) => (
@@ -53,7 +58,7 @@ function Menu() {
           <Button
             type="primary"
             icon={<EditOutlined />}
-            onClick={() => navigate(`/Menu/edit/${record.ID}`)}
+            onClick={() => navigate(`/menu/edit/${record.ID}`)}
           >
             แก้ไขข้อมูล
           </Button>
@@ -122,9 +127,9 @@ function Menu() {
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
-            <Link to="/Menu/create">
+            <Link to="/ingredient/create">
               <Button type="primary" icon={<PlusOutlined />}>
-                เพิ่มเมนู
+                เพิ่มวัตถุดิบ
               </Button>
             </Link>
           </Space>
@@ -135,11 +140,11 @@ function Menu() {
         <Table
           rowKey="ID"
           columns={columns}
-          dataSource={menu}
+          dataSource={ingredients}
           style={{ width: "100%", overflow: "scroll" }}
         />
       </div>
     </>
   );
 }
-export default Menu;
+export default Menus;
