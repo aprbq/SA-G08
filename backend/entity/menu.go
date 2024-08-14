@@ -12,16 +12,16 @@ type Menu struct {
 	Price  		float32    	`json:"price"`
 	
 
-	CategoryID  	uint     	
-	Category    	*Category   	`gorm:"foreignKey: CategoryID"`
+	CategoryID  	*uint     	
+	Category    	Category   	`gorm:"foreignKey: CategoryID"`
 
-	MenuIngredientID  	uint     	
-	MenuIngredient     	*MenuIngredient   	`gorm:"foreignKey: MenuIngredientID"`
+	MenuIngredientID  	*uint     	
+	MenuIngredient     	MenuIngredient   	`gorm:"foreignKey: MenuIngredientID"`
 
 	EmployeeID *uint
 	Employee   Employee `gorm:"foriegnKey:EmployeeID"`
 
 	Condition []Condition `gorm:"foreignKey:MenuID"`
 
-	//Condition []Condition `gorm:"foreignKey:MenuID"`
+	Orderitem []Orderitem `gorm:"foreignKey:MenuID"`
 }
