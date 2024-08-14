@@ -3,7 +3,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import "../../App.css";
 import { UserOutlined, DashboardOutlined , ShoppingOutlined} from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme, Button, message } from "antd";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logocafe.png";
 import Dashboard from "../../pages/dashboard";
 import Customer from "../../pages/customer";
 import CustomerCreate from "../../pages/customer/create";
