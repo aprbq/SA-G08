@@ -97,7 +97,12 @@ import {
                     },
                   ]}
                 >
-                  <Input />
+                  <InputNumber
+                    min={0}
+                    max={99}
+                    defaultValue={0}
+                    style={{ width: "100%" }}
+                  />
                 </Form.Item>
               </Col>
 
@@ -112,7 +117,12 @@ import {
                     },
                   ]}
                 >
-                  <Input />
+                  <InputNumber
+                    min={0}
+                    max={99}
+                    defaultValue={0}
+                    style={{ width: "100%" }}
+                  />
                 </Form.Item>
               </Col>
 
@@ -127,7 +137,13 @@ import {
                     },
                   ]}
                 >
-                  <Input />
+                  <InputNumber
+                    min={0}
+                    max={9999}
+                    defaultValue={0}
+                    style={{ width: "100%" }}
+                    step={0.01} 
+                  />
                 </Form.Item>
               </Col>
               
