@@ -20,9 +20,9 @@ import PromotionEdit from "../../pages/promotion/edit";
 import Order from "../../pages/ingredient";
 import OrderCreate from "../../pages/ingredient/create";
 import OrderEdit from "../../pages/ingredient/edit";
-import Member from "../../pages/Member";
-import MemberCreate from "../../pages/Member/create";
-import MemberEdit from "../../pages/Member/edit";
+import Member from "../../pages/member";
+import MemberCreate from "../../pages/member/create";
+import MemberEdit from "../../pages/member/edit";
 
 const { Header, Content, Footer, Sider } = Layout;
 
