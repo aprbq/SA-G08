@@ -30,6 +30,7 @@ func SetupDatabase() {
 		&entity.Class{},
 		&entity.Users{},
 		&entity.Ingredients{},
+		&entity.Menu{},
 	)
 
 	GenderMale := entity.Genders{Gender: "Male"}
@@ -81,6 +82,18 @@ func SetupDatabase() {
 		UsersID:  1,
 	}
 	db.FirstOrCreate(Ingre, &entity.Ingredients{
+		Name: "Nom",
+	})
+
+	Menu := &entity.Menu{
+		Name: "Nom",
+		Description:  10,
+		
+		Price:  800,
+		
+		
+	}
+	db.FirstOrCreate(Menu, &entity.Menu{
 		Name: "Nom",
 	})
 }

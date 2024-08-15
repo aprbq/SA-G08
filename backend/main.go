@@ -2,14 +2,16 @@ package main
 
 import (
 	"net/http"
-    "github.com/gin-gonic/gin"
-    "example.com/sa-67-example/config"
-    "example.com/sa-67-example/controller/genders"
-    "example.com/sa-67-example/controller/users"
-	"example.com/sa-67-example/controller/ingredients"
+
+	"example.com/sa-67-example/config"
 	"example.com/sa-67-example/controller/class"
-    "example.com/sa-67-example/middlewares"
+	"example.com/sa-67-example/controller/genders"
+	"example.com/sa-67-example/controller/ingredients"
+	"example.com/sa-67-example/controller/menus"
+	"example.com/sa-67-example/controller/users"
 	"example.com/sa-67-example/entity"
+	"example.com/sa-67-example/middlewares"
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -47,6 +49,11 @@ func main() {
         router.GET("/ingredient", ingredients.GetAll)
         router.GET("/ingredient/:id", ingredients.Get)
         router.DELETE("/ingredient/:id", ingredients.Delete)
+
+		router.PUT("/menu/:id", menus.Update)
+        router.GET("/menu", menus.GetAll)
+        router.GET("/menu/:id", menus.Get)
+        router.DELETE("/menu/:id", menus.Delete)
 	 }
  
 	 r.GET("/genders", genders.GetAll)
