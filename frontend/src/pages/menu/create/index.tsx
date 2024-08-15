@@ -32,7 +32,7 @@ import {
           content: res.data.message,
         });
         setTimeout(function () {
-          navigate("/Menu");
+          navigate("/menus");
         }, 2000);
       } else {
         messageApi.open({
@@ -46,7 +46,7 @@ import {
       <div>
         {contextHolder}
         <Card>
-          <h2>เพิ่มข้อมูล เมนู</h2>
+          <h2>เพิ่มข้อมูลเมนู</h2>
           <Divider />
   
           <Form
@@ -74,7 +74,7 @@ import {
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label="ประเภท"
-                name="class_id"
+                name="category_id"
                 rules={[
                   {
                     required: true,
@@ -87,10 +87,9 @@ import {
                   style={{ width: "100%" }}
                   options={[
                     { value: "", label: "กรุณาเลือกประเภท", disabled: true },
-                    { value: 1, label: "Milk" },
-                    { value: 2, label: "Tea" },
-                    { value: 3, label: "Coffee" },
-                    { value: 4, label: "Syrups" },
+                    { value: 1, label: "Hot" },
+                    { value: 2, label: "Ice" },
+                    { value: 3, label: "Frappe" },
                   ]}
                 />
               </Form.Item>
@@ -98,25 +97,20 @@ import {
 
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
-                  label="จำนวน"
-                  name="quantity"
+                  label="คำอธิบาย"
+                  name="description"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกจำนวน !",
+                      message: "กรุณากรอกคำอธิบาย !",
                     },
                   ]}
                 >
-                  <InputNumber
-                    min={0}
-                    max={99}
-                    defaultValue={0}
-                    style={{ width: "100%" }}
-                  />
+                  <Input />
                 </Form.Item>
               </Col>
   
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              {/* <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
                   label="หน่วย"
                   name="unit"
@@ -150,7 +144,7 @@ import {
                     step={0.01} 
                   />
                 </Form.Item>
-              </Col>
+              </Col> */}
               
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
@@ -173,7 +167,7 @@ import {
                 </Form.Item>
               </Col>
 
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              {/* <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
                   label="ผู้ผลิต"
                   name="supplier"
@@ -201,14 +195,14 @@ import {
                 >
                   <DatePicker style={{ width: "100%" }} />
                 </Form.Item>
-              </Col>
+              </Col> */}
             </Row>
   
             <Row justify="end">
               <Col style={{ marginTop: "40px" }}>
                 <Form.Item>
                   <Space>
-                    <Link to="/Menu">
+                    <Link to="/menus">
                       <Button htmlType="button" style={{ marginRight: "10px" }}>
                         ย้อนกลับ
                       </Button>

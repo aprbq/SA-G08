@@ -31,12 +31,10 @@ function MenuEdit() {
       form.setFieldsValue({
         name: res.data.name,
         quantity: res.data.quantity,
-        unit: res.data.unit,
-        unit_price: res.data.unit_price,
+       
         price: res.data.price,
-        supplier: res.data.supplier,
-        exp_date: dayjs(res.data.exp_date),
-        class_id: res.data.class?.ID,
+        
+        category_id: res.data.category?.ID,
       });
     } else {
       messageApi.open({
@@ -44,7 +42,7 @@ function MenuEdit() {
         content: "ไม่พบข้อมูลวัตถุดิบ",
       });
       setTimeout(() => {
-        navigate("/menu");
+        navigate("/menus");
       }, 2000);
     }
   };
@@ -61,7 +59,7 @@ function MenuEdit() {
         content: res.data.message,
       });
       setTimeout(() => {
-        navigate("/menu");
+        navigate("/menus");
       }, 2000);
     } else {
       messageApi.open({
@@ -79,7 +77,7 @@ function MenuEdit() {
     <div>
       {contextHolder}
       <Card>
-        <h2>แก้ไขข้อมูล วัตถุดิบ</h2>
+        <h2>แก้ไขข้อมูลเมนู</h2>
         <Divider />
 
         <Form
@@ -108,7 +106,7 @@ function MenuEdit() {
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label="ประเภท"
-                name="class_id"
+                name="category_id"
                 rules={[
                   {
                     required: true,
@@ -121,10 +119,10 @@ function MenuEdit() {
                   style={{ width: "100%" }}
                   options={[
                     { value: "", label: "กรุณาเลือกประเภท", disabled: true },
-                    { value: 1, label: "Milk" },
-                    { value: 2, label: "Tea" },
-                    { value: 3, label: "Coffee" },
-                    { value: 4, label: "Syrups" },
+                    { value: 1, label: "Hot" },
+                    { value: 2, label: "Ice" },
+                    { value: 3, label: "Frappe" },
+                    
                   ]}
                 />
               </Form.Item>
@@ -132,25 +130,20 @@ function MenuEdit() {
 
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
-                  label="จำนวน"
-                  name="quantity"
+                  label="คำอธิบาย"
+                  name="description"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกจำนวน !",
+                      message: "กรุณากรอกคำอธิบาย !",
                     },
                   ]}
                 >
-                  <InputNumber
-                    min={0}
-                    max={99}
-                    defaultValue={0}
-                    style={{ width: "100%" }}
-                  />
+                  <Input />
                 </Form.Item>
               </Col>
   
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              {/* <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
                   label="หน่วย"
                   name="unit"
@@ -184,7 +177,7 @@ function MenuEdit() {
                     step={0.01} 
                   />
                 </Form.Item>
-              </Col>
+              </Col> */}
               
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
@@ -207,7 +200,7 @@ function MenuEdit() {
                 </Form.Item>
               </Col>
 
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              {/* <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
                   label="ผู้ผลิต"
                   name="supplier"
@@ -235,14 +228,14 @@ function MenuEdit() {
                 >
                   <DatePicker style={{ width: "100%" }} />
                 </Form.Item>
-              </Col>
+              </Col> */}
           </Row>
 
           <Row justify="end">
             <Col style={{ marginTop: "40px" }}>
               <Form.Item>
                 <Space>
-                  <Link to="/menu">
+                  <Link to="/menus">
                     <Button htmlType="button" style={{ marginRight: "10px" }}>
                       ย้อนกลับ
                     </Button>

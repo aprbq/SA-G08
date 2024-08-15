@@ -62,7 +62,7 @@ function Menus() {
           <Button
             type="primary"
             icon={<EditOutlined />}
-            onClick={() => navigate(`/menu/edit/${record.ID}`)}
+            onClick={() => navigate(`/menus/edit/${record.ID}`)}
           >
             แก้ไขข้อมูล
           </Button>
@@ -151,9 +151,9 @@ function Menus() {
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
-            <Link to="/ingredient/create">
+            <Link to="/menus/create">
               <Button type="primary" icon={<PlusOutlined />}>
-                เพิ่มวัตถุดิบ
+                เพิ่มเมนู
               </Button>
             </Link>
           </Space>
