@@ -20,6 +20,9 @@ import PromotionEdit from "../../pages/promotion/edit";
 import Order from "../../pages/ingredient";
 import OrderCreate from "../../pages/ingredient/create";
 import OrderEdit from "../../pages/ingredient/edit";
+import Member from "../../pages/Member";
+import MemberCreate from "../../pages/Member/create";
+import MemberEdit from "../../pages/Member/edit";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -133,6 +136,16 @@ const FullLayout: React.FC = () => {
                 <Link to="/promotion">
                   <StarOutlined />
                   <span>โปรโมชั่น</span>
+                </Link>
+              </Menu.Item>
+              
+              <Menu.Item
+                key="member"
+                onClick={() => setCurrentPage("member")}
+              >
+                <Link to="/member">
+                  <UserOutlined />
+                  <span>สมาชิก</span>
                 </Link>
               </Menu.Item>
 

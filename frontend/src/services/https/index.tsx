@@ -4,6 +4,7 @@ import { IngredientInterface } from "../../interfaces/Ingre";
 import { PromotionInterface } from "../../interfaces/Promotion";
 import { MenuInterface } from "../../interfaces/Menu";
 import { OrderInterface } from "../../interfaces/Order";
+import { MemberInterface } from "../../interfaces/Member";
 
 import axios from "axios";
 
@@ -202,6 +203,42 @@ async function CreatePromotion(data: PromotionInterface) {
     .then((res) => res)
     .catch((e) => e.response);
 }
+//Member
+
+async function GetMember() {
+  return await axios
+    .get(`${apiUrl}/Member`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function GetMemberById(id: string) {
+  return await axios
+    .get(`${apiUrl}/Member/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function UpdateMemberById(id: string, data: MemberInterface) {
+  return await axios
+    .put(`${apiUrl}/Member/${id}`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function DeleteMemberById(id: string) {
+  return await axios
+    .delete(`${apiUrl}/Member/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function CreateMember(data: MemberInterface) {
+  return await axios
+    .post(`${apiUrl}/signupMember`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 
 export {
   SignIn,
@@ -232,4 +269,10 @@ export {
   UpdatePromotionById,
   DeletePromotionById,
   CreatePromotion,
+
+  GetMember,
+  GetMemberById,
+  UpdateMemberById,
+  DeleteMemberById,
+  CreateMember,
 };
