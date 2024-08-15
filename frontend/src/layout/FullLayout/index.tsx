@@ -17,6 +17,9 @@ import MenuEdit from "../../pages/menu/edit";
 import Promotion from "../../pages/promotion";
 import PromotionCreate from "../../pages/promotion/create";
 import PromotionEdit from "../../pages/promotion/edit";
+import Order from "../../pages/ingredient";
+import OrderCreate from "../../pages/ingredient/create";
+import OrderEdit from "../../pages/ingredient/edit";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -115,6 +118,15 @@ const FullLayout: React.FC = () => {
                 </Link>
               </Menu.Item>
               <Menu.Item
+                key="Order"
+                onClick={() => setCurrentPage("Order")}
+              >
+                <Link to="/Order">
+                  <ShoppingOutlined />
+                  <span>รายการสั่งซื้อ</span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item
                 key="promotion"
                 onClick={() => setCurrentPage("promotion")}
               >
@@ -163,6 +175,9 @@ const FullLayout: React.FC = () => {
               <Route path="/ingredient" element={<Ingredient />} />
               <Route path="/ingredient/create" element={<IngredientCreate />} />
               <Route path="/ingredient/edit/:id" element={<IngredientEdit />} />
+              <Route path="/order" element={<Order />} />
+              <Route path="/order/create" element={<OrderCreate />} />
+              <Route path="/order/edit/:id" element={<OrderEdit />} />
               <Route path="/promotion" element={<Promotion />} />
               <Route path="/promotion/create" element={<PromotionCreate />} />
               <Route path="/promotion/edit/:id" element={<PromotionEdit />} />
