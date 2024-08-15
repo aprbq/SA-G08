@@ -8,6 +8,7 @@ import (
 	"example.com/sa-67-example/controller/class"
 	"example.com/sa-67-example/controller/genders"
 	"example.com/sa-67-example/controller/ingredients"
+	"example.com/sa-67-example/controller/menuingredient"
 	"example.com/sa-67-example/controller/menus"
 	"example.com/sa-67-example/controller/users"
 	"example.com/sa-67-example/entity"
@@ -55,6 +56,11 @@ func main() {
         router.GET("/menu", menus.GetAll)
         router.GET("/menu/:id", menus.Get)
         router.DELETE("/menu/:id", menus.Delete)
+
+		router.PUT("/menuingredient/:id", menuingredient.Update)
+        router.GET("/menuingredient", menuingredient.GetAll)
+        router.GET("/menuingredient/:id", menuingredient.Get)
+        router.DELETE("/menuingredient/:id", menuingredient.Delete)
 	 }
  
 	 r.GET("/genders", genders.GetAll)

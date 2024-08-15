@@ -106,4 +106,13 @@ func SetupDatabase() {
 	db.FirstOrCreate(Menu, &entity.Menu{
 		Name: "Espresso",
 	})
+
+	MenuIngredient := &entity.MenuIngredient{
+		MenuQuantity: 1,
+		
+
+	}
+	db.FirstOrCreate(MenuIngredient, &entity.MenuIngredient{
+		
+	})
 }
