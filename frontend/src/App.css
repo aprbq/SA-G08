@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 body {
 
   margin: 0;
@@ -69,4 +71,51 @@ body {
 
 .custom-menu .ant-menu-item-selected {
   color: #3C3C3B; /* สีฟอนต์เมื่อถูกเลือก */
+}
+.add-button {
+  background-color: #b80303;
+  border-radius: 22px;
+  border: 0px;
+  box-shadow: rgba(1,60,136,.5) 0 -1px 3px 0 inset,rgba(0,44,97,.1) 0 3px 6px 0;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+  justify-content: center; 
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 0px;
+  margin: 0px;
+  min-height: 20px;
+  min-width: 20px;
+  padding: 16px 20px;
+  position: relative;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  transition: all .2s cubic-bezier(.22, .61, .36, 1);
+}
+
+.add-button:hover {
+  background-color: #ff0000;
+  transform: translateY(-2px);
+}
+
+@media (min-width: 768px) {
+  .add-button {
+    padding: 16px 44px;
+    min-width: 150px;
+  }
+}
+
+.header{
+  box-shadow: rgba(0, 3, 7, 0.5) 0 -2px 3px 0 inset,rgba(0,44,97,.1) 0 3px 6px 0;
+}
+
+.middle-bg{
+  background-color: #CAB69F;
 }

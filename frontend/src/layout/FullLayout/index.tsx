@@ -40,15 +40,14 @@ const FullLayout: React.FC = () => {
   };
 
   return (
-    <Layout style={{ minHeight: "100vh",background: "#745F47"}}>
+    <Layout style={{ minHeight: "100vh"}}>
       {contextHolder}
       <Sider
         collapsible
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
-        style={{ background: "#745F47" }}
       >
-        <div
+        <div className="slide-bg"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -131,12 +130,12 @@ const FullLayout: React.FC = () => {
       </Sider>
 
       <Layout>
-        <Header style={{ 
+        <Header className = "header" style={{ 
             padding: "0 16px", 
             backgroundColor: "#CEC8B6", 
             display: "flex", 
             justifyContent: "space-between", 
-            alignItems: "center" 
+            alignItems: "center",
           }}
         >
           <div />
@@ -149,14 +148,12 @@ const FullLayout: React.FC = () => {
             ออกจากระบบ
           </Button>
         </Header>
-        <Content style={{ margin: "0 16px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }} />
-          <div
+        <Content style={{ margin: "0 0px", }}>
+          <Breadcrumb style={{ margin: "0px 0", }} />
+          <div className="middle-bg"
             style={{
               padding: 24,
               minHeight: "100%",
-              background: "#CAB69F",
-
             }}
           >
             <Routes>

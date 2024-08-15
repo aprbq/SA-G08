@@ -146,8 +146,8 @@ function Promotion() {
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
             <Link to="/ingredient/create">
-              <Button type="primary" icon={<PlusOutlined />}>
-                เพิ่มวัตถุดิบ
+              <Button className = "add-button" type="primary" icon={<PlusOutlined />}>
+                สร้างโปรโมชั่น
               </Button>
             </Link>
           </Space>
