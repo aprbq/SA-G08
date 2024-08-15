@@ -17,7 +17,7 @@ import {
   import { CreatePromotion } from "../../../services/https";
   import { useNavigate, Link } from "react-router-dom";
   
-  function IngredientsCreate() {
+  function PromotionCreate() {
     const navigate = useNavigate();
   
     const [messageApi, contextHolder] = message.useMessage();
@@ -56,7 +56,7 @@ import {
             autoComplete="off"
           >
             <Row gutter={[16, 0]}>
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
                   label="ชื่อ"
                   name="name"
@@ -70,11 +70,71 @@ import {
                   <Input />
                 </Form.Item>
               </Col>
+
+              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+                <Form.Item
+                  label="คำอธิบาย"
+                  name="description"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณากรอกคำอธิบาย !",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+                <Form.Item
+                  label="ได้แต้ม"
+                  name="points_added"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณากรอกแต้ม !",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+                <Form.Item
+                  label="ได้แต้ม"
+                  name="points_use"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณากรอกแต้ม !",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+                <Form.Item
+                  label="จำนวน"
+                  name="discount_value"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณากรอกจำนวน !",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
               
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label="ประเภท"
-                name="class_id"
+                name="discount_type"
                 rules={[
                   {
                     required: true,
@@ -87,111 +147,56 @@ import {
                   style={{ width: "100%" }}
                   options={[
                     { value: "", label: "กรุณาเลือกประเภท", disabled: true },
-                    { value: 1, label: "Milk" },
-                    { value: 2, label: "Tea" },
-                    { value: 3, label: "Coffee" },
-                    { value: 4, label: "Syrups" },
+                    { value: 1, label: "Percent" },
+                    { value: 2, label: "BOGO" },
+                    { value: 3, label: "bath" },
                   ]}
                 />
               </Form.Item>
               </Col>
-
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="จำนวน"
-                  name="quantity"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกจำนวน !",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    max={99}
-                    defaultValue={0}
-                    style={{ width: "100%" }}
-                  />
-                </Form.Item>
-              </Col>
   
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
-                  label="หน่วย"
-                  name="unit"
+                  label="สถานะ"
+                  name="status"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกหน่วย !",
+                      message: "กรุณาเลือกสถานะ !",
                     },
                   ]}
                 >
-                  <Input />
-                </Form.Item>
-              </Col>
-  
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="ราคาต่อหน่วย"
-                  name="unit_price"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกราคาต่อหน่วย !",
-                    },
+                  <Select
+                  defaultValue=""
+                  style={{ width: "100%" }}
+                  options={[
+                    { value: "", label: "กรุณาเลือกสถานะ", disabled: true },
+                    { value: 1, label: "Active" },
+                    { value: 2, label: "Inactive" },
                   ]}
-                >
-                  <InputNumber
-                    min={0}
-                    max={9999}
-                    defaultValue={0}
-                    style={{ width: "100%" }}
-                    step={0.01} 
-                  />
-                </Form.Item>
-              </Col>
-              
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="ราคา"
-                  name="price"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกราคา !",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    max={9999}
-                    defaultValue={0}
-                    style={{ width: "100%" }}
-                    step={0.01} 
-                  />
+                />
                 </Form.Item>
               </Col>
 
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
-                  label="ผู้ผลิต"
-                  name="supplier"
+                  label="วัน/เดือน/ปี เริ่มโปรโมชั่น"
+                  name="start_date"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกชื่อผู้ผลิต !",
+                      message: "กรุณาเลือกวัน/เดือน/ปี หมดอายุ !",
                     },
                   ]}
                 >
-                  <Input />
+                  <DatePicker style={{ width: "100%" }} />
                 </Form.Item>
               </Col>
 
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
-                  label="วัน/เดือน/ปี หมดอายุ"
-                  name="exp"
+                  label="วัน/เดือน/ปี หมดโปรโมชั่น"
+                  name="start_date"
                   rules={[
                     {
                       required: true,
@@ -208,7 +213,7 @@ import {
               <Col style={{ marginTop: "40px" }}>
                 <Form.Item>
                   <Space>
-                    <Link to="/ingredient">
+                    <Link to="/promotion">
                       <Button htmlType="button" style={{ marginRight: "10px" }}>
                         ย้อนกลับ
                       </Button>
@@ -231,4 +236,4 @@ import {
     );
   }
   
-  export default IngredientsCreate;
+  export default PromotionCreate;

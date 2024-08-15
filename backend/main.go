@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"example.com/sa-67-example/config"
+	"example.com/sa-67-example/controller/category"
 	"example.com/sa-67-example/controller/class"
 	"example.com/sa-67-example/controller/genders"
 	"example.com/sa-67-example/controller/ingredients"
@@ -58,6 +59,7 @@ func main() {
  
 	 r.GET("/genders", genders.GetAll)
 	 r.GET("/class", class.GetAll)
+	 r.GET("/category", category.GetAll)
 	 r.GET("/", func(c *gin.Context) {
 		 c.String(http.StatusOK, "API RUNNING... PORT: %s", PORT)
 	 })

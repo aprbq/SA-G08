@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message } from "antd";
-import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { Space, Table, Button, Col, Row, Divider, message, Upload } from "antd";
+import { PlusOutlined, DeleteOutlined, EditOutlined, UploadOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetMenu, DeleteMenuById } from "../../services/https/index";
 import { MenuInterface } from "../../interfaces/Menu";
@@ -9,47 +9,51 @@ import dayjs from "dayjs";
 
 function Menus() {
   const navigate = useNavigate();
-  const [ingredients , setMenu] = useState<MenuInterface[]>([]);
+  const [menus, setMenu] = useState<MenuInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const myId = localStorage.getItem("id");
 
   const columns: ColumnsType<MenuInterface> = [
-
-
     {
       title: "ลำดับ",
       dataIndex: "ID",
       key: "id",
     },
-
     {
       title: "ชื่อ",
       dataIndex: "PromotionName",
       key: "PromotionName",
     },
-
     {
       title: "คำอธิบาย",
       dataIndex: "Description",
       key: "Description",
     },
-
-    
-    
     {
-        title: "จำนวน",
-        dataIndex: "DiscountValue",
-        key: "DiscountValue",
+      title: "จำนวน",
+      dataIndex: "DiscountValue",
+      key: "DiscountValue",
     },
     {
-        title: "ประเภท",
-        key: "DiscountType",
-        render: (record) => <>{record?.class?.class}</>,
+      title: "ประเภท",
+      key: "DiscountType",
+      render: (record) => <>{record?.class?.class}</>,
     },
     {
-    title: "สถานะ",
-    key: "Status",
-    render: (record) => <>{record?.class?.class}</>,
+      title: "สถานะ",
+      key: "Status",
+      render: (record) => <>{record?.class?.class}</>,
+    },
+    {
+      title: "รูปภาพ",
+      key: "image",
+      render: (record) => (
+        <img
+          src={record.imageUrl}
+          alt={record.PromotionName}
+          style={{ width: 100, height: 100, objectFit: "cover" }}
+        />
+      ),
     },
     {
       title: "",
@@ -66,22 +70,22 @@ function Menus() {
       ),
     },
     {
-        title: "",
-        render: (record) => (
-          <>
-            {myId == record?.ID ? (
-              <></>
-            ) : (
-              <Button
-                type="dashed"
-                danger
-                icon={<DeleteOutlined />}
-                onClick={() => deleteMenuById(record.ID)}
-              ></Button>
-            )}
-          </>
-        ),
-      },
+      title: "",
+      render: (record) => (
+        <>
+          {myId == record?.ID ? (
+            <></>
+          ) : (
+            <Button
+              type="dashed"
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => deleteMenuById(record.ID)}
+            ></Button>
+          )}
+        </>
+      ),
+    },
   ];
 
   const deleteMenuById = async (id: string) => {
@@ -114,6 +118,26 @@ function Menus() {
     }
   };
 
+  const handleImageUpload = async (info: any, record: MenuInterface) => {
+    if (info.file.status === "done") {
+      const imageUrl = info.file.response.url; // Assuming your server returns the URL of the uploaded image
+      // Update the specific menu item with the new image URL
+      const updatedMenus = menus.map(menu =>
+        menu.ID === record.ID ? { ...menu, imageUrl } : menu
+      );
+      setMenu(updatedMenus);
+      messageApi.open({
+        type: "success",
+        content: "Image uploaded successfully!",
+      });
+    } else if (info.file.status === "error") {
+      messageApi.open({
+        type: "error",
+        content: "Image upload failed!",
+      });
+    }
+  };
+
   useEffect(() => {
     getMenu();
   }, []);
@@ -140,11 +164,24 @@ function Menus() {
         <Table
           rowKey="ID"
           columns={columns}
-          dataSource={ingredients}
+          dataSource={menus}
           style={{ width: "100%", overflow: "scroll" }}
+          expandable={{
+            expandedRowRender: record => (
+              <Upload
+                name="image"
+                action="/upload-image-url" // Your image upload URL
+                onChange={info => handleImageUpload(info, record)}
+                showUploadList={false}
+              >
+                <Button icon={<UploadOutlined />}>Upload Image</Button>
+              </Upload>
+            ),
+          }}
         />
       </div>
     </>
   );
 }
+
 export default Menus;

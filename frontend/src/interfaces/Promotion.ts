@@ -9,4 +9,6 @@ PointsUse?:     number;
 DiscountValue?: number;
 DiscountType?:  string;
 Status?:        string;
+ConditionID?:   number;
+EmployeeID?:    number;
 }
