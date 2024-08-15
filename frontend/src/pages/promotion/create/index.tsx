@@ -103,7 +103,7 @@ import {
 
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
-                  label="ได้แต้ม"
+                  label="ใช้แต้ม"
                   name="points_use"
                   rules={[
                     {
@@ -149,7 +149,7 @@ import {
                     { value: "", label: "กรุณาเลือกประเภท", disabled: true },
                     { value: 1, label: "Percent" },
                     { value: 2, label: "BOGO" },
-                    { value: 3, label: "bath" },
+                    { value: 3, label: "Bath" },
                   ]}
                 />
               </Form.Item>
@@ -185,7 +185,7 @@ import {
                   rules={[
                     {
                       required: true,
-                      message: "กรุณาเลือกวัน/เดือน/ปี หมดอายุ !",
+                      message: "กรุณาเลือกวัน/เดือน/ปี เริ่มโปรโมชั่น !",
                     },
                   ]}
                 >
@@ -196,11 +196,11 @@ import {
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
                   label="วัน/เดือน/ปี หมดโปรโมชั่น"
-                  name="start_date"
+                  name="end_date"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณาเลือกวัน/เดือน/ปี หมดอายุ !",
+                      message: "กรุณาเลือกวัน/เดือน/ปี หมดโปรโมชั่น !",
                     },
                   ]}
                 >
