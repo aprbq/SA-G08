@@ -119,3 +119,30 @@ body {
 .middle-bg{
   background-color: #CAB69F;
 }
+.logout-button{
+  background-color: #7c7c7c;
+  border-radius: 22px;
+  border: 0px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 -1px 3px 0 inset,rgba(0,44,97,.1) 0 3px 6px 0;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+  justify-content: center; 
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 0px;
+  margin: 0px;
+  min-height: 20px;
+  min-width: 20px;
+  padding: 16px 20px;
+  position: relative;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  transition: all .2s cubic-bezier(.22, .61, .36, 1);
+}

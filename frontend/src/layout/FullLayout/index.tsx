@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "../../App.css";
-import { UserOutlined, DashboardOutlined , ShoppingOutlined} from "@ant-design/icons";
+import { UserOutlined, DashboardOutlined , ShoppingOutlined,LogoutOutlined} from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme, Button, message } from "antd";
 import logo from "../../assets/logocafe.png";
 import Dashboard from "../../pages/dashboard";
@@ -139,12 +139,8 @@ const FullLayout: React.FC = () => {
           }}
         >
           <div />
-          <Button 
-            onClick={Logout} 
-            style={{ 
-              backgroundColor: "#2C2C2C", 
-              color: "#F8EDED" 
-            }}>
+          <Button className="logout-button"
+            onClick={Logout} icon={<LogoutOutlined/>} >
             ออกจากระบบ
           </Button>
         </Header>
