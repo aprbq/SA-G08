@@ -8,18 +8,18 @@ import (
 type Menu struct {
 	gorm.Model
 	Name 		string    	`json:"name"`
-	Description  	float32    	`json:"description"`
+	Description  	string    	`json:"description"`
 	Price  		float32    	`json:"price"`
 	
 
-	CategoryID  	*uint     	
-	Category    	Category   	`gorm:"foreignKey: CategoryID"`
+	CategoryID  	uint     	`json:"category_id"`
+	Category    	*Category   	`gorm:"foreignKey: CategoryID"`
 
-	MenuIngredientID  	*uint     	
-	MenuIngredient     	MenuIngredient   	`gorm:"foreignKey: MenuIngredientID"`
+	MenuIngredientID  	uint     	`json:"menuingredient_id"`
+	MenuIngredient     	*MenuIngredient   	`gorm:"foreignKey: MenuIngredientID"`
 
-	EmployeeID *uint
-	Employee   Employee `gorm:"foriegnKey:EmployeeID"`
+	UsersID 		uint	`json:"users_id"`
+	Users   		*Users `gorm:"foriegnKey:UsersID"`
 
 	Condition []Condition `gorm:"foreignKey:MenuID"`
 

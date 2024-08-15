@@ -31,6 +31,8 @@ func SetupDatabase() {
 		&entity.Users{},
 		&entity.Ingredients{},
 		&entity.Menu{},
+		&entity.Category{},
+		&entity.MenuIngredient{},
 	)
 
 	GenderMale := entity.Genders{Gender: "Male"}
@@ -41,6 +43,10 @@ func SetupDatabase() {
 	ClassCoffee := entity.Class{Class: "Coffee"}
 	ClassSyrups := entity.Class{Class: "Syrups"}
 
+	CategoryHot := entity.Category{Category: "Hot"}
+	CategoryIce := entity.Category{Category: "Ice"}
+	CategoryFrappe:= entity.Category{Category: "Frappe"}
+
 	db.FirstOrCreate(&GenderMale, &entity.Genders{Gender: "Male"})
 	db.FirstOrCreate(&GenderFemale, &entity.Genders{Gender: "Female"})
 
@@ -48,6 +54,10 @@ func SetupDatabase() {
 	db.FirstOrCreate(&ClassTea, &entity.Class{Class: "Tea"})
 	db.FirstOrCreate(&ClassCoffee, &entity.Class{Class: "Coffee"})
 	db.FirstOrCreate(&ClassSyrups, &entity.Class{Class: "Syrups"})
+
+	db.FirstOrCreate(&CategoryHot, &entity.Category{Category: "Hot"})
+	db.FirstOrCreate(&CategoryIce, &entity.Category{Category: "Ice"})
+	db.FirstOrCreate(&CategoryFrappe, &entity.Category{Category: "Frappe"})
 
 	hashedPassword, _ := HashPassword("123456")
 	BirthDay, _ := time.Parse("2006-01-02", "1988-11-12")
@@ -86,14 +96,14 @@ func SetupDatabase() {
 	})
 
 	Menu := &entity.Menu{
-		Name: "Nom",
-		Description:  10,
-		
-		Price:  800,
-		
-		
+		Name: "Espresso",
+		Description:  "ajh",
+		Price:  45,
+		CategoryID: 1,
+		MenuIngredientID: 1,
+		UsersID: 1,
 	}
 	db.FirstOrCreate(Menu, &entity.Menu{
-		Name: "Nom",
+		Name: "Espresso",
 	})
 }
