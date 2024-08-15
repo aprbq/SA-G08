@@ -33,17 +33,6 @@ function Promotion() {
       dataIndex: "Description",
       key: "Description",
     },
-
-    {
-      title: "วันเริ่ม",
-      key: "StartDate",
-      render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
-    },
-    {
-      title: "วันสิ้นสุด",
-      key: "EndDate",
-      render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
-    },
     {
       title: "ได้แต้ม",
       dataIndex: "PointsAdded",
@@ -63,6 +52,16 @@ function Promotion() {
         title: "ประเภท",
         key: "DiscountType",
         render: (record) => <>{record?.class?.class}</>,
+    },
+    {
+      title: "วันเริ่ม",
+      key: "StartDate",
+      render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
+    },
+    {
+      title: "วันสิ้นสุด",
+      key: "EndDate",
+      render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
     },
     {
     title: "สถานะ",

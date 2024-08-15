@@ -230,7 +230,7 @@ import {
                 <Form.Item>
                   <Space>
                     <Link to="/promotion">
-                      <Button htmlType="button" style={{ marginRight: "10px" }}>
+                      <Button className="back-button" htmlType="button" style={{ marginRight: "10px" }}>
                         ย้อนกลับ
                       </Button>
                     </Link>
@@ -238,6 +238,7 @@ import {
                     <Button
                       type="primary"
                       htmlType="submit"
+                      className="confirm-button"
                       icon={<PlusOutlined />}
                     >
                       ตกลง

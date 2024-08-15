@@ -146,3 +146,13 @@ body {
   vertical-align: baseline;
   transition: all .2s cubic-bezier(.22, .61, .36, 1);
 }
+
+.confirm-button{
+  background-color: #06bb00;
+  border-radius: 22px;
+}
+
+.back-button{
+  background-color: #e0e0e0;
+  border-radius: 22px;
+}
