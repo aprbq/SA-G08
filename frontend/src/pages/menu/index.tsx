@@ -21,40 +21,40 @@ function Menus() {
     },
     {
       title: "ชื่อ",
-      dataIndex: "PromotionName",
-      key: "PromotionName",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "คำอธิบาย",
-      dataIndex: "Description",
-      key: "Description",
+      dataIndex: "description",
+      key: "description",
     },
     {
-      title: "จำนวน",
-      dataIndex: "DiscountValue",
-      key: "DiscountValue",
+      title: "ราคา",
+      dataIndex: "price",
+      key: "price",
     },
     {
       title: "ประเภท",
-      key: "DiscountType",
-      render: (record) => <>{record?.class?.class}</>,
+      key: "category",
+      render: (record) => <>{record?.class?.category}</>,
     },
-    {
-      title: "สถานะ",
-      key: "Status",
-      render: (record) => <>{record?.class?.class}</>,
-    },
-    {
-      title: "รูปภาพ",
-      key: "image",
-      render: (record) => (
-        <img
-          src={record.imageUrl}
-          alt={record.PromotionName}
-          style={{ width: 100, height: 100, objectFit: "cover" }}
-        />
-      ),
-    },
+    // {
+    //   title: "สถานะ",
+    //   key: "Status",
+    //   render: (record) => <>{record?.class?.class}</>,
+    // },
+    // {
+    //   title: "รูปภาพ",
+    //   key: "image",
+    //   render: (record) => (
+    //     <img
+    //       src={record.imageUrl}
+    //       alt={record.PromotionName}
+    //       style={{ width: 100, height: 100, objectFit: "cover" }}
+    //     />
+    //   ),
+    // },
     {
       title: "",
       render: (record) => (
