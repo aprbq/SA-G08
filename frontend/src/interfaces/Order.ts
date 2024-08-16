@@ -1,4 +1,9 @@
 export interface OrderInterface {
-    ID?:            number;
-    OrderDate?:     string;
-    }
+	ID?: number;
+	Name?: string;
+	Description?:   string;
+	Price?: number;
+	CategoryID?: number;
+	MenuIngredientID?: number;
+	UsersID?: string;
+  }

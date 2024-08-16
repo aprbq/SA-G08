@@ -112,7 +112,7 @@ async function GetOrderById(id: string) {
     .catch((e) => e.response);
 }
 
-async function UpdateOrderById(id: string, data: IngredientInterface) {
+async function UpdateOrderById(id: string, data: OrderInterface) {
   return await axios
     .put(`${apiUrl}/order/${id}`, data, requestOptions)
     .then((res) => res)
@@ -126,7 +126,7 @@ async function DeleteOrderById(id: string) {
     .catch((e) => e.response);
 }
 
-async function CreateOrder(data: IngredientInterface) {
+async function CreateOrder(data: OrderInterface) {
   return await axios
     .post(`${apiUrl}/signupingre`, data, requestOptions)
     .then((res) => res)

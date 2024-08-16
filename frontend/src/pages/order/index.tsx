@@ -2,18 +2,18 @@ import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message } from "antd";
 import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetIngredients, DeleteIngredientsById } from "../../services/https/index";
-import { IngredientInterface } from "../../interfaces/Ingre";
+import { GetOrder, DeleteOrderById } from "../../services/https/index";
+import { OrderInterface } from "../../interfaces/Order";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 
-function Ingredients() {
+function Order() {
   const navigate = useNavigate();
-  const [ingredients , setIngredients] = useState<IngredientInterface[]>([]);
+  const [order , setOrder] = useState<OrderInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const myId = localStorage.getItem("id");
 
-  const columns: ColumnsType<IngredientInterface> = [
+  const columns: ColumnsType<OrderInterface> = [
     {
       title: "ลำดับ",
       dataIndex: "ID",
@@ -68,7 +68,7 @@ function Ingredients() {
       render: (record) => (
         <>
           <Button
-          onClick={() => navigate(`/ingredient/edit/${record.ID}`)}
+          onClick={() => navigate(`/order/edit/${record.ID}`)}
             type="primary"
             style={{ 
               backgroundColor: "#A28B73", 
@@ -93,7 +93,7 @@ function Ingredients() {
               type="dashed"
               danger
               icon={<DeleteOutlined />}
-              onClick={() => deleteIngredientsById(record.ID)}
+              onClick={() => deleteOrderById(record.ID)}
             ></Button>
           )}
         </>
@@ -101,15 +101,15 @@ function Ingredients() {
     },
   ];
 
-  const deleteIngredientsById = async (id: string) => {
-    let res = await DeleteIngredientsById(id);
+  const deleteOrderById = async (id: string) => {
+    let res = await DeleteOrderById(id);
 
     if (res.status == 200) {
       messageApi.open({
         type: "success",
         content: res.data.message,
       });
-      await getIngredients();
+      await getOrder();
     } else {
       messageApi.open({
         type: "error",
@@ -118,12 +118,12 @@ function Ingredients() {
     }
   };
 
-  const getIngredients = async () => {
-    let res = await GetIngredients();
+  const getOrder = async () => {
+    let res = await GetOrder();
     if (res.status == 200) {
-      setIngredients(res.data);
+      setOrder(res.data);
     } else {
-      setIngredients([]);
+      setOrder([]);
       messageApi.open({
         type: "error",
         content: res.data.error,
@@ -132,7 +132,7 @@ function Ingredients() {
   };
 
   useEffect(() => {
-    getIngredients();
+    getOrder();
   }, []);
 
   return (
@@ -140,13 +140,13 @@ function Ingredients() {
       {contextHolder}
       <Row>
         <Col span={12}>
-          <h2>จัดการวัตถุดิบ</h2>
+          <h2>จัดการรายการสั่งซื้อ</h2>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
-            <Link to="/ingredient/create">
+            <Link to="/order/create">
               <Button type="primary" icon={<PlusOutlined />}>
-                เพิ่มวัตถุดิบ
+                เพิ่มรายการสั่งซื้อ
               </Button>
             </Link>
           </Space>
@@ -157,11 +157,11 @@ function Ingredients() {
         <Table
           rowKey="ID"
           columns={columns}
-          dataSource={ingredients}
+          dataSource={order}
           style={{ width: "100%", overflow: "scroll" }}
         />
       </div>
     </>
   );
 }
-export default Ingredients;
+export default Order;
