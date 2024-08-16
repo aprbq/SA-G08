@@ -69,11 +69,8 @@ function Ingredients() {
         <>
           <Button
           onClick={() => navigate(`/ingredient/edit/${record.ID}`)}
-            type="primary"
-            style={{ 
-              backgroundColor: "#A28B73", 
-              color: "#F8EDED" 
-            }}
+            type="primary" 
+            className='btn-1'
             icon={<EditOutlined />}
           >
             แก้ไขข้อมูล
@@ -81,7 +78,6 @@ function Ingredients() {
         </>
       ),
     },
-
     {
       title: "",
       render: (record) => (
@@ -145,7 +141,7 @@ function Ingredients() {
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
             <Link to="/ingredient/create">
-              <Button type="primary" icon={<PlusOutlined />}>
+              <Button className='btn-1' type="primary" icon={<PlusOutlined />} >
                 เพิ่มวัตถุดิบ
               </Button>
             </Link>

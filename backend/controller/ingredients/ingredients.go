@@ -24,19 +24,19 @@ func GetAll(c *gin.Context) {
 // Get retrieves a single ingredient by ID along with their associated class
 func Get(c *gin.Context) {
     ID := c.Param("id")
-    var ingredient entity.Ingredients
+    var ingredients entity.Ingredients
     db := config.DB()
-    results := db.Preload("Class").First(&ingredient, ID)
+    results := db.Preload("Class").First(&ingredients, ID)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
         return
     }
-    if ingredient.ID == 0 {
+    if ingredients.ID == 0 {
         c.JSON(http.StatusNoContent, gin.H{})
         return
     }
-    c.JSON(http.StatusOK, ingredient)
+    c.JSON(http.StatusOK, ingredients)
 }
 
 // Update updates the details of an existing ingredient

@@ -156,3 +156,20 @@ body {
   background-color: #e0e0e0;
   border-radius: 22px;
 }
+
+.btn-1 {
+  outline: none;
+  box-shadow: none;
+  background: #000;
+  color: #fff;
+  border-radius: 30px;
+  transition: all .25s ease;
+  
+}
+
+.btn-1:hover {
+  background: #fff !important;
+  color: #000 !important;
+  transform: translate(-5px, -5px);
+}
+
