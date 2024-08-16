@@ -17,9 +17,11 @@ import MenuEdit from "../../pages/menu/edit";
 import Promotion from "../../pages/promotion";
 import PromotionCreate from "../../pages/promotion/create";
 import PromotionEdit from "../../pages/promotion/edit";
-import Order from "../../pages/ingredient";
-import OrderCreate from "../../pages/ingredient/create";
-import OrderEdit from "../../pages/ingredient/edit";
+
+import Order from "../../pages/order";
+import OrderCreate from "../../pages/order/create";
+import OrderEdit from "../../pages/order/edit";
+
 import Member from "../../pages/member";
 import MemberCreate from "../../pages/member/create";
 import MemberEdit from "../../pages/member/edit";
