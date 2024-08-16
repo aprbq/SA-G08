@@ -27,7 +27,7 @@ import {
     const [conditions, setConditions] = useState([]);
 
     useEffect(() => {
-      axios.get('/api/conditions')
+      axios.get('/api/condition')
         .then(response => {
           setConditions(response.data);
         })
@@ -184,7 +184,26 @@ import {
                 />
               </Form.Item>
               </Col>
-  
+
+              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+                <Form.Item
+                  label="เงื่อนไข"
+                  name="condition_id"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาเลือกเงื่อนไข !",
+                    },
+                  ]}
+                >
+                  <Select
+                  defaultValue="ไม่่มี"
+                  style={{ width: "100%" }}
+                  options={conditions}
+                />
+                </Form.Item>
+              </Col>
+
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
                   label="สถานะ"
@@ -204,25 +223,6 @@ import {
                     { value: 1, label: "Active" },
                     { value: 2, label: "Inactive" },
                   ]}
-                />
-                </Form.Item>
-              </Col>
-
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="เงื่อนไข"
-                  name="condition"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณาเลือกเงื่อนไข !",
-                    },
-                  ]}
-                >
-                  <Select
-                  defaultValue="ไม่่มี"
-                  style={{ width: "100%" }}
-                  options={conditions}
                 />
                 </Form.Item>
               </Col>
