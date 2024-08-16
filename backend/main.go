@@ -47,7 +47,7 @@ func main() {
 		 router.GET("/user/:id", users.Get)
 		 router.DELETE("/user/:id", users.Delete)
 
-		 router.PUT("/ingredient/:id", ingredients.Update)
+		router.PUT("/ingredient/:id", ingredients.Update)
         router.GET("/ingredient", ingredients.GetAll)
         router.GET("/ingredient/:id", ingredients.Get)
         router.DELETE("/ingredient/:id", ingredients.Delete)
@@ -56,6 +56,11 @@ func main() {
         router.GET("/menu", menus.GetAll)
         router.GET("/menu/:id", menus.Get)
         router.DELETE("/menu/:id", menus.Delete)
+
+		router.PUT("/order/:id", order.Update)
+        router.GET("/order", order.GetAll)
+        router.GET("/order/:id", order.Get)
+        router.DELETE("/order/:id", order.Delete)
 
 		router.PUT("/menuingredient/:id", menuingredient.Update)
         router.GET("/menuingredient", menuingredient.GetAll)
