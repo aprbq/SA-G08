@@ -18,7 +18,7 @@ type Employee struct {
 	Member []Member `gorm:"foreignKey:EmployeeID"`
 	Promotion []Promotion `gorm:"foreignKey:EmployeeID"`
 	Order []Order `gorm:"foreignKey:EmployeeID"`
-	// Menu []Menu `gorm:"foreignKey:EmployeeID"`
-	//Ingredients []Ingredients `gorm:"foreignKey:EmployeeID"`
+	Menu []Menu `gorm:"foreignKey:EmployeeID"`
+	Ingredients []Ingredients `gorm:"foreignKey:EmployeeID"`
 
 }
