@@ -145,7 +145,7 @@ function Promotion() {
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
             <Link to="/promotion/create">
-              <Button className = "add-button" type="primary" icon={<PlusOutlined />}>
+              <Button className = "btn-1" type="primary" icon={<PlusOutlined />}>
                 สร้างโปรโมชั่น
               </Button>
             </Link>
