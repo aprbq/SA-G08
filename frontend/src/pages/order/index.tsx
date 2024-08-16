@@ -152,7 +152,7 @@ function Order() {
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
             <Link to="/order/create">
-              <Button type="primary" icon={<PlusOutlined />}>
+            <Button className='btn-1' type="primary" icon={<PlusOutlined />} >
                 เพิ่มรายการสั่งซื้อ
               </Button>
             </Link>
