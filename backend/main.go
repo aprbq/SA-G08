@@ -11,6 +11,7 @@ import (
 	"example.com/sa-67-example/controller/menuingredient"
 	"example.com/sa-67-example/controller/menus"
 	"example.com/sa-67-example/controller/users"
+	"example.com/sa-67-example/controller/order"
 	"example.com/sa-67-example/entity"
 	"example.com/sa-67-example/middlewares"
 	"github.com/gin-gonic/gin"
