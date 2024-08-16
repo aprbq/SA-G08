@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState,useEffect } from "react";
 import {
   Space,
   Button,
@@ -18,12 +18,25 @@ import { PromotionInterface } from "../../../interfaces/Promotion";
 import { GetPromotionById, UpdatePromotionById } from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import dayjs from "dayjs";
+import axios from "axios";
+
 
 function PromotionEdit() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: any }>();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
+  const [conditions, setConditions] = useState([]);
+
+    useEffect(() => {
+      axios.get('/api/condition')
+        .then(response => {
+          setConditions(response.data);
+        })
+        .catch(error => {
+          console.error("There was an error fetching the data!", error);
+        });
+    }, []);
 
   const getPromotionById = async (id: string) => {
     let res = await GetPromotionById(id);
@@ -207,6 +220,25 @@ function PromotionEdit() {
               </Form.Item>
               </Col>
   
+              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+                <Form.Item
+                  label="เงื่อนไข"
+                  name="condition_id"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาเลือกเงื่อนไข !",
+                    },
+                  ]}
+                >
+                  <Select
+                  defaultValue="ไม่่มี"
+                  style={{ width: "100%" }}
+                  options={conditions}
+                />
+                </Form.Item>
+              </Col>
+
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
                   label="สถานะ"

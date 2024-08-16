@@ -11,7 +11,7 @@ function Ingredients() {
   const navigate = useNavigate();
   const [ingredients , setIngredients] = useState<IngredientInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const myId = localStorage.getItem("id");
+  //const myId = localStorage.getItem("id");
 
   const columns: ColumnsType<IngredientInterface> = [
     {
@@ -69,11 +69,8 @@ function Ingredients() {
         <>
           <Button
           onClick={() => navigate(`/ingredient/edit/${record.ID}`)}
-            type="primary"
-            style={{ 
-              backgroundColor: "#A28B73", 
-              color: "#F8EDED" 
-            }}
+            type="primary" 
+            className='btn-1'
             icon={<EditOutlined />}
           >
             แก้ไขข้อมูล
@@ -81,21 +78,16 @@ function Ingredients() {
         </>
       ),
     },
-
     {
       title: "",
       render: (record) => (
         <>
-          {myId == record?.ID ? (
-            <></>
-          ) : (
             <Button
-              type="dashed"
-              danger
+              type="primary"
+              className="btn-delete"
               icon={<DeleteOutlined />}
               onClick={() => deleteIngredientsById(record.ID)}
             ></Button>
-          )}
         </>
       ),
     },
@@ -145,7 +137,7 @@ function Ingredients() {
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
             <Link to="/ingredient/create">
-              <Button type="primary" icon={<PlusOutlined />}>
+              <Button className='btn-1' type="primary" icon={<PlusOutlined />} >
                 เพิ่มวัตถุดิบ
               </Button>
             </Link>

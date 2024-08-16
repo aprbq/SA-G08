@@ -33,6 +33,8 @@ func SetupDatabase() {
 		&entity.Menu{},
 		&entity.Category{},
 		&entity.MenuIngredient{},
+		&entity.Promotion{},
+		&entity.Condition{},
 	)
 
 	GenderMale := entity.Genders{Gender: "Male"}

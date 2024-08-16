@@ -139,13 +139,13 @@ function Promotion() {
     <>
       {contextHolder}
       <Row>
-        <Col span={12}>
+        <Col className = "name-table" span={12}>
           <h2>จัดการโปรโมชั่น</h2>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
             <Link to="/promotion/create">
-              <Button className = "add-button" type="primary" icon={<PlusOutlined />}>
+              <Button className = "btn-1" type="primary" icon={<PlusOutlined />}>
                 สร้างโปรโมชั่น
               </Button>
             </Link>
