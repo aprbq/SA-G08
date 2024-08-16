@@ -110,41 +110,7 @@ import {
                 </Form.Item>
               </Col>
   
-              {/* <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="หน่วย"
-                  name="unit"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกหน่วย !",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-  
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="ราคาต่อหน่วย"
-                  name="unit_price"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกราคาต่อหน่วย !",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    max={9999}
-                    defaultValue={0}
-                    style={{ width: "100%" }}
-                    step={0.01} 
-                  />
-                </Form.Item>
-              </Col> */}
+              
               
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
@@ -167,35 +133,7 @@ import {
                 </Form.Item>
               </Col>
 
-              {/* <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="ผู้ผลิต"
-                  name="supplier"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกชื่อผู้ผลิต !",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="วัน/เดือน/ปี หมดอายุ"
-                  name="exp"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณาเลือกวัน/เดือน/ปี หมดอายุ !",
-                    },
-                  ]}
-                >
-                  <DatePicker style={{ width: "100%" }} />
-                </Form.Item>
-              </Col> */}
+              
             </Row>
   
             <Row justify="end">

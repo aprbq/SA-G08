@@ -60,9 +60,10 @@ function Menus() {
       render: (record) => (
         <>
           <Button
-            type="primary"
+          onClick={() => navigate(`/menus/edit/${record.ID}`)}
+            type="primary" 
+            className='btn-1'
             icon={<EditOutlined />}
-            onClick={() => navigate(`/menus/edit/${record.ID}`)}
           >
             แก้ไขข้อมูล
           </Button>
@@ -73,16 +74,12 @@ function Menus() {
       title: "",
       render: (record) => (
         <>
-          {myId == record?.ID ? (
-            <></>
-          ) : (
             <Button
-              type="dashed"
-              danger
+              type="primary"
+              className="btn-delete"
               icon={<DeleteOutlined />}
               onClick={() => deleteMenuById(record.ID)}
             ></Button>
-          )}
         </>
       ),
     },
@@ -152,7 +149,7 @@ function Menus() {
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
             <Link to="/menus/create">
-              <Button type="primary" icon={<PlusOutlined />}>
+              <Button className='btn-1' type="primary" icon={<PlusOutlined />}>
                 เพิ่มเมนู
               </Button>
             </Link>
