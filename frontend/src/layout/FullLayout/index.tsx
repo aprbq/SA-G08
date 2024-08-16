@@ -196,6 +196,9 @@ const FullLayout: React.FC = () => {
               <Route path="/promotion" element={<Promotion />} />
               <Route path="/promotion/create" element={<PromotionCreate />} />
               <Route path="/promotion/edit/:id" element={<PromotionEdit />} />
+              <Route path="/member" element={<Member />} />
+              <Route path="/member/create" element={<MemberCreate />} />
+              <Route path="/member/edit/:id" element={<MemberEdit />} />
             </Routes>
           </div>
         </Content>

@@ -2,71 +2,65 @@ import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message } from "antd";
 import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetMember, DeletePromotionById } from "../../services/https/index";
+import { GetMember, DeleteMemberById } from "../../services/https/index";
 import { MemberInterface } from "../../interfaces/Member";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-
-function Promotion() {
+function Member() {
   const navigate = useNavigate();
-  const [ingredients , setPromotion] = useState<MemberInterface[]>([]);
+  const [ingredients , setMember] = useState<MemberInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const myId = localStorage.getItem("id");
-
   const columns: ColumnsType<MemberInterface> = [
-
-
     {
       title: "ลำดับ",
       dataIndex: "ID",
       key: "id",
     },
-
     {
       title: "ชื่อ",
-      dataIndex: "PromotionName",
-      key: "PromotionName",
-    },
-
-    {
-      title: "คำอธิบาย",
-      dataIndex: "Description",
-      key: "Description",
+      dataIndex: "FristName",
+      key: "FristName",
     },
     {
-      title: "ได้แต้ม",
-      dataIndex: "PointsAdded",
-      key: "PointsAdded",
+      title: "นามสกุล",
+      dataIndex: "LastName",
+      key: "LastName",
     },
     {
-      title: "ใช้แต้ม",
-      dataIndex: "PointsUse",
-      key: "PointsUse",
+      title: "อีเมล",
+      dataIndex: "Email",
+      key: "Email",
     },
     {
-        title: "จำนวน",
-        dataIndex: "DiscountValue",
-        key: "DiscountValue",
+      title: "เบอร์โทรศัพท์",
+      dataIndex: "PhoneNumber",
+      key: "PhoneNumber",
     },
     {
-        title: "ประเภท",
-        key: "DiscountType",
-        render: (record) => <>{record?.class?.class}</>,
+        title: "เพศ",
+        dataIndex: "Gender",
+        key: "Gender",
     },
     {
-      title: "วันเริ่ม",
+      title: "วันเกิด",
+      key: "DateOfBirth",
+      render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
+    },
+    {
+      title: "วันเริ่มเป็นสมาชิก",
       key: "StartDate",
       render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
     },
     {
-      title: "วันสิ้นสุด",
+      title: "วันสิ้นสุดการเป็นสมาชิก",
       key: "EndDate",
       render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
     },
     {
-    title: "สถานะ",
-    key: "Status",
-    render: (record) => <>{record?.class?.class}</>,
+      title: "แต้ม",
+      dataIndex: "Points",
+      key: "Points",
     },
     {
       title: "",
@@ -75,7 +69,7 @@ function Promotion() {
           <Button
             type="primary"
             icon={<EditOutlined />}
-            onClick={() => navigate(`/promotion/edit/${record.ID}`)}
+            onClick={() => navigate(`/member/edit/${record.ID}`)}
           >
             แก้ไขข้อมูล
           </Button>
@@ -93,17 +87,15 @@ function Promotion() {
                 type="dashed"
                 danger
                 icon={<DeleteOutlined />}
-                onClick={() => deletePromotionById(record.ID)}
+                onClick={() => deleteMemberById(record.ID)}
               ></Button>
             )}
           </>
         ),
       },
   ];
-
-  const deletePromotionById = async (id: string) => {
-    let res = await DeletePromotionById(id);
-
+  const deleteMemberById = async (id: string) => {
+    let res = await DeleteMemberById(id);
     if (res.status == 200) {
       messageApi.open({
         type: "success",
@@ -117,36 +109,33 @@ function Promotion() {
       });
     }
   };
-
   const getMember = async () => {
     let res = await GetMember();
     if (res.status == 200) {
-      setPromotion(res.data);
+      setMember(res.data);
     } else {
-      setPromotion([]);
+      setMember([]);
       messageApi.open({
         type: "error",
         content: res.data.error,
       });
     }
   };
-
   useEffect(() => {
     getMember();
   }, []);
-
   return (
     <>
       {contextHolder}
       <Row>
         <Col span={12}>
-          <h2>จัดการโปรโมชั่น</h2>
+          <h2>จัดการสมาชิก</h2>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
-            <Link to="/promotion/create">
+            <Link to="/member/create">
               <Button className = "add-button" type="primary" icon={<PlusOutlined />}>
-                สร้างโปรโมชั่น
+                สมัครสมาชิก
               </Button>
             </Link>
           </Space>
@@ -164,4 +153,4 @@ function Promotion() {
     </>
   );
 }
-export default Promotion;
+export default Member;
