@@ -186,7 +186,7 @@ function OrderEdit() {
             <Col style={{ marginTop: "40px" }}>
               <Form.Item>
                 <Space>
-                  <Link to="/ingredient">
+                  <Link to="/order">
                     <Button htmlType="button" style={{ marginRight: "10px" }}>
                       ย้อนกลับ
                     </Button>
