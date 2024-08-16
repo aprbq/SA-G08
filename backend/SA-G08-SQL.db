@@ -1,0 +1,230 @@
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "employees" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"username"	text,
+	"password"	text,
+	"email"	text,
+	"first_name"	text,
+	"last_name"	text,
+	"gender"	text,
+	"role"	text,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "classes" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"class"	text,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "categories" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"category"	text,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "payments" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"payment_date"	datetime,
+	"payment_amount"	real,
+	"payment_method"	text,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "members" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"frist_name"	text,
+	"last_name"	text,
+	"email"	text,
+	"phone_number"	text,
+	"date_of_birth"	datetime,
+	"gender"	text,
+	"start_date"	datetime,
+	"endt_date"	datetime,
+	"points"	integer,
+	"status"	text,
+	"employee_id"	integer,
+	CONSTRAINT "fk_employees_member" FOREIGN KEY("employee_id") REFERENCES "employees"("id"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "ingredients" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"name"	text,
+	"quantity"	real,
+	"unit"	text,
+	"unit_price"	real,
+	"price"	real,
+	"supplier"	text,
+	"exp_date"	datetime,
+	"class_id"	integer,
+	"users_id"	integer,
+	CONSTRAINT "fk_classes_ingredients" FOREIGN KEY("class_id") REFERENCES "classes"("id"),
+	CONSTRAINT "fk_ingredients_users" FOREIGN KEY("users_id") REFERENCES "users"("id"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "menu_ingredients" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"menu_quantity"	integer,
+	"ingredients_id"	integer,
+	CONSTRAINT "fk_menu_ingredients_ingredients" FOREIGN KEY("ingredients_id") REFERENCES "ingredients"("id"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "menus" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"name"	text,
+	"description"	text,
+	"price"	real,
+	"category_id"	integer,
+	"menu_ingredient_id"	integer,
+	"users_id"	integer,
+	CONSTRAINT "fk_categories_menu" FOREIGN KEY("category_id") REFERENCES "categories"("id"),
+	CONSTRAINT "fk_menu_ingredients_menu" FOREIGN KEY("menu_ingredient_id") REFERENCES "menu_ingredients"("id"),
+	CONSTRAINT "fk_menus_users" FOREIGN KEY("users_id") REFERENCES "users"("id"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "conditions" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"condition_name"	text,
+	"condition_for_date"	datetime,
+	"condition_for_member"	text,
+	"menu_id"	integer,
+	CONSTRAINT "fk_menus_condition" FOREIGN KEY("menu_id") REFERENCES "menus"("id"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "promotions" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"promotion_name"	text,
+	"description"	text,
+	"start_date"	datetime,
+	"end_date"	datetime,
+	"points_added"	integer,
+	"points_use"	integer,
+	"discount_value"	real,
+	"discount_type"	text,
+	"status"	text,
+	"condition_id"	integer,
+	"employee_id"	integer,
+	CONSTRAINT "fk_promotions_condition" FOREIGN KEY("condition_id") REFERENCES "conditions"("id"),
+	CONSTRAINT "fk_employees_promotion" FOREIGN KEY("employee_id") REFERENCES "employees"("id"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "orders" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"order_date"	datetime,
+	"payments_id"	integer,
+	"promotion_id"	integer,
+	"employee_id"	integer,
+	CONSTRAINT "fk_payments_order" FOREIGN KEY("payments_id") REFERENCES "payments"("id"),
+	CONSTRAINT "fk_employees_order" FOREIGN KEY("employee_id") REFERENCES "employees"("id"),
+	CONSTRAINT "fk_promotions_order" FOREIGN KEY("promotion_id") REFERENCES "promotions"("id"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "order_items" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"quantity"	integer,
+	"total_item"	real,
+	"order_id"	integer,
+	CONSTRAINT "fk_order_items_order" FOREIGN KEY("order_id") REFERENCES "orders"("id"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "order_has_menus" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"order_item_id"	integer,
+	"menu_id"	integer,
+	CONSTRAINT "fk_menus_order_has_menu" FOREIGN KEY("menu_id") REFERENCES "menus"("id"),
+	CONSTRAINT "fk_order_items_order_has_menu" FOREIGN KEY("order_item_id") REFERENCES "order_items"("id"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "points_transactions" (
+	"id"	integer,
+	"created_at"	datetime,
+	"updated_at"	datetime,
+	"deleted_at"	datetime,
+	"transactionst_date"	datetime,
+	"points_used"	integer,
+	"points_add"	integer,
+	"description"	text,
+	"member_id"	integer,
+	"promotion_id"	integer,
+	CONSTRAINT "fk_members_points_transactions" FOREIGN KEY("member_id") REFERENCES "members"("id"),
+	CONSTRAINT "fk_promotions_points_transactions" FOREIGN KEY("promotion_id") REFERENCES "promotions"("id"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE INDEX IF NOT EXISTS "idx_employees_deleted_at" ON "employees" (
+	"deleted_at"
+);
+CREATE INDEX IF NOT EXISTS "idx_classes_deleted_at" ON "classes" (
+	"deleted_at"
+);
+CREATE INDEX IF NOT EXISTS "idx_categories_deleted_at" ON "categories" (
+	"deleted_at"
+);
+CREATE INDEX IF NOT EXISTS "idx_payments_deleted_at" ON "payments" (
+	"deleted_at"
+);
+CREATE INDEX IF NOT EXISTS "idx_members_deleted_at" ON "members" (
+	"deleted_at"
+);
+CREATE INDEX IF NOT EXISTS "idx_ingredients_deleted_at" ON "ingredients" (
+	"deleted_at"
+);
+CREATE INDEX IF NOT EXISTS "idx_menu_ingredients_deleted_at" ON "menu_ingredients" (
+	"deleted_at"
+);
+CREATE INDEX IF NOT EXISTS "idx_menus_deleted_at" ON "menus" (
+	"deleted_at"
+);
+CREATE INDEX IF NOT EXISTS "idx_conditions_deleted_at" ON "conditions" (
+	"deleted_at"
+);
+CREATE INDEX IF NOT EXISTS "idx_promotions_deleted_at" ON "promotions" (
+	"deleted_at"
+);
+CREATE INDEX IF NOT EXISTS "idx_orders_deleted_at" ON "orders" (
+	"deleted_at"
+);
+CREATE INDEX IF NOT EXISTS "idx_order_items_deleted_at" ON "order_items" (
+	"deleted_at"
+);
+CREATE INDEX IF NOT EXISTS "idx_order_has_menus_deleted_at" ON "order_has_menus" (
+	"deleted_at"
+);
+CREATE INDEX IF NOT EXISTS "idx_points_transactions_deleted_at" ON "points_transactions" (
+	"deleted_at"
+);
+COMMIT;

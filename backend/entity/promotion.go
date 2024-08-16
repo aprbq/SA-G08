@@ -22,9 +22,9 @@ type Promotion struct {
 
 	Order []Order `gorm:"foreignKey:PromotionID"`
 
-	ConditionID *uint `json:"condition_id"`
-	Condition   Condition `gorm:"foriegnKey:ConditionID" json: "condition"`
+	ConditionID uint `json:"condition_id"`
+	Condition   *Condition `gorm:"foriegnKey:ConditionID" json: "condition"`
 
-	EmployeeID *uint `json:"employee_id"`
-	Employee   Employee `gorm:"foriegnKey:EmployeeID" json: "employee"`
+	EmployeeID uint `json:"employee_id"`
+	Employee   *Employee `gorm:"foriegnKey:EmployeeID" json: "employee"`
 }

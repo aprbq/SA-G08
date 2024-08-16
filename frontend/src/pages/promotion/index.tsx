@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 
 function Promotion() {
   const navigate = useNavigate();
-  const [ingredients , setPromotion] = useState<PromotionInterface[]>([]);
+  const [Promotion , setPromotion] = useState<PromotionInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const myId = localStorage.getItem("id");
 
@@ -24,35 +24,40 @@ function Promotion() {
 
     {
       title: "ชื่อ",
-      dataIndex: "PromotionName",
+      dataIndex: "promotion_name",
       key: "promotion_name",
     },
 
     {
       title: "คำอธิบาย",
-      dataIndex: "Description",
+      dataIndex: "description",
       key: "description",
     },
     {
       title: "ได้แต้ม",
-      dataIndex: "PointsAdded",
+      dataIndex: "points_added",
       key: "points_added",
     },
     {
       title: "ใช้แต้ม",
-      dataIndex: "PointsUse",
+      dataIndex: "points_use",
       key: "points_use",
     },
     {
         title: "จำนวน",
-        dataIndex: "DiscountValue",
+        dataIndex: "discount_value",
         key: "discount_value",
     },
     {
         title: "ประเภท",
+        dataIndex:"discount_type",
         key: "discount_type",
-        render: (record) => <>{record?.class?.class}</>,
     },
+    {
+      title: "เงื่อนไข",
+      dataIndex:"condition_id",
+      key: "condition_id",
+  },
     {
       title: "วันเริ่ม",
       key: "start_date",
@@ -73,6 +78,7 @@ function Promotion() {
       render: (record) => (
         <>
           <Button
+            className="btn-1"
             type="primary"
             icon={<EditOutlined />}
             onClick={() => navigate(`/promotion/edit/${record.ID}`)}
@@ -86,16 +92,12 @@ function Promotion() {
         title: "",
         render: (record) => (
           <>
-            {myId == record?.ID ? (
-              <></>
-            ) : (
-              <Button
-                type="dashed"
-                danger
+            <Button
+                type="primary"
+                className="btn-delete"
                 icon={<DeleteOutlined />}
                 onClick={() => deletePromotionById(record.ID)}
-              ></Button>
-            )}
+            ></Button>
           </>
         ),
       },
@@ -157,7 +159,7 @@ function Promotion() {
         <Table
           rowKey="ID"
           columns={columns}
-          dataSource={ingredients}
+          dataSource={Promotion}
           style={{ width: "100%", overflow: "scroll" }}
         />
       </div>

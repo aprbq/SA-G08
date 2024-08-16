@@ -51,7 +51,7 @@ function PromotionEdit() {
         status: res.data.status,
         start_date: dayjs(res.data.start_date),
         end_date: dayjs(res.data.end_date),
-        condition_id: res.data.condition?.ID,
+        condition_id: res.data.condition_id?.ID,
       });
     } else {
       messageApi.open({
@@ -108,7 +108,7 @@ function PromotionEdit() {
           <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
                   label="ชื่อ"
-                  name="name"
+                  name="promotion_name"
                   rules={[
                     {
                       required: true,

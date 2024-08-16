@@ -10,6 +10,7 @@ import (
 	"example.com/sa-67-example/controller/ingredients"
 	"example.com/sa-67-example/controller/menuingredient"
 	"example.com/sa-67-example/controller/menus"
+	"example.com/sa-67-example/controller/promotion"
 	"example.com/sa-67-example/controller/users"
 	"example.com/sa-67-example/controller/order"
 	"example.com/sa-67-example/entity"
@@ -67,6 +68,11 @@ func main() {
         router.GET("/menuingredient", menuingredient.GetAll)
         router.GET("/menuingredient/:id", menuingredient.Get)
         router.DELETE("/menuingredient/:id", menuingredient.Delete)
+
+		router.PUT("/promotion/:id", promotion.Update)
+        router.GET("/promotion", promotion.GetAll)
+        router.GET("/promotion/:id", promotion.Get)
+        router.DELETE("/promotion/:id", promotion.Delete)
 	 }
  
 	 r.GET("/genders", genders.GetAll)
@@ -81,7 +87,7 @@ func main() {
 
 
 	// Migrate the schema
-	db.AutoMigrate(&entity.Genders{},&entity.Users{}, &entity.Employee{},&entity.Class{}, &entity.Category{},
+	db.AutoMigrate(&entity.Employee{},&entity.Class{}, &entity.Category{},
 		&entity.Payments{}, &entity.Member{}, &entity.Menu{},&entity.Ingredients{},
 		&entity.MenuIngredient{}, &entity.Order{}, &entity.OrderItem{},
 		&entity.OrderHasMenu{}, &entity.Condition{}, &entity.Promotion{},
