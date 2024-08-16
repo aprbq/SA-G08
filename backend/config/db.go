@@ -47,7 +47,7 @@ func SetupDatabase() {
 
 	CategoryHot := entity.Category{Category: "Hot"}
 	CategoryIce := entity.Category{Category: "Ice"}
-	CategoryFrappe:= entity.Category{Category: "Frappe"}
+	CategoryFrappe := entity.Category{Category: "Frappe"}
 
 	db.FirstOrCreate(&GenderMale, &entity.Genders{Gender: "Male"})
 	db.FirstOrCreate(&GenderFemale, &entity.Genders{Gender: "Female"})
@@ -83,27 +83,27 @@ func SetupDatabase() {
 	}
 
 	Ingre := &entity.Ingredients{
-		Name: "Nom",
+		Name:      "Nom",
 		Quantity:  10,
-		Unit:     "kilogram",
-		UnitPrice:   80,
-		Price:  800,
+		Unit:      "kilogram",
+		UnitPrice: 80,
+		Price:     800,
 		Supplier:  "mild",
-		ExpDate:  exp_date,
-		ClassID:  1,
-		UsersID:  1,
+		ExpDate:   exp_date,
+		ClassID:   1,
+		UsersID:   1,
 	}
 	db.FirstOrCreate(Ingre, &entity.Ingredients{
 		Name: "Nom",
 	})
 
 	Menu := &entity.Menu{
-		Name: "Espresso",
-		Description:  "ajh",
-		Price:  45,
-		CategoryID: 1,
+		Name:             "Espresso",
+		Description:      "ajh",
+		Price:            45,
+		CategoryID:       1,
 		MenuIngredientID: 1,
-		UsersID: 1,
+		UsersID:          1,
 	}
 	db.FirstOrCreate(Menu, &entity.Menu{
 		Name: "Espresso",
@@ -111,10 +111,22 @@ func SetupDatabase() {
 
 	MenuIngredient := &entity.MenuIngredient{
 		MenuQuantity: 1,
-		
-
 	}
-	db.FirstOrCreate(MenuIngredient, &entity.MenuIngredient{
-		
+	db.FirstOrCreate(MenuIngredient, &entity.MenuIngredient{})
+	Promotion := &entity.Promotion{
+		PromotionName: "a",
+		Description:   "a",
+		StartDate:     exp_date,
+		EndDate:       exp_date,
+		PointsAdded:   1,
+		PointsUse:     1,
+		DiscountValue: 1,
+		DiscountType:  "BOGO",
+		Status:        "Active",
+		ConditionID:   1,
+		EmployeeID:    1,
+	}
+	db.FirstOrCreate(Promotion, &entity.Promotion{
+		PromotionName: "a",
 	})
 }
