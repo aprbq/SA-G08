@@ -11,7 +11,7 @@ function Ingredients() {
   const navigate = useNavigate();
   const [ingredients , setIngredients] = useState<IngredientInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const myId = localStorage.getItem("id");
+  //const myId = localStorage.getItem("id");
 
   const columns: ColumnsType<IngredientInterface> = [
     {
@@ -82,16 +82,12 @@ function Ingredients() {
       title: "",
       render: (record) => (
         <>
-          {myId == record?.ID ? (
-            <></>
-          ) : (
             <Button
-              type="dashed"
-              danger
+              type="primary"
+              className="btn-delete"
               icon={<DeleteOutlined />}
               onClick={() => deleteIngredientsById(record.ID)}
             ></Button>
-          )}
         </>
       ),
     },
