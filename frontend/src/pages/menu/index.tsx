@@ -37,7 +37,7 @@ function Menus() {
     {
       title: "ประเภท",
       key: "category",
-      render: (record) => <>{record?.class?.category}</>,
+      render: (record) => <>{record?.category?.category}</>,
     },
     // {
     //   title: "สถานะ",
