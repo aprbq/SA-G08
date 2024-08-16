@@ -32,35 +32,42 @@ function Order() {
       key: "quantity",
     },
 
+    // {
+    //   title: "หน่วย",
+    //   dataIndex: "unit",
+    //   key: "unit",
+    // },
+    // {
+    //   title: "ราคาต่อหน่วย",
+    //   dataIndex: "unit_price",
+    //   key: "unit_price",
+    // },
+    // {
+    //   title: "ผู้ผลิต",
+    //   dataIndex: "supplier",
+    //   key: "supplier",
+    // },
+    // {
+    //   title: "วัน/เดือน/ปี หมดอายุ",
+    //   key: "exp_date",
+    //   render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
+    // },
     {
-      title: "หน่วย",
-      dataIndex: "unit",
-      key: "unit",
+      title: "ประเภท",
+      key: "class",
+      render: (record) => <>{record?.class?.class}</>,
     },
-    {
-      title: "ราคาต่อหน่วย",
-      dataIndex: "unit_price",
-      key: "unit_price",
-    },
+    
     {
       title: "ราคา",
       dataIndex: "price",
       key: "price",
     },
+    
     {
-      title: "ผู้ผลิต",
-      dataIndex: "supplier",
-      key: "supplier",
-    },
-    {
-      title: "วัน/เดือน/ปี หมดอายุ",
-      key: "exp_date",
-      render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
-    },
-    {
-      title: "ประเภท",
-      key: "class",
-      render: (record) => <>{record?.class?.class}</>,
+      title: "ราคารวม",
+      dataIndex: "total_price",
+      key: "total_price",
     },
 
     {
