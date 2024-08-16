@@ -143,7 +143,7 @@ function Menus() {
     <>
       {contextHolder}
       <Row>
-        <Col span={12}>
+        <Col className = "name-table" span={12}>
           <h2>จัดการเมนู</h2>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
