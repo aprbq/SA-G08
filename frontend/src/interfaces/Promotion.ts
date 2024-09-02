@@ -7,8 +7,8 @@ EndDate?:       string;
 PointsAdded?:   number;
 PointsUse?:     number;
 DiscountValue?: number;
-DiscountType?:  string;
-Status?:        string;
-ConditionID?:   number;
+DiscountTypeID?:  number;
+PromotionTypeID?: number;
+StatusID?:        number;
 EmployeeID?:    number;
 }

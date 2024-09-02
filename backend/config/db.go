@@ -137,7 +137,6 @@ func SetupDatabase() {
 		DiscountValue: 1,
 		DiscountTypeID:  1,
 		StatusID:        1,
-		ConditionID:   1,
 		EmployeeID:    1,
 	}
 	db.FirstOrCreate(Promotion, &entity.Promotion{

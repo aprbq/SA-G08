@@ -11,14 +11,14 @@ function Promotion() {
   const navigate = useNavigate();
   const [Promotion , setPromotion] = useState<PromotionInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const myId = localStorage.getItem("id");
+
 
   const columns: ColumnsType<PromotionInterface> = [
 
 
     {
       title: "ลำดับ",
-      dataIndex: "ID",
+      dataIndex: "id",
       key: "id",
     },
 
@@ -50,14 +50,14 @@ function Promotion() {
     },
     {
         title: "ประเภท",
-        dataIndex:"discount_type",
-        key: "discount_type",
+        dataIndex:"discount_type_id",
+        key: "discount_type_id",
     },
     {
-      title: "เงื่อนไข",
-      dataIndex:"condition_id",
-      key: "condition_id",
-  },
+      title: "สำหรับ",
+      dataIndex:"promotion_type_id",
+      key: "promotion_type_id",
+    },
     {
       title: "วันเริ่ม",
       key: "start_date",
@@ -70,8 +70,8 @@ function Promotion() {
     },
     {
     title: "สถานะ",
-    key: "status",
-    render: (record) => <>{record?.class?.class}</>,
+    dataIndex: "status_id",
+    key: "status_id",
     },
     {
       title: "",

@@ -6,7 +6,8 @@ import (
 
 type Status struct {
 	gorm.Model
+	StatusName string      `json:"status_name"`
 
 	Promotion  []Promotion `gorm:"foreignKey:StatusID"`
-	StatusName string      `json:"status_name"`
+	
 }
