@@ -22,11 +22,7 @@ import (
 	const PORT = "8000"
 
 func main() {
-	db, err := gorm.Open(sqlite.Open("SA-G08.db"), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
-	}
-
+	
 	 // open connection database
 	 config.ConnectionDB()
 
@@ -87,11 +83,7 @@ func main() {
 
 
 	// Migrate the schema
-	db.AutoMigrate(&entity.Employee{},&entity.Class{}, &entity.Category{},
-		&entity.Payments{}, &entity.Member{}, &entity.Menu{},&entity.Ingredients{},
-		&entity.MenuIngredient{}, &entity.Order{}, &entity.OrderItem{},
-		&entity.OrderHasMenu{}, &entity.Condition{}, &entity.Promotion{},
-		&entity.PointsTransactions{})
+	
 }
 func CORSMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
