@@ -13,11 +13,9 @@ import (
 	"example.com/sa-67-example/controller/promotion"
 	"example.com/sa-67-example/controller/users"
 	"example.com/sa-67-example/controller/order"
-	"example.com/sa-67-example/entity"
 	"example.com/sa-67-example/middlewares"
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
+
 )
 	const PORT = "8000"
 
