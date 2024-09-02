@@ -127,20 +127,20 @@ func SetupDatabase() {
 		MenuQuantity: 1,
 	}
 	db.FirstOrCreate(MenuIngredient, &entity.MenuIngredient{})
-	// Promotion := &entity.Promotion{
-	// 	PromotionName: "a",
-	// 	Description:   "a",
-	// 	StartDate:     exp_date,
-	// 	EndDate:       exp_date,
-	// 	PointsAdded:   1,
-	// 	PointsUse:     1,
-	// 	DiscountValue: 1,
-	// 	DiscountType:  1,
-	// 	Status:        1,
-	// 	ConditionID:   1,
-	// 	EmployeeID:    1,
-	// }
-	// db.FirstOrCreate(Promotion, &entity.Promotion{
-	// 	PromotionName: "a",
-	// })
+	Promotion := &entity.Promotion{
+		PromotionName: "a",
+		Description:   "a",
+		StartDate:     exp_date,
+		EndDate:       exp_date,
+		PointsAdded:   1,
+		PointsUse:     1,
+		DiscountValue: 1,
+		DiscountTypeID:  1,
+		StatusID:        1,
+		ConditionID:   1,
+		EmployeeID:    1,
+	}
+	db.FirstOrCreate(Promotion, &entity.Promotion{
+		PromotionName: "a",
+	})
 }
