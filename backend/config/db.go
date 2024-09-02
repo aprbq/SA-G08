@@ -37,6 +37,7 @@ func SetupDatabase() {
 		&entity.Condition{},
 		&entity.Status{},
 		&entity.PromotionType{},
+		&entity.Stock{},
 	)
 
 	GenderMale := entity.Genders{Gender: "Male"}
@@ -44,6 +45,9 @@ func SetupDatabase() {
 
 	StatusActive := entity.Status{StatusName: "Active"}
 	StatusUnactive := entity.Status{StatusName: "Unactive"}
+
+	StockIn := entity.Stock{StockName: "In stock"}
+	StockOut := entity.Stock{StockName: "Out of stock"}
 
 	PromotionTypeMember := entity.PromotionType{PromotionTypeName: "Member"}
 	PromotionTypeAll := entity.PromotionType{PromotionTypeName: "All"}
@@ -62,6 +66,9 @@ func SetupDatabase() {
 
 	db.FirstOrCreate(&StatusActive, &entity.Status{StatusName: "Active"})
 	db.FirstOrCreate(&StatusUnactive, &entity.Status{StatusName: "Unactive"})
+
+	db.FirstOrCreate(&StockIn, &entity.Stock{StockName: "In stock"})
+	db.FirstOrCreate(&StockOut, &entity.Stock{StockName: "Out of stock"})
 
 	db.FirstOrCreate(&PromotionTypeMember, &entity.PromotionType{PromotionTypeName: "Member"})
 	db.FirstOrCreate(&PromotionTypeAll, &entity.PromotionType{PromotionTypeName: "All"})

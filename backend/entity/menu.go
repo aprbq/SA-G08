@@ -14,6 +14,9 @@ type Menu struct {
 	CategoryID  	uint     	`json:"category_id"`
 	Category    	*Category   	`gorm:"foreignKey: CategoryID"`
 
+	StockID 	uint    `json:"stock_id"`
+	Stock   	*Stock `gorm:"foriegnKey:StockID" json: "stock"`
+
 	UsersID 		uint	`json:"users_id"`
 	Users   		*Users `gorm:"foriegnKey:UsersID"`
 
