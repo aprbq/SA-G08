@@ -1,16 +1,22 @@
 package entity
 
-import "gorm.io/gorm"
+import (
+	"time"
 
-type OrderItem struct {
+	"gorm.io/gorm"
+)
+
+type Orderitem struct {
 	gorm.Model
-	Quantity  int
-	TotalItem float32
+	
+	Quantity  	float32    	`json:"order_quantity"`
+	
+	TotalItem  	float32     `json:"total_item"`
 	
 
-	
-	OrderID *uint
-	Order   Order `gorm:"foriegnKey:OrderID"`
+	OrderID  	uint		`json:"order_id"`
+	Order    	*Order   	`gorm:"foreignKey:OrderID" json: "order"`
 
-	OrderHasMenu []OrderHasMenu `gorm:"foreignKey:OrderItemID"`
+	
+	OrderHasMenu []OrderHasMenu `gorm:"foreignKey:OrderitemID"`
 }

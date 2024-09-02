@@ -2,22 +2,22 @@ package entity
 
 import (
 	"time"
+
 	"gorm.io/gorm"
 )
 
 type Order struct {
 	gorm.Model
-	OrderDate time.Time
-	
-	
+	OrderDate  	time.Time 	`json:"order_date"` 
 
-	PaymentsID *uint
-	Payments   Payments `gorm:"foriegnKey:PaymentsID"`
+	PaymentID  	uint		`json:"payment_id"`
+	Payment    	*Payment   	`gorm:"foreignKey:PaymentID" json: "payment"`
 
-	PromotionID *uint
-	Promotion   Promotion `gorm:"foriegnKey:PromotionID"`
+	EmployeeID 	uint		`json:"employee_id"`
+	Employee    	*Employee   	`gorm:"foreignKey: EmployeeID" json:"employee"`
 
-	EmployeeID *uint
-	Employee   Employee `gorm:"foriegnKey:EmployeeID"`
-	
+	PromotionID 	uint		`json:"promotion_id"`
+	Promotion    	*Promotion   	`gorm:"foreignKey: PromotionID" json:"promotion"`
+
+	Orderitem []Orderitem `gorm:"foreignKey:OrderID"`
 }
