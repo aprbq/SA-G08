@@ -21,4 +21,6 @@ type Member struct {
 	PointsTransactions []PointsTransactions `gorm:"foreignKey:MemberID"`
 	EmployeeID *uint
 	Employee   Employee `gorm:"foriegnKey:EmployeeID"`
+
+	Order []Order `gorm:"foreignKey:MemberID"`
 }

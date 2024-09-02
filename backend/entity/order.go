@@ -19,5 +19,8 @@ type Order struct {
 	PromotionID 	uint		`json:"promotion_id"`
 	Promotion    	*Promotion   	`gorm:"foreignKey: PromotionID" json:"promotion"`
 
+	MemberID 	uint		`json:"member_id"`
+	Member    	*Member   	`gorm:"foreignKey: MemberID" json:"member"`
+
 	Orderitem []Orderitem `gorm:"foreignKey:OrderID"`
 }
