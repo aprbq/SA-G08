@@ -122,10 +122,10 @@ func SetupDatabase() {
 		Name: "Espresso",
 	})
 
-	MenuIngredient := &entity.MenuIngredient{
-		// MenuQuantity: 1,
-	}
-	db.FirstOrCreate(MenuIngredient, &entity.MenuIngredient{})
+	// MenuIngredient := &entity.MenuIngredient{
+	// 	// MenuQuantity: 1,
+	// }
+	// db.FirstOrCreate(MenuIngredient, &entity.MenuIngredient{})
 	Promotion := &entity.Promotion{
 		PromotionName: "a",
 		Description:   "a",
