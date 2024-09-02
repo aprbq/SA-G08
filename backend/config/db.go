@@ -121,8 +121,8 @@ func SetupDatabase() {
 		PointsAdded:   1,
 		PointsUse:     1,
 		DiscountValue: 1,
-		DiscountType:  "BOGO",
-		Status:        "Active",
+		DiscountType:  1,
+		Status:        1,
 		ConditionID:   1,
 		EmployeeID:    1,
 	}
