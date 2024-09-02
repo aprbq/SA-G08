@@ -35,10 +35,18 @@ func SetupDatabase() {
 		&entity.MenuIngredient{},
 		&entity.Promotion{},
 		&entity.Condition{},
+		&entity.Status{},
+		&entity.PromotionType{},
 	)
 
 	GenderMale := entity.Genders{Gender: "Male"}
 	GenderFemale := entity.Genders{Gender: "Female"}
+
+	StatusActive := entity.Status{StatusName: "Active"}
+	StatusUnactive := entity.Status{StatusName: "Unactive"}
+
+	PromotionTypeMember := entity.PromotionType{PromotionTypeName: "Member"}
+	PromotionTypeAll := entity.PromotionType{PromotionTypeName: "All"}
 
 	ClassMilk := entity.Class{Class: "Milk"}
 	ClassTea := entity.Class{Class: "Tea"}
@@ -51,6 +59,12 @@ func SetupDatabase() {
 
 	db.FirstOrCreate(&GenderMale, &entity.Genders{Gender: "Male"})
 	db.FirstOrCreate(&GenderFemale, &entity.Genders{Gender: "Female"})
+
+	db.FirstOrCreate(&StatusActive, &entity.Status{StatusName: "Active"})
+	db.FirstOrCreate(&StatusUnactive, &entity.Status{StatusName: "Unactive"})
+
+	db.FirstOrCreate(&PromotionTypeMember, &entity.PromotionType{PromotionTypeName: "Member"})
+	db.FirstOrCreate(&PromotionTypeAll, &entity.PromotionType{PromotionTypeName: "All"})
 
 	db.FirstOrCreate(&ClassMilk, &entity.Class{Class: "Milk"})
 	db.FirstOrCreate(&ClassTea, &entity.Class{Class: "Tea"})

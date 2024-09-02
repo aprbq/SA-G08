@@ -16,8 +16,6 @@ type Promotion struct {
 	PointsUse     int       `json:"points_use"`
 	DiscountValue float32   `json:"discount_value"`
 
-	PointsTransactions []PointsTransactions `gorm:"foreignKey:PromotionID"`
-
 	Order []Order `gorm:"foreignKey:PromotionID"`
 
 	ConditionID uint       `json:"condition_id"`
