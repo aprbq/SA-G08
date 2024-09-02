@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "../../App.css";
-import { UserOutlined, DashboardOutlined , ShoppingOutlined,LogoutOutlined,StarOutlined} from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, theme, Button, message } from "antd";
+import { UserOutlined, DashboardOutlined, ShoppingOutlined, LogoutOutlined, StarOutlined } from "@ant-design/icons";
+import { Breadcrumb, Layout, Menu, Button, message } from "antd";
 import logo from "../../assets/logocafe.png";
 import Dashboard from "../../pages/dashboard";
 import Customer from "../../pages/customer";
@@ -26,14 +26,11 @@ import Member from "../../pages/member";
 import MemberCreate from "../../pages/member/create";
 import MemberEdit from "../../pages/member/edit";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Footer } = Layout;
 
 const FullLayout: React.FC = () => {
   const page = localStorage.getItem("page");
   const [messageApi, contextHolder] = message.useMessage();
-
-  const [collapsed, setCollapsed] = useState(false);
-
 
   const setCurrentPage = (val: string) => {
     localStorage.setItem("page", val);
@@ -48,132 +45,80 @@ const FullLayout: React.FC = () => {
   };
 
   return (
-    <Layout style={{ minHeight: "100vh"}}>
+    <Layout style={{ minHeight: "100vh" }}>
       {contextHolder}
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-      >
-        <div className="slide-bg"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            height: "100%",
-            background: "#745F47"
-          }}
-        >
-          <div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: 20,
-                marginBottom: 20,
-              }}
-            >
-              <img
-                src={logo}
-                alt="Logo"
-                style={{ width: "80%" }}
-              />
-            </div>
-            <Menu
-              theme="light"
-              defaultSelectedKeys={[page ? page : "dashboard"]}
-              mode="inline"
-              className="custom-menu"
-            >
-              <Menu.Item
-                key="dashboard"
-                onClick={() => setCurrentPage("dashboard")}
-              >
-                <Link to="/">
-                  <DashboardOutlined />
-                  <span>แดชบอร์ด</span>
-                </Link>
-              </Menu.Item>
-
-              <Menu.Item
-                key="customer"
-                onClick={() => setCurrentPage("customer")}
-              >
-                <Link to="/customer">
-                  <UserOutlined />
-                  <span>ข้อมูลสมาชิก</span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item
-                key="menu"
-                onClick={() => setCurrentPage("menu")}
-              >
-                <Link to="/menus">
-                  <ShoppingOutlined />
-                  <span>เมนู</span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item
-                key="ingredient"
-                onClick={() => setCurrentPage("ingredient")}
-              >
-                <Link to="/ingredient">
-                  <ShoppingOutlined />
-                  <span>วัตถุดิบ</span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item
-                key="Order"
-                onClick={() => setCurrentPage("Order")}
-              >
-                <Link to="/Order">
-                  <ShoppingOutlined />
-                  <span>รายการสั่งซื้อ</span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item
-                key="promotion"
-                onClick={() => setCurrentPage("promotion")}
-              >
-                <Link to="/promotion">
-                  <StarOutlined />
-                  <span>โปรโมชั่น</span>
-                </Link>
-              </Menu.Item>
-              
-              <Menu.Item
-                key="member"
-                onClick={() => setCurrentPage("member")}
-              >
-                <Link to="/member">
-                  <UserOutlined />
-                  <span>สมาชิก</span>
-                </Link>
-              </Menu.Item>
-
-            </Menu>
-          </div>
-        </div>
-      </Sider>
-
       <Layout>
-        <Header className = "header" style={{ 
-            padding: "0 16px", 
-            backgroundColor: "#CEC8B6", 
-            display: "flex", 
-            justifyContent: "space-between", 
-            alignItems: "center",
-          }}
-        >
-          <div />
-          <Button className="logout-button"
-            onClick={Logout} icon={<LogoutOutlined/>} >
+        <Header className="header" style={{ backgroundColor: "#745F47", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ width: "95px", height:"75px"}}>
+            <img src={logo} alt="Logo" style={{ width: "75px", height:"75px" }} />
+          </div>
+          <div className="header-buttons">
+            <Button
+              type={page === "dashboard" ? "primary" : "default"}
+              onClick={() => setCurrentPage("dashboard")}
+              icon={<DashboardOutlined />}
+              className="btn-1" 
+              
+            >
+              <Link to="/">แดชบอร์ด</Link>
+            </Button>
+            <Button
+              type={page === "customer" ? "primary" : "default"}
+              onClick={() => setCurrentPage("customer")}
+              icon={<UserOutlined />}
+              className="btn-1"
+            >
+              <Link to="/customer">ข้อมูลสมาชิก</Link>
+            </Button>
+            <Button
+              type={page === "menu" ? "primary" : "default"}
+              onClick={() => setCurrentPage("menu")}
+              icon={<ShoppingOutlined />}
+              className="btn-1"
+            >
+              <Link to="/menus">เมนู</Link>
+            </Button>
+            <Button
+              type={page === "ingredient" ? "primary" : "default"}
+              onClick={() => setCurrentPage("ingredient")}
+              icon={<ShoppingOutlined />}
+              className="btn-1"
+            >
+              <Link to="/ingredient">วัตถุดิบ</Link>
+            </Button>
+            <Button
+              type={page === "Order" ? "primary" : "default"}
+              onClick={() => setCurrentPage("Order")}
+              icon={<ShoppingOutlined />}
+              className="btn-1"
+            >
+              <Link to="/Order">รายการสั่งซื้อ</Link>
+            </Button>
+            <Button
+              type={page === "promotion" ? "primary" : "default"}
+              onClick={() => setCurrentPage("promotion")}
+              icon={<StarOutlined />}
+              className="btn-1"
+            >
+              <Link to="/promotion">โปรโมชั่น</Link>
+            </Button>
+            <Button
+              type={page === "member" ? "primary" : "default"}
+              onClick={() => setCurrentPage("member")}
+              icon={<UserOutlined />}
+              className="btn-1"
+            >
+              <Link to="/member">สมาชิก</Link>
+            </Button>
+          </div>
+          <Button className="logout-button" onClick={Logout} icon={<LogoutOutlined />}>
             ออกจากระบบ
           </Button>
         </Header>
-        <Content style={{ margin: "0 0px", }}>
-          <Breadcrumb style={{ margin: "0px 0", }} />
-          <div className="middle-bg"
+        <Content style={{ margin: "0px", paddingTop: "20px" }}>
+          <Breadcrumb style={{ margin: "0px 0" }} />
+          <div
+            className="middle-bg"
             style={{
               padding: 24,
               minHeight: "100%",
