@@ -21,4 +21,6 @@ type Ingredients struct {
 
 	UsersID 	uint		`json:"users_id"`
 	Users    	*Users   	`gorm:"foreignKey: UsersID" json:"users"`
+
+	MenuIngredient []MenuIngredient `gorm:"foreignKey:MenuID"`
 }

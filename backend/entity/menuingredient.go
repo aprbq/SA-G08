@@ -4,10 +4,12 @@ import "gorm.io/gorm"
 
 type MenuIngredient struct {
 	gorm.Model
-	MenuQuantity  int
+	// MenuQuantity  int
 	
 	IngredientsID *uint
 	Ingredients   Ingredients `gorm:"foriegnKey:IngredientsID"`
 
-	Menu []Menu `gorm:"foreignKey:MenuIngredientID"`
+	MenuID *uint
+	Menu   Menu `gorm:"foriegnKey:MenuID"`
+	
 }

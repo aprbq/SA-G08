@@ -116,7 +116,6 @@ func SetupDatabase() {
 		Description:      "ajh",
 		Price:            45,
 		CategoryID:       1,
-		MenuIngredientID: 1,
 		UsersID:          1,
 	}
 	db.FirstOrCreate(Menu, &entity.Menu{
@@ -124,7 +123,7 @@ func SetupDatabase() {
 	})
 
 	MenuIngredient := &entity.MenuIngredient{
-		MenuQuantity: 1,
+		// MenuQuantity: 1,
 	}
 	db.FirstOrCreate(MenuIngredient, &entity.MenuIngredient{})
 	Promotion := &entity.Promotion{
