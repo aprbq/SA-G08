@@ -38,6 +38,12 @@ func SetupDatabase() {
 		&entity.Status{},
 		&entity.PromotionType{},
 		&entity.Stock{},
+		&entity.Order{},
+		&entity.OrderHasMenu{},
+		&entity.Orderitem{},
+		&entity.Payment{},
+		&entity.Paymentmethod{},
+
 	)
 
 	GenderMale := entity.Genders{Gender: "Male"}
