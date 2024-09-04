@@ -33,17 +33,19 @@ func SetupDatabase() {
 		&entity.Users{},
 		&entity.Ingredients{},
 		&entity.Menu{},
+		&entity.MenuIngredient{},
 		&entity.Category{},
 		&entity.PromotionType{},
 		&entity.DiscountType{},
 		&entity.Promotion{},
-		&entity.Order{},
-		&entity.OrderHasMenu{},
-		&entity.Orderitem{},
-		&entity.Payment{},
-		&entity.Paymentmethod{},
-		&entity.MenuIngredient{},
 		&entity.Condition{},
+		&entity.Paymentmethod{},
+		&entity.Payment{},
+		&entity.Order{},
+		&entity.Orderitem{},
+		&entity.OrderHasMenu{},
+
+
 
 	)
 

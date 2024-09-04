@@ -13,8 +13,8 @@ type Order struct {
 	PaymentID  	uint		`json:"payment_id"`
 	Payment    	*Payment   	`gorm:"foreignKey:PaymentID" json: "payment"`
 
-	EmployeeID 	uint		`json:"employee_id"`
-	Employee    	*Employee   	`gorm:"foreignKey: EmployeeID" json:"employee"`
+	UsersID uint      `json:"user_id"`
+	Users   *Users `gorm:"foriegnKey:UsersID" json: "users"`
 
 	PromotionID 	uint		`json:"promotion_id"`
 	Promotion    	*Promotion   	`gorm:"foreignKey: PromotionID" json:"promotion"`
