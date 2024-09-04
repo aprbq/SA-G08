@@ -27,22 +27,23 @@ func ConnectionDB() {
 func SetupDatabase() {
 	db.AutoMigrate(
 		&entity.Genders{},
+		&entity.Status{},
+		&entity.Stock{},
 		&entity.Class{},
 		&entity.Users{},
 		&entity.Ingredients{},
 		&entity.Menu{},
 		&entity.Category{},
-		&entity.MenuIngredient{},
-		&entity.Promotion{},
-		&entity.Condition{},
-		&entity.Status{},
 		&entity.PromotionType{},
-		&entity.Stock{},
+		&entity.DiscountType{},
+		&entity.Promotion{},
 		&entity.Order{},
 		&entity.OrderHasMenu{},
 		&entity.Orderitem{},
 		&entity.Payment{},
 		&entity.Paymentmethod{},
+		&entity.MenuIngredient{},
+		&entity.Condition{},
 
 	)
 
@@ -149,7 +150,7 @@ func SetupDatabase() {
 		DiscountValue: 1,
 		DiscountTypeID:  1,
 		StatusID:        1,
-		EmployeeID:    1,
+		UsersID:    1,
 	}
 	db.FirstOrCreate(Promotion, &entity.Promotion{
 		PromotionName: "a",

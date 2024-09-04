@@ -46,71 +46,41 @@ const FullLayout: React.FC = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      {contextHolder}
-      <Layout>
-        <Header className="header" style={{ backgroundColor: "#745F47", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ width: "95px", height:"75px"}}>
-            <img src={logo} alt="Logo" style={{ width: "75px", height:"75px" }} />
-          </div>
-          <div className="header-buttons">
-            <Button
-              type={page === "dashboard" ? "primary" : "default"}
-              onClick={() => setCurrentPage("dashboard")}
-              icon={<DashboardOutlined />}
-              className="btn-1" 
-              
-            >
-              <Link to="/">แดชบอร์ด</Link>
-            </Button>
-            <Button
-              type={page === "customer" ? "primary" : "default"}
-              onClick={() => setCurrentPage("customer")}
-              icon={<UserOutlined />}
-              className="btn-1"
-            >
-              <Link to="/customer">ข้อมูลสมาชิก</Link>
-            </Button>
-            <Button
-              type={page === "menu" ? "primary" : "default"}
-              onClick={() => setCurrentPage("menu")}
-              icon={<ShoppingOutlined />}
-              className="btn-1"
-            >
-              <Link to="/menus">เมนู</Link>
-            </Button>
-            <Button
-              type={page === "ingredient" ? "primary" : "default"}
-              onClick={() => setCurrentPage("ingredient")}
-              icon={<ShoppingOutlined />}
-              className="btn-1"
-            >
-              <Link to="/ingredient">วัตถุดิบ</Link>
-            </Button>
-            <Button
-              type={page === "Order" ? "primary" : "default"}
-              onClick={() => setCurrentPage("Order")}
-              icon={<ShoppingOutlined />}
-              className="btn-1"
-            >
-              <Link to="/Order">รายการสั่งซื้อ</Link>
-            </Button>
-            <Button
-              type={page === "promotion" ? "primary" : "default"}
-              onClick={() => setCurrentPage("promotion")}
-              icon={<StarOutlined />}
-              className="btn-1"
-            >
-              <Link to="/promotion">โปรโมชั่น</Link>
-            </Button>
-            <Button
-              type={page === "member" ? "primary" : "default"}
-              onClick={() => setCurrentPage("member")}
-              icon={<UserOutlined />}
-              className="btn-1"
-            >
-              <Link to="/member">สมาชิก</Link>
-            </Button>
-          </div>
+  {contextHolder}
+  <Layout>
+    <Header className="header">
+      <div className="header-logo">
+        <img src={logo} alt="Logo" />
+      </div>
+      <Menu
+        theme="dark"
+        mode="horizontal"
+        //selectedKeys={[page]}
+        onClick={({ key }) => setCurrentPage(key)}
+        className="header-menu"
+      >
+        <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
+          <Link to="/">แดชบอร์ด</Link>
+        </Menu.Item>
+        <Menu.Item key="customer" icon={<UserOutlined />}>
+          <Link to="/customer">ข้อมูลสมาชิก</Link>
+        </Menu.Item>
+        <Menu.Item key="menu" icon={<ShoppingOutlined />}>
+          <Link to="/menus">เมนู</Link>
+        </Menu.Item>
+        <Menu.Item key="ingredient" icon={<ShoppingOutlined />}>
+          <Link to="/ingredient">วัตถุดิบ</Link>
+        </Menu.Item>
+        <Menu.Item key="Order" icon={<ShoppingOutlined />}>
+          <Link to="/Order">รายการสั่งซื้อ</Link>
+        </Menu.Item>
+        <Menu.Item key="promotion" icon={<StarOutlined />}>
+          <Link to="/promotion">โปรโมชั่น</Link>
+        </Menu.Item>
+        <Menu.Item key="member" icon={<UserOutlined />}>
+          <Link to="/member">สมาชิก</Link>
+        </Menu.Item>
+      </Menu>
           <Button className="logout-button" onClick={Logout} icon={<LogoutOutlined />}>
             ออกจากระบบ
           </Button>

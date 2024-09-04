@@ -17,16 +17,17 @@ type Promotion struct {
 	DiscountValue float32   `json:"discount_value"`
 
 	Order []Order `gorm:"foreignKey:PromotionID"`
+	Condition []Condition `gorm:"foreignKey:PromotionID"`
 
 	DiscountTypeID uint          `json:"discount_type_id"`
-	DiscountType   *DiscountType `gorm:"foriegnKey:ConditionID" json: "discount_type"`
+	DiscountType   *DiscountType `gorm:"foriegnKey:DiscountTypeID" json: "discount_type"`
 
 	PromotionTypeID uint           `json:"promotion_type_id"`
-	PromotionType   *PromotionType `gorm:"foriegnKey:ConditionID" json: "promotion_type"`
+	PromotionType   *PromotionType `gorm:"foriegnKey:PromotionTypeID" json: "promotion_type"`
 
 	StatusID uint    `json:"status_id"`
-	Status   *Status `gorm:"foriegnKey:ConditionID" json: "status"`
+	Status   *Status `gorm:"foriegnKey:StatusID" json: "status"`
 
-	EmployeeID uint      `json:"employee_id"`
-	Employee   *Employee `gorm:"foriegnKey:EmployeeID" json: "employee"`
+	UsersID uint      `json:"user_id"`
+	Users   *Users `gorm:"foriegnKey:UsersID" json: "users"`
 }
