@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message, Modal } from "antd";
-import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetMenu, DeleteMenuById } from "../../services/https/index";
 import { MenuInterface } from "../../interfaces/Menu";
@@ -15,7 +15,6 @@ function Menus() {
   const myId = localStorage.getItem("id");
 
   const columns: ColumnsType<MenuInterface> = [
-
     {
       title: "",
       render: (record) => (
@@ -40,7 +39,7 @@ function Menus() {
     },
     {
       title: "รูปภาพ",
-      dataIndex: "imageUrl", 
+      dataIndex: "imageUrl",
       key: "image",
       render: (imageUrl) => (
         <img src={imageUrl} alt="menu" style={{ width: 100, height: 100, objectFit: 'cover' }} />
@@ -65,13 +64,24 @@ function Menus() {
       title: "ประเภท",
       dataIndex: "category_id",
       key: "category_id",
-      // render: (record) => <>{record?.category?.category}</>,
     },
     {
       title: "สต็อก",
       dataIndex: "stock_id",
       key: "stock_id",
-      // render: (record) => <>{record?.category?.category}</>,
+    },
+    {
+      title: "ดูวัตถุดิบ",
+      key: "ingredients",
+      render: (record) => (
+        <Button
+          type="default"
+          icon={<EyeOutlined />}
+          onClick={() => handleViewIngredients(record.ID)} // ฟังก์ชันดูวัตถุดิบ
+        >
+          ดูวัตถุดิบ
+        </Button>
+      ),
     },
     {
       title: "",
@@ -88,35 +98,12 @@ function Menus() {
         </>
       ),
     },
-    {
-      title: "",
-      render: (record) => (
-        <>
-          <Button
-            type="primary"
-            className="btn-delete"
-            icon={<DeleteOutlined />}
-            onClick={() => showDeleteConfirm(record.ID)}
-          ></Button>
-        </>
-      ),
-    },
   ];
 
-  const showDeleteConfirm = (id: string) => {
-    confirm({
-      title: "คุณแน่ใจหรือว่าต้องการลบเมนูนี้?",
-      content: "การลบจะไม่สามารถยกเลิกได้",
-      okText: "ยืนยัน",
-      okType: "danger",
-      cancelText: "ยกเลิก",
-      onOk() {
-        deleteMenuById(id);
-      },
-      onCancel() {
-        console.log("ยกเลิกการลบ");
-      },
-    });
+  const handleViewIngredients = (menuId: number) => {
+    // ฟังก์ชันที่จะเปิด Modal หรือไปยังหน้าแสดงวัตถุดิบ
+    console.log("ดูวัตถุดิบของเมนู ID:", menuId);
+    // คุณสามารถเลือกที่จะเปิด Modal หรือ redirect ไปยังหน้าใหม่ที่แสดงข้อมูลวัตถุดิบของเมนูนี้
   };
 
   const deleteMenuById = async (id: string) => {

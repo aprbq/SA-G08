@@ -8,12 +8,11 @@ import {
   Input,
   Card,
   message,
-  DatePicker,
   InputNumber,
   Select,
   Upload,
 } from "antd";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined, UploadOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { MenuInterface } from "../../../interfaces/Menu";
 import { CreateMenu } from "../../../services/https";
 import { useNavigate, Link } from "react-router-dom";
@@ -151,6 +150,44 @@ function MenuCreate() {
               </Form.Item>
             </Col>
           </Row>
+
+          {/* เพิ่มส่วนสำหรับการเพิ่มวัตถุดิบหลายรายการ */}
+          <Form.List name="ingredients">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map((field) => (
+                  <Row key={field.key} gutter={[16, 0]} align="middle">
+                    <Col xs={20} sm={20} md={20} lg={20} xl={20}>
+                      <Form.Item
+                        {...field}
+                        label="ชื่อวัตถุดิบ"
+                        name={[field.name, "name"]}
+                        rules={[
+                          { required: true, message: "กรุณากรอกชื่อวัตถุดิบ !" },
+                        ]}
+                      >
+                        <Input placeholder="ชื่อวัตถุดิบ" />
+                      </Form.Item>
+                    </Col>
+
+                    <Col xs={4} sm={4} md={4} lg={4} xl={4}>
+                      <Button
+                        type="link"
+                        icon={<MinusCircleOutlined />}
+                        onClick={() => remove(field.name)}
+                      />
+                    </Col>
+                  </Row>
+                ))}
+
+                <Form.Item>
+                  <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    เพิ่มวัตถุดิบ
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
 
           <Row justify="end">
             <Col style={{ marginTop: "40px" }}>

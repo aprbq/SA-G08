@@ -13,7 +13,7 @@ import {
   Select,
   Upload,
 } from "antd";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined, UploadOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { MenuInterface } from "../../../interfaces/Menu";
 import { GetMenuById, UpdateMenuById } from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
@@ -23,28 +23,26 @@ function MenuEdit() {
   const { id } = useParams<{ id: any }>();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
-  const [imageFile, setImageFile] = useState<any[]>([]); // For handling image uploads
+  const [imageFile, setImageFile] = useState<any[]>([]);
 
   const getMenuById = async (id: string) => {
     let res = await GetMenuById(id);
     if (res.status == 200) {
       form.setFieldsValue({
         name: res.data.name,
-        // quantity: res.data.quantity,
         price: res.data.price,
         description: res.data.description,
         category_id: res.data.category?.ID,
-        
+        ingredients: res.data.ingredients || [], // Set ingredients from API
       });
 
-      // Load existing image if available
       if (res.data.image) {
         setImageFile([
           {
             uid: "-1",
             name: "image.png",
             status: "done",
-            url: res.data.image, // Image URL from the API
+            url: res.data.image,
           },
         ]);
       }
@@ -62,7 +60,7 @@ function MenuEdit() {
   const onFinish = async (values: MenuInterface) => {
     let payload = {
       ...values,
-      image: imageFile.length ? imageFile[0].originFileObj : undefined, // Include new image if uploaded
+      image: imageFile.length ? imageFile[0].originFileObj : undefined,
     };
 
     const res = await UpdateMenuById(id, payload);
@@ -109,12 +107,7 @@ function MenuEdit() {
               <Form.Item
                 label="ชื่อ"
                 name="name"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณากรอกชื่อ !",
-                  },
-                ]}
+                rules={[{ required: true, message: "กรุณากรอกชื่อ !" }]}
               >
                 <Input />
               </Form.Item>
@@ -124,18 +117,11 @@ function MenuEdit() {
               <Form.Item
                 label="ประเภท"
                 name="category_id"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาเลือกประเภท !",
-                  },
-                ]}
+                rules={[{ required: true, message: "กรุณาเลือกประเภท !" }]}
               >
                 <Select
-                  defaultValue=""
                   style={{ width: "100%" }}
                   options={[
-                    { value: "", label: "กรุณาเลือกประเภท", disabled: true },
                     { value: 1, label: "Hot" },
                     { value: 2, label: "Ice" },
                     { value: 3, label: "Frappe" },
@@ -148,12 +134,7 @@ function MenuEdit() {
               <Form.Item
                 label="คำอธิบาย"
                 name="description"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณากรอกคำอธิบาย !",
-                  },
-                ]}
+                rules={[{ required: true, message: "กรุณากรอกคำอธิบาย !" }]}
               >
                 <Input />
               </Form.Item>
@@ -163,12 +144,7 @@ function MenuEdit() {
               <Form.Item
                 label="ราคา"
                 name="price"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณากรอกราคา !",
-                  },
-                ]}
+                rules={[{ required: true, message: "กรุณากรอกราคา !" }]}
               >
                 <InputNumber
                   min={0}
@@ -186,7 +162,7 @@ function MenuEdit() {
                   listType="picture"
                   fileList={imageFile}
                   onChange={handleImageChange}
-                  beforeUpload={() => false} // Prevent auto-upload
+                  beforeUpload={() => false}
                   maxCount={1}
                 >
                   <Button icon={<UploadOutlined />}>อัพโหลดรูปภาพ</Button>
@@ -194,6 +170,42 @@ function MenuEdit() {
               </Form.Item>
             </Col>
           </Row>
+
+          {/* ส่วนสำหรับแก้ไขวัตถุดิบ */}
+          <Form.List name="ingredients">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map((field) => (
+                  <Row key={field.key} gutter={[16, 0]} align="middle">
+                    <Col xs={20} sm={20} md={20} lg={20} xl={20}>
+                      <Form.Item
+                        {...field}
+                        label="ชื่อวัตถุดิบ"
+                        name={[field.name, "name"]}
+                        rules={[{ required: true, message: "กรุณากรอกชื่อวัตถุดิบ !" }]}
+                      >
+                        <Input placeholder="ชื่อวัตถุดิบ" />
+                      </Form.Item>
+                    </Col>
+
+                    <Col xs={4} sm={4} md={4} lg={4} xl={4}>
+                      <Button
+                        type="link"
+                        icon={<MinusCircleOutlined />}
+                        onClick={() => remove(field.name)}
+                      />
+                    </Col>
+                  </Row>
+                ))}
+
+                <Form.Item>
+                  <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    เพิ่มวัตถุดิบ
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
 
           <Row justify="end">
             <Col style={{ marginTop: "40px" }}>
