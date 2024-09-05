@@ -1,20 +1,17 @@
-package controller
+package status
 
 import (
 	"net/http"
 
-	"example.com/sa-67-example/entity"
-	"github.com/gin-gonic/gin"
     "example.com/sa-67-example/config"
+    "example.com/sa-67-example/entity"
+    "github.com/gin-gonic/gin"
 )
 
-// GET /genders
-func ListStatus(c *gin.Context) {
-	var status []entity.Status
+func GetAll(c *gin.Context) {
+    db := config.DB()
+    var status []entity.Status
+    db.Find(&status)
 
-	db := config.DB()
-
-	db.Find(&status)
-
-	c.JSON(http.StatusOK, &status)
+    c.JSON(http.StatusOK, &status)
 }
