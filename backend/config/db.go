@@ -157,6 +157,7 @@ func SetupDatabase() {
 		EndDate:       exp_date,
 		PointsAdded:   1,
 		PointsUse:     1,
+		PromotionTypeID: 1,
 		DiscountValue: 1,
 		DiscountTypeID:  1,
 		StatusID:        1,
