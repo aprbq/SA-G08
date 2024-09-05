@@ -61,6 +61,10 @@ func SetupDatabase() {
 	PromotionTypeMember := entity.PromotionType{PromotionTypeName: "Member"}
 	PromotionTypeAll := entity.PromotionType{PromotionTypeName: "All"}
 
+	DiscountTypePercen := entity.DiscountType{DiscountTypeName: "Percen"}
+	DiscountTypeBogo := entity.DiscountType{DiscountTypeName: "Bogo"}
+	DiscountTypeBath := entity.DiscountType{DiscountTypeName: "Bath"}
+
 	ClassMilk := entity.Class{Class: "Milk"}
 	ClassTea := entity.Class{Class: "Tea"}
 	ClassCoffee := entity.Class{Class: "Coffee"}
@@ -75,6 +79,10 @@ func SetupDatabase() {
 
 	db.FirstOrCreate(&StatusActive, &entity.Status{StatusName: "Active"})
 	db.FirstOrCreate(&StatusUnactive, &entity.Status{StatusName: "Unactive"})
+
+	db.FirstOrCreate(&DiscountTypePercen, &entity.DiscountType{DiscountTypeName: "Percen"})
+	db.FirstOrCreate(&DiscountTypeBogo, &entity.DiscountType{DiscountTypeName: "Bogo"})
+	db.FirstOrCreate(&DiscountTypeBath, &entity.DiscountType{DiscountTypeName: "Bath"})
 
 	db.FirstOrCreate(&StockIn, &entity.Stock{StockName: "In stock"})
 	db.FirstOrCreate(&StockOut, &entity.Stock{StockName: "Out of stock"})

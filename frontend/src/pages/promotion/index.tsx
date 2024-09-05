@@ -72,6 +72,7 @@ function Promotion() {
     title: "สถานะ",
     dataIndex: "status_id",
     key: "status_id",
+    //render: (item) => Object.values(item.StatusName),
     },
     {
       title: "",
