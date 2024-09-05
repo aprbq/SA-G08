@@ -19,8 +19,8 @@ type Member struct {
 	Status string
 
 	PointsTransactions []PointsTransactions `gorm:"foreignKey:MemberID"`
-	EmployeeID *uint
-	Employee   Employee `gorm:"foreignKey:EmployeeID"`
+	UsersID *uint
+	Users   Users `gorm:"foreignKey:UsersID"`
 
 	Order []Order `gorm:"foreignKey:MemberID"`
 }

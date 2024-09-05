@@ -1,12 +1,76 @@
 package promotion
 
 import (
-    "net/http"
+	"net/http"
 
-    "github.com/gin-gonic/gin"
-    "example.com/sa-67-example/config"
-    "example.com/sa-67-example/entity"
+	"example.com/sa-67-example/config"
+	"example.com/sa-67-example/entity"
+	"github.com/gin-gonic/gin"
 )
+
+func CreatePromotion(c *gin.Context) {
+	var promotion entity.Promotion
+
+
+	db := config.DB()
+
+	// ค้นหา gender ด้วย id
+	var status entity.Status
+	db.First(&status, promotion.StatusID)
+	if status.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
+		return
+	}
+
+    var users entity.Users
+	db.First(&users, promotion.UsersID)
+	if users.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
+		return
+	}
+
+    var promotion_type entity.PromotionType
+	db.First(&promotion_type,promotion.DiscountTypeID)
+	if promotion_type.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
+		return
+	}
+
+    var discount_type entity.DiscountType
+	db.First(&discount_type, promotion.DiscountTypeID)
+	if discount_type.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
+		return
+	}
+
+
+	// สร้าง User
+	u := entity.Promotion{
+		PromotionName: promotion.PromotionName, //  
+		Description:  promotion.Description,  //  
+		StartDate:     promotion.StartDate,     //  
+		EndDate:  promotion.EndDate,
+		PointsAdded:  promotion.PointsAdded,
+		PointsUse:   promotion.PointsUse, //  
+		DiscountValue:  promotion.DiscountValue,
+		DiscountTypeID:    promotion.DiscountTypeID,
+        DiscountType:    discount_type,
+        PromotionTypeID:    promotion.PromotionTypeID,
+        PromotionType:    promotion_type,
+        StatusID:    promotion.StatusID,
+        Status:    status,
+        UsersID:    promotion.UsersID,
+        Users:    users, //   
+	}
+
+	// บันทึก
+	if err := db.Create(&u).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"message": "Created success", "data": u})
+}
 
 // GetAll retrieves all promotion along with their associated class
 func GetAll(c *gin.Context) {
