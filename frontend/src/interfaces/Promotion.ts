@@ -10,5 +10,5 @@ DiscountValue?: number;
 DiscountTypeID?:  number;
 PromotionTypeID?: number;
 StatusID?:        number;
-EmployeeID?:    number;
+UsersID?:         number;
 }

@@ -26,6 +26,26 @@ async function SignIn(data: SignInInterface) {
     .catch((e) => e.response);
 }
 
+async function GetStatus() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/status`, requestOptions)
+    .then((res) => {
+      if (res.status == 200) {
+        return res.json();
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
 async function GetUsers() {
   return await axios
     .get(`${apiUrl}/users`, requestOptions)
@@ -247,6 +267,7 @@ export {
   UpdateUsersById,
   DeleteUsersById,
   CreateUser,
+  GetStatus,
   GetIngredients,
   GetIngredientsById,
   UpdateIngredientsById,

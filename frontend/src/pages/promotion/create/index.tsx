@@ -15,27 +15,19 @@ import {
   } from "antd";
   import { PlusOutlined } from "@ant-design/icons";
   import { PromotionInterface } from "../../../interfaces/Promotion";
-  import { CreatePromotion } from "../../../services/https";
+  import { StatusInterface } from "../../../interfaces/Status";
+  import { CreatePromotion,GetStatus } from "../../../services/https";
   import { useNavigate, Link } from "react-router-dom";
-  import axios from "axios";
+
+  const { Option } = Select;
 
   function PromotionCreate() {
     const navigate = useNavigate();
   
     const [messageApi, contextHolder] = message.useMessage();
 
-    const [conditions, setConditions] = useState([]);
+    const [status, setStatus] = useState<StatusInterface[]>([]);
 
-    useEffect(() => {
-      axios.get('/api/condition')
-        .then(response => {
-          setConditions(response.data);
-        })
-        .catch(error => {
-          console.error("There was an error fetching the data!", error);
-        });
-    }, []);
-  
     const onFinish = async (values: PromotionInterface) => {
   
       let res = await CreatePromotion(values);
@@ -55,6 +47,17 @@ import {
         });
       }
     };
+
+    const getStatus = async () => {
+      let res = await GetStatus();
+      if (res) {
+        setStatus(res);
+      }
+    };
+
+    useEffect(() => {
+      getStatus();
+    }, []);
   
     return (
       <div>
@@ -163,69 +166,19 @@ import {
               
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="ประเภท"
-                name="discount_type"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาเลือกประเภท !",
-                  },
-                ]}
+                name="StatusID"
+                label="สถานะ"
+                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
               >
-                <Select
-                  defaultValue=""
-                  style={{ width: "100%" }}
-                  options={[
-                    { value: "", label: "กรุณาเลือกประเภท", disabled: true },
-                    { value: 1, label: "Percent" },
-                    { value: 2, label: "BOGO" },
-                    { value: 3, label: "Bath" },
-                  ]}
-                />
+                <Select allowClear>
+                  {status.map((item) => (
+                    <Option value={item.ID} key={item.StatusName}>
+                      {item.StatusName}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
-              </Col>
-
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="เงื่อนไข"
-                  name="condition_id"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณาเลือกเงื่อนไข !",
-                    },
-                  ]}
-                >
-                  <Select
-                  defaultValue="ไม่่มี"
-                  style={{ width: "100%" }}
-                  options={conditions}
-                />
-                </Form.Item>
-              </Col>
-
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="สถานะ"
-                  name="status"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณาเลือกสถานะ !",
-                    },
-                  ]}
-                >
-                  <Select
-                  defaultValue=""
-                  style={{ width: "100%" }}
-                  options={[
-                    { value: "", label: "กรุณาเลือกสถานะ", disabled: true },
-                    { value: 1, label: "Active" },
-                    { value: 2, label: "Inactive" },
-                  ]}
-                />
-                </Form.Item>
-              </Col>
+            </Col>
 
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
