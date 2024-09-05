@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message } from "antd";
+import { Space, Table, Button, Col, Row, Divider, message ,Card,Statistic,Typography} from "antd";
 import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetMember, DeleteMemberById } from "../../services/https/index";
@@ -134,11 +134,49 @@ function Member() {
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
             <Link to="/member/create">
-              <Button className = "add-button" type="primary" icon={<PlusOutlined />}>
+              <Button className = "btn-1" type="primary" icon={<PlusOutlined />}>
                 สมัครสมาชิก
               </Button>
             </Link>
           </Space>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={5}>
+            <Card bordered={false}
+                  style={{
+                    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                  }}
+                >
+              <Statistic title="Total Members" value={3000} valueStyle={{ color: "black" }}  />
+            </Card>
+        </Col>
+        <Col span={5}>
+            <Card bordered={false}
+                  style={{
+                    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                  }}
+                >
+              <Statistic title="Active Members" value={3000} valueStyle={{ color: "black" }}  />
+            </Card>
+        </Col>
+        <Col span={5}>
+        <Card bordered={false}
+                  style={{
+                    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                  }}
+                >
+              <Statistic title="Inactive Members" value={3000} valueStyle={{ color: "black" }}  />
+            </Card>
+        </Col>
+        <Col span={5}>
+        <Card bordered={false}
+                  style={{
+                    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                  }}
+                >
+              <Statistic title="New This Month" value={3000} valueStyle={{ color: "black" }}  />
+            </Card>
         </Col>
       </Row>
       <Divider />
