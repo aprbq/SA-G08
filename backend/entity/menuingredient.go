@@ -7,9 +7,9 @@ type MenuIngredient struct {
 	// MenuQuantity  int
 	
 	IngredientsID *uint
-	Ingredients   Ingredients `gorm:"foriegnKey:IngredientsID"`
+	Ingredients   Ingredients `gorm:"foreignKey:IngredientsID"`
 
 	MenuID *uint
-	Menu   Menu `gorm:"foriegnKey:MenuID"`
+	Menu   Menu `gorm:"foreignKey:MenuID"`
 	
 }

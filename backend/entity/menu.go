@@ -15,10 +15,10 @@ type Menu struct {
 	Category    	*Category   	`gorm:"foreignKey: CategoryID"`
 
 	StockID 	uint    `json:"stock_id"`
-	Stock   	*Stock `gorm:"foriegnKey:StockID" json: "stock"`
+	Stock   	*Stock `gorm:"foreignKey:StockID" json: "stock"`
 
 	UsersID 		uint	`json:"users_id"`
-	Users   		*Users `gorm:"foriegnKey:UsersID"`
+	Users   		*Users `gorm:"foreignKey:UsersID"`
 
 	MenuIngredient []MenuIngredient `gorm:"foreignKey:MenuID"`
 

@@ -20,14 +20,14 @@ type Promotion struct {
 	Condition []Condition `gorm:"foreignKey:PromotionID"`
 
 	DiscountTypeID uint          `json:"discount_type_id"`
-	DiscountType   *DiscountType `gorm:"foriegnKey:DiscountTypeID" json: "discount_type"`
+	DiscountType   *DiscountType `gorm:"foreignKey:DiscountTypeID" json: "discount_type"`
 
 	PromotionTypeID uint           `json:"promotion_type_id"`
-	PromotionType   *PromotionType `gorm:"foriegnKey:PromotionTypeID" json: "promotion_type"`
+	PromotionType   *PromotionType `gorm:"foreignKey:PromotionTypeID" json: "promotion_type"`
 
 	StatusID uint    `json:"status_id"`
-	Status   *Status `gorm:"foriegnKey:StatusID" json: "status"`
+	Status   *Status `gorm:"foreignKey:StatusID" json: "status"`
 
 	UsersID uint      `json:"user_id"`
-	Users   *Users `gorm:"foriegnKey:UsersID" json: "users"`
+	Users   *Users `gorm:"foreignKey:UsersID" json: "users"`
 }

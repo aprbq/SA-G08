@@ -12,8 +12,8 @@ type PointsTransactions struct {
 	PointsAdd int
 	Description string
 	MemberID *uint
-	Member   Member `gorm:"foriegnKey:MemberID"`
+	Member   Member `gorm:"foreignKey:MemberID"`
 	PromotionID *uint
-	Promotion   Promotion `gorm:"foriegnKey:PromotionID"`
+	Promotion   Promotion `gorm:"foreignKey:PromotionID"`
 
 }

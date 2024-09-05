@@ -68,6 +68,8 @@ func main() {
         router.GET("/promotion", promotion.GetAll)
         router.GET("/promotion/:id", promotion.Get)
         router.DELETE("/promotion/:id", promotion.Delete)
+
+
 	 }
  
 	 r.GET("/genders", genders.GetAll)

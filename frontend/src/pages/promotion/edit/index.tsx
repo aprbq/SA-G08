@@ -15,10 +15,11 @@ import {
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { PromotionInterface } from "../../../interfaces/Promotion";
-import { GetPromotionById, UpdatePromotionById } from "../../../services/https/index";
+import { StatusInterface } from "../../../interfaces/Status";
+import { GetPromotionById, UpdatePromotionById,GetStatus } from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import dayjs from "dayjs";
-import axios from "axios";
+const { Option } = Select;
 
 
 function PromotionEdit() {
@@ -26,17 +27,8 @@ function PromotionEdit() {
   const { id } = useParams<{ id: any }>();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
-  const [conditions, setConditions] = useState([]);
+  const [status, setStatus] = useState<StatusInterface[]>([]);
 
-    useEffect(() => {
-      axios.get('/api/condition')
-        .then(response => {
-          setConditions(response.data);
-        })
-        .catch(error => {
-          console.error("There was an error fetching the data!", error);
-        });
-    }, []);
 
   const getPromotionById = async (id: string) => {
     let res = await GetPromotionById(id);
@@ -47,8 +39,9 @@ function PromotionEdit() {
         points_added: res.data.points_added,
         points_use: res.data.points_use,
         discount_value: res.data.discount_value,
-        discount_type: res.data.discount_type,
-        status: res.data.status,
+        discount_type_id: res.data.discount_type_id?.ID,
+        promotion_type_id:res.data.promotion_type_id?.ID,
+        status_id: res.data.status_id?.ID,
         start_date: dayjs(res.data.start_date),
         end_date: dayjs(res.data.end_date),
         condition_id: res.data.condition_id?.ID,
@@ -86,8 +79,16 @@ function PromotionEdit() {
     }
   };
 
+  const getStatus = async () => {
+    let res = await GetStatus();
+    if (res) {
+      setStatus(res);
+    }
+  };
+
   useEffect(() => {
     getPromotionById(id);
+    getStatus();
   }, []);
 
   return (
@@ -195,73 +196,54 @@ function PromotionEdit() {
                   />
                 </Form.Item>
               </Col>
+
+              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                name="StatusID"
+                label="สถานะ"
+                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
+              >
+                <Select allowClear>
+                  {status.map((item) => (
+                    <Option value={item.ID} key={item.StatusName}>
+                      {item.StatusName}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                name="StatusID"
+                label="สถานะ"
+                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
+              >
+                <Select allowClear>
+                  {status.map((item) => (
+                    <Option value={item.ID} key={item.StatusName}>
+                      {item.StatusName}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
               
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="ประเภท"
-                name="discount_type"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาเลือกประเภท !",
-                  },
-                ]}
+                name="StatusID"
+                label="สถานะ"
+                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
               >
-                <Select
-                  defaultValue=""
-                  style={{ width: "100%" }}
-                  options={[
-                    { value: "", label: "กรุณาเลือกประเภท", disabled: true },
-                    { value: 1, label: "Percent" },
-                    { value: 2, label: "BOGO" },
-                    { value: 3, label: "Bath" },
-                  ]}
-                />
+                <Select allowClear>
+                  {status.map((item) => (
+                    <Option value={item.ID} key={item.StatusName}>
+                      {item.StatusName}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
-              </Col>
-  
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="เงื่อนไข"
-                  name="condition_id"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณาเลือกเงื่อนไข !",
-                    },
-                  ]}
-                >
-                  <Select
-                  defaultValue="ไม่่มี"
-                  style={{ width: "100%" }}
-                  options={conditions}
-                />
-                </Form.Item>
-              </Col>
-
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="สถานะ"
-                  name="status"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณาเลือกสถานะ !",
-                    },
-                  ]}
-                >
-                  <Select
-                  defaultValue=""
-                  style={{ width: "100%" }}
-                  options={[
-                    { value: "", label: "กรุณาเลือกสถานะ", disabled: true },
-                    { value: 1, label: "Active" },
-                    { value: 2, label: "Inactive" },
-                  ]}
-                />
-                </Form.Item>
-              </Col>
-              
+            </Col>
 
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
@@ -292,7 +274,7 @@ function PromotionEdit() {
                   <DatePicker style={{ width: "100%" }} />
                 </Form.Item>
               </Col>
-          </Row>
+            </Row>
 
           <Row justify="end">
             <Col style={{ marginTop: "40px" }}>

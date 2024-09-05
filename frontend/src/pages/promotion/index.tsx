@@ -18,7 +18,7 @@ function Promotion() {
 
     {
       title: "ลำดับ",
-      dataIndex: "id",
+      dataIndex: "ID",
       key: "id",
     },
 
@@ -55,8 +55,8 @@ function Promotion() {
     },
     {
       title: "สำหรับ",
-      dataIndex:"promotion_type_name",
-      key: "promotion_type_name",
+      dataIndex:"promotion_type",
+      key: "promotion_type",
       render: (item) => item ? item.PromotionTypeName : "ไม่มีข้อมูล",
     },
     {
@@ -71,9 +71,9 @@ function Promotion() {
     },
     {
     title: "สถานะ",
-    dataIndex: "status_name",
-    key: "status_name",
-    render: (record) => <>{record?.status_name?.status_name}</>,
+    dataIndex: "status",
+    key: "status",
+    render: (item) => item ? item.status : "ไม่มีข้อมูล",
     },
     {
       title: "",

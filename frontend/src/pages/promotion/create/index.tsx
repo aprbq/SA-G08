@@ -19,13 +19,12 @@ import {
   import { CreatePromotion,GetStatus } from "../../../services/https";
   import { useNavigate, Link } from "react-router-dom";
 
+
   const { Option } = Select;
 
   function PromotionCreate() {
     const navigate = useNavigate();
-  
     const [messageApi, contextHolder] = message.useMessage();
-
     const [status, setStatus] = useState<StatusInterface[]>([]);
 
     const onFinish = async (values: PromotionInterface) => {
@@ -163,10 +162,42 @@ import {
                   />
                 </Form.Item>
               </Col>
+
+              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                name="StatusID"
+                label="สถานะ"
+                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
+              >
+                <Select allowClear>
+                  {status.map((item) => (
+                    <Option value={item.ID} key={item.StatusName}>
+                      {item.StatusName}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                name="StatusID"
+                label="สถานะ"
+                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
+              >
+                <Select allowClear>
+                  {status.map((item) => (
+                    <Option value={item.ID} key={item.StatusName}>
+                      {item.StatusName}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
               
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                name="status_name"
+                name="StatusID"
                 label="สถานะ"
                 rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
               >
