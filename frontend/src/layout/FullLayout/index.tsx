@@ -52,10 +52,13 @@ const FullLayout: React.FC = () => {
       <div className="header-logo">
         <img src={logo} alt="Logo" />
       </div>
-      <Menu
+      <Button className="btn-2" onClick={Logout} icon={<LogoutOutlined />}>
+          ออกจากระบบ
+      </Button>
+    </Header>
+    <Menu
         theme="dark"
         mode="horizontal"
-        //selectedKeys={[page]}
         onClick={({ key }) => setCurrentPage(key)}
         className="header-menu"
       >
@@ -81,11 +84,7 @@ const FullLayout: React.FC = () => {
           <Link to="/member">สมาชิก</Link>
         </Menu.Item>
       </Menu>
-          <Button className="logout-button" onClick={Logout} icon={<LogoutOutlined />}>
-            ออกจากระบบ
-          </Button>
-        </Header>
-        <Content style={{ margin: "0px", paddingTop: "20px" }}>
+        <Content className="bg" style={{ margin: "0px", paddingTop: "20px"}}>
           <Breadcrumb style={{ margin: "0px 0" }} />
           <div
             className="middle-bg"
@@ -117,7 +116,7 @@ const FullLayout: React.FC = () => {
             </Routes>
           </div>
         </Content>
-        <Footer style={{ textAlign: "center", backgroundColor: "#948979", color: "#5B4C43" }}>
+        <Footer style={{ textAlign: "center", backgroundColor: "#533f38", color: "black" }}>
           System Analysis and Design 1/67
         </Footer>
       </Layout>

@@ -26,8 +26,7 @@ body {
 .header {
   text-align: center;
   height: 75px;
-  background-color: #CEC8B6;
-  background-image: url('https://media.istockphoto.com/id/1139741745/th/%E0%B8%A3%E0%B8%B9%E0%B8%9B%E0%B8%96%E0%B9%88%E0%B8%B2%E0%B8%A2/%E0%B8%81%E0%B8%AD%E0%B8%87%E0%B9%80%E0%B8%A1%E0%B8%A5%E0%B9%87%E0%B8%94%E0%B8%81%E0%B8%B2%E0%B9%81%E0%B8%9F%E0%B8%97%E0%B8%B5%E0%B9%88%E0%B8%A1%E0%B8%B5%E0%B8%95%E0%B8%B1%E0%B8%81%E0%B9%84%E0%B8%A1%E0%B9%89-%E0%B9%83%E0%B8%81%E0%B8%A5%E0%B9%89%E0%B8%8A%E0%B8%B4%E0%B8%94-%E0%B8%9E%E0%B8%B7%E0%B9%89%E0%B8%99%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87%E0%B8%AA%E0%B8%B5%E0%B9%80%E0%B8%82%E0%B9%89%E0%B8%A1%E0%B8%97%E0%B8%B5%E0%B9%88%E0%B8%A1%E0%B8%B5%E0%B8%9E%E0%B8%B7%E0%B9%89%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%88%E0%B8%84%E0%B8%B1%E0%B8%94%E0%B8%A5%E0%B8%AD%E0%B8%81-%E0%B8%95%E0%B8%B7%E0%B9%89%E0%B8%99%E0%B8%A5%E0%B8%B6%E0%B8%81%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%AA%E0%B8%99%E0%B8%B2%E0%B8%A1.jpg?s=1024x1024&w=is&k=20&c=3M2ZOscCMzuQr-VXY8XDDTQF9ubIs_MUbjnRJ5ktiKg=');
+  background-color: #978479;
   background-position: center;
   background-size: cover;
   padding: 10px 20px;
@@ -61,7 +60,6 @@ body {
 
 }
 
-
 .images-logo {
 
   width: 100%;
@@ -74,24 +72,12 @@ body {
 
 }
 
-
 .login-form-button {
 
   width: 100%;
 
 }
 
-.custom-menu {
-  background-color: #745F47; /* สีของ bg */
-}
-
-.custom-menu .ant-menu-item {
-  color: #FFFFFF; /* เปลี่ยนสีฟอนต์ในเมนูทั้งหมด */
-}
-
-.custom-menu .ant-menu-item-selected {
-  color: #3C3C3B; /* สีฟอนต์เมื่อถูกเลือก */
-}
 .add-button {
   background-color: #b80303;
   border-radius: 22px;
@@ -133,34 +119,7 @@ body {
 }
 
 .middle-bg{
-  background-color: #ffdaab;
-}
-.logout-button{
-  background-color: #7c7c7c;
-  border-radius: 22px;
-  border: 0px;
-  box-shadow: rgba(0, 0, 0, 0.5) 0 -1px 3px 0 inset,rgba(0,44,97,.1) 0 3px 6px 0;
-  box-sizing: border-box;
-  color: #ffffff;
-  cursor: pointer;
-  display: flex;
-  align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
-  justify-content: center; 
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 0px;
-  margin: 0px;
-  min-height: 20px;
-  min-width: 20px;
-  padding: 16px 20px;
-  position: relative;
-  text-align: center;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  vertical-align: baseline;
-  transition: all .2s cubic-bezier(.22, .61, .36, 1);
+  background-color: #fffef7;
 }
 
 .confirm-button{
@@ -183,6 +142,16 @@ body {
   
 }
 
+.btn-2 {
+  outline: none;
+  box-shadow: none;
+  background: #ccc6c6;
+  color: #2b2727;
+  border-radius: 6px;
+  transition: all .25s ease;
+  
+}
+
 .btn-1:hover {
   background: #fff !important;
   color: #000 !important;
@@ -199,6 +168,7 @@ body {
   font-weight: normal;
   font-size: 18px;
   font-style: normal;
+
 }
 
 .btn-delete {
@@ -235,8 +205,11 @@ body {
 }
 
 .header-menu .ant-menu-item {
-  font-size: 16px;
-  color: #ffffff;
+  color: #ffffff !important;
+  font-family: "Mitr", sans-serif;
+  font-weight: normal;
+  font-size: 18px;
+  font-style: normal;
 }
 
 .header-menu .ant-menu-item a {
@@ -245,12 +218,12 @@ body {
 }
 
 .header-menu .ant-menu-item:hover {
-  background-color: #1890ff; /* Hover color */
+  background-color: #533f38!important; /* Hover color */
 }
 
 .header-menu .ant-menu-item-active,
 .header-menu .ant-menu-item-selected {
-  background-color: #40a9ff; /* Active/selected color */
+  background-color: #533f38!important; /* Active/selected color */
   border-bottom: 2px solid #ffffff; /* Optional: adds a bottom border */
 }
 
