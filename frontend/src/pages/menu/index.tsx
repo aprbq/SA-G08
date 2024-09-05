@@ -63,8 +63,15 @@ function Menus() {
     },
     {
       title: "ประเภท",
-      key: "category",
-      render: (record) => <>{record?.category?.category}</>,
+      dataIndex: "category_id",
+      key: "category_id",
+      // render: (record) => <>{record?.category?.category}</>,
+    },
+    {
+      title: "สต็อก",
+      dataIndex: "stock_id",
+      key: "stock_id",
+      // render: (record) => <>{record?.category?.category}</>,
     },
     {
       title: "",

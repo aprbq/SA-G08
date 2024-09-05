@@ -5,5 +5,6 @@ export interface MenuInterface {
 	Price?: number;
 	CategoryID?: number;
 	MenuIngredientID?: number;
+	StockID?: number;
 	UsersID?: string;
   }

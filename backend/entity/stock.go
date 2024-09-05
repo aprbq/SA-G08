@@ -6,7 +6,7 @@ import (
 
 type Stock struct {
 	gorm.Model
-	StockName string      `json:"stock_name"`
+	Stock string      `json:"stock"`
 
 	Menu  []Menu `gorm:"foreignKey:StockID"`
 	
