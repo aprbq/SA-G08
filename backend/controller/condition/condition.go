@@ -12,7 +12,8 @@ import (
 func GetAll(c *gin.Context) {
     var condition []entity.Condition
     db := config.DB()
-    results := db.Preload("Menu").Find(&condition)
+    results := db.Preload("Promotion").Find(&condition)
+    
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
@@ -26,7 +27,7 @@ func Get(c *gin.Context) {
     ID := c.Param("id")
     var condition entity.Condition
     db := config.DB()
-    results := db.Preload("Menu").First(&condition, ID)
+    results := db.Preload("Promotion").First(&condition, ID)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
