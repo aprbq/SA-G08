@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message, Upload } from "antd";
-import { PlusOutlined, DeleteOutlined, EditOutlined, UploadOutlined } from "@ant-design/icons";
+import { useState, useEffect } from "react";
+import { Space, Table, Button, Col, Row, Divider, message, Modal } from "antd";
+import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetMenu, DeleteMenuById } from "../../services/https/index";
 import { MenuInterface } from "../../interfaces/Menu";
 import { Link, useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
+
+const { confirm } = Modal;
 
 function Menus() {
   const navigate = useNavigate();
@@ -14,10 +15,36 @@ function Menus() {
   const myId = localStorage.getItem("id");
 
   const columns: ColumnsType<MenuInterface> = [
+
+    {
+      title: "",
+      render: (record) => (
+        <>
+          {myId == record?.ID ? (
+            <></>
+          ) : (
+            <Button
+              type="dashed"
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => deleteMenuById(record.ID)}
+            ></Button>
+          )}
+        </>
+      ),
+    },
     {
       title: "ลำดับ",
       dataIndex: "ID",
       key: "id",
+    },
+    {
+      title: "รูปภาพ",
+      dataIndex: "imageUrl", 
+      key: "image",
+      render: (imageUrl) => (
+        <img src={imageUrl} alt="menu" style={{ width: 100, height: 100, objectFit: 'cover' }} />
+      ),
     },
     {
       title: "ชื่อ",
@@ -39,15 +66,14 @@ function Menus() {
       key: "category",
       render: (record) => <>{record?.category?.category}</>,
     },
-    
     {
       title: "",
       render: (record) => (
         <>
           <Button
-          onClick={() => navigate(`/menus/edit/${record.ID}`)}
-            type="primary" 
-            className='btn-1'
+            onClick={() => navigate(`/menus/edit/${record.ID}`)}
+            type="primary"
+            className="btn-1"
             icon={<EditOutlined />}
           >
             แก้ไขข้อมูล
@@ -59,16 +85,32 @@ function Menus() {
       title: "",
       render: (record) => (
         <>
-            <Button
-              type="primary"
-              className="btn-delete"
-              icon={<DeleteOutlined />}
-              onClick={() => deleteMenuById(record.ID)}
-            ></Button>
+          <Button
+            type="primary"
+            className="btn-delete"
+            icon={<DeleteOutlined />}
+            onClick={() => showDeleteConfirm(record.ID)}
+          ></Button>
         </>
       ),
     },
   ];
+
+  const showDeleteConfirm = (id: string) => {
+    confirm({
+      title: "คุณแน่ใจหรือว่าต้องการลบเมนูนี้?",
+      content: "การลบจะไม่สามารถยกเลิกได้",
+      okText: "ยืนยัน",
+      okType: "danger",
+      cancelText: "ยกเลิก",
+      onOk() {
+        deleteMenuById(id);
+      },
+      onCancel() {
+        console.log("ยกเลิกการลบ");
+      },
+    });
+  };
 
   const deleteMenuById = async (id: string) => {
     let res = await DeleteMenuById(id);
@@ -100,26 +142,6 @@ function Menus() {
     }
   };
 
-  const handleImageUpload = async (info: any, record: MenuInterface) => {
-    if (info.file.status === "done") {
-      const imageUrl = info.file.response.url; // Assuming your server returns the URL of the uploaded image
-      // Update the specific menu item with the new image URL
-      const updatedMenus = menus.map(menu =>
-        menu.ID === record.ID ? { ...menu, imageUrl } : menu
-      );
-      setMenu(updatedMenus);
-      messageApi.open({
-        type: "success",
-        content: "Image uploaded successfully!",
-      });
-    } else if (info.file.status === "error") {
-      messageApi.open({
-        type: "error",
-        content: "Image upload failed!",
-      });
-    }
-  };
-
   useEffect(() => {
     getMenu();
   }, []);
@@ -128,13 +150,13 @@ function Menus() {
     <>
       {contextHolder}
       <Row>
-        <Col className = "name-table" span={12}>
+        <Col className="name-table" span={12}>
           <h2>จัดการเมนู</h2>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
             <Link to="/menus/create">
-              <Button className='btn-1' type="primary" icon={<PlusOutlined />}>
+              <Button className="btn-1" type="primary" icon={<PlusOutlined />}>
                 เพิ่มเมนู
               </Button>
             </Link>
@@ -148,18 +170,6 @@ function Menus() {
           columns={columns}
           dataSource={menus}
           style={{ width: "100%", overflow: "scroll" }}
-          expandable={{
-            expandedRowRender: record => (
-              <Upload
-                name="image"
-                action="/upload-image-url" // Your image upload URL
-                onChange={info => handleImageUpload(info, record)}
-                showUploadList={false}
-              >
-                <Button icon={<UploadOutlined />}>Upload Image</Button>
-              </Upload>
-            ),
-          }}
         />
       </div>
     </>
