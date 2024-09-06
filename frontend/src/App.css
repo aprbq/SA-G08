@@ -31,10 +31,10 @@ body {
   background-size: cover;
   padding: 10px 20px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   font-family: 'Arial', sans-serif;
+  
 }
 
 .header-logo {
@@ -45,6 +45,17 @@ body {
 .header-logo img {
   width: 75px;
   height: 75px;
+}
+
+.text-head{
+  width: 8000px;
+  color: #33210a !important;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  font-family: "Mitr", sans-serif;
+  font-weight: normal;
+  font-size: 25px;
+  font-style: normal;
+  text-align: left;
 }
 
 
@@ -77,6 +88,7 @@ body {
   width: 100%;
 
 }
+
 
 .add-button {
   background-color: #b80303;

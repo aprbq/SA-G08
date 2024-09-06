@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "../../App.css";
-import { UserOutlined, DashboardOutlined, ShoppingOutlined, LogoutOutlined, StarOutlined } from "@ant-design/icons";
+import { UserOutlined, DashboardOutlined, ShoppingOutlined, LogoutOutlined, StarOutlined ,} from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, Button, message } from "antd";
 import logo from "../../assets/logocafe.png";
 import Dashboard from "../../pages/dashboard";
@@ -52,9 +52,14 @@ const FullLayout: React.FC = () => {
       <div className="header-logo">
         <img src={logo} alt="Logo" />
       </div>
-      <Button className="btn-2" onClick={Logout} icon={<LogoutOutlined />}>
+      <div className = "text-head">
+          <h2>BIG DOOK CAFE</h2>
+      </div>
+      <div className = "logout" >
+        <Button className="btn-2" onClick={Logout} icon={<LogoutOutlined />}>
           ออกจากระบบ
-      </Button>
+        </Button>
+      </div>
     </Header>
     <Menu
         theme="dark"
