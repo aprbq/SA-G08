@@ -46,6 +46,26 @@ async function GetStatus() {
   return res;
 }
 
+async function GetCategory() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/category`, requestOptions)
+    .then((res) => {
+      if (res.status == 200) {
+        return res.json();
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
 async function GetUsers() {
   return await axios
     .get(`${apiUrl}/users`, requestOptions)
@@ -273,6 +293,8 @@ export {
   UpdateIngredientsById,
   DeleteIngredientsById,
   CreateIngredients,
+
+  GetCategory,
   GetMenu,
   GetMenuById,
   UpdateMenuById,
