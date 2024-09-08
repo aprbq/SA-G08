@@ -68,12 +68,12 @@ func main() {
         router.GET("/promotion", promotion.GetAll)
         router.GET("/promotion/:id", promotion.Get)
         router.DELETE("/promotion/:id", promotion.Delete)
+		router.GET("/status", status.GetAll)
 
 
 	 }
 
 	 r.GET("/genders", genders.GetAll)
-	 r.GET("/status", status.GetAll)
 	 r.GET("/class", class.GetAll)
 	 r.GET("/category", category.GetAll)
 	 r.GET("/stock", stock.GetAll)
