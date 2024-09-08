@@ -71,8 +71,8 @@ func main() {
         router.GET("/promotion/:id", promotion.Get)
         router.DELETE("/promotion/:id", promotion.Delete)
 		router.GET("/status", status.GetAll)
-		router.GET("/promotiontype", status.GetAll)
-		router.GET("/discounttypr", status.GetAll)
+		router.GET("/promotiontype", promotiontype.GetAll)
+		router.GET("/discounttype", discounttype.GetAll)
 
 
 	 }
