@@ -7,6 +7,8 @@ import (
 	"example.com/sa-67-example/controller/category"
 	"example.com/sa-67-example/controller/class"
 	"example.com/sa-67-example/controller/status"
+	"example.com/sa-67-example/controller/promotiontype"
+	"example.com/sa-67-example/controller/discounttype"
 	"example.com/sa-67-example/controller/stock"
 	"example.com/sa-67-example/controller/genders"
 	"example.com/sa-67-example/controller/ingredients"
@@ -69,6 +71,8 @@ func main() {
         router.GET("/promotion/:id", promotion.Get)
         router.DELETE("/promotion/:id", promotion.Delete)
 		router.GET("/status", status.GetAll)
+		router.GET("/promotiontype", status.GetAll)
+		router.GET("/discounttypr", status.GetAll)
 
 
 	 }
