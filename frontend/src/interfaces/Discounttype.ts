@@ -1,5 +1,5 @@
 export interface DiscountTypeInterface {
     ID?:                    number;
-    DiscountTypeName?:            string;
+    discount_type_name?:            string;
     
 }

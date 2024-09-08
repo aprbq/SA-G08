@@ -50,13 +50,15 @@ function Promotion() {
     },
     {
         title: "ประเภท",
-        dataIndex:"discount_type_id",
+        dataIndex:"DiscountType",
         key: "discount_type_id",
+        render: (item) => Object.values(item.discount_type_name),
     },
     {
       title: "สำหรับ",
-      dataIndex:"promotion_type_id",
+      dataIndex:"PromotionType",
       key: "promotion_type_id",
+      render: (item) => Object.values(item.promotion_type_name),
     },
     {
       title: "วันเริ่ม",
@@ -70,8 +72,9 @@ function Promotion() {
     },
     {
     title: "สถานะ",
-    dataIndex: "status_id",
+    dataIndex: "Status",
     key: "status_id",
+    render: (item) => Object.values(item.status_name),
     },
 
     {

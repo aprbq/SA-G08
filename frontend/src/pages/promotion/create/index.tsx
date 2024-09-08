@@ -191,8 +191,8 @@ import {
               >
                 <Select allowClear>
                   {discounttype.map((item) => (
-                    <Option value={item.ID} key={item.DiscountTypeName}>
-                      {item.DiscountTypeName}
+                    <Option value={item.ID} key={item.discount_type_name}>
+                      {item.discount_type_name}
                     </Option>
                   ))}
                 </Select>
@@ -207,8 +207,8 @@ import {
               >
                 <Select allowClear>
                   {promotiontype.map((item) => (
-                    <Option value={item.ID} key={item.PromotionTypeName}>
-                      {item.PromotionTypeName}
+                    <Option value={item.ID} key={item.promotion_type_name}>
+                      {item.promotion_type_name}
                     </Option>
                   ))}
                 </Select>
@@ -223,8 +223,8 @@ import {
               >
                 <Select allowClear>
                   {status.map((item) => (
-                    <Option value={item.ID} key={item.ID}>
-                      {item.StatusName}
+                    <Option value={item.ID} key={item.status_name}>
+                      {item.status_name}
                     </Option>
                   ))}
                 </Select>

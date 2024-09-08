@@ -1,5 +1,5 @@
 export interface PromotionTypeInterface {
     ID?:                    number;
-    PromotionTypeName?:            string;
+    promotion_type_name?:            string;
     
 }

@@ -1,14 +1,14 @@
 export interface PromotionInterface {
 ID?:            number;
-PromotionName?: string;
-Description?:   string;
-StartDate?:     string;
-EndDate?:       string;
-PointsAdded?:   number;
-PointsUse?:     number;
-DiscountValue?: number;
-DiscountTypeID?:  number;
-PromotionTypeID?: number;
-StatusID?:        number;
-UsersID?:         number;
+promotion_name?: string;
+description?:   string;
+start_date?:     string;
+end_date?:       string;
+points_added?:   number;
+points_use?:     number;
+discount_value?: number;
+discount_type_id?:  number;
+promotion_type_id?: number;
+status_id?:        number;
+users_id?:         number;
 }

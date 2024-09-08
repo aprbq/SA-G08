@@ -1,5 +1,5 @@
 export interface StatusInterface {
     ID?:                    number;
-    StatusName?:            string;
+    status_name?:            string;
     
 }

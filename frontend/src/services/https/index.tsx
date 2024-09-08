@@ -5,9 +5,7 @@ import { PromotionInterface } from "../../interfaces/Promotion";
 import { MenuInterface } from "../../interfaces/Menu";
 import { OrderInterface } from "../../interfaces/Order";
 import { MemberInterface } from "../../interfaces/Member";
-import { StatusInterface } from "../../interfaces/Status";
-import { PromotionTypeInterface } from "../../interfaces/Promotiontype";
-import { DiscountTypeInterface } from "../../interfaces/Discounttype";
+
 
 import axios from "axios";
 
