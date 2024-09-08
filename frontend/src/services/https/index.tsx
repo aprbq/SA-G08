@@ -46,6 +46,46 @@ async function GetStatus() {
   return res;
 }
 
+async function GetPromotionType() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/promotiontype`, requestOptions)
+    .then((res) => {
+      if (res.status == 200) {
+        return res.json();
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
+async function GetDiscountType() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/discountype`, requestOptions)
+    .then((res) => {
+      if (res.status == 200) {
+        return res.json();
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
 async function GetCategory() {
   const requestOptions = {
     method: "GET",
@@ -321,6 +361,8 @@ export {
   CreateOrder,
 
   GetPromotion,
+  GetPromotionType,
+  GetDiscountType,
   GetPromotionById,
   UpdatePromotionById,
   DeletePromotionById,
