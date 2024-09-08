@@ -64,6 +64,7 @@ function Menus() {
       title: "ประเภท",
       dataIndex: "category_id",
       key: "category_id",
+      // render: (item) => Object.values(item.Name),
     },
     {
       title: "สต็อก",
@@ -83,6 +84,7 @@ function Menus() {
         </Button>
       ),
     },
+    
     {
       title: "",
       render: (record) => (
@@ -98,13 +100,28 @@ function Menus() {
         </>
       ),
     },
+    {
+      title: "",
+      render: (record) => (
+        <>
+          <Button
+            type="primary"
+            className="btn-delete"
+            icon={<DeleteOutlined />}
+            onClick={() => showDeleteConfirm(record.ID)}
+          ></Button>
+        </>
+      ),
+    },
   ];
+  
 
   const handleViewIngredients = (menuId: number) => {
     // ฟังก์ชันที่จะเปิด Modal หรือไปยังหน้าแสดงวัตถุดิบ
     console.log("ดูวัตถุดิบของเมนู ID:", menuId);
     // คุณสามารถเลือกที่จะเปิด Modal หรือ redirect ไปยังหน้าใหม่ที่แสดงข้อมูลวัตถุดิบของเมนูนี้
   };
+  
 
   const deleteMenuById = async (id: string) => {
     let res = await DeleteMenuById(id);
@@ -135,6 +152,20 @@ function Menus() {
       });
     }
   };
+  const showDeleteConfirm = (id: string) => {
+    confirm({
+      title: "คุณแน่ใจหรือว่าต้องการลบเมนูนี้?",
+      content: "การลบจะไม่สามารถยกเลิกได้",
+      okText: "ยืนยัน",
+      okType: "danger",
+      cancelText: "ยกเลิก",
+      onOk() {
+        deleteMenuById(id);
+      },
+      onCancel() {
+        console.log("ยกเลิกการลบ");
+      },
+    })};
 
   useEffect(() => {
     getMenu();

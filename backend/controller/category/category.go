@@ -12,6 +12,5 @@ func GetAll(c *gin.Context) {
     db := config.DB()
     var category []entity.Category
     db.Find(&category)
-
     c.JSON(http.StatusOK, &category)
 }
