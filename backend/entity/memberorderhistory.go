@@ -15,4 +15,7 @@ type MemberOrderHistory struct {
 
 	MemberID 	uint		`json:"member_id"`
 	Member    	*Member   	`gorm:"foreignKey: MemberID" json:"member"`
+
+	OrderID  	uint		`json:"order_id"`
+	Order    	*Order   	`gorm:"foreignKey:OrderID" json: "order"`
 }

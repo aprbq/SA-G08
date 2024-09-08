@@ -9,5 +9,7 @@ type Status struct {
 	StatusName string      `json:"status_name"`
 
 	Promotion  []Promotion `gorm:"foreignKey:StatusID"`
+
+	Member  []Member `gorm:"foreignKey:StatusID"`
 	
 }
