@@ -73,6 +73,7 @@ function Promotion() {
     dataIndex: "status_id",
     key: "status_id",
     },
+
     {
       title: "",
       render: (record) => (
@@ -122,14 +123,8 @@ function Promotion() {
 
   const getPromotion = async () => {
     let res = await GetPromotion();
-    if (res.status == 200) {
-      setPromotion(res.data);
-    } else {
-      setPromotion([]);
-      messageApi.open({
-        type: "error",
-        content: res.data.error,
-      });
+    if (res) {
+      setPromotion(res);
     }
   };
 

@@ -15,7 +15,6 @@ import (
 	"example.com/sa-67-example/controller/promotion"
 	"example.com/sa-67-example/controller/users"
 	"example.com/sa-67-example/controller/order"
-	"example.com/sa-67-example/middlewares"
 	"github.com/gin-gonic/gin"
 
 )
@@ -38,7 +37,6 @@ func main() {
  
 	 router := r.Group("/")
 	 {
-		 router.Use(middlewares.Authorizes())
 		 // User Route
 		 router.PUT("/user/:id", users.Update)
 		 router.GET("/users", users.GetAll)
@@ -65,11 +63,11 @@ func main() {
         router.GET("/menuingredient/:id", menuingredient.Get)
         router.DELETE("/menuingredient/:id", menuingredient.Delete)
 
-		r.PATCH("/promotion/:id", promotion.Update)
-		r.POST("/promotion", promotion.CreatePromotion)
-        r.GET("/promotion", promotion.GetAll)
-        r.GET("/promotion/:id", promotion.Get)
-        r.DELETE("/promotion/:id", promotion.Delete)
+		router.PATCH("/promotion/:id", promotion.Update)
+		router.POST("/promotion", promotion.CreatePromotion)
+        router.GET("/promotion", promotion.GetAll)
+        router.GET("/promotion/:id", promotion.Get)
+        router.DELETE("/promotion/:id", promotion.Delete)
 
 
 	 }
