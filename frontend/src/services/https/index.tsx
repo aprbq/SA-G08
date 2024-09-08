@@ -210,10 +210,23 @@ async function CreateMenu(data: MenuInterface) {
 }
 // Promotion
 async function GetPromotion() {
-  return await axios
-    .get(`${apiUrl}/promotion`, requestOptions)
-    .then((res) => res)
-    .catch((e) => e.response);
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/promotion`, requestOptions)
+    .then((res) => {
+      if (res.status == 200) {
+        return res.json();
+      } else {
+        return false;
+      }
+    });
+
+  return res;
 }
 
 async function GetPromotionById(id: string) {

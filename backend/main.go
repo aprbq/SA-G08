@@ -65,15 +65,15 @@ func main() {
         router.GET("/menuingredient/:id", menuingredient.Get)
         router.DELETE("/menuingredient/:id", menuingredient.Delete)
 
-		router.PATCH("/promotion/:id", promotion.Update)
-		router.POST("/promotion", promotion.CreatePromotion)
-        router.GET("/promotion", promotion.GetAll)
-        router.GET("/promotion/:id", promotion.Get)
-        router.DELETE("/promotion/:id", promotion.Delete)
+		r.PATCH("/promotion/:id", promotion.Update)
+		r.POST("/promotion", promotion.CreatePromotion)
+        r.GET("/promotion", promotion.GetAll)
+        r.GET("/promotion/:id", promotion.Get)
+        r.DELETE("/promotion/:id", promotion.Delete)
 
 
 	 }
- 
+
 	 r.GET("/genders", genders.GetAll)
 	 r.GET("/status", status.GetAll)
 	 r.GET("/class", class.GetAll)
