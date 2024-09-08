@@ -16,7 +16,9 @@ import {
   import { PlusOutlined } from "@ant-design/icons";
   import { PromotionInterface } from "../../../interfaces/Promotion";
   import { StatusInterface } from "../../../interfaces/Status";
-  import { CreatePromotion,GetStatus } from "../../../services/https";
+  import { DiscountTypeInterface } from "../../../interfaces/Discounttype";
+  import { PromotionTypeInterface } from "../../../interfaces/Promotiontype";
+  import { CreatePromotion,GetStatus,GetDiscountType,GetPromotionType } from "../../../services/https";
   import { useNavigate, Link } from "react-router-dom";
 
 
@@ -26,6 +28,8 @@ import {
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const [status, setStatus] = useState<StatusInterface[]>([]);
+    const [promotiontype, setPromotionType] = useState<PromotionTypeInterface[]>([]);
+    const [discounttype, setDiscountType] = useState<DiscountTypeInterface[]>([]);
 
     const onFinish = async (values: PromotionInterface) => {
   
@@ -54,8 +58,24 @@ import {
       }
     };
 
+    const getPromotionType = async () => {
+      let res = await GetPromotionType();
+      if (res) {
+        setPromotionType(res);
+      }
+    };
+
+    const getDiscountType = async () => {
+      let res = await GetDiscountType();
+      if (res) {
+        setDiscountType(res);
+      }
+    };
+
     useEffect(() => {
       getStatus();
+      getPromotionType();
+      getDiscountType();
     }, []);
   
     return (
@@ -165,14 +185,14 @@ import {
 
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                name="StatusID"
-                label="สถานะ"
-                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
+                name="DiscountTypeID"
+                label="ประเภทส่วนลด"
+                rules={[{ required: true, message: "กรุณาระบุประเภทส่วนลด !" }]}
               >
                 <Select allowClear>
-                  {status.map((item) => (
-                    <Option value={item.ID} key={item.StatusName}>
-                      {item.StatusName}
+                  {discounttype.map((item) => (
+                    <Option value={item.ID} key={item.DiscountTypeName}>
+                      {item.DiscountTypeName}
                     </Option>
                   ))}
                 </Select>
@@ -181,14 +201,14 @@ import {
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                name="StatusID"
-                label="สถานะ"
-                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
+                name="PromotionTypeID"
+                label="สำหรับ"
+                rules={[{ required: true, message: "กรุณาระบุสำหรับ !" }]}
               >
                 <Select allowClear>
-                  {status.map((item) => (
-                    <Option value={item.ID} key={item.StatusName}>
-                      {item.StatusName}
+                  {promotiontype.map((item) => (
+                    <Option value={item.ID} key={item.PromotionTypeName}>
+                      {item.PromotionTypeName}
                     </Option>
                   ))}
                 </Select>
@@ -203,7 +223,7 @@ import {
               >
                 <Select allowClear>
                   {status.map((item) => (
-                    <Option value={item.ID} key={item.StatusName}>
+                    <Option value={item.ID} key={item.ID}>
                       {item.StatusName}
                     </Option>
                   ))}

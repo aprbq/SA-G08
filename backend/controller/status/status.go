@@ -9,8 +9,8 @@ import (
 )
 
 func GetAll(c *gin.Context) {
-    db := config.DB()
     var status []entity.Status
+    db := config.DB()
     db.Find(&status)
 
     c.JSON(http.StatusOK, &status)

@@ -5,6 +5,9 @@ import { PromotionInterface } from "../../interfaces/Promotion";
 import { MenuInterface } from "../../interfaces/Menu";
 import { OrderInterface } from "../../interfaces/Order";
 import { MemberInterface } from "../../interfaces/Member";
+import { StatusInterface } from "../../interfaces/Status";
+import { PromotionTypeInterface } from "../../interfaces/Promotiontype";
+import { DiscountTypeInterface } from "../../interfaces/Discounttype";
 
 import axios from "axios";
 
@@ -74,7 +77,7 @@ async function GetDiscountType() {
     },
   };
 
-  let res = await fetch(`${apiUrl}/discountype`, requestOptions)
+  let res = await fetch(`${apiUrl}/discounttype`, requestOptions)
     .then((res) => {
       if (res.status == 200) {
         return res.json();
