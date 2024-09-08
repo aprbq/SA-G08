@@ -8,7 +8,7 @@ import (
 
 type Paymentmethod struct {
 	gorm.Model
-	PaymentMethod 		string    	`json:"payment_method"`
+	PaymentMethods 		string    	`json:"payment_method"`
 	
 
 	Payment []Payment `gorm:"foreignKey:PaymentmethodID"`
