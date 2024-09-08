@@ -16,8 +16,8 @@ type Member struct {
 	EndDate time.Time			`json:"end_date"`
 	Points int					`json:"points"`
 	//PointsTransactions []PointsTransactions `gorm:"foreignKey:MemberID"`
-	UsersID *uint
-	Users   Users `gorm:"foreignKey:UsersID"`
+	UsersID 		uint	`json:"users_id"`
+	Users   		*Users `gorm:"foreignKey:UsersID"`
 	// Order []Order `gorm:"foreignKey:MemberID"`
 
 	StatusID uint    `json:"status_id"`

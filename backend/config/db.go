@@ -168,4 +168,22 @@ func SetupDatabase() {
 	db.FirstOrCreate(Promotion, &entity.Promotion{
 		PromotionName: "a",
 	})
+	TestDate, _ := time.Parse("2006-01-02", "1999-05-05")
+	Member := &entity.Member{
+	FristName: "Sut"			,		
+	LastName: "SAcafetestmember",		
+	Email: "Satest.gmail.com"	,
+	PhoneNumber: "191"			,
+	DateOfBirth: TestDate		,
+	StartDate: TestDate			,
+	EndDate: TestDate			,
+	Points: 20					,
+	StatusID:1					,
+	GendersID:1					,
+	UsersID:          			1,
+	}
+
+	db.FirstOrCreate(Member, &entity.Member{
+		FristName: "Sut",
+	})
 }
