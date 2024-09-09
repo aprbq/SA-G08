@@ -117,17 +117,17 @@ function Promotion() {
 
   const deletePromotionById = async (id: string) => {
     let res = await DeletePromotionById(id);
-
-    if (res.status == 200) {
+  
+    if (res) { // ถ้า res เป็น true
       messageApi.open({
         type: "success",
-        content: res.data.message,
+        content: "ลบโปรโมชั่นสำเร็จ", // ข้อความเมื่อการลบสำเร็จ
       });
-      await getPromotion();
+      await getPromotion(); // โหลดข้อมูลใหม่หลังจากลบสำเร็จ
     } else {
       messageApi.open({
         type: "error",
-        content: res.data.error,
+        content: "เกิดข้อผิดพลาดในการลบ", // ข้อความเมื่อการลบล้มเหลว
       });
     }
   };

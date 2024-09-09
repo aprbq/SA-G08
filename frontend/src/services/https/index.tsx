@@ -285,10 +285,20 @@ async function UpdatePromotionById(id: string, data: PromotionInterface) {
 }
 
 async function DeletePromotionById(id: string) {
-  return await axios
-    .delete(`${apiUrl}/promotion/${id}`, requestOptions)
-    .then((res) => res)
-    .catch((e) => e.response);
+  const requestOptions = {
+    method: "DELETE"
+  };
+
+  let res = await fetch(`${apiUrl}/promotion/${id}`, requestOptions)
+    .then((res) => {
+      if (res.status == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+
+  return res;
 }
 
 async function CreatePromotion(data: PromotionInterface) {
