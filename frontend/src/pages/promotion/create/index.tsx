@@ -32,13 +32,12 @@ import {
     const [discounttype, setDiscountType] = useState<DiscountTypeInterface[]>([]);
 
     const onFinish = async (values: PromotionInterface) => {
-  
       let res = await CreatePromotion(values);
-     
-      if (res.status == 201) {
+      console.log(res);
+      if (res) {
         messageApi.open({
           type: "success",
-          content: res.data.message,
+          content: "บันทึกข้อมูลสำเร็จ",
         });
         setTimeout(function () {
           navigate("/promotion");
@@ -46,7 +45,7 @@ import {
       } else {
         messageApi.open({
           type: "error",
-          content: res.data.error,
+          content: "เกิดข้อผิดพลาด !",
         });
       }
     };
@@ -185,7 +184,7 @@ import {
 
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                name="DiscountTypeID"
+                name="discount_type_id"
                 label="ประเภทส่วนลด"
                 rules={[{ required: true, message: "กรุณาระบุประเภทส่วนลด !" }]}
               >
@@ -201,7 +200,7 @@ import {
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                name="PromotionTypeID"
+                name="promotion_type_id"
                 label="สำหรับ"
                 rules={[{ required: true, message: "กรุณาระบุสำหรับ !" }]}
               >
@@ -217,7 +216,7 @@ import {
               
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                name="StatusID"
+                name="status_id"
                 label="สถานะ"
                 rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
               >

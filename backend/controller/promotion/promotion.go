@@ -11,6 +11,10 @@ import (
 func CreatePromotion(c *gin.Context) {
 	var promotion entity.Promotion
 
+    if err := c.ShouldBindJSON(&promotion); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	db := config.DB()
 
@@ -19,13 +23,6 @@ func CreatePromotion(c *gin.Context) {
 	db.First(&status, promotion.StatusID)
 	if status.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"error": "status not found"})
-		return
-	}
-
-    var users entity.Users
-	db.First(&users, promotion.UsersID)
-	if users.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
 		return
 	}
 
@@ -58,8 +55,6 @@ func CreatePromotion(c *gin.Context) {
         PromotionType:    promotion_type,
         StatusID:    promotion.StatusID,
         Status:    status,
-        UsersID:    promotion.UsersID,
-        Users:    users, //   
 	}
 
 	// บันทึก

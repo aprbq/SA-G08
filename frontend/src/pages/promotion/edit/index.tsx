@@ -16,7 +16,9 @@ import {
 import { PlusOutlined } from "@ant-design/icons";
 import { PromotionInterface } from "../../../interfaces/Promotion";
 import { StatusInterface } from "../../../interfaces/Status";
-import { GetPromotionById, UpdatePromotionById,GetStatus } from "../../../services/https/index";
+import { DiscountTypeInterface } from "../../../interfaces/Discounttype";
+import { PromotionTypeInterface } from "../../../interfaces/Promotiontype";
+import { GetPromotionById, UpdatePromotionById,GetStatus,GetPromotionType,GetDiscountType } from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 const { Option } = Select;
@@ -28,6 +30,8 @@ function PromotionEdit() {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [status, setStatus] = useState<StatusInterface[]>([]);
+  const [promotiontype, setPromotionType] = useState<PromotionTypeInterface[]>([]);
+  const [discounttype, setDiscountType] = useState<DiscountTypeInterface[]>([]);
 
 
   const getPromotionById = async (id: string) => {
@@ -86,195 +90,210 @@ function PromotionEdit() {
     }
   };
 
+  const getPromotionType = async () => {
+    let res = await GetPromotionType();
+    if (res) {
+      setPromotionType(res);
+    }
+  };
+
+  const getDiscountType = async () => {
+    let res = await GetDiscountType();
+    if (res) {
+      setDiscountType(res);
+    }
+  };
+
   useEffect(() => {
-    getPromotionById(id);
     getStatus();
+    getPromotionType();
+    getDiscountType();
+    getPromotionById(id);
   }, []);
 
   return (
     <div>
       {contextHolder}
       <Card>
-        <h2>แก้ไขข้อมูล โปรโมชั่น</h2>
+        <h2>เพิ่มโปรโมชั่น</h2>
         <Divider />
 
         <Form
           name="basic"
-          form={form}
           layout="vertical"
           onFinish={onFinish}
           autoComplete="off"
         >
           <Row gutter={[16, 0]}>
           <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="ชื่อ"
-                  name="promotion_name"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกชื่อ !",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="คำอธิบาย"
-                  name="description"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกคำอธิบาย !",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="ได้แต้ม"
-                  name="points_added"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกแต้ม !",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    max={99}
-                    defaultValue={0}
-                    style={{ width: "100%" }}
-                  />
-                </Form.Item>
-              </Col>
-
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="ใช้แต้ม"
-                  name="points_use"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกแต้ม !",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    max={99}
-                    defaultValue={0}
-                    style={{ width: "100%" }}
-                  />
-                </Form.Item>
-              </Col>
-
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="จำนวน"
-                  name="discount_value"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกจำนวน !",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    max={9999}
-                    defaultValue={0}
-                    style={{ width: "100%" }}
-                    step={0.01} 
-                  />
-                </Form.Item>
-              </Col>
-
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                name="StatusID"
-                label="สถานะ"
-                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
+                label="ชื่อ"
+                name="promotion_name"
+                rules={[
+                  {
+                    required: true,
+                    message: "กรุณากรอกชื่อ !",
+                  },
+                ]}
               >
-                <Select allowClear>
-                  {status.map((item) => (
-                    <Option value={item.ID} key={item.status_name}>
-                      {item.status_name}
-                    </Option>
-                  ))}
-                </Select>
+                <Input />
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                name="StatusID"
-                label="สถานะ"
-                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
+                label="คำอธิบาย"
+                name="description"
+                rules={[
+                  {
+                    required: true,
+                    message: "กรุณากรอกคำอธิบาย !",
+                  },
+                ]}
               >
-                <Select allowClear>
-                  {status.map((item) => (
-                    <Option value={item.ID} key={item.status_name}>
-                      {item.status_name}
-                    </Option>
-                  ))}
-                </Select>
+                <Input />
               </Form.Item>
             </Col>
-              
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                name="StatusID"
-                label="สถานะ"
-                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
+                label="ได้แต้ม"
+                name="points_added"
+                rules={[
+                  {
+                    required: true,
+                    message: "กรุณากรอกแต้ม !",
+                  },
+                ]}
               >
-                <Select allowClear>
-                  {status.map((item) => (
-                    <Option value={item.ID} key={item.status_name}>
-                      {item.status_name}
-                    </Option>
-                  ))}
-                </Select>
+                <InputNumber
+                  min={0}
+                  max={99}
+                  defaultValue={0}
+                  style={{ width: "100%" }}
+                />
               </Form.Item>
             </Col>
 
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="วัน/เดือน/ปี เริ่มโปรโมชั่น"
-                  name="start_date"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณาเลือกวัน/เดือน/ปี เริ่มโปรโมชั่น !",
-                    },
-                  ]}
-                >
-                  <DatePicker style={{ width: "100%" }} />
-                </Form.Item>
-              </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                label="ใช้แต้ม"
+                name="points_use"
+                rules={[
+                  {
+                    required: true,
+                    message: "กรุณากรอกแต้ม !",
+                  },
+                ]}
+              >
+                <InputNumber
+                  min={0}
+                  max={99}
+                  defaultValue={0}
+                  style={{ width: "100%" }}
+                />
+              </Form.Item>
+            </Col>
 
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="วัน/เดือน/ปี หมดโปรโมชั่น"
-                  name="end_date"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณาเลือกวัน/เดือน/ปี หมดโปรโมชั่น !",
-                    },
-                  ]}
-                >
-                  <DatePicker style={{ width: "100%" }} />
-                </Form.Item>
-              </Col>
-            </Row>
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                label="จำนวน"
+                name="discount_value"
+                rules={[
+                  {
+                    required: true,
+                    message: "กรุณากรอกจำนวน !",
+                  },
+                ]}
+              >
+                <InputNumber
+                  min={0}
+                  max={9999}
+                  defaultValue={0}
+                  style={{ width: "100%" }}
+                  step={0.01} 
+                />
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            <Form.Item
+              name="discount_type_id"
+              label="ประเภทส่วนลด"
+              rules={[{ required: true, message: "กรุณาระบุประเภทส่วนลด !" }]}
+            >
+              <Select allowClear>
+                {discounttype.map((item) => (
+                  <Option value={item.ID} key={item.discount_type_name}>
+                    {item.discount_type_name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+
+          <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            <Form.Item
+              name="promotion_type_id"
+              label="สำหรับ"
+              rules={[{ required: true, message: "กรุณาระบุสำหรับ !" }]}
+            >
+              <Select allowClear>
+                {promotiontype.map((item) => (
+                  <Option value={item.ID} key={item.promotion_type_name}>
+                    {item.promotion_type_name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+            
+          <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            <Form.Item
+              name="StatusID"
+              label="สถานะ"
+              rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
+            >
+              <Select allowClear>
+                {status.map((item) => (
+                  <Option value={item.ID} key={item.status_name}>
+                    {item.status_name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+
+          <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                label="วัน/เดือน/ปี เริ่มโปรโมชั่น"
+                name="start_date"
+                rules={[
+                  {
+                    required: true,
+                    message: "กรุณาเลือกวัน/เดือน/ปี เริ่มโปรโมชั่น !",
+                  },
+                ]}
+              >
+                <DatePicker style={{ width: "100%" }} />
+              </Form.Item>
+          </Col>
+
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                label="วัน/เดือน/ปี หมดโปรโมชั่น"
+                name="end_date"
+                rules={[
+                  {
+                    required: true,
+                    message: "กรุณาเลือกวัน/เดือน/ปี หมดโปรโมชั่น !",
+                  },
+                ]}
+              >
+                <DatePicker style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+          </Row>
 
           <Row justify="end">
             <Col style={{ marginTop: "40px" }}>
