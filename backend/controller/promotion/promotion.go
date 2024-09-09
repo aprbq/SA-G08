@@ -17,6 +17,7 @@ func CreatePromotion(c *gin.Context) {
 	}
 
 	db := config.DB()
+    
 
 	// ค้นหา gender ด้วย id
 	var status entity.Status

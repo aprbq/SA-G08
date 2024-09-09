@@ -26,9 +26,10 @@ const { Option } = Select;
 
 function PromotionEdit() {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: any }>();
+  let { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
+
   const [status, setStatus] = useState<StatusInterface[]>([]);
   const [promotiontype, setPromotionType] = useState<PromotionTypeInterface[]>([]);
   const [discounttype, setDiscountType] = useState<DiscountTypeInterface[]>([]);
@@ -43,12 +44,11 @@ function PromotionEdit() {
         points_added: res.data.points_added,
         points_use: res.data.points_use,
         discount_value: res.data.discount_value,
-        discount_type_id: res.data.discount_type_id?.ID,
-        promotion_type_id:res.data.promotion_type_id?.ID,
-        status_id: res.data.status_id?.ID,
+        discount_type_id: res.data.discount_type_id,
+        promotion_type_id:res.data.promotion_type_id,
+        status_id: res.data.status_id,
         start_date: dayjs(res.data.start_date),
         end_date: dayjs(res.data.end_date),
-        condition_id: res.data.condition_id?.ID,
       });
     } else {
       messageApi.open({
@@ -62,23 +62,20 @@ function PromotionEdit() {
   };
 
   const onFinish = async (values: PromotionInterface) => {
-    let payload = {
-      ...values,
-    };
-
-    const res = await UpdatePromotionById(id, payload);
-    if (res.status == 200) {
+    values.ID = promotion?.ID;
+    let res = await UpdatePromotionById(values);
+    if (res) {
       messageApi.open({
         type: "success",
-        content: res.data.message,
+        content: res.message,
       });
-      setTimeout(() => {
-        navigate("/promotion");
+      setTimeout(function () {
+        navigate("/customer");
       }, 2000);
     } else {
       messageApi.open({
         type: "error",
-        content: res.data.error,
+        content: res.message,
       });
     }
   };
