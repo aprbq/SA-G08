@@ -1,10 +1,10 @@
 export interface MenuInterface {
 	ID?: number;
-	Name?: string;
-	Description?:   string;
-	Price?: number;
-	CategoryID?: number;
+	name?: string;
+	description?:   string;
+	price?: number;
+	category_id?: number;
 	MenuIngredientID?: number;
-	StockID?: number;
-	UsersID?: string;
+	stock_id?: number;
+	users_id?: string;
   }

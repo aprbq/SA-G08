@@ -56,6 +56,7 @@ func main() {
         router.GET("/menu", menus.GetAll)
         router.GET("/menu/:id", menus.Get)
         router.DELETE("/menu/:id", menus.Delete)
+		router.GET("/category", category.GetAll)
 
 		router.PUT("/order/:id", order.Update)
         router.GET("/order", order.GetAll)
@@ -91,7 +92,7 @@ func main() {
 
 	 r.GET("/genders", genders.GetAll)
 	 r.GET("/class", class.GetAll)
-	 r.GET("/category", category.GetAll)
+	 
 	 r.GET("/stock", stock.GetAll)
 	 r.GET("/", func(c *gin.Context) {
 		 c.String(http.StatusOK, "API RUNNING... PORT: %s", PORT)

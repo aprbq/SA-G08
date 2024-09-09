@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Space,
   Button,
@@ -14,12 +15,15 @@ import {
 } from "antd";
 import { PlusOutlined, UploadOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { MenuInterface } from "../../../interfaces/Menu";
-import { CreateMenu } from "../../../services/https";
-import { useNavigate, Link } from "react-router-dom";
+import { CategoryInterface } from "../../../interfaces/Category";
+import {CreateMenu, GetCategory} from "../../../services/https/index";
+import { useNavigate, Link, useParams } from "react-router-dom";
+const { Option } = Select;
 
 function MenuCreate() {
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
+  const [category, setCategory] = useState<CategoryInterface[]>([]);
 
   const onFinish = async (values: MenuInterface) => {
     let res = await CreateMenu(values);
@@ -40,12 +44,24 @@ function MenuCreate() {
     }
   };
 
+  const getCategory = async () => {
+    let res = await GetCategory();
+    if (res) {
+      setCategory(res);
+    }
+  };
+
   const normFile = (e: any) => {
     if (Array.isArray(e)) {
       return e;
     }
     return e?.fileList;
   };
+
+  useEffect(() => {
+    getCategory();
+    
+  }, []);
 
   return (
     <div>
@@ -72,27 +88,19 @@ function MenuCreate() {
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                label="ประเภท"
-                name="category_id"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาเลือกประเภท !",
-                  },
-                ]}
-              >
-                <Select
-                  defaultValue=""
-                  style={{ width: "100%" }}
-                  options={[
-                    { value: "", label: "กรุณาเลือกประเภท", disabled: true },
-                    { value: 1, label: "Hot" },
-                    { value: 2, label: "Ice" },
-                    { value: 3, label: "Frappe" },
-                  ]}
-                />
-              </Form.Item>
+            <Form.Item
+              name="category_id"
+              label="ประเภท"
+              rules={[{ required: true, message: "กรุณาเลือกประเภท !" }]}
+            >
+              <Select allowClear>
+                {category.map((item) => (
+                  <Option value={item.ID} key={item.category}>
+                    {item.category}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>

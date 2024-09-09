@@ -15,23 +15,23 @@ function Menus() {
   const myId = localStorage.getItem("id");
 
   const columns: ColumnsType<MenuInterface> = [
-    {
-      title: "",
-      render: (record) => (
-        <>
-          {myId == record?.ID ? (
-            <></>
-          ) : (
-            <Button
-              type="dashed"
-              danger
-              icon={<DeleteOutlined />}
-              onClick={() => deleteMenuById(record.ID)}
-            ></Button>
-          )}
-        </>
-      ),
-    },
+    // {
+    //   title: "",
+    //   render: (record) => (
+    //     <>
+    //       {myId == record?.ID ? (
+    //         <></>
+    //       ) : (
+    //         <Button
+    //           type="dashed"
+    //           danger
+    //           icon={<DeleteOutlined />}
+    //           onClick={() => deleteMenuById(record.ID)}
+    //         ></Button>
+    //       )}
+    //     </>
+    //   ),
+    // },
     {
       title: "ลำดับ",
       dataIndex: "ID",
@@ -62,9 +62,9 @@ function Menus() {
     },
     {
       title: "ประเภท",
-      dataIndex: "category_id",
+      dataIndex: "Category",
       key: "category_id",
-      // render: (item) => Object.values(item.Name),
+      render: (item) => Object.values(item.category),
     },
     {
       title: "สต็อก",
