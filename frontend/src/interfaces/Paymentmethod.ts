@@ -1,5 +1,5 @@
 export interface PaymentmethodInterface {
     ID?:                number;
-    PaymentMethods?:       string;
+    payment_method?:       string;
     
     }

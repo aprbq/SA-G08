@@ -1,6 +1,6 @@
 export interface PaymentInterface {
     ID?:                number;
-    PaymentDate?:       string;
-    PaymentAmount?:     string;
+    payment_date?:       string;
+    payment_amount?:     string;
     
     }

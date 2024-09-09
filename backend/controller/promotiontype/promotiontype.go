@@ -9,8 +9,8 @@ import (
 )
 
 func GetAll(c *gin.Context) {
-    db := config.DB()
     var promotiontype []entity.PromotionType
+    db := config.DB()
     db.Find(&promotiontype)
 
     c.JSON(http.StatusOK, &promotiontype)

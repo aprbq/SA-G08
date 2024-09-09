@@ -76,7 +76,7 @@ func CreatePromotion(c *gin.Context) {
 func GetAll(c *gin.Context) {
     var promotion []entity.Promotion
     db := config.DB()
-    results := db.Preload("Status").Find(&promotion)
+    results := db.Preload("Status").Preload("DiscountType").Preload("PromotionType").Find(&promotion)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})

@@ -205,8 +205,8 @@ function PromotionEdit() {
               >
                 <Select allowClear>
                   {status.map((item) => (
-                    <Option value={item.ID} key={item.StatusName}>
-                      {item.StatusName}
+                    <Option value={item.ID} key={item.status_name}>
+                      {item.status_name}
                     </Option>
                   ))}
                 </Select>
@@ -221,8 +221,8 @@ function PromotionEdit() {
               >
                 <Select allowClear>
                   {status.map((item) => (
-                    <Option value={item.ID} key={item.StatusName}>
-                      {item.StatusName}
+                    <Option value={item.ID} key={item.status_name}>
+                      {item.status_name}
                     </Option>
                   ))}
                 </Select>
@@ -237,8 +237,8 @@ function PromotionEdit() {
               >
                 <Select allowClear>
                   {status.map((item) => (
-                    <Option value={item.ID} key={item.StatusName}>
-                      {item.StatusName}
+                    <Option value={item.ID} key={item.status_name}>
+                      {item.status_name}
                     </Option>
                   ))}
                 </Select>

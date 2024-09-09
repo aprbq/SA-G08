@@ -1,4 +1,4 @@
 export interface OrderInterface {
     ID?:            number;
-    OrderDate?:     string;
+    order_date?:     string;
     }

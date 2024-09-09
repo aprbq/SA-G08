@@ -14,7 +14,8 @@ type Payment struct {
 	PaymentDate  	time.Time 	`json:"payment_date"` 
 
 	PaymentmethodID  	uint		`json:"paymentmethod_id"`
-	Paymentmethod    	*Paymentmethod   	`gorm:"foreignKey:PaymentmethodID" json: "paymentmethod"`
+	Paymentmethod    	*Paymentmethod   	`gorm:"foreignKey:PaymentmethodID" json: "payment_method"`
 
+	Order []Order `gorm:"foreignKey:PaymentID"`
 	
 }

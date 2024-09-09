@@ -4,6 +4,7 @@ import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetPromotion, DeletePromotionById } from "../../services/https/index";
 import { PromotionInterface } from "../../interfaces/Promotion";
+import { DiscountTypeInterface } from "../../interfaces/Discounttype";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 
@@ -33,43 +34,51 @@ function Promotion() {
       dataIndex: "description",
       key: "description",
     },
+
     {
       title: "ได้แต้ม",
       dataIndex: "points_added",
       key: "points_added",
     },
+
     {
       title: "ใช้แต้ม",
       dataIndex: "points_use",
       key: "points_use",
     },
+
     {
         title: "จำนวน",
         dataIndex: "discount_value",
         key: "discount_value",
     },
+    
     {
-        title: "ประเภท",
-        dataIndex:"DiscountType",
-        key: "discount_type_id",
-        render: (item) => Object.values(item.discount_type_name),
+      title: "ประเภท",
+      dataIndex: "DiscountType",
+      key: "discount_type_id",
+      render: (item) => Object.values(item.discount_type_name),
     },
+
     {
       title: "สำหรับ",
       dataIndex:"PromotionType",
       key: "promotion_type_id",
       render: (item) => Object.values(item.promotion_type_name),
     },
+
     {
       title: "วันเริ่ม",
       key: "start_date",
       render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
     },
+
     {
       title: "วันสิ้นสุด",
       key: "end_date",
       render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
     },
+
     {
     title: "สถานะ",
     dataIndex: "Status",
