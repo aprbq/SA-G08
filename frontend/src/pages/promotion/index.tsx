@@ -4,7 +4,6 @@ import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetPromotion, DeletePromotionById } from "../../services/https/index";
 import { PromotionInterface } from "../../interfaces/Promotion";
-import { DiscountTypeInterface } from "../../interfaces/Discounttype";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 

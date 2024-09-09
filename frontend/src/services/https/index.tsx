@@ -292,10 +292,22 @@ async function DeletePromotionById(id: string) {
 }
 
 async function CreatePromotion(data: PromotionInterface) {
-  return await axios
-    .post(`${apiUrl}/signuppromotion`, data, requestOptions)
-    .then((res) => res)
-    .catch((e) => e.response);
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  };
+
+  let res = await fetch(`${apiUrl}/promotion`, requestOptions)
+    .then((res) => {
+      if (res.status == 201) {
+        return res.json();
+      } else {
+        return false;
+      }
+    });
+
+  return res;
 }
 //Member
 
