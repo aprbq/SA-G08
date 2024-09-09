@@ -9,132 +9,133 @@ import dayjs from "dayjs";
 
 function Order() {
   const navigate = useNavigate();
-  const [order , setOrder] = useState<OrderInterface[]>([]);
+  const [Order , setOrder] = useState<OrderInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const myId = localStorage.getItem("id");
+
 
   const columns: ColumnsType<OrderInterface> = [
+
+
     {
       title: "ลำดับ",
       dataIndex: "ID",
       key: "id",
     },
 
-    {
-      title: "ชื่อ",
-      dataIndex: "name",
-      key: "name",
-    },
-
-    {
-      title: "จำนวน",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
+    // {
+    //   title: "ชื่อ",
+    //   dataIndex: "promotion_name",
+    //   key: "promotion_name",
+    // },
 
     // {
-    //   title: "หน่วย",
-    //   dataIndex: "unit",
-    //   key: "unit",
+    //   title: "คำอธิบาย",
+    //   dataIndex: "description",
+    //   key: "description",
     // },
+
     // {
-    //   title: "ราคาต่อหน่วย",
-    //   dataIndex: "unit_price",
-    //   key: "unit_price",
+    //   title: "ได้แต้ม",
+    //   dataIndex: "points_added",
+    //   key: "points_added",
     // },
+
     // {
-    //   title: "ผู้ผลิต",
-    //   dataIndex: "supplier",
-    //   key: "supplier",
+    //   title: "ใช้แต้ม",
+    //   dataIndex: "points_use",
+    //   key: "points_use",
     // },
+
     // {
-    //   title: "วัน/เดือน/ปี หมดอายุ",
-    //   key: "exp_date",
+    //     title: "จำนวน",
+    //     dataIndex: "discount_value",
+    //     key: "discount_value",
+    // },
+    
+    // {
+    //   title: "ประเภท",
+    //   dataIndex: "DiscountType",
+    //   key: "discount_type_id",
+    //   render: (item) => Object.values(item.discount_type_name),
+    // },
+
+    // {
+    //   title: "สำหรับ",
+    //   dataIndex:"PromotionType",
+    //   key: "promotion_type_id",
+    //   render: (item) => Object.values(item.promotion_type_name),
+    // },
+
+     {
+       title: "วันทำรายการ",
+       key: "order_date",
+       render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
+     },
+
+    // {
+    //   title: "วันสิ้นสุด",
+    //   key: "end_date",
     //   render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
     // },
-    {
-      title: "ประเภท",
-      key: "class",
-      render: (record) => <>{record?.class?.class}</>,
-    },
-    
-    {
-      title: "ราคา",
-      dataIndex: "price",
-      key: "price",
-    },
-    
-    {
-      title: "ราคารวม",
-      dataIndex: "total_price",
-      key: "total_price",
-    },
+
+    // {
+    // title: "สถานะ",
+    // dataIndex: "Status",
+    // key: "status_id",
+    // render: (item) => Object.values(item.status_name),
+    // },
 
     {
       title: "",
       render: (record) => (
         <>
           <Button
-          onClick={() => navigate(`/order/edit/${record.ID}`)}
+            className="btn-1"
             type="primary"
-            style={{ 
-              backgroundColor: "#A28B73", 
-              color: "#F8EDED" 
-            }}
             icon={<EditOutlined />}
+            onClick={() => navigate(`/order/edit/${record.ID}`)}
           >
             แก้ไขข้อมูล
           </Button>
         </>
       ),
     },
-
     {
-      title: "",
-      render: (record) => (
-        <>
-          {myId == record?.ID ? (
-            <></>
-          ) : (
+        title: "",
+        render: (record) => (
+          <>
             <Button
-              type="dashed"
-              danger
-              icon={<DeleteOutlined />}
-              onClick={() => deleteOrderById(record.ID)}
+                type="primary"
+                className="btn-delete"
+                icon={<DeleteOutlined />}
+                onClick={() => deleteOrderById(record.ID)}
             ></Button>
-          )}
-        </>
-      ),
-    },
+          </>
+        ),
+      },
   ];
 
   const deleteOrderById = async (id: string) => {
     let res = await DeleteOrderById(id);
-
-    if (res.status == 200) {
+  
+    if (res) { // ถ้า res เป็น true
       messageApi.open({
         type: "success",
-        content: res.data.message,
+        content: "ลบออเดอร์สำเร็จ", // ข้อความเมื่อการลบสำเร็จ
       });
-      await getOrder();
+      await getOrder(); // โหลดข้อมูลใหม่หลังจากลบสำเร็จ
     } else {
       messageApi.open({
         type: "error",
-        content: res.data.error,
+        content: "เกิดข้อผิดพลาดในการลบ", // ข้อความเมื่อการลบล้มเหลว
       });
     }
   };
 
   const getOrder = async () => {
     let res = await GetOrder();
-    if (res.status == 200) {
-      setOrder(res.data);
-    } else {
-      setOrder([]);
-      messageApi.open({
-        type: "error",
-        content: res.data.error,
-      });
+    if (res) {
+      setOrder(res);
     }
   };
 
@@ -146,14 +147,14 @@ function Order() {
     <>
       {contextHolder}
       <Row>
-        <Col span={12}>
-          <h2>จัดการรายการสั่งซื้อ</h2>
+        <Col className = "name-table" span={12}>
+          <h2>จัดการออเดอร์</h2>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
-            <Link to="/order/create">
-            <Button className='btn-1' type="primary" icon={<PlusOutlined />} >
-                เพิ่มรายการสั่งซื้อ
+            <Link to="/promotion/create">
+              <Button className = "btn-1" type="primary" icon={<PlusOutlined />}>
+                สร้างออเดอร์
               </Button>
             </Link>
           </Space>
@@ -164,7 +165,7 @@ function Order() {
         <Table
           rowKey="ID"
           columns={columns}
-          dataSource={order}
+          dataSource={Order}
           style={{ width: "100%", overflow: "scroll" }}
         />
       </div>
