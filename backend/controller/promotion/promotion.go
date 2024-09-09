@@ -101,10 +101,10 @@ func Get(c *gin.Context) {
 // Update updates the details of an existing menu
 func Update(c *gin.Context) {
     var promotion entity.Promotion
-    promotionID := c.Param("id")
+    PromotionID := c.Param("id")
     db := config.DB()
 
-    result := db.First(&promotion, promotionID)
+    result := db.First(&promotion, PromotionID)
     if result.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": "id not found"})
         return

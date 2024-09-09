@@ -270,7 +270,7 @@ async function GetPromotion() {
   return res;
 }
 
-async function GetPromotionById(id: string) {
+async function GetPromotionById(id: Number ) {
   const requestOptions = {
     method: "GET"
   };

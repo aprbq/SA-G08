@@ -26,40 +26,15 @@ const { Option } = Select;
 
 function PromotionEdit() {
   const navigate = useNavigate();
-  let { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
-  const [form] = Form.useForm();
-
+  const [promotion, setPromotion] = useState<PromotionInterface>();
   const [status, setStatus] = useState<StatusInterface[]>([]);
   const [promotiontype, setPromotionType] = useState<PromotionTypeInterface[]>([]);
   const [discounttype, setDiscountType] = useState<DiscountTypeInterface[]>([]);
 
+  let { id } = useParams();
+  const [form] = Form.useForm();
 
-  const getPromotionById = async (id: string) => {
-    let res = await GetPromotionById(id);
-    if (res.status == 200) {
-      form.setFieldsValue({
-        promotion_name: res.data.promotion_name,
-        description: res.data.description,
-        points_added: res.data.points_added,
-        points_use: res.data.points_use,
-        discount_value: res.data.discount_value,
-        discount_type_id: res.data.discount_type_id,
-        promotion_type_id:res.data.promotion_type_id,
-        status_id: res.data.status_id,
-        start_date: dayjs(res.data.start_date),
-        end_date: dayjs(res.data.end_date),
-      });
-    } else {
-      messageApi.open({
-        type: "error",
-        content: "ไม่พบข้อมูลวัตถุดิบ",
-      });
-      setTimeout(() => {
-        navigate("/promotion");
-      }, 2000);
-    }
-  };
 
   const onFinish = async (values: PromotionInterface) => {
     values.ID = promotion?.ID;
@@ -70,7 +45,7 @@ function PromotionEdit() {
         content: res.message,
       });
       setTimeout(function () {
-        navigate("/customer");
+        navigate("/promotion");
       }, 2000);
     } else {
       messageApi.open({
@@ -101,11 +76,31 @@ function PromotionEdit() {
     }
   };
 
+  const getPromotionById = async () => {
+    let res = await GetPromotionById(Number(id));
+    if (res) {
+      setPromotion(res);
+      // set form ข้อมูลเริ่มของผู่้ใช้ที่เราแก้ไข
+      form.setFieldsValue({
+        promotion_name: res.data.promotion_name,
+        description: res.data.description,
+        points_added: res.data.points_added,
+        points_use: res.data.points_use,
+        discount_value: res.data.discount_value,
+        discount_type_id: res.data.discount_type_id,
+        promotion_type_id:res.data.promotion_type_id,
+        status_id: res.data.status_id,
+        start_date: dayjs(res.data.start_date),
+        end_date: dayjs(res.data.end_date),
+      });
+    }
+  };
+
   useEffect(() => {
     getStatus();
     getPromotionType();
     getDiscountType();
-    getPromotionById(id);
+    getPromotionById();
   }, []);
 
   return (
