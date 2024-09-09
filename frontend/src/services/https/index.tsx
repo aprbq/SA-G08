@@ -287,7 +287,7 @@ async function GetPromotionById(id: string) {
   return res;
 }
 
-async function UpdatePromotionById(id: string, data: PromotionInterface) {
+async function UpdatePromotionById(data: PromotionInterface) {
   const requestOptions = {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
