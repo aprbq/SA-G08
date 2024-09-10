@@ -1,4 +1,4 @@
-package users
+package employee
 
 import (
     "net/http"
@@ -10,7 +10,7 @@ import (
 
 // GetAll retrieves all users along with their associated gender
 func GetAll(c *gin.Context) {
-    var users []entity.Users
+    var users []entity.Employee
     db := config.DB()
     results := db.Preload("Gender").Find(&users)
 
@@ -24,7 +24,7 @@ func GetAll(c *gin.Context) {
 // Get retrieves a single user by ID along with their associated gender
 func Get(c *gin.Context) {
     ID := c.Param("id")
-    var user entity.Users
+    var user entity.Employee
     db := config.DB()
     results := db.Preload("Gender").First(&user, ID)
 
@@ -41,11 +41,11 @@ func Get(c *gin.Context) {
 
 // Update updates the details of an existing user
 func Update(c *gin.Context) {
-    var user entity.Users
-    UserID := c.Param("id")
+    var user entity.Employee
+    EmployeeID := c.Param("id")
     db := config.DB()
 
-    result := db.First(&user, UserID)
+    result := db.First(&user, EmployeeID)
     if result.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": "id not found"})
         return

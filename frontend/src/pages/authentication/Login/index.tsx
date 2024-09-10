@@ -48,8 +48,8 @@ function SignInPages() {
                 layout="vertical"
               >
                 <Form.Item
-                  label="Email"
-                  name="email"
+                  label="Username"
+                  name="username"
                   rules={[
                     { required: true, message: "Please input your username!" },
                   ]}

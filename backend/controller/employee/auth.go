@@ -1,9 +1,8 @@
-package users
+package employee
 
 import (
 	"errors"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -16,7 +15,7 @@ import (
 
 type (
 	Authen struct {
-		Email    string `json:"email"`
+		Username    string `json:"username"`
 		Password string `json:"password"`
 	}
 
@@ -24,11 +23,10 @@ type (
 		FirstName string    `json:"first_name"`
 		LastName  string    `json:"last_name"`
 		Email     string    `json:"email"`
-		Age       uint8     `json:"age"`
+		Username  string    `json:"username"`
 		Password  string    `json:"password"`
-		BirthDay  time.Time `json:"birthday"`
 		GenderID  uint      `json:"gender_id"`
-		Address   string    `json:"address"`
+		Role   string    `json:"role"`
 	}
 )
 
@@ -41,9 +39,9 @@ func SignUp(c *gin.Context) {
 	}
 
 	db := config.DB()
-	var userCheck entity.Users
+	var userCheck entity.Employee
 
-	result := db.Where("email = ?", payload.Email).First(&userCheck)
+	result := db.Where("username = ?", payload.Username).First(&userCheck)
 	if result.Error != nil && !errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return
@@ -56,15 +54,13 @@ func SignUp(c *gin.Context) {
 
 	hashedPassword, _ := config.HashPassword(payload.Password)
 
-	user := entity.Users{
+	user := entity.Employee{
 		FirstName: payload.FirstName,
 		LastName:  payload.LastName,
 		Email:     payload.Email,
-		Age:       payload.Age,
 		Password:  hashedPassword,
-		BirthDay:  payload.BirthDay,
 		GenderID:  payload.GenderID,
-		Address:   payload.Address,
+		Role:   payload.Role,
 	}
 
 	if err := db.Create(&user).Error; err != nil {
@@ -77,14 +73,14 @@ func SignUp(c *gin.Context) {
 
 func SignIn(c *gin.Context) {
 	var payload Authen
-	var user entity.Users
+	var user entity.Employee
 
 	if err := c.ShouldBindJSON(&payload); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := config.DB().Raw("SELECT * FROM users WHERE email = ?", payload.Email).Scan(&user).Error; err != nil {
+	if err := config.DB().Raw("SELECT * FROM employees WHERE username = ?", payload.Username).Scan(&user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -101,7 +97,7 @@ func SignIn(c *gin.Context) {
 		ExpirationHours: 24,
 	}
 
-	signedToken, err := jwtWrapper.GenerateToken(user.Email)
+	signedToken, err := jwtWrapper.GenerateToken(user.Username)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error signing token"})
 		return

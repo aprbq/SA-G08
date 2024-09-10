@@ -10,5 +10,5 @@ discount_value?: number;
 discount_type_id?:  number;
 promotion_type_id?: number;
 status_id?:        number;
-users_id?:         number;
+employee_id?:         number;
 }

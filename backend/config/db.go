@@ -27,6 +27,7 @@ func ConnectionDB() {
 func SetupDatabase() {
 	db.AutoMigrate(
 		&entity.Genders{},
+		&entity.Employee{},
 		&entity.Status{},
 		&entity.Stock{},
 		&entity.Class{},
@@ -116,6 +117,19 @@ func SetupDatabase() {
 		Email: "sa@gmail.com",
 	})
 
+	Employee := &entity.Employee{
+		FirstName: "Software",
+		LastName:  "Analysis",
+		Email:     "sa67@gmail.com",
+		Username:  "nahee",
+		Password:  hashedPassword,
+		Role:  "aa",
+		GenderID:  1,
+	}
+	db.FirstOrCreate(Employee, &entity.Employee{
+		Email: "sa@gmail.com",
+	})
+
 	exp_date, err := time.Parse("2006-01-02", "2024-08-14")
 	if err != nil {
 		fmt.Println("Error parsing date:", err)
@@ -163,7 +177,7 @@ func SetupDatabase() {
 		DiscountValue: 1,
 		DiscountTypeID:  1,
 		StatusID:        1,
-		UsersID:    1,
+		EmployeeID:    1,
 	}
 	db.FirstOrCreate(Promotion, &entity.Promotion{
 		PromotionName: "a",

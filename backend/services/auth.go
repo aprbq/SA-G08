@@ -16,14 +16,14 @@ type JwtWrapper struct {
 
 // JwtClaim adds email as a claim to the token
 type JwtClaim struct {
-   Email string
+   Username string
    jwt.StandardClaims
 }
 
 // GenerateToken generates a jwt token
-func (j *JwtWrapper) GenerateToken(email string) (signedToken string, err error) {
+func (j *JwtWrapper) GenerateToken(username string) (signedToken string, err error) {
    claims := &JwtClaim{
-       Email: email,
+       Username: username,
        StandardClaims: jwt.StandardClaims{
            ExpiresAt: time.Now().Local().Add(time.Hour * time.Duration(j.ExpirationHours)).Unix(),
            Issuer:    j.Issuer,

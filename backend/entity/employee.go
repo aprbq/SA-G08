@@ -7,18 +7,17 @@ import (
 
 type Employee struct {
 	gorm.Model
-	Username string
-	Password string
-	Email string
-	FirstName string
-	LastName string
-	Gender string
-	Role string
+	Username string `json:"username"`
+	Password string `json:"-"`
+	Email string 	`json:"email"`
+	FirstName string`json:"first_name"`
+	LastName string	`json:"last_name"`	
+	Role string		`json:"role"`
 
-	Member []Member `gorm:"foreignKey:EmployeeID"`
+	GenderID  uint      `json:"gender_id"`
+    Gender    *Genders  `gorm:"foreignKey: GenderID" json:"gender"`
+
 	Promotion []Promotion `gorm:"foreignKey:EmployeeID"`
-	Order []Order `gorm:"foreignKey:EmployeeID"`
-	Menu []Menu `gorm:"foreignKey:EmployeeID"`
-	Ingredients []Ingredients `gorm:"foreignKey:EmployeeID"`
+
 
 }

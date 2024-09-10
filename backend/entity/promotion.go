@@ -28,6 +28,6 @@ type Promotion struct {
 	StatusID uint    `json:"status_id"`
 	Status   Status `gorm:"foreignKey:StatusID" json: "status"`
 
-	UsersID uint      `json:"user_id"`
-	Users   Users `gorm:"foreignKey:UsersID" json: "users"`
+	EmployeeID uint      `json:"employee_id"`
+	Employee   Employee `gorm:"foreignKey:EmployeeID" json: "employee"`
 }
