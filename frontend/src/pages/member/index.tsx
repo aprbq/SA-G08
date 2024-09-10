@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message ,Card,Statistic,Typography} from "antd";
+import { Space, Table, Button, Col, Row, Divider, message ,Card,Statistic} from "antd";
 import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetMember, DeleteMemberById } from "../../services/https/index";
@@ -8,9 +8,13 @@ import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 function Member() {
   const navigate = useNavigate();
-  const [ingredients , setMember] = useState<MemberInterface[]>([]);
+  const [member , setMember] = useState<MemberInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const myId = localStorage.getItem("id");
+
+  // const navigate = useNavigate();
+  // const [Promotion , setPromotion] = useState<PromotionInterface[]>([]);
+  // const [messageApi, contextHolder] = message.useMessage();
   const columns: ColumnsType<MemberInterface> = [
     {
       title: "ลำดับ",
@@ -20,47 +24,47 @@ function Member() {
     {
       title: "ชื่อ",
       dataIndex: "FristName",
-      key: "FristName",
+      key: "frist_name",
     },
     {
       title: "นามสกุล",
       dataIndex: "LastName",
-      key: "LastName",
+      key: "last_name",
     },
     {
       title: "อีเมล",
       dataIndex: "Email",
-      key: "Email",
+      key: "email",
     },
     {
       title: "เบอร์โทรศัพท์",
       dataIndex: "PhoneNumber",
-      key: "PhoneNumber",
+      key: "phone_number",
     },
     {
         title: "เพศ",
         dataIndex: "Gender",
-        key: "Gender",
+        key: "gender",
     },
     {
       title: "วันเกิด",
-      key: "DateOfBirth",
+      key: "date_of_birth",
       render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
     },
     {
       title: "วันเริ่มเป็นสมาชิก",
-      key: "StartDate",
+      key: "start_date",
       render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
     },
     {
       title: "วันสิ้นสุดการเป็นสมาชิก",
-      key: "EndDate",
+      key: "end_date",
       render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
     },
     {
       title: "แต้ม",
       dataIndex: "Points",
-      key: "Points",
+      key: "points",
     },
     {
       title: "",
@@ -184,7 +188,7 @@ function Member() {
         <Table
           rowKey="ID"
           columns={columns}
-          dataSource={ingredients}
+          dataSource={member}
           style={{ width: "100%", overflow: "scroll" }}
         />
       </div>

@@ -1,0 +1,133 @@
+package member
+
+import (
+	"net/http"
+
+	"example.com/sa-67-example/config"
+	"example.com/sa-67-example/entity"
+	"github.com/gin-gonic/gin"
+)
+
+func CreateMember(c *gin.Context) {
+	var member entity.Member
+
+
+	db := config.DB()
+
+	// ค้นหา gender ด้วย id
+	var status entity.Status
+	db.First(&status, member.StatusID)
+	if status.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Status not found"})
+		return
+	}
+
+    var users entity.Users
+	db.First(&users, member.UsersID)
+	if users.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Users not found"})
+		return
+	}
+
+    var genders entity.Genders
+	db.First(&genders,member.GendersID)
+	if genders.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
+		return
+	}
+	// สร้าง User
+	u := entity.Member{
+		FristName: member.FristName, //  
+		LastName:  member.LastName,  //  
+		Email:     member.Email,     //  
+		PhoneNumber:  member.PhoneNumber,
+		DateOfBirth:  member.DateOfBirth,
+		StartDate:   member.StartDate, //  
+		EndDate:  member.EndDate,
+		Points:    member.Points,
+        // DiscountType:    discount_type,
+        // PromotionTypeID:    promotion.PromotionTypeID,
+        // PromotionType:    promotion_type,
+        StatusID:    member.StatusID,
+        //Status:    status,
+        UsersID:    member.UsersID,
+        //Users:    users, //   
+        //GenderID:    member.GenderID,
+	}
+
+	// บันทึก
+	if err := db.Create(&u).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"message": "Created success", "data": u})
+}
+
+// GetAll retrieves all promotion along with their associated class
+func GetAll(c *gin.Context) {
+    var member []entity.Member
+    db := config.DB()
+    results := db.Preload("Status").Find(&member)
+
+    if results.Error != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
+        return
+    }
+    c.JSON(http.StatusOK, member)
+}
+
+// Get retrieves a single promotion by ID along with their associated class
+func Get(c *gin.Context) {
+    ID := c.Param("id")
+    var member entity.Member
+    db := config.DB()
+    results := db.Preload("Status").First(&member, ID)
+
+    if results.Error != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
+        return
+    }
+    if member.ID == 0 {
+        c.JSON(http.StatusNoContent, gin.H{})
+        return
+    }
+    c.JSON(http.StatusOK, member)
+}
+
+// Update updates the details of an existing menu
+func Update(c *gin.Context) {
+    var member entity.Member
+    memberID := c.Param("id")
+    db := config.DB()
+
+    result := db.First(&member, memberID)
+    if result.Error != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": "id not found"})
+        return
+    }
+
+    if err := c.ShouldBindJSON(&member); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request, unable to map payload"})
+        return
+    }
+
+    result = db.Save(&member)
+    if result.Error != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+        return
+    }
+    c.JSON(http.StatusOK, gin.H{"message": "Updated successful"})
+}
+
+// Delete removes a menu by ID
+func Delete(c *gin.Context) {
+    id := c.Param("id")
+    db := config.DB()
+
+    if tx := db.Exec("DELETE FROM member WHERE id = ?", id); tx.RowsAffected == 0 {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "id not found"})
+        return
+    }
+    c.JSON(http.StatusOK, gin.H{"message": "Deleted successful"})
+}

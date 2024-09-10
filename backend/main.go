@@ -19,6 +19,7 @@ import (
 	"example.com/sa-67-example/controller/order"
 	"example.com/sa-67-example/controller/orderitem"
 	"example.com/sa-67-example/controller/payment"
+	"example.com/sa-67-example/controller/member"
 	"github.com/gin-gonic/gin"
 
 )
@@ -86,6 +87,11 @@ func main() {
 		router.GET("/status", status.GetAll)
 		router.GET("/promotiontype", promotiontype.GetAll)
 		router.GET("/discounttype", discounttype.GetAll)
+
+		router.PUT("/member/:id", member.Update)
+        router.GET("/member", member.GetAll)
+        router.GET("/member/:id", member.Get)
+        router.DELETE("/member/:id", member.Delete)
 
 
 	 }
