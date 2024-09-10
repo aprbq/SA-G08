@@ -10,15 +10,16 @@ type Menu struct {
 	Name 		string    	`json:"name"`
 	Description  	string    	`json:"description"`
 	Price  		float32    	`json:"price"`
+	Picture     string      ` json:"picture"`
 	
 	CategoryID  	uint     	`json:"category_id"`
-	Category    	*Category   	`gorm:"foreignKey: CategoryID"`
+	Category    	Category   	`gorm:"foreignKey: CategoryID"`
 
 	StockID 	uint    `json:"stock_id"`
-	Stock   	*Stock `gorm:"foreignKey:StockID" json: "stock"`
+	Stock   	Stock `gorm:"foreignKey:StockID" json: "stock"`
 
-	UsersID 		uint	`json:"users_id"`
-	Users   		*Users `gorm:"foreignKey:UsersID"`
+	EmployeeID uint      `json:"employee_id"`
+	Employee   Employee `gorm:"foreignKey:EmployeeID" json: "employee"`
 
 	MenuIngredient []MenuIngredient `gorm:"foreignKey:MenuID"`
 

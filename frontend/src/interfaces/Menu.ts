@@ -3,8 +3,9 @@ export interface MenuInterface {
 	name?: string;
 	description?:   string;
 	price?: number;
+	picture?: string;
 	category_id?: number;
 	MenuIngredientID?: number;
 	stock_id?: number;
-	users_id?: string;
+	employee_id?: string;
   }

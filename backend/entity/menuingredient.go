@@ -6,10 +6,10 @@ type MenuIngredient struct {
 	gorm.Model
 	// MenuQuantity  int
 	
-	IngredientsID *uint
+	IngredientsID uint
 	Ingredients   Ingredients `gorm:"foreignKey:IngredientsID"`
 
-	MenuID *uint
+	MenuID uint
 	Menu   Menu `gorm:"foreignKey:MenuID"`
 	
 }

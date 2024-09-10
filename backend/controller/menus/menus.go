@@ -1,82 +1,70 @@
 package menus
 
 import (
-    "net/http"
+	"net/http"
 
-    "github.com/gin-gonic/gin"
-    "example.com/sa-67-example/config"
-    "example.com/sa-67-example/entity"
+	"example.com/sa-67-example/config"
+	// "example.com/sa-67-example/controller/employee"
+	"example.com/sa-67-example/entity"
+	"github.com/gin-gonic/gin"
 )
 
-// func CreateMenu(c *gin.Context) {
-// 	var promotion entity.Promotion
+func CreateMenu(c *gin.Context) {
+	var menu entity.Menu
 
+    if err := c.ShouldBindJSON(&menu); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
-// 	db := config.DB()
+	db := config.DB()
+    
 
-	
-// 	var status entity.Status
-// 	db.First(&status, promotion.StatusID)
-// 	if status.ID == 0 {
-// 		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
-// 		return
-// 	}
+	// ค้นหา gender ด้วย id
+	var category entity.Category
+	db.First(&category, menu.CategoryID)
+	if category.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "status not found"})
+		return
+	}
 
-//     var users entity.Users
-// 	db.First(&users, promotion.UsersID)
-// 	if users.ID == 0 {
-// 		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
-// 		return
-// 	}
+    var stock entity.Stock
+	db.First(&stock,menu.Stock)
+	if stock.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
+		return
+	}
 
-//     var promotion_type entity.PromotionType
-// 	db.First(&promotion_type,promotion.DiscountTypeID)
-// 	if promotion_type.ID == 0 {
-// 		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
-// 		return
-// 	}
+	// สร้าง User
+	u := entity.Menu{
+		Name: menu.Name, //  
+		Description:  menu.Description,  //  
+		Price:     menu.Price,     //  
+		
+		Picture:   menu.Picture, //  
+		
+		CategoryID:    menu.CategoryID,
+        Category:    category,
+        StockID:    menu.StockID,
+        Stock:    stock,
+        
+	}
 
-//     var discount_type entity.DiscountType
-// 	db.First(&discount_type, promotion.DiscountTypeID)
-// 	if discount_type.ID == 0 {
-// 		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
-// 		return
-// 	}
+	// บันทึก
+	if err := db.Create(&u).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
+	c.JSON(http.StatusCreated, gin.H{"message": "Created success", "data": u})
+}
 
-	
-// 	u := entity.Promotion{
-// 		PromotionName: promotion.PromotionName, //  
-// 		Description:  promotion.Description,  //  
-// 		StartDate:     promotion.StartDate,     //  
-// 		EndDate:  promotion.EndDate,
-// 		PointsAdded:  promotion.PointsAdded,
-// 		PointsUse:   promotion.PointsUse, //  
-// 		DiscountValue:  promotion.DiscountValue,
-// 		DiscountTypeID:    promotion.DiscountTypeID,
-//         DiscountType:    discount_type,
-//         PromotionTypeID:    promotion.PromotionTypeID,
-//         PromotionType:    promotion_type,
-//         StatusID:    promotion.StatusID,
-//         Status:    status,
-//         UsersID:    promotion.UsersID,
-//         Users:    users, //   
-// 	}
-
-// 	// บันทึก
-// 	if err := db.Create(&u).Error; err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusCreated, gin.H{"message": "Created success", "data": u})
-// }
 
 // GetAll retrieves all menu along with their associated class
 func GetAll(c *gin.Context) {
     var menus []entity.Menu
     db := config.DB()
-    results := db.Preload("Category").Find(&menus)
+    results := db.Preload("Category").Preload("Stock").Find(&menus)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
@@ -90,7 +78,7 @@ func Get(c *gin.Context) {
     ID := c.Param("id")
     var menu entity.Menu
     db := config.DB()
-    results := db.Preload("Category").First(&menu, ID)
+    results := db.Preload("Category").Preload("Stock").First(&menu, ID)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})

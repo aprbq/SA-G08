@@ -16,18 +16,23 @@ import {
 import { PlusOutlined, UploadOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { MenuInterface } from "../../../interfaces/Menu";
 import { CategoryInterface } from "../../../interfaces/Category";
-import { GetMenuById, UpdateMenuById, GetCategory} from "../../../services/https/index";
+import { StockInterface } from "../../../interfaces/Stock";
+import { GetMenuById, UpdateMenuById, GetCategory, GetStock} from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 const { Option } = Select;
 
 function MenuEdit() {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: any }>();
+  
   const [messageApi, contextHolder] = message.useMessage();
   const [menu, setMenu] = useState<MenuInterface>();
   const [category, setCategory] = useState<CategoryInterface[]>([]);
+  const [stock, setStock] = useState<StockInterface[]>([]);
+  
+  // รับข้อมูลจาก params
+  let { id } = useParams();
+  // อ้างอิง form กรอกข้อมูล
   const [form] = Form.useForm();
-  const [imageFile, setImageFile] = useState<any[]>([]);
 
   const getMenuById = async (id: string) => {
     let res = await GetMenuById(id);
@@ -35,36 +40,19 @@ function MenuEdit() {
       form.setFieldsValue({
         name: res.data.name,
         price: res.data.price,
+        
         description: res.data.description,
         category_id: res.data.category?.ID,
+        stock_id: res.data.stock?.ID,
         ingredients: res.data.ingredients || [], // Set ingredients from API
       });
 
-      if (res.data.image) {
-        setImageFile([
-          {
-            uid: "-1",
-            name: "image.png",
-            status: "done",
-            url: res.data.image,
-          },
-        ]);
-      }
-    } else {
-      messageApi.open({
-        type: "error",
-        content: "ไม่พบข้อมูลเมนู",
-      });
-      setTimeout(() => {
-        navigate("/menus");
-      }, 2000);
-    }
+      
   };
 
   const onFinish = async (values: MenuInterface) => {
     let payload = {
       ...values,
-      image: imageFile.length ? imageFile[0].originFileObj : undefined,
     };
 
     const res = await UpdateMenuById(id, payload);
@@ -74,7 +62,7 @@ function MenuEdit() {
         content: res.data.message,
       });
       setTimeout(() => {
-        navigate("/menus");
+        navigate("/ingredient");
       }, 2000);
     } else {
       messageApi.open({
@@ -91,13 +79,17 @@ function MenuEdit() {
     }
   };
 
-  const handleImageChange = ({ fileList }: any) => {
-    setImageFile(fileList);
+  const getStock = async () => {
+    let res = await GetStock();
+    if (res) {
+      setStock(res);
+    }
   };
 
   useEffect(() => {
     getMenuById(id);
     getCategory();
+    getStock();
   }, []);
 
   return (
@@ -167,19 +159,7 @@ function MenuEdit() {
               </Form.Item>
             </Col>
 
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item label="รูปภาพ" name="image">
-                <Upload
-                  listType="picture"
-                  fileList={imageFile}
-                  onChange={handleImageChange}
-                  beforeUpload={() => false}
-                  maxCount={1}
-                >
-                  <Button icon={<UploadOutlined />}>อัพโหลดรูปภาพ</Button>
-                </Upload>
-              </Form.Item>
-            </Col>
+        
           </Row>
 
           {/* ส่วนสำหรับแก้ไขวัตถุดิบ */}
@@ -244,5 +224,5 @@ function MenuEdit() {
     </div>
   );
 }
-
+}
 export default MenuEdit;

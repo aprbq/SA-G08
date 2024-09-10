@@ -12,38 +12,30 @@ function Menus() {
   const navigate = useNavigate();
   const [menus, setMenu] = useState<MenuInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const myId = localStorage.getItem("id");
+  
+
+  
+  // // Model
+  // const [open, setOpen] = useState(false);
+  // const [confirmLoading, setConfirmLoading] = useState(false);
+  // const [modalText, setModalText] = useState<String>();
+  // const [deleteId, setDeleteId] = useState<Number>();
 
   const columns: ColumnsType<MenuInterface> = [
-    // {
-    //   title: "",
-    //   render: (record) => (
-    //     <>
-    //       {myId == record?.ID ? (
-    //         <></>
-    //       ) : (
-    //         <Button
-    //           type="dashed"
-    //           danger
-    //           icon={<DeleteOutlined />}
-    //           onClick={() => deleteMenuById(record.ID)}
-    //         ></Button>
-    //       )}
-    //     </>
-    //   ),
-    // },
+    
     {
       title: "ลำดับ",
       dataIndex: "ID",
       key: "id",
     },
     {
-      title: "รูปภาพ",
-      dataIndex: "imageUrl",
-      key: "image",
-      render: (imageUrl) => (
-        <img src={imageUrl} alt="menu" style={{ width: 100, height: 100, objectFit: 'cover' }} />
-      ),
+      title: "รูปเมนู",
+      dataIndex: "Picture",
+      key: "picture",
+      width: "15%",
+      render: (text, record, index) => (
+        <img src={record.picture} className="w3-left w3-circle w3-margin-right" width="100%" />
+      )
     },
     {
       title: "ชื่อ",
@@ -67,9 +59,10 @@ function Menus() {
       render: (item) => Object.values(item.category),
     },
     {
-      title: "สต็อก",
-      dataIndex: "stock_id",
+      title: "สถานะเมนู",
+      dataIndex: "Stock",
       key: "stock_id",
+      render: (item) => Object.values(item.stock),
     },
     {
       title: "ดูวัตถุดิบ",

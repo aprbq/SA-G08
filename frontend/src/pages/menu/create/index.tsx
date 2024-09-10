@@ -16,14 +16,40 @@ import {
 import { PlusOutlined, UploadOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { MenuInterface } from "../../../interfaces/Menu";
 import { CategoryInterface } from "../../../interfaces/Category";
-import {CreateMenu, GetCategory} from "../../../services/https/index";
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { StockInterface } from "../../../interfaces/Stock";
+import {CreateMenu, GetCategory, GetStock} from "../../../services/https/index";
+import { useNavigate, Link } from "react-router-dom";
+import type { GetProp, UploadFile, UploadProps } from "antd";
+import ImgCrop from "antd-img-crop";
+
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 const { Option } = Select;
 
 function MenuCreate() {
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const [category, setCategory] = useState<CategoryInterface[]>([]);
+  const [stock, setStock] = useState<StockInterface[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
+
+  const onPreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as FileType);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
 
   const onFinish = async (values: MenuInterface) => {
     let res = await CreateMenu(values);
@@ -51,16 +77,18 @@ function MenuCreate() {
     }
   };
 
-  const normFile = (e: any) => {
-    if (Array.isArray(e)) {
-      return e;
+  const getStock = async () => {
+    let res = await GetStock();
+    if (res) {
+      setStock(res);
     }
-    return e?.fileList;
   };
+
+  
 
   useEffect(() => {
     getCategory();
-    
+    getStock();
   }, []);
 
   return (
@@ -72,6 +100,35 @@ function MenuCreate() {
 
         <Form name="basic" layout="vertical" onFinish={onFinish} autoComplete="off">
           <Row gutter={[16, 0]}>
+
+          <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+              <Form.Item
+                label="รูปเมนู"
+                name="picture"
+                valuePropName="fileList"
+              >
+                <ImgCrop rotationSlider>
+                  <Upload
+                    fileList={fileList}
+                    onChange={onChange}
+                    onPreview={onPreview}
+                    beforeUpload={(file) => {
+                      setFileList([...fileList, file]);
+                      return false;
+                    }}
+                    maxCount={1}
+                    multiple={false}
+                    listType="picture-card"
+                  >
+                    <div>
+                      <PlusOutlined />
+                      <div style={{ marginTop: 8 }}>อัพโหลด</div>
+                    </div>
+                  </Upload>
+                </ImgCrop>
+              </Form.Item>
+            </Col>
+
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label="ชื่อ"
@@ -97,6 +154,22 @@ function MenuCreate() {
                 {category.map((item) => (
                   <Option value={item.ID} key={item.category}>
                     {item.category}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            <Form.Item
+              name="stock_id"
+              label="สถานะ"
+              rules={[{ required: true, message: "กรุณาเลือกสถานะ !" }]}
+            >
+              <Select allowClear>
+                {stock.map((item) => (
+                  <Option value={item.ID} key={item.stock}>
+                    {item.stock}
                   </Option>
                 ))}
               </Select>
@@ -139,24 +212,7 @@ function MenuCreate() {
               </Form.Item>
             </Col>
 
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                label="รูปภาพ"
-                name="image"
-                valuePropName="fileList"
-                getValueFromEvent={normFile}
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาอัพโหลดรูปภาพ !",
-                  },
-                ]}
-              >
-                <Upload name="image" listType="picture" maxCount={1}>
-                  <Button icon={<UploadOutlined />}>คลิกเพื่ออัพโหลด</Button>
-                </Upload>
-              </Form.Item>
-            </Col>
+            
           </Row>
 
           {/* เพิ่มส่วนสำหรับการเพิ่มวัตถุดิบหลายรายการ */}

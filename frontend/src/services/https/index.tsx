@@ -49,23 +49,17 @@ async function GetDiscountType() {
 }
 
 async function GetCategory() {
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
+  return await axios
+    .get(`${apiUrl}/category`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 
-  let res = await fetch(`${apiUrl}/category`, requestOptions)
-    .then((res) => {
-      if (res.status == 200) {
-        return res.json();
-      } else {
-        return false;
-      }
-    });
-
-  return res;
+async function GetStock() {
+  return await axios
+    .get(`${apiUrl}/stock`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
 }
 
 async function GetUsers() {
@@ -297,6 +291,7 @@ export {
   CreateIngredients,
 
   GetCategory,
+  GetStock,
   GetMenu,
   GetMenuById,
   UpdateMenuById,
