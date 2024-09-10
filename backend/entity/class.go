@@ -6,5 +6,5 @@ type Class struct {
    gorm.Model
    Class string `json:"class"`
 
-   /* Ingredients []Ingredients `gorm:"foreignKey:ClassID"` */
+   Ingredients []Ingredients `gorm:"foreignKey: ClassID"`
 }

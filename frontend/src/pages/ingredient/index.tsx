@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message } from "antd";
-import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined , EditOutlined, ScheduleOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetIngredients, DeleteIngredientsById } from "../../services/https/index";
 import { IngredientInterface } from "../../interfaces/Ingre";
@@ -64,7 +64,7 @@ function Ingredients() {
     },
 
     {
-      title: "",
+      title: "แก้ไข/ลบข้อมูล",
       render: (record) => (
         <>
           <Button
@@ -128,7 +128,7 @@ function Ingredients() {
   }, []);
 
   return (
-    <>
+    <div>
       {contextHolder}
       <Row>
         <Col span={12}>
@@ -137,9 +137,14 @@ function Ingredients() {
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
             <Link to="/ingredient/create">
-              <Button className='btn-1' type="primary" icon={<PlusOutlined />} >
+              <Button type="primary" icon={<PlusOutlined />}>
                 เพิ่มวัตถุดิบ
               </Button>
+            </Link>
+            <Link to="/ingredient/create">
+                <Button type="primary" icon={<ScheduleOutlined />} style={{ background: '#E48F44' }}>
+                    ประวัติการนำเข้า
+                </Button>
             </Link>
           </Space>
         </Col>
@@ -153,7 +158,7 @@ function Ingredients() {
           style={{ width: "100%", overflow: "scroll" }}
         />
       </div>
-    </>
+    </div>
   );
 }
 export default Ingredients;
