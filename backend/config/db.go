@@ -42,6 +42,8 @@ func SetupDatabase() {
 		&entity.Condition{},
 		&entity.Paymentmethod{},
 		&entity.Payment{},
+		&entity.Ordersweet{},
+		&entity.Ordertype{},
 		&entity.Member{},
 		&entity.Order{},
 		&entity.Orderitem{},
