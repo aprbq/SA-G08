@@ -22,69 +22,36 @@ function Order() {
       key: "id",
     },
 
-    // {
-    //   title: "ชื่อ",
-    //   dataIndex: "promotion_name",
-    //   key: "promotion_name",
-    // },
+     {
+       title: "ชื่อเมนู",
+       dataIndex: "name",
+       key: "name",
+     },
 
-    // {
-    //   title: "คำอธิบาย",
-    //   dataIndex: "description",
-    //   key: "description",
-    // },
+     {
+       title: "จำนวน",
+       dataIndex: "order_quantity",
+       key: "order_quantity",
+     },
 
-    // {
-    //   title: "ได้แต้ม",
-    //   dataIndex: "points_added",
-    //   key: "points_added",
-    // },
+     {
+       title: "ราคา",
+       dataIndex: "Price",
+       key: "Price",
+     },
 
-    // {
-    //   title: "ใช้แต้ม",
-    //   dataIndex: "points_use",
-    //   key: "points_use",
-    // },
-
-    // {
-    //     title: "จำนวน",
-    //     dataIndex: "discount_value",
-    //     key: "discount_value",
-    // },
-    
-    // {
-    //   title: "ประเภท",
-    //   dataIndex: "DiscountType",
-    //   key: "discount_type_id",
-    //   render: (item) => Object.values(item.discount_type_name),
-    // },
-
-    // {
-    //   title: "สำหรับ",
-    //   dataIndex:"PromotionType",
-    //   key: "promotion_type_id",
-    //   render: (item) => Object.values(item.promotion_type_name),
-    // },
+     {
+       title: "ราคารวมของเมนู",
+       dataIndex: "total_item",
+       key: "total_item",
+     },
 
      {
        title: "วันทำรายการ",
        key: "order_date",
        render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
      },
-
-    // {
-    //   title: "วันสิ้นสุด",
-    //   key: "end_date",
-    //   render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
-    // },
-
-    // {
-    // title: "สถานะ",
-    // dataIndex: "Status",
-    // key: "status_id",
-    // render: (item) => Object.values(item.status_name),
-    // },
-
+    
     {
       title: "",
       render: (record) => (
@@ -152,7 +119,7 @@ function Order() {
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
-            <Link to="/promotion/create">
+            <Link to="/order/create">
               <Button className = "btn-1" type="primary" icon={<PlusOutlined />}>
                 สร้างออเดอร์
               </Button>
