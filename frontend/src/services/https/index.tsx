@@ -251,95 +251,38 @@ async function CreateMenu(data: MenuInterface) {
 }
 // Promotion
 async function GetPromotion() {
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
-  let res = await fetch(`${apiUrl}/promotion`, requestOptions)
-    .then((res) => {
-      if (res.status == 200) {
-        return res.json();
-      } else {
-        return false;
-      }
-    });
-
-  return res;
+  return await axios
+    .get(`${apiUrl}/promotion`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
 }
 
 async function GetPromotionById(id: Number ) {
-  const requestOptions = {
-    method: "GET"
-  };
-
-  let res = await fetch(`${apiUrl}/promotion/${id}`, requestOptions)
-    .then((res) => {
-      if (res.status == 200) {
-        return res.json();
-      } else {
-        return false;
-      }
-    });
-
-  return res;
+  return await axios
+    .get(`${apiUrl}/promotion/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
 }
 
-async function UpdatePromotionById(data: PromotionInterface) {
-  const requestOptions = {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  };
-
-  let res = await fetch(`${apiUrl}/promotion`, requestOptions)
-    .then((res) => {
-      if (res.status == 200) {
-        return res.json();
-      } else {
-        return false;
-      }
-    });
-
-  return res;
+async function UpdatePromotionById(id: string, data: PromotionInterface) {
+  return await axios
+    .put(`${apiUrl}/promotion/${id}`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
 }
 
 async function DeletePromotionById(id: string) {
-  const requestOptions = {
-    method: "DELETE"
-  };
-
-  let res = await fetch(`${apiUrl}/promotion/${id}`, requestOptions)
-    .then((res) => {
-      if (res.status == 200) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-
-  return res;
+  return await axios
+    .delete(`${apiUrl}/promotion/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
 }
 
 async function CreatePromotion(data: PromotionInterface) {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  };
-
-  let res = await fetch(`${apiUrl}/promotion`, requestOptions)
-    .then((res) => {
-      if (res.status == 201) {
-        return res.json();
-      } else {
-        return false;
-      }
-    });
-
-  return res;
+  return await axios
+    .post(`${apiUrl}/promotion`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
 }
 //Member
 
