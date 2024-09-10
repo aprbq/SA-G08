@@ -52,23 +52,74 @@ import {
 
     const getStatus = async () => {
       let res = await GetStatus();
-      if (res) {
-        setStatus(res);
-      }
+
+   
+
+    if (res.status == 200) {
+
+      setStatus(res.data);
+
+    } else {
+
+      setStatus([]);
+
+      messageApi.open({
+
+        type: "error",
+
+        content: res.data.error,
+
+      });
+
+    }
     };
 
     const getPromotionType = async () => {
       let res = await GetPromotionType();
-      if (res) {
-        setPromotionType(res);
+
+   
+
+      if (res.status == 200) {
+  
+        setPromotionType(res.data);
+  
+      } else {
+  
+        setPromotionType([]);
+  
+        messageApi.open({
+  
+          type: "error",
+  
+          content: res.data.error,
+  
+        });
+  
       }
     };
 
     const getDiscountType = async () => {
       let res = await GetDiscountType();
-      if (res) {
-        setDiscountType(res);
-      }
+
+   
+
+    if (res.status == 200) {
+
+      setDiscountType(res.data);
+
+    } else {
+
+      setDiscountType([]);
+
+      messageApi.open({
+
+        type: "error",
+
+        content: res.data.error,
+
+      });
+
+    }
     };
 
     useEffect(() => {
