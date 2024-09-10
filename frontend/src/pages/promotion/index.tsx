@@ -117,25 +117,54 @@ function Promotion() {
 
   const deletePromotionById = async (id: string) => {
     let res = await DeletePromotionById(id);
-  
-    if (res) { // ถ้า res เป็น true
+
+
+    if (res.status == 200) {
+
       messageApi.open({
+
         type: "success",
-        content: "ลบโปรโมชั่นสำเร็จ", // ข้อความเมื่อการลบสำเร็จ
+
+        content: res.data.message,
+
       });
-      await getPromotion(); // โหลดข้อมูลใหม่หลังจากลบสำเร็จ
+
+      await getPromotion();
+
     } else {
+
       messageApi.open({
+
         type: "error",
-        content: "เกิดข้อผิดพลาดในการลบ", // ข้อความเมื่อการลบล้มเหลว
+
+        content: res.data.error,
+
       });
+
     }
   };
 
   const getPromotion = async () => {
     let res = await GetPromotion();
-    if (res) {
-      setPromotion(res);
+
+   
+
+    if (res.status == 200) {
+
+      setPromotion(res.data);
+
+    } else {
+
+      setPromotion([]);
+
+      messageApi.open({
+
+        type: "error",
+
+        content: res.data.error,
+
+      });
+
     }
   };
 

@@ -28,63 +28,24 @@ async function SignIn(data: SignInInterface) {
 }
 
 async function GetStatus() {
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
-  let res = await fetch(`${apiUrl}/status`, requestOptions)
-    .then((res) => {
-      if (res.status == 200) {
-        return res.json();
-      } else {
-        return false;
-      }
-    });
-
-  return res;
+  return await axios
+    .get(`${apiUrl}/status`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
 }
 
 async function GetPromotionType() {
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
-  let res = await fetch(`${apiUrl}/promotiontype`, requestOptions)
-    .then((res) => {
-      if (res.status == 200) {
-        return res.json();
-      } else {
-        return false;
-      }
-    });
-
-  return res;
+  return await axios
+    .get(`${apiUrl}/promotiontype`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
 }
 
 async function GetDiscountType() {
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
-  let res = await fetch(`${apiUrl}/discounttype`, requestOptions)
-    .then((res) => {
-      if (res.status == 200) {
-        return res.json();
-      } else {
-        return false;
-      }
-    });
-
-  return res;
+  return await axios
+    .get(`${apiUrl}/discounttype`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
 }
 
 async function GetCategory() {
