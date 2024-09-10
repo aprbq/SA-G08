@@ -20,6 +20,7 @@ import (
 	"example.com/sa-67-example/controller/orderitem"
 	"example.com/sa-67-example/controller/payment"
 	"example.com/sa-67-example/controller/member"
+	"example.com/sa-67-example/middlewares"
 	"github.com/gin-gonic/gin"
 
 )
@@ -42,6 +43,7 @@ func main() {
  
 	 router := r.Group("/")
 	 {
+		router.Use(middlewares.Authorizes())
 		 // User Route
 		//  router.PUT("/user/:id", users.Update)
 		//  router.GET("/users", users.GetAll)
