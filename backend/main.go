@@ -15,7 +15,7 @@ import (
 	"example.com/sa-67-example/controller/menuingredient"
 	"example.com/sa-67-example/controller/menus"
 	"example.com/sa-67-example/controller/promotion"
-	"example.com/sa-67-example/controller/users"
+	"example.com/sa-67-example/controller/employee"
 	"example.com/sa-67-example/controller/order"
 	"example.com/sa-67-example/controller/orderitem"
 	"example.com/sa-67-example/controller/payment"
@@ -37,16 +37,16 @@ func main() {
 	 r.Use(CORSMiddleware())
  
 	 // Auth Route
-	 r.POST("/signup", users.SignUp)
-	 r.POST("/signin", users.SignIn)
+	 r.POST("/signup", employee.SignUp)
+	 r.POST("/signin", employee.SignIn)
  
 	 router := r.Group("/")
 	 {
 		 // User Route
-		 router.PUT("/user/:id", users.Update)
-		 router.GET("/users", users.GetAll)
-		 router.GET("/user/:id", users.Get)
-		 router.DELETE("/user/:id", users.Delete)
+		//  router.PUT("/user/:id", users.Update)
+		//  router.GET("/users", users.GetAll)
+		//  router.GET("/user/:id", users.Get)
+		//  router.DELETE("/user/:id", users.Delete)
 
 		router.PUT("/ingredient/:id", ingredients.Update)
         router.GET("/ingredient", ingredients.GetAll)
