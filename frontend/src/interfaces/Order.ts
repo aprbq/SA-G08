@@ -1,6 +1,7 @@
 export interface OrderInterface {
     ID?:            number;
     order_date?:     string;
-    //user_id?:        number;
-    //promotion_id?:         number;
+    user_id?:        number;
+    promotion_id?:         number;
+    payment_id?:        number;
     }
