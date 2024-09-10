@@ -10,8 +10,8 @@ type Order struct {
 	gorm.Model
 	OrderDate  	time.Time 	`json:"order_date"` 
 
-	//PaymentID  	uint		`json:"payment_id"`
-	//Payment    	*Payment   	`gorm:"foreignKey:PaymentID" json: "payment"`
+	PaymentID  	uint		`json:"payment_id"`
+	Payment    	*Payment   	`gorm:"foreignKey:PaymentID" json:"payment"`
 
 	UsersID uint      `json:"user_id"`
 	Users   *Users `gorm:"foreignKey:UsersID" json: "users"`

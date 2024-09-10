@@ -15,7 +15,7 @@ type Orderitem struct {
 	
 
 	OrderID  	uint		`json:"order_id"`
-	Order    	*Order   	`gorm:"foreignKey:OrderID" json: "order"`
+	Order    	*Order   	`gorm:"foreignKey:OrderID" json:"order"`
 
 	
 	OrderHasMenu []OrderHasMenu `gorm:"foreignKey:OrderitemID"`
