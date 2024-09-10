@@ -23,28 +23,29 @@ function Member() {
     },
     {
       title: "ชื่อ",
-      dataIndex: "FristName",
+      dataIndex: "frist_name",
       key: "frist_name",
     },
     {
       title: "นามสกุล",
-      dataIndex: "LastName",
+      dataIndex: "last_name",
       key: "last_name",
     },
     {
       title: "อีเมล",
-      dataIndex: "Email",
+      dataIndex: "email",
       key: "email",
     },
     {
       title: "เบอร์โทรศัพท์",
-      dataIndex: "PhoneNumber",
+      dataIndex: "phone_number",
       key: "phone_number",
     },
     {
-        title: "เพศ",
-        dataIndex: "Gender",
-        key: "gender",
+        title: "สถานะ",
+        dataIndex: "Status",
+        key: "status",
+        render: (item) => Object.values(item.status_name),
     },
     {
       title: "วันเกิด",
@@ -63,9 +64,16 @@ function Member() {
     },
     {
       title: "แต้ม",
-      dataIndex: "Points",
+      dataIndex: "points",
       key: "points",
     },
+
+    {
+      title: "เพศ",
+      key: "gender",
+      render: (record) => <>{record?.gender?.gender}</>,
+    },
+
     {
       title: "",
       render: (record) => (

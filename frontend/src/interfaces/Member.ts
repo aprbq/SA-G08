@@ -11,6 +11,6 @@ export interface MemberInterface {
 	points?:         number;
 	users_id?:		number;
 	status_id?:		number;
-	gender?:		number;
+	GenderID?: 		number;
 	
     }
