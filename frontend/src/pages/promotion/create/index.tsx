@@ -273,10 +273,10 @@ import {
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Form.Item name="menuID" label="Menus" rules={[{ required: true }]}>
+              <Form.Item name="menu_id" label="Menus" rules={[{ required: true }]}>
               <Select mode="multiple" placeholder="Select menus">
                 {menu.map((menu) => (
-                <Option key={menu.ID} value={menu.name}>
+                <Option key={menu.ID} value={menu.ID}>
                   {menu.name}
                 </Option>
                 ))}
