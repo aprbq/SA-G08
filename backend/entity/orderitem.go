@@ -16,10 +16,7 @@ type Orderitem struct {
 
 	 OrdersweetID  	uint		`json:"ordersweet_id"`
 	 Ordersweet    	*Ordersweet   	`gorm:"foreignKey:OrdersweetID" json:"ordersweet"`
-
-	 OrdertypeID  	uint		`json:"ordertype_id"`
-	 Ordertype    	*Ordertype   	`gorm:"foreignKey:OrdertypeID" json:"ordertype"`
-
+	
 	 OrderID  	uint		`json:"order_id"`
 	 Order    	*Order   	`gorm:"foreignKey:OrderID" json:"order"`
 
