@@ -78,6 +78,10 @@ func SetupDatabase() {
 	CategoryIce := entity.Category{Category: "Ice"}
 	CategoryFrappe := entity.Category{Category: "Frappe"}
 
+	OrdersweetNormal := entity.Ordersweet{OrderSweets: "100%"}
+	OrdersweetLot := entity.Ordersweet{OrderSweets: "120%"}
+	OrdersweetLittle := entity.Ordersweet{OrderSweets: "50%"}
+
 	db.FirstOrCreate(&GenderMale, &entity.Gender{GenderName: "Male"})
 	db.FirstOrCreate(&GenderFemale, &entity.Gender{GenderName: "Female"})
 
@@ -102,6 +106,10 @@ func SetupDatabase() {
 	db.FirstOrCreate(&CategoryHot, &entity.Category{Category: "Hot"})
 	db.FirstOrCreate(&CategoryIce, &entity.Category{Category: "Ice"})
 	db.FirstOrCreate(&CategoryFrappe, &entity.Category{Category: "Frappe"})
+
+	db.FirstOrCreate(&OrdersweetNormal, &entity.Ordersweet{OrderSweets: "100%"})
+	db.FirstOrCreate(&OrdersweetLot, &entity.Ordersweet{OrderSweets: "120%"})
+	db.FirstOrCreate(&OrdersweetLittle, &entity.Ordersweet{OrderSweets: "50%"})
 
 	hashedPassword, _ := HashPassword("123456")
 	BirthDay, _ := time.Parse("2006-01-02", "1988-11-12")
