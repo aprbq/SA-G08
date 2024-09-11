@@ -183,6 +183,15 @@ body {
 
 }
 
+.front-1{
+  color: #000000 !important;
+  font-family: "Mitr", sans-serif;
+  font-weight: normal;
+  font-size: 13px;
+  font-style: normal;
+
+}
+
 .btn-delete {
   background: #FF4D4F;
   color: #000;

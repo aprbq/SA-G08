@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message } from "antd";
+import { Space, Table, Button, Col, Row, Divider, message, Modal } from "antd";
 import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetPromotion, DeletePromotionById } from "../../services/https/index";
 import { PromotionInterface } from "../../interfaces/Promotion";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+
+const { confirm } = Modal;
 
 function Promotion() {
   const navigate = useNavigate();
@@ -15,41 +17,46 @@ function Promotion() {
 
   const columns: ColumnsType<PromotionInterface> = [
 
-
     {
       title: "ลำดับ",
       dataIndex: "ID",
       key: "id",
+      className:  "front-1",
     },
 
     {
       title: "ชื่อ",
       dataIndex: "promotion_name",
       key: "promotion_name",
+      className:  "front-1",
     },
 
     {
       title: "คำอธิบาย",
       dataIndex: "description",
       key: "description",
+      className:  "front-1",
     },
 
     {
       title: "ได้แต้ม",
       dataIndex: "points_added",
       key: "points_added",
+      className:  "front-1",
     },
 
     {
       title: "ใช้แต้ม",
       dataIndex: "points_use",
       key: "points_use",
+      className:  "front-1",
     },
 
     {
         title: "จำนวน",
         dataIndex: "discount_value",
         key: "discount_value",
+        className:  "front-1",
     },
     
     {
@@ -57,6 +64,7 @@ function Promotion() {
       dataIndex: "DiscountType",
       key: "discount_type_id",
       render: (item) => Object.values(item.discount_type_name),
+      className:  "front-1",
     },
 
     {
@@ -64,18 +72,21 @@ function Promotion() {
       dataIndex:"PromotionType",
       key: "promotion_type_id",
       render: (item) => Object.values(item.promotion_type_name),
+      className:  "front-1",
     },
 
     {
       title: "วันเริ่ม",
       key: "start_date",
       render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
+      className:  "front-1",
     },
 
     {
       title: "วันสิ้นสุด",
       key: "end_date",
       render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
+      className:  "front-1",
     },
 
     {
@@ -83,6 +94,7 @@ function Promotion() {
     dataIndex: "Status",
     key: "status_id",
     render: (item) => Object.values(item.status_name),
+    className:  "front-1",
     },
 
     {
@@ -108,7 +120,7 @@ function Promotion() {
                 type="primary"
                 className="btn-delete"
                 icon={<DeleteOutlined />}
-                onClick={() => deletePromotionById(record.ID)}
+                onClick={() => showDeleteConfirm(record.ID)}
             ></Button>
           </>
         ),
@@ -117,54 +129,46 @@ function Promotion() {
 
   const deletePromotionById = async (id: string) => {
     let res = await DeletePromotionById(id);
-
-
     if (res.status == 200) {
-
       messageApi.open({
-
         type: "success",
-
         content: res.data.message,
-
       });
-
       await getPromotion();
-
     } else {
-
       messageApi.open({
-
         type: "error",
-
         content: res.data.error,
-
       });
-
     }
   };
 
+  const showDeleteConfirm = (id: string) => {
+    confirm({
+      title: "คุณแน่ใจหรือว่าต้องการลบ'โปรโมชั่น'",
+      content: "การลบจะไม่สามารถยกเลิกได้",
+      okText: "ยืนยัน",
+      okType: "danger",
+      cancelText: "ยกเลิก",
+      className:  "front-1",
+      onOk() {
+        deletePromotionById(id);
+      },
+      onCancel() {
+        console.log("ยกเลิกการลบ");
+      },
+    })};
+
   const getPromotion = async () => {
     let res = await GetPromotion();
-
-   
-
     if (res.status == 200) {
-
       setPromotion(res.data);
-
     } else {
-
       setPromotion([]);
-
       messageApi.open({
-
         type: "error",
-
         content: res.data.error,
-
       });
-
     }
   };
 
