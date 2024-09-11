@@ -40,12 +40,20 @@ function MenuEdit() {
       form.setFieldsValue({
         name: res.data.name,
         price: res.data.price,
-        
+        picture: res.data.picture,
         description: res.data.description,
         category_id: res.data.category_id,
         stock_id: res.data.stock_id,
         // ingredients: res.data.ingredients || [], // Set ingredients from API
       });
+    }else {
+      messageApi.open({
+        type: "error",
+        content: "ไม่พบข้อมูล",
+      });
+      setTimeout(() => {
+        navigate("/menu");
+      }, 2000);
     }
       
   };

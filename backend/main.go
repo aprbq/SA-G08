@@ -56,7 +56,7 @@ func main() {
         router.GET("/ingredient/:id", ingredients.Get)
         router.DELETE("/ingredient/:id", ingredients.Delete)
 
-		router.PATCH("/menu/:id", menus.Update)
+		router.PUT("/menu/:id", menus.Update)
 		router.POST("/menu", menus.CreateMenu)
         router.GET("/menu", menus.GetAll)
         router.GET("/menu/:id", menus.Get)
