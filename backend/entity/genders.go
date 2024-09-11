@@ -7,5 +7,5 @@ type Genders struct {
    Gender string `json:"gender"`
 
    Employee []Employee `gorm:"foreignKey:GenderID"`
-   
+   Member []Member `gorm:"foreignKey:GendersID"`
 }
