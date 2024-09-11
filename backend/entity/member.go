@@ -24,8 +24,8 @@ type Member struct {
 	StatusID uint    `json:"status_id"`
 	Status   Status `gorm:"foreignKey:StatusID" json: "status"`
 
-	GendersID uint    `json:"gender"`
-	Genders   Genders `gorm:"foreignKey:GendersID" json: "genders"`
+	GenderID uint    `json:"gender_id"`
+	Gender   Gender `gorm:"foreignKey:GenderID" json: "gender"`
 	
 	MemberOrderHistory []MemberOrderHistory `gorm:"foreignKey:MemberID"`
 }

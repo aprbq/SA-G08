@@ -15,6 +15,6 @@ type Users struct {
 	Password  string    `json:"-"`
 	BirthDay  time.Time `json:"birthday"`
 	GenderID  uint      `json:"gender_id"`
-	Gender    *Genders  `gorm:"foreignKey: GenderID" json:"gender"`
+	Gender    *Gender  `gorm:"foreignKey: GenderID" json:"gender"`
 	Address   string    `json:"address"`
 }

@@ -10,7 +10,7 @@ import (
 	"example.com/sa-67-example/controller/promotiontype"
 	"example.com/sa-67-example/controller/discounttype"
 	"example.com/sa-67-example/controller/stock"
-	"example.com/sa-67-example/controller/genders"
+	"example.com/sa-67-example/controller/gender"
 	"example.com/sa-67-example/controller/ingredients"
 	"example.com/sa-67-example/controller/menuingredient"
 	"example.com/sa-67-example/controller/menus"
@@ -49,6 +49,7 @@ func main() {
 		//  router.GET("/users", users.GetAll)
 		//  router.GET("/user/:id", users.Get)
 		//  router.DELETE("/user/:id", users.Delete)
+		router.GET("/employee", employee.Get)
 
 		router.PUT("/ingredient/:id", ingredients.Update)
         router.GET("/ingredient", ingredients.GetAll)
@@ -98,7 +99,7 @@ func main() {
 
 	 }
 
-	 r.GET("/genders", genders.GetAll)
+	 r.GET("/gender", gender.GetAll)
 	 r.GET("/class", class.GetAll)
 	 
 	 r.GET("/stock", stock.GetAll)

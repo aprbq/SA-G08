@@ -15,7 +15,7 @@ type Employee struct {
 	Role string		`json:"role"`
 
 	GenderID  uint      `json:"gender_id"`
-    Gender    *Genders  `gorm:"foreignKey: GenderID" json:"gender"`
+    Gender    *Gender  `gorm:"foreignKey: GenderID" json:"gender"`
 
 	Promotion []Promotion `gorm:"foreignKey:EmployeeID"`
 	Member []Member `gorm:"foreignKey:EmployeeID"`

@@ -26,7 +26,7 @@ func ConnectionDB() {
 
 func SetupDatabase() {
 	db.AutoMigrate(
-		&entity.Genders{},
+		&entity.Gender{},
 		&entity.Employee{},
 		&entity.Status{},
 		&entity.Stock{},
@@ -53,8 +53,8 @@ func SetupDatabase() {
 
 	)
 
-	GenderMale := entity.Genders{Gender: "Male"}
-	GenderFemale := entity.Genders{Gender: "Female"}
+	GenderMale := entity.Gender{GenderName: "Male"}
+	GenderFemale := entity.Gender{GenderName: "Female"}
 
 	StatusActive := entity.Status{StatusName: "Active"}
 	StatusUnactive := entity.Status{StatusName: "Unactive"}
@@ -78,8 +78,8 @@ func SetupDatabase() {
 	CategoryIce := entity.Category{Category: "Ice"}
 	CategoryFrappe := entity.Category{Category: "Frappe"}
 
-	db.FirstOrCreate(&GenderMale, &entity.Genders{Gender: "Male"})
-	db.FirstOrCreate(&GenderFemale, &entity.Genders{Gender: "Female"})
+	db.FirstOrCreate(&GenderMale, &entity.Gender{GenderName: "Male"})
+	db.FirstOrCreate(&GenderFemale, &entity.Gender{GenderName: "Female"})
 
 	db.FirstOrCreate(&StatusActive, &entity.Status{StatusName: "Active"})
 	db.FirstOrCreate(&StatusUnactive, &entity.Status{StatusName: "Unactive"})
@@ -196,7 +196,7 @@ func SetupDatabase() {
 	EndDate: TestDate			,
 	Points: 20					,
 	StatusID:1					,
-	GendersID:1					,
+	GenderID:1					,
 	EmployeeID:          		1,
 	}
 

@@ -29,9 +29,9 @@ func CreateMember(c *gin.Context) {
 	// 	return
 	// }
 
-    var genders entity.Genders
-	db.First(&genders,member.GendersID)
-	if genders.ID == 0 {
+    var gender entity.Gender
+	db.First(&gender,member.GenderID)
+	if gender.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
 		return
 	}
@@ -68,7 +68,7 @@ func CreateMember(c *gin.Context) {
 func GetAll(c *gin.Context) {
     var member []entity.Member
     db := config.DB()
-    results := db.Preload("Status").Find(&member)
+    results := db.Preload("Status").Preload("Gender").Preload("Employee").Find(&member)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
@@ -82,7 +82,7 @@ func Get(c *gin.Context) {
     ID := c.Param("id")
     var member entity.Member
     db := config.DB()
-    results := db.Preload("Status").First(&member, ID)
+    results := db.Preload("Status").Preload("Gender").Preload("Employee").First(&member, ID)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})

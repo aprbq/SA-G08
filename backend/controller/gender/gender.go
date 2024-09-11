@@ -1,4 +1,4 @@
-package genders
+package gender
 
 import (
     "net/http"
@@ -10,8 +10,8 @@ import (
 
 func GetAll(c *gin.Context) {
     db := config.DB()
-    var genders []entity.Genders
-    db.Find(&genders)
+    var gender []entity.Gender
+    db.Find(&gender)
 
-    c.JSON(http.StatusOK, &genders)
+    c.JSON(http.StatusOK, &gender)
 }
