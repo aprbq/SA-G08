@@ -42,8 +42,8 @@ function MenuEdit() {
         price: res.data.price,
         
         description: res.data.description,
-        category_id: res.data.category?.ID,
-        stock_id: res.data.stock?.ID,
+        category_id: res.data.category_id,
+        stock_id: res.data.stock_id,
         ingredients: res.data.ingredients || [], // Set ingredients from API
       });
     }
