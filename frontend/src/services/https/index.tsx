@@ -207,7 +207,7 @@ async function DeleteMenuById(id: string) {
 
 async function CreateMenu(data: MenuInterface) {
   return await axios
-    .post(`${apiUrl}/signupmenu`, data, requestOptions)
+    .post(`${apiUrl}/menu`, data, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
