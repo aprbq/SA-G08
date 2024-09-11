@@ -22,12 +22,12 @@ func CreateMember(c *gin.Context) {
 		return
 	}
 
-    var users entity.Users
-	db.First(&users, member.UsersID)
-	if users.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Users not found"})
-		return
-	}
+    // var employee entity.Employee
+	// db.First(&Employee, member.EmployeeID)
+	// if Employee.ID == 0 {
+	// 	c.JSON(http.StatusNotFound, gin.H{"error": "Employee not found"})
+	// 	return
+	// }
 
     var genders entity.Genders
 	db.First(&genders,member.GendersID)
@@ -50,7 +50,7 @@ func CreateMember(c *gin.Context) {
         // PromotionType:    promotion_type,
         StatusID:    member.StatusID,
         //Status:    status,
-        UsersID:    member.UsersID,
+        EmployeeID:    member.EmployeeID,
         //Users:    users, //   
         //GenderID:    member.GenderID,
 	}
