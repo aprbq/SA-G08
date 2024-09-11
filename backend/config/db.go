@@ -197,7 +197,7 @@ func SetupDatabase() {
 	Points: 20					,
 	StatusID:1					,
 	GendersID:1					,
-	UsersID:          			1,
+	EmployeeID:          		1,
 	}
 
 	db.FirstOrCreate(Member, &entity.Member{
