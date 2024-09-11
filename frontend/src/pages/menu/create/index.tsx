@@ -227,7 +227,7 @@ function MenuCreate() {
           </Row>
 
           {/* เพิ่มส่วนสำหรับการเพิ่มวัตถุดิบหลายรายการ */}
-          <Form.List name="ingredients">
+          {/* <Form.List name="ingredients">
             {(fields, { add, remove }) => (
               <>
                 {fields.map((field) => (
@@ -262,7 +262,7 @@ function MenuCreate() {
                 </Form.Item>
               </>
             )}
-          </Form.List>
+          </Form.List> */}
 
           <Row justify="end">
             <Col style={{ marginTop: "40px" }}>

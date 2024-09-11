@@ -5,7 +5,7 @@ export interface MenuInterface {
 	price?: number;
 	picture?: string;
 	category_id?: number;
-	MenuIngredientID?: number;
+	// MenuIngredientID?: number;
 	stock_id?: number;
 	employee_id?: string;
   }

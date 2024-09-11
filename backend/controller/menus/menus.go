@@ -35,6 +35,13 @@ func CreateMenu(c *gin.Context) {
 		return
 	}
 
+    var employee entity.Employee
+    db.First(&employee, menu.Employee)
+	if employee.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "employee not found"})
+		return
+	}
+
 	// สร้าง User
 	u := entity.Menu{
 		Name: menu.Name, //  
@@ -47,7 +54,9 @@ func CreateMenu(c *gin.Context) {
         Category:    category,
         StockID:    menu.StockID,
         Stock:    stock,
-        
+        EmployeeID: menu.EmployeeID,
+        Employee: employee,
+
 	}
 
 	// บันทึก
@@ -64,7 +73,7 @@ func CreateMenu(c *gin.Context) {
 func GetAll(c *gin.Context) {
     var menus []entity.Menu
     db := config.DB()
-    results := db.Preload("Category").Preload("Stock").Find(&menus)
+    results := db.Preload("Category").Preload("Stock").Preload("Employee").Find(&menus)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
@@ -78,7 +87,7 @@ func Get(c *gin.Context) {
     ID := c.Param("id")
     var menu entity.Menu
     db := config.DB()
-    results := db.Preload("Category").Preload("Stock").First(&menu, ID)
+    results := db.Preload("Category").Preload("Stock").Preload("Employee").First(&menu, ID)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})

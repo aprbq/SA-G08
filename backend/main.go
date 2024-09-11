@@ -56,11 +56,13 @@ func main() {
         router.GET("/ingredient/:id", ingredients.Get)
         router.DELETE("/ingredient/:id", ingredients.Delete)
 
-		router.PUT("/menu/:id", menus.Update)
+		router.PATCH("/menu/:id", menus.Update)
+		router.POST("/menu", menus.CreateMenu)
         router.GET("/menu", menus.GetAll)
         router.GET("/menu/:id", menus.Get)
         router.DELETE("/menu/:id", menus.Delete)
 		router.GET("/category", category.GetAll)
+		router.GET("/stock", stock.GetAll)
 
 		router.PUT("/order/:id", order.Update)
         router.GET("/order", order.GetAll)
@@ -102,7 +104,7 @@ func main() {
 	 r.GET("/gender", gender.GetAll)
 	 r.GET("/class", class.GetAll)
 	 
-	 r.GET("/stock", stock.GetAll)
+	 
 	 r.GET("/", func(c *gin.Context) {
 		 c.String(http.StatusOK, "API RUNNING... PORT: %s", PORT)
 	 })

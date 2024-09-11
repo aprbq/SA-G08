@@ -10,7 +10,7 @@ type Menu struct {
 	Name 		string    	`json:"name"`
 	Description  	string    	`json:"description"`
 	Price  		float32    	`json:"price"`
-	Picture     string      ` json:"picture"`
+	Picture     string      `gorm:"type:longtext" json:"picture"`
 	
 	CategoryID  	uint     	`json:"category_id"`
 	Category    	Category   	`gorm:"foreignKey: CategoryID"`
