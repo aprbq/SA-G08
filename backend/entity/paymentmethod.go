@@ -11,5 +11,5 @@ type Paymentmethod struct {
 	PaymentMethods 		string    	`json:"payment_method"`
 	
 
-	Payment []Payment `gorm:"foreignKey:PaymentmethodID"`
+	Order []Order `gorm:"foreignKey:PaymentmethodID"`
 }

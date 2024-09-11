@@ -25,12 +25,12 @@ function MenuEdit() {
   const navigate = useNavigate();
   
   const [messageApi, contextHolder] = message.useMessage();
-  const [menu, setMenu] = useState<MenuInterface>();
+  // const [menu, setMenu] = useState<MenuInterface>();
   const [category, setCategory] = useState<CategoryInterface[]>([]);
   const [stock, setStock] = useState<StockInterface[]>([]);
   
   // รับข้อมูลจาก params
-  let { id } = useParams();
+  const { id } = useParams<{ id: any }>();
   // อ้างอิง form กรอกข้อมูล
   const [form] = Form.useForm();
 
@@ -46,7 +46,7 @@ function MenuEdit() {
         stock_id: res.data.stock?.ID,
         ingredients: res.data.ingredients || [], // Set ingredients from API
       });
-
+    }
       
   };
 
@@ -62,7 +62,7 @@ function MenuEdit() {
         content: res.data.message,
       });
       setTimeout(() => {
-        navigate("/ingredient");
+        navigate("/menu");
       }, 2000);
     } else {
       messageApi.open({
@@ -74,15 +74,27 @@ function MenuEdit() {
 
   const getCategory = async () => {
     let res = await GetCategory();
-    if (res) {
-      setCategory(res);
+    if (res.status == 200) {
+      setCategory(res.data);
+    } else {
+      setCategory([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
     }
   };
 
   const getStock = async () => {
     let res = await GetStock();
-    if (res) {
-      setStock(res);
+    if (res.status == 200) {
+      setStock(res.data);
+    } else {
+      setStock([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
     }
   };
 
@@ -127,6 +139,22 @@ function MenuEdit() {
                 {category.map((item) => (
                   <Option value={item.ID} key={item.category}>
                     {item.category}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            <Form.Item
+              name="stock_id"
+              label="สถานะ"
+              rules={[{ required: true, message: "กรุณาเลือกสถานะ !" }]}
+            >
+              <Select allowClear>
+                {stock.map((item) => (
+                  <Option value={item.ID} key={item.stock}>
+                    {item.stock}
                   </Option>
                 ))}
               </Select>
@@ -224,5 +252,5 @@ function MenuEdit() {
     </div>
   );
 }
-}
+
 export default MenuEdit;

@@ -72,18 +72,29 @@ function MenuCreate() {
 
   const getCategory = async () => {
     let res = await GetCategory();
-    if (res) {
-      setCategory(res);
+    if (res.status == 200) {
+      setCategory(res.data);
+    } else {
+      setCategory([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
     }
   };
 
   const getStock = async () => {
     let res = await GetStock();
-    if (res) {
-      setStock(res);
+    if (res.status == 200) {
+      setStock(res.data);
+    } else {
+      setStock([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
     }
   };
-
   
 
   useEffect(() => {

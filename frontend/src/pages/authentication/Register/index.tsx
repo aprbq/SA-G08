@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Card,
@@ -7,18 +8,21 @@ import {
   Flex,
   Row,
   Col,
-  InputNumber,
-  DatePicker,
   Select,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { CreateUser } from "../../../services/https";
 import { UsersInterface } from "../../../interfaces/IUser";
+import { GendersInterface } from "../../../interfaces/Genders";
+import { GetGenders } from "../../../services/https";
 import logo from "../../../assets/logo.png";
+
+const { Option } = Select;
 
 function SignUpPages() {
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
+  const [genders, setGenders] = useState<GendersInterface[]>([]);
 
   const onFinish = async (values: UsersInterface) => {
     let res = await CreateUser(values);
@@ -38,6 +42,31 @@ function SignUpPages() {
       });
     }
   };
+
+  const getGenders = async () => {
+    let res = await GetGenders();
+  if (res.status == 200) {
+
+    setGenders(res.data);
+
+  } else {
+
+    setGenders([]);
+
+    messageApi.open({
+
+      type: "error",
+
+      content: res.data.error,
+
+    });
+
+  }
+  };
+
+  useEffect(() => {
+    getGenders
+  }, []);
 
   return (
     <>
@@ -86,8 +115,23 @@ function SignUpPages() {
                       <Input />
                     </Form.Item>
                   </Col>
+                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <Form.Item
+                      name="gender"
+                      label="เพศ"
+                      rules={[{ required: true, message: "กรุณาระบุเพศ !" }]}
+                    >
+                      <Select allowClear>
+                        {genders.map((item) => (
+                          <Option value={item.ID} key={item.gender}>
+                            {item.gender}
+                          </Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  </Col>
 
-                  <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <Form.Item
                       label="อีเมล"
                       name="email"
@@ -99,6 +143,21 @@ function SignUpPages() {
                         {
                           required: true,
                           message: "กรุณากรอกอีเมล !",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
+
+                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <Form.Item
+                      label="Username"
+                      name="username"
+                      rules={[
+                        {
+                          required: true,
+                          message: "กรุณากรอก username !",
                         },
                       ]}
                     >
@@ -120,74 +179,18 @@ function SignUpPages() {
                       <Input.Password />
                     </Form.Item>
                   </Col>
-
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                    <Form.Item
-                      label="วัน/เดือน/ปี เกิด"
-                      name="birthday"
-                      rules={[
-                        {
-                          required: true,
-                          message: "กรุณาเลือกวัน/เดือน/ปี เกิด !",
-                        },
-                      ]}
-                    >
-                      <DatePicker style={{ width: "100%" }} />
-                    </Form.Item>
-                  </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                    <Form.Item
-                      label="อายุ"
-                      name="age"
-                      rules={[
-                        {
-                          required: true,
-                          message: "กรุณากรอกอายุ !",
-                        },
-                      ]}
-                    >
-                      <InputNumber
-                        min={0}
-                        max={99}
-                        defaultValue={0}
-                        style={{ width: "100%" }}
-                      />
-                    </Form.Item>
-                  </Col>
                   <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                     <Form.Item
-                      label="ที่อยู่"
-                      name="address"
+                      label="ตำแหน่งงาน"
+                      name="role"
                       rules={[
                         {
                           required: true,
-                          message: "กรุณากรอกที่อยู่ !",
+                          message: "กรุณากรอกตำแหน่งงาน !",
                         },
                       ]}
                     >
-                      <Input.TextArea />
-                    </Form.Item>
-                  </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                    <Form.Item
-                      label="เพศ"
-                      name="gender_id"
-                      rules={[
-                        {
-                          required: true,
-                          message: "กรุณาเลือกเพศ !",
-                        },
-                      ]}
-                    >
-                      <Select
-                        defaultValue=""
-                        style={{ width: "100%" }}
-                        options={[
-                          { value: "", label: "กรุณาเลือกเพศ", disabled: true },
-                          { value: 1, label: "Male" },
-                          { value: 2, label: "Female" },
-                        ]}
-                      />
+                      <Input />
                     </Form.Item>
                   </Col>
 
