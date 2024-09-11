@@ -70,8 +70,9 @@ function Member() {
 
     {
       title: "เพศ",
-      key: "gender",
-      render: (record) => <>{record?.gender?.gender}</>,
+      dataIndex: "Genders",
+      key: "genders",
+      render: (item) => Object.values(item.gender),
     },
 
     {

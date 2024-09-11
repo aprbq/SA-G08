@@ -34,6 +34,13 @@ async function GetStatus() {
     .catch((e) => e.response);
 }
 
+async function GetGenders() {
+  return await axios
+    .get(`${apiUrl}/genders`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 async function GetPromotionType() {
   return await axios
     .get(`${apiUrl}/promotiontype`, requestOptions)
@@ -284,6 +291,7 @@ export {
   DeleteUsersById,
   CreateUser,
   GetStatus,
+  GetGenders,
   GetIngredients,
   GetIngredientsById,
   UpdateIngredientsById,
