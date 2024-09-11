@@ -13,11 +13,12 @@ import {
   Select,
   Upload,
 } from "antd";
-import { PlusOutlined, UploadOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import { PlusOutlined} from "@ant-design/icons";
 import { MenuInterface } from "../../../interfaces/Menu";
 import { CategoryInterface } from "../../../interfaces/Category";
 import { StockInterface } from "../../../interfaces/Stock";
-import {CreateMenu, GetCategory, GetStock} from "../../../services/https/index";
+import { IngredientInterface } from "../../../interfaces/Ingre";
+import {CreateMenu, GetCategory, GetStock, GetIngredients} from "../../../services/https/index";
 import { useNavigate, Link } from "react-router-dom";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 import ImgCrop from "antd-img-crop";
@@ -30,7 +31,9 @@ function MenuCreate() {
   const [messageApi, contextHolder] = message.useMessage();
   const [category, setCategory] = useState<CategoryInterface[]>([]);
   const [stock, setStock] = useState<StockInterface[]>([]);
+  const [ingredients , setIngredients] = useState<IngredientInterface[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
 
   const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
@@ -52,8 +55,14 @@ function MenuCreate() {
   };
 
   const onFinish = async (values: MenuInterface) => {
+    let payload = {
+      ...values,
+      "employee_id": Number(accountid)
+    }
+    values.picture = fileList[0].thumbUrl;
+    console.log(payload);
     let res = await CreateMenu(values);
-
+    console.log(res);
     if (res.status === 201) {
       messageApi.open({
         type: "success",
@@ -95,11 +104,26 @@ function MenuCreate() {
       });
     }
   };
+
+  const getIngredients = async () => {
+    let res = await GetIngredients();
+    if (res.status == 200) {
+      setIngredients(res.data);
+    } else {
+      setIngredients([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
+    }
+  };
   
 
   useEffect(() => {
     getCategory();
     getStock();
+    getIngredients();
+    console.log(accountid)
   }, []);
 
   return (
@@ -223,7 +247,17 @@ function MenuCreate() {
               </Form.Item>
             </Col>
 
-            
+            {/* <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+              <Form.Item name="menu_id" label="Menus" rules={[{ required: true }]}>
+              <Select mode="multiple" placeholder="Select menus">
+                {menu.map((menu) => (
+                <Option key={menu.ID} value={menu.ID}>
+                  {menu.name}
+                </Option>
+                ))}
+              </Select>
+              </Form.Item>
+            </Col> */}
           </Row>
 
           {/* เพิ่มส่วนสำหรับการเพิ่มวัตถุดิบหลายรายการ */}
