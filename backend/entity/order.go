@@ -8,19 +8,17 @@ import (
 
 type Order struct {
 	gorm.Model
-	OrderDate  	time.Time 	`json:"order_date"` 
+	OrderDate  	time.Time 	`json:"order_date"`
+	PaymentAmount float32 `json:"payment_amount"`
 
-	PaymentID  	uint		`json:"payment_id"`
-	Payment    	*Payment   	`gorm:"foreignKey:PaymentID" json:"payment"`
-
-	UsersID uint      `json:"user_id"`
-	Users   *Users `gorm:"foreignKey:UsersID" json:"users"`
+	EmployeeID uint      `json:"employee_id"`
+	Employee   *Employee `gorm:"foreignKey:EmployeeID" json:"users"`
 
 	PromotionID 	uint		`json:"promotion_id"`
 	Promotion    	*Promotion   	`gorm:"foreignKey: PromotionID" json:"promotion"`
 
-	// MemberID 	uint		`json:"member_id"`
-	// Member    	*Member   	`gorm:"foreignKey: MemberID" json:"member"`
+	 PaymentmethodID 	uint		`json:"paymentmethod_id"`
+	 Paymentmethod    	*Paymentmethod   	`gorm:"foreignKey: PaymentmethodID" json:"paymentmethod"`
 
 	Orderitem []Orderitem `gorm:"foreignKey:OrderID"`
 

@@ -101,8 +101,25 @@ function Order() {
 
   const getOrder = async () => {
     let res = await GetOrder();
-    if (res) {
-      setOrder(res);
+
+   
+
+    if (res.status == 200) {
+
+      setOrder(res.data);
+
+    } else {
+
+      setOrder([]);
+
+      messageApi.open({
+
+        type: "error",
+
+        content: res.data.error,
+
+      });
+
     }
   };
 
