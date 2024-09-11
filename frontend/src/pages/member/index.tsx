@@ -70,9 +70,9 @@ function Member() {
 
     {
       title: "เพศ",
-      dataIndex: "Genders",
-      key: "genders",
-      render: (item) => Object.values(item.gender),
+      dataIndex: "Gender",
+      key: "gender",
+      render: (item) => Object.values(item.gender_name),
     },
 
     {
