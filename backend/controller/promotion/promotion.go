@@ -41,6 +41,13 @@ func CreatePromotion(c *gin.Context) {
 		return
 	}
 
+    var employee entity.Employee
+    db.First(&employee, promotion.Employee)
+	if employee.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "employee not found"})
+		return
+	}
+
 	// สร้าง User
 	u := entity.Promotion{
 		PromotionName: promotion.PromotionName, //  
@@ -56,6 +63,9 @@ func CreatePromotion(c *gin.Context) {
         PromotionType:    promotion_type,
         StatusID:    promotion.StatusID,
         Status:    status,
+        EmployeeID: promotion.EmployeeID,
+        Employee: employee,
+
 	}
 
 	// บันทึก
@@ -71,7 +81,7 @@ func CreatePromotion(c *gin.Context) {
 func GetAll(c *gin.Context) {
     var promotion []entity.Promotion
     db := config.DB()
-    results := db.Preload("Status").Preload("DiscountType").Preload("PromotionType").Find(&promotion)
+    results := db.Preload("Status").Preload("DiscountType").Preload("PromotionType").Preload("Employee").Find(&promotion)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
@@ -85,7 +95,7 @@ func Get(c *gin.Context) {
     ID := c.Param("id")
     var promotion entity.Promotion
     db := config.DB()
-    results := db.Preload("Status").Preload("DiscountType").Preload("PromotionType").First(&promotion, ID)
+    results := db.Preload("Status").Preload("DiscountType").Preload("PromotionType").Preload("Employee").First(&promotion, ID)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})

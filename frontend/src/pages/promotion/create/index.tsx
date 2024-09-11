@@ -31,7 +31,14 @@ import {
     const [promotiontype, setPromotionType] = useState<PromotionTypeInterface[]>([]);
     const [discounttype, setDiscountType] = useState<DiscountTypeInterface[]>([]);
 
+    const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
+
     const onFinish = async (values: PromotionInterface) => {
+      let payload = {
+        ...values,
+        "employee_id": Number(accountid)
+      }
+      console.log(payload);
       let res = await CreatePromotion(values);
       console.log(res);
       if (res) {
@@ -126,6 +133,7 @@ import {
       getStatus();
       getPromotionType();
       getDiscountType();
+      console.log(accountid)
     }, []);
   
     return (

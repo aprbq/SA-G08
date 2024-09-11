@@ -13,8 +13,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { CreateUser } from "../../../services/https";
 import { UsersInterface } from "../../../interfaces/IUser";
-import { GendersInterface } from "../../../interfaces/Genders";
-import { GetGenders } from "../../../services/https";
+import { GenderInterface } from "../../../interfaces/Gender";
+import { GetGender } from "../../../services/https";
 import logo from "../../../assets/logo.png";
 
 const { Option } = Select;
@@ -22,7 +22,7 @@ const { Option } = Select;
 function SignUpPages() {
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
-  const [genders, setGenders] = useState<GendersInterface[]>([]);
+  const [gender, setGender] = useState<GenderInterface[]>([]);
 
   const onFinish = async (values: UsersInterface) => {
     let res = await CreateUser(values);
@@ -43,15 +43,15 @@ function SignUpPages() {
     }
   };
 
-  const getGenders = async () => {
-    let res = await GetGenders();
+  const getGender = async () => {
+    let res = await GetGender();
   if (res.status == 200) {
 
-    setGenders(res.data);
+    setGender(res.data);
 
   } else {
 
-    setGenders([]);
+    setGender([]);
 
     messageApi.open({
 
@@ -65,7 +65,7 @@ function SignUpPages() {
   };
 
   useEffect(() => {
-    getGenders
+    getGender();
   }, []);
 
   return (
@@ -122,9 +122,9 @@ function SignUpPages() {
                       rules={[{ required: true, message: "กรุณาระบุเพศ !" }]}
                     >
                       <Select allowClear>
-                        {genders.map((item) => (
-                          <Option value={item.ID} key={item.gender}>
-                            {item.gender}
+                        {gender.map((item) => (
+                          <Option value={item.ID} key={item.gender_name}>
+                            {item.gender_name}
                           </Option>
                         ))}
                       </Select>
