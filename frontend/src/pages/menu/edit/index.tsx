@@ -23,14 +23,14 @@ const { Option } = Select;
 
 function MenuEdit() {
   const navigate = useNavigate();
-  
+  // รับข้อมูลจาก params
+  const { id } = useParams<{ id: any }>();
   const [messageApi, contextHolder] = message.useMessage();
   // const [menu, setMenu] = useState<MenuInterface>();
   const [category, setCategory] = useState<CategoryInterface[]>([]);
   const [stock, setStock] = useState<StockInterface[]>([]);
   
-  // รับข้อมูลจาก params
-  const { id } = useParams<{ id: any }>();
+  
   // อ้างอิง form กรอกข้อมูล
   const [form] = Form.useForm();
 
@@ -70,7 +70,7 @@ function MenuEdit() {
         content: res.data.message,
       });
       setTimeout(() => {
-        navigate("/menu");
+        navigate("/menus");
       }, 2000);
     } else {
       messageApi.open({
