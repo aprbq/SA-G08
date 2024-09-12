@@ -10,62 +10,76 @@ import (
 )
 
 func CreateMenu(c *gin.Context) {
-	var menu entity.Menu
+    var menu entity.Menu
+    var menuIngredients []entity.MenuIngredient
 
+    // Bind the JSON payload to the menu struct
     if err := c.ShouldBindJSON(&menu); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
 
-	db := config.DB()
-    
+    db := config.DB()
 
-	// ค้นหา gender ด้วย id
-	var category entity.Category
-	db.First(&category, menu.CategoryID)
-	if category.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "status not found"})
-		return
-	}
+    // Check if Category exists
+    var category entity.Category
+    db.First(&category, menu.CategoryID)
+    if category.ID == 0 {
+        c.JSON(http.StatusNotFound, gin.H{"error": "Category not found"})
+        return
+    }
 
+    // Check if Stock exists
     var stock entity.Stock
-	db.First(&stock,menu.Stock)
-	if stock.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
-		return
-	}
+    db.First(&stock, menu.StockID)
+    if stock.ID == 0 {
+        c.JSON(http.StatusNotFound, gin.H{"error": "Stock not found"})
+        return
+    }
 
+    // Check if Employee exists
     var employee entity.Employee
-    db.First(&employee, menu.Employee)
-	if employee.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "employee not found"})
-		return
-	}
+    db.First(&employee, menu.EmployeeID)
+    if employee.ID == 0 {
+        c.JSON(http.StatusNotFound, gin.H{"error": "Employee not found"})
+        return
+    }
 
-	// สร้าง User
-	u := entity.Menu{
-		Name: menu.Name, //  
-		Description:  menu.Description,  //  
-		Price:     menu.Price,     //  
-		
-		Picture:   menu.Picture, //  
-		
-		CategoryID:    menu.CategoryID,
+    // Create the Menu
+    u := entity.Menu{
+        Name:        menu.Name,
+        Description: menu.Description,
+        Price:       menu.Price,
+        Picture:     menu.Picture,
+        CategoryID:  menu.CategoryID,
         Category:    category,
-        StockID:    menu.StockID,
-        Stock:    stock,
-        EmployeeID: menu.EmployeeID,
-        Employee: employee,
+        StockID:     menu.StockID,
+        Stock:       stock,
+        EmployeeID:  menu.EmployeeID,
+        Employee:    employee,
+    }
 
-	}
+    // Save the Menu to the database
+    if err := db.Create(&u).Error; err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
 
-	// บันทึก
-	if err := db.Create(&u).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+    // Process MenuIngredients (assuming you get this as part of the request)
+    if menu.MenuIngredients != nil {
+        for _, mi := range menu.MenuIngredients {
+            mi.MenuID = u.ID // Associate the MenuIngredient with the newly created menu
+            menuIngredients = append(menuIngredients, mi)
+        }
 
-	c.JSON(http.StatusCreated, gin.H{"message": "Created success", "data": u})
+        // Save the MenuIngredients to the database
+        if err := db.Create(&menuIngredients).Error; err != nil {
+            c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+            return
+        }
+    }
+
+    c.JSON(http.StatusCreated, gin.H{"message": "Created successfully", "data": u})
 }
 
 

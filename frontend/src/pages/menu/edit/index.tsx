@@ -17,7 +17,8 @@ import { PlusOutlined, UploadOutlined, MinusCircleOutlined } from "@ant-design/i
 import { MenuInterface } from "../../../interfaces/Menu";
 import { CategoryInterface } from "../../../interfaces/Category";
 import { StockInterface } from "../../../interfaces/Stock";
-import { GetMenuById, UpdateMenuById, GetCategory, GetStock} from "../../../services/https/index";
+import { IngredientInterface } from "../../../interfaces/Ingre";
+import { GetMenuById, UpdateMenuById, GetCategory, GetStock, GetIngredients} from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 const { Option } = Select;
 
@@ -29,6 +30,7 @@ function MenuEdit() {
   // const [menu, setMenu] = useState<MenuInterface>();
   const [category, setCategory] = useState<CategoryInterface[]>([]);
   const [stock, setStock] = useState<StockInterface[]>([]);
+  const [ingredients , setIngredients] = useState<IngredientInterface[]>([]);
   
   
   // อ้างอิง form กรอกข้อมูล
@@ -44,7 +46,7 @@ function MenuEdit() {
         description: res.data.description,
         category_id: res.data.category_id,
         stock_id: res.data.stock_id,
-        // ingredients: res.data.ingredients || [], // Set ingredients from API
+        ingredients: res.data.ingredients_id || [], 
       });
     }else {
       messageApi.open({
@@ -106,10 +108,24 @@ function MenuEdit() {
     }
   };
 
+  const getIngredients = async () => {
+    let res = await GetIngredients();
+    if (res.status == 200) {
+      setIngredients(res.data);
+    } else {
+      setIngredients([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
+    }
+  };
+
   useEffect(() => {
     getMenuById(id);
     getCategory();
     getStock();
+    getIngredients();
   }, []);
 
   return (
@@ -195,11 +211,23 @@ function MenuEdit() {
               </Form.Item>
             </Col>
 
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+              <Form.Item name="ingredient_id" label="วัตถุดิบ" rules={[{ required: true }]}>
+              <Select mode="multiple" placeholder="Select ingredient">
+                {ingredients.map((item) => (
+                <Option key={item.ID} value={item.ID}>
+                  {item.name}
+                </Option>
+                ))}
+              </Select>
+              </Form.Item>
+            </Col>
+
         
           </Row>
 
           {/* ส่วนสำหรับแก้ไขวัตถุดิบ */}
-          <Form.List name="ingredients">
+          {/* <Form.List name="ingredients">
             {(fields, { add, remove }) => (
               <>
                 {fields.map((field) => (
@@ -232,7 +260,7 @@ function MenuEdit() {
                 </Form.Item>
               </>
             )}
-          </Form.List>
+          </Form.List> */}
 
           <Row justify="end">
             <Col style={{ marginTop: "40px" }}>

@@ -13,12 +13,12 @@ import {
   Select,
   Upload,
 } from "antd";
-import { PlusOutlined} from "@ant-design/icons";
+import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { MenuInterface } from "../../../interfaces/Menu";
 import { CategoryInterface } from "../../../interfaces/Category";
 import { StockInterface } from "../../../interfaces/Stock";
 import { IngredientInterface } from "../../../interfaces/Ingre";
-import {CreateMenu, GetCategory, GetStock, GetIngredients} from "../../../services/https/index";
+import { CreateMenu, GetCategory, GetStock, GetIngredients } from "../../../services/https/index";
 import { useNavigate, Link } from "react-router-dom";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 import ImgCrop from "antd-img-crop";
@@ -31,7 +31,7 @@ function MenuCreate() {
   const [messageApi, contextHolder] = message.useMessage();
   const [category, setCategory] = useState<CategoryInterface[]>([]);
   const [stock, setStock] = useState<StockInterface[]>([]);
-  const [ingredients , setIngredients] = useState<IngredientInterface[]>([]);
+  const [ingredients, setIngredients] = useState<IngredientInterface[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
 
@@ -54,21 +54,27 @@ function MenuCreate() {
     imgWindow?.document.write(image.outerHTML);
   };
 
-  const onFinish = async (values: MenuInterface) => {
+  const onFinish = async (values: any) => {
     let payload = {
       ...values,
-      "employee_id": Number(accountid)
-    }
-    values.picture = fileList[0].thumbUrl;
+      "employee_id": Number(accountid),
+      "picture": fileList[0]?.thumbUrl,
+      "menu_ingredients": values.menu_ingredients.map((item: any) => ({
+        ingredients_id: item.ingredients_id,
+        quantity: item.quantity
+      }))
+    };
+
     console.log(payload);
-    let res = await CreateMenu(values);
+
+    let res = await CreateMenu(payload);
     console.log(res);
     if (res.status === 201) {
       messageApi.open({
         type: "success",
         content: res.data.message,
       });
-      setTimeout(function () {
+      setTimeout(() => {
         navigate("/menus");
       }, 2000);
     } else {
@@ -81,7 +87,7 @@ function MenuCreate() {
 
   const getCategory = async () => {
     let res = await GetCategory();
-    if (res.status == 200) {
+    if (res.status === 200) {
       setCategory(res.data);
     } else {
       setCategory([]);
@@ -94,7 +100,7 @@ function MenuCreate() {
 
   const getStock = async () => {
     let res = await GetStock();
-    if (res.status == 200) {
+    if (res.status === 200) {
       setStock(res.data);
     } else {
       setStock([]);
@@ -107,7 +113,7 @@ function MenuCreate() {
 
   const getIngredients = async () => {
     let res = await GetIngredients();
-    if (res.status == 200) {
+    if (res.status === 200) {
       setIngredients(res.data);
     } else {
       setIngredients([]);
@@ -117,13 +123,12 @@ function MenuCreate() {
       });
     }
   };
-  
 
   useEffect(() => {
     getCategory();
     getStock();
     getIngredients();
-    console.log(accountid)
+    console.log(accountid);
   }, []);
 
   return (
@@ -136,7 +141,7 @@ function MenuCreate() {
         <Form name="basic" layout="vertical" onFinish={onFinish} autoComplete="off">
           <Row gutter={[16, 0]}>
 
-          <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
               <Form.Item
                 label="รูปเมนู"
                 name="picture"
@@ -180,35 +185,35 @@ function MenuCreate() {
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-            <Form.Item
-              name="category_id"
-              label="ประเภท"
-              rules={[{ required: true, message: "กรุณาเลือกประเภท !" }]}
-            >
-              <Select allowClear>
-                {category.map((item) => (
-                  <Option value={item.ID} key={item.category}>
-                    {item.category}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
+              <Form.Item
+                name="category_id"
+                label="ประเภท"
+                rules={[{ required: true, message: "กรุณาเลือกประเภท !" }]}
+              >
+                <Select allowClear>
+                  {category.map((item) => (
+                    <Option value={item.ID} key={item.ID}>
+                      {item.category}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-            <Form.Item
-              name="stock_id"
-              label="สถานะ"
-              rules={[{ required: true, message: "กรุณาเลือกสถานะ !" }]}
-            >
-              <Select allowClear>
-                {stock.map((item) => (
-                  <Option value={item.ID} key={item.stock}>
-                    {item.stock}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
+              <Form.Item
+                name="stock_id"
+                label="สถานะ"
+                rules={[{ required: true, message: "กรุณาเลือกสถานะ !" }]}
+              >
+                <Select allowClear>
+                  {stock.map((item) => (
+                    <Option value={item.ID} key={item.ID}>
+                      {item.stock}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
@@ -247,56 +252,73 @@ function MenuCreate() {
               </Form.Item>
             </Col>
 
-            {/* <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Form.Item name="menu_id" label="Menus" rules={[{ required: true }]}>
-              <Select mode="multiple" placeholder="Select menus">
-                {menu.map((menu) => (
-                <Option key={menu.ID} value={menu.ID}>
-                  {menu.name}
-                </Option>
-                ))}
-              </Select>
-              </Form.Item>
-            </Col> */}
-          </Row>
+            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+              <Form.List
+                name="menu_ingredients"
+                initialValue={[]}
+              >
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Row key={key} gutter={[16, 0]} align="middle">
+                        <Col xs={12} sm={12} md={8} lg={8} xl={8}>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'ingredients_id']}
+                            label="วัตถุดิบ"
+                            rules={[{ required: true, message: 'กรุณากรอกวัตถุดิบ!' }]}
+                          >
+                            <Select placeholder="Select ingredient">
+                              {ingredients.map((item) => (
+                                <Option value={item.ID} key={item.name}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                            </Select>
+                          </Form.Item>
+                        </Col>
 
-          {/* เพิ่มส่วนสำหรับการเพิ่มวัตถุดิบหลายรายการ */}
-          {/* <Form.List name="ingredients">
-            {(fields, { add, remove }) => (
-              <>
-                {fields.map((field) => (
-                  <Row key={field.key} gutter={[16, 0]} align="middle">
-                    <Col xs={20} sm={20} md={20} lg={20} xl={20}>
-                      <Form.Item
-                        {...field}
-                        label="ชื่อวัตถุดิบ"
-                        name={[field.name, "name"]}
-                        rules={[
-                          { required: true, message: "กรุณากรอกชื่อวัตถุดิบ !" },
-                        ]}
-                      >
-                        <Input placeholder="ชื่อวัตถุดิบ" />
-                      </Form.Item>
-                    </Col>
+                        <Col xs={12} sm={12} md={8} lg={8} xl={8}>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'quantity']}
+                            label="จำนวน"
+                            rules={[{ required: true, message: 'กรุณากรอกจำนวน!' }]}
+                          >
+                            <InputNumber
+                              min={0}
+                              style={{ width: "100%" }}
+                            />
+                          </Form.Item>
+                        </Col>
 
-                    <Col xs={4} sm={4} md={4} lg={4} xl={4}>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                          <Button
+                            type="link"
+                            icon={<MinusCircleOutlined />}
+                            onClick={() => remove(name)}
+                          >
+                            ลบ
+                          </Button>
+                        </Col>
+                      </Row>
+                    ))}
+
+                    <Form.Item>
                       <Button
-                        type="link"
-                        icon={<MinusCircleOutlined />}
-                        onClick={() => remove(field.name)}
-                      />
-                    </Col>
-                  </Row>
-                ))}
-
-                <Form.Item>
-                  <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                    เพิ่มวัตถุดิบ
-                  </Button>
-                </Form.Item>
-              </>
-            )}
-          </Form.List> */}
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        เพิ่มวัตถุดิบ
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </Col>
+          </Row>
 
           <Row justify="end">
             <Col style={{ marginTop: "40px" }}>

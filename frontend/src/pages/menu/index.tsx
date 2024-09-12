@@ -12,17 +12,10 @@ function Menus() {
   const navigate = useNavigate();
   const [menus, setMenu] = useState<MenuInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-  
-
-  
-  // // Model
-  // const [open, setOpen] = useState(false);
-  // const [confirmLoading, setConfirmLoading] = useState(false);
-  // const [modalText, setModalText] = useState<String>();
-  // const [deleteId, setDeleteId] = useState<Number>();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]); // เก็บข้อมูลวัตถุดิบ
 
   const columns: ColumnsType<MenuInterface> = [
-    
     {
       title: "ลำดับ",
       dataIndex: "ID",
@@ -35,7 +28,7 @@ function Menus() {
       width: "15%",
       render: (text, record, index) => (
         <img src={record.picture} className="w3-left w3-circle w3-margin-right" width="100%" />
-      )
+      ),
     },
     {
       title: "ชื่อ",
@@ -71,13 +64,12 @@ function Menus() {
         <Button
           type="default"
           icon={<EyeOutlined />}
-          onClick={() => handleViewIngredients(record.ID)} // ฟังก์ชันดูวัตถุดิบ
+          onClick={() => handleViewIngredients(record.ingredients)} // ฟังก์ชันดูวัตถุดิบ
         >
           ดูวัตถุดิบ
         </Button>
       ),
     },
-    
     {
       title: "",
       render: (record) => (
@@ -102,19 +94,22 @@ function Menus() {
             className="btn-delete"
             icon={<DeleteOutlined />}
             onClick={() => showDeleteConfirm(record.ID)}
-          ></Button>
+          />
         </>
       ),
     },
   ];
-  
 
-  const handleViewIngredients = (menuId: number) => {
-    // ฟังก์ชันที่จะเปิด Modal หรือไปยังหน้าแสดงวัตถุดิบ
-    console.log("ดูวัตถุดิบของเมนู ID:", menuId);
-    // คุณสามารถเลือกที่จะเปิด Modal หรือ redirect ไปยังหน้าใหม่ที่แสดงข้อมูลวัตถุดิบของเมนูนี้
+  // ฟังก์ชันดูวัตถุดิบ
+  const handleViewIngredients = (ingredients: string[]) => {
+    setSelectedIngredients(ingredients); // เซ็ตข้อมูลวัตถุดิบที่เลือก
+    setIsModalVisible(true); // เปิด Modal
   };
-  
+
+  // ปิด Modal
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const deleteMenuById = async (id: string) => {
     let res = await DeleteMenuById(id);
@@ -145,6 +140,7 @@ function Menus() {
       });
     }
   };
+
   const showDeleteConfirm = (id: string) => {
     confirm({
       title: "คุณแน่ใจหรือว่าต้องการลบเมนูนี้?",
@@ -158,7 +154,8 @@ function Menus() {
       onCancel() {
         console.log("ยกเลิกการลบ");
       },
-    })};
+    });
+  };
 
   useEffect(() => {
     getMenu();
@@ -190,6 +187,24 @@ function Menus() {
           style={{ width: "100%", overflow: "scroll" }}
         />
       </div>
+
+      {/* Modal สำหรับแสดงวัตถุดิบ */}
+      <Modal
+        title="วัตถุดิบของเมนู"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="close" onClick={handleCancel}>
+            ปิด
+          </Button>,
+        ]}
+      >
+        <ul>
+          {selectedIngredients.map((ingredient, index) => (
+            <li key={index}>{ingredient}</li>
+          ))}
+        </ul>
+      </Modal>
     </>
   );
 }

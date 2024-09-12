@@ -21,7 +21,7 @@ type Menu struct {
 	EmployeeID uint      `json:"employee_id"`
 	Employee   Employee `gorm:"foreignKey:EmployeeID" json: "employee"`
 
-	MenuIngredient []MenuIngredient `gorm:"foreignKey:MenuID"`
+	MenuIngredients []MenuIngredient `json:"menu_ingredients" gorm:"foreignKey:MenuID"`
 
 	Condition []Condition `gorm:"foreignKey:MenuID"`
 

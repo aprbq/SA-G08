@@ -1,12 +1,12 @@
 export interface IngredientInterface {
 	ID?: number;
-	Name?: string;
-	Quantity?: number;
-	Unit?: string;
-	UnitPrice?: number;
-	Price?: number;
-	Supplier?: string;
-	ExpDate?: string;
-	ClassID?: number;
-	UsersID?: number;
+	name?: string;
+	quantity?: number;
+	unit?: string;
+	unit_price?: number;
+	price?: number;
+	supplier?: string;
+	exp_date?: string;
+	class_id?: number;
+	users_id?: number;
   }
