@@ -14,7 +14,6 @@ import {
   Upload,
 } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
-import { MenuInterface } from "../../../interfaces/Menu";
 import { CategoryInterface } from "../../../interfaces/Category";
 import { StockInterface } from "../../../interfaces/Stock";
 import { IngredientInterface } from "../../../interfaces/Ingre";
@@ -54,7 +53,35 @@ function MenuCreate() {
     imgWindow?.document.write(image.outerHTML);
   };
 
+  const checkForDuplicates = (ingredientsList: any[]) => {
+    const ids = new Set();
+    for (const item of ingredientsList) {
+      if (ids.has(item.ingredients_id)) {
+        return true;  // Duplicate found
+      }
+      ids.add(item.ingredients_id);
+    }
+    return false;  // No duplicates
+  };
+
   const onFinish = async (values: any) => {
+    if (!values.menu_ingredients || values.menu_ingredients.length === 0) {
+      messageApi.open({
+        type: "error",
+        content: "กรุณาเพิ่มวัตถุดิบ!",
+      });
+      return;
+    }
+
+    // Check for duplicates
+    if (checkForDuplicates(values.menu_ingredients)) {
+      messageApi.open({
+        type: "error",
+        content: "วัตถุดิบมีการเพิ่มซ้ำ!",
+      });
+      return;
+    }
+
     let payload = {
       ...values,
       "employee_id": Number(accountid),
@@ -129,7 +156,7 @@ function MenuCreate() {
     getStock();
     getIngredients();
     console.log(accountid);
-  }, []);
+  }, [accountid]);
 
   return (
     <div>
@@ -173,12 +200,7 @@ function MenuCreate() {
               <Form.Item
                 label="ชื่อ"
                 name="name"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณากรอกชื่อ !",
-                  },
-                ]}
+                rules={[{ required: true, message: "กรุณากรอกชื่อ !" }]}
               >
                 <Input />
               </Form.Item>
@@ -220,12 +242,7 @@ function MenuCreate() {
               <Form.Item
                 label="คำอธิบาย"
                 name="description"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณากรอกคำอธิบาย !",
-                  },
-                ]}
+                rules={[{ required: true, message: "กรุณากรอกคำอธิบาย !" }]}
               >
                 <Input />
               </Form.Item>
@@ -235,12 +252,7 @@ function MenuCreate() {
               <Form.Item
                 label="ราคา"
                 name="price"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณากรอกราคา !",
-                  },
-                ]}
+                rules={[{ required: true, message: "กรุณากรอกราคา !" }]}
               >
                 <InputNumber
                   min={0}
@@ -270,7 +282,7 @@ function MenuCreate() {
                           >
                             <Select placeholder="Select ingredient">
                               {ingredients.map((item) => (
-                                <Option value={item.ID} key={item.name}>
+                                <Option value={item.ID} key={item.ID}>
                                   {item.name}
                                 </Option>
                               ))}

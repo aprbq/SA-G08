@@ -139,14 +139,23 @@ func Update(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"message": "Updated successful"})
 }
 
-// Delete removes a menu by ID
+// Delete removes a menu by ID and also deletes related menu ingredients
 func Delete(c *gin.Context) {
-    id := c.Param("id")
+    menuID := c.Param("id")
     db := config.DB()
 
-    if tx := db.Exec("DELETE FROM menus WHERE id = ?", id); tx.RowsAffected == 0 {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "id not found"})
+    // ลบ `MenuIngredient` ที่เกี่ยวข้องทั้งหมดก่อน
+    if err := db.Where("menu_id = ?", menuID).Delete(&entity.MenuIngredient{}).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete associated ingredients"})
         return
     }
-    c.JSON(http.StatusOK, gin.H{"message": "Deleted successful"})
+
+    // ลบเมนู
+    if err := db.Delete(&entity.Menu{}, menuID).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete menu"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"message": "Deleted successfully"})
 }
+

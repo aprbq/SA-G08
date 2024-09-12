@@ -112,21 +112,29 @@ function Menus() {
   };
 
   const deleteMenuById = async (id: string) => {
-    let res = await DeleteMenuById(id);
+    try {
+        let res = await DeleteMenuById(id);
 
-    if (res.status == 200) {
-      messageApi.open({
-        type: "success",
-        content: res.data.message,
-      });
-      await getMenu();
-    } else {
-      messageApi.open({
-        type: "error",
-        content: res.data.error,
-      });
+        if (res.status === 200) {
+            messageApi.open({
+                type: "success",
+                content: res.data.message,
+            });
+            await getMenu();  // รีเฟรชเมนู
+        } else {
+            messageApi.open({
+                type: "error",
+                content: res.data.error,
+            });
+        }
+    } catch (error) {
+        messageApi.open({
+            type: "error",
+            content: "เกิดข้อผิดพลาดในการลบเมนู",
+        });
     }
-  };
+};
+
 
   const getMenu = async () => {
     let res = await GetMenu();
