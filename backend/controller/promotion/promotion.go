@@ -134,13 +134,40 @@ func Update(c *gin.Context) {
 }
 
 // Delete removes a menu by ID
-func Delete(c *gin.Context) {
-    id := c.Param("id")
-    db := config.DB()
+func DeleteConditionsByPromotionID(promotionID uint) error {
+	db := config.DB()
+	
+	// ลบเงื่อนไขทั้งหมดที่มี PromotionID ตรงกัน
+	if err := db.Where("promotion_id = ?", promotionID).Delete(&entity.Condition{}).Error; err != nil {
+		return err
+	}
 
-    if tx := db.Exec("DELETE FROM promotions WHERE id = ?", id); tx.RowsAffected == 0 {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "id not found"})
-        return
-    }
-    c.JSON(http.StatusOK, gin.H{"message": "Deleted successful"})
+	return nil
+}
+
+func Delete(c *gin.Context) {
+    var promotion entity.Promotion
+	promotionID := c.Param("id")
+
+	// ค้นหาข้อมูลโปรโมชั่น
+	db := config.DB()
+	db.First(&promotion, promotionID)
+	if promotion.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "promotion not found"})
+		return
+	}
+
+	// ลบเงื่อนไขที่เกี่ยวข้อง
+	if err := DeleteConditionsByPromotionID(promotion.ID); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete conditions"})
+		return
+	}
+
+	// ลบโปรโมชั่น
+	if err := db.Delete(&promotion).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Promotion deleted successfully"})
 }

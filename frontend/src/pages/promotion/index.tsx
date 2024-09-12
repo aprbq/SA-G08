@@ -128,17 +128,25 @@ function Promotion() {
   ];
 
   const deletePromotionById = async (id: string) => {
-    let res = await DeletePromotionById(id);
-    if (res.status == 200) {
-      messageApi.open({
-        type: "success",
-        content: res.data.message,
-      });
-      await getPromotion();
-    } else {
+    try {
+      // เรียกฟังก์ชันที่ลบโปรโมชั่นและลบเงื่อนไข
+      let res = await DeletePromotionById(id);
+      if (res.status === 200) {
+        messageApi.open({
+          type: "success",
+          content: res.data.message,
+        });
+        await getPromotion(); // รีเฟรชรายการโปรโมชั่น
+      } else {
+        messageApi.open({
+          type: "error",
+          content: res.data.error,
+        });
+      }
+    } catch (error) {
       messageApi.open({
         type: "error",
-        content: res.data.error,
+        content: "เกิดข้อผิดพลาดในการลบโปรโมชั่น",
       });
     }
   };
