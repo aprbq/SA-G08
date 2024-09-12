@@ -8,6 +8,7 @@ import (
 	"example.com/sa-67-example/controller/class"
 	"example.com/sa-67-example/controller/status"
 	"example.com/sa-67-example/controller/promotiontype"
+	"example.com/sa-67-example/controller/condition"
 	"example.com/sa-67-example/controller/discounttype"
 	"example.com/sa-67-example/controller/stock"
 	"example.com/sa-67-example/controller/gender"
@@ -96,6 +97,7 @@ func main() {
 		router.GET("/status", status.GetAll)
 		router.GET("/promotiontype", promotiontype.GetAll)
 		router.GET("/discounttype", discounttype.GetAll)
+		router.POST("/condition", condition.CreateCondition)
 
 		router.PUT("/member/:id", member.Update)
         router.GET("/member", member.GetAll)

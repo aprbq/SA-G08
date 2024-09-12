@@ -19,8 +19,9 @@ import {
   import { DiscountTypeInterface } from "../../../interfaces/Discounttype";
   import { PromotionTypeInterface } from "../../../interfaces/Promotiontype";
   import { MenuInterface } from "../../../interfaces/Menu";
-  import { CreatePromotion,GetStatus,GetDiscountType,GetPromotionType,GetMenu } from "../../../services/https";
+  import { CreatePromotion,GetStatus,GetDiscountType,GetPromotionType,GetMenu,CreateCondition } from "../../../services/https";
   import { useNavigate, Link } from "react-router-dom";
+  import moment from 'moment';
 
 
   const { Option } = Select;
@@ -38,23 +39,57 @@ import {
     const onFinish = async (values: PromotionInterface) => {
       let payload = {
         ...values,
-        "employee_id": Number(accountid)
-      }
+        "employee_id": Number(accountid),
+        "start_date": values.start_date ? moment(values.start_date).format() : undefined,
+        "end_date": values.end_date ? moment(values.end_date).format() : undefined,
+        "menu_ids": values.menu_id // ส่งค่า menu_id ที่เป็น array
+      };
+    
       console.log(payload);
-      let res = await CreatePromotion(values);
-      console.log(res);
-      if (res) {
-        messageApi.open({
-          type: "success",
-          content: "บันทึกข้อมูลสำเร็จ",
-        });
-        setTimeout(function () {
-          navigate("/promotion");
-        }, 2000);
-      } else {
+      
+      try {
+        // สร้างโปรโมชั่น
+        let res = await CreatePromotion(payload);
+        console.log('CreatePromotion response:', res);
+      
+        if (res && res.status === 201) {
+          // ดึง ID ของโปรโมชั่นหากต้องใช้ในการสร้างเงื่อนไข
+          const promotionId = res.data.data;
+          
+          // เตรียมข้อมูลเงื่อนไขหากจำเป็น
+          const conditionPayload = {
+            promotion_id: promotionId,
+            menu_ids: values.menu_id // ส่งค่า menu_id ที่เป็น array
+          };
+      
+          // สร้างเงื่อนไข
+          let res1 = await CreateCondition(conditionPayload);
+          if (res1 && res1.status === 201) {
+            messageApi.open({
+              type: "success",
+              content: "บันทึกข้อมูลสำเร็จ",
+            });
+            setTimeout(() => {
+              navigate("/promotion");
+            }, 2000);
+          } else {
+            throw new Error(res1.data.error || "ไม่สามารถสร้างเงื่อนไขได้");
+          }
+        } else {
+          throw new Error(res.data.error || "ไม่สามารถสร้างโปรโมชั่นได้");
+        }
+      } catch (error) {
+        // ตรวจสอบประเภทของข้อผิดพลาด
+        let errorMessage = "เกิดข้อผิดพลาด !";
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        } else if (typeof error === 'string') {
+          errorMessage = error;
+        }
+      
         messageApi.open({
           type: "error",
-          content: "เกิดข้อผิดพลาด !",
+          content: errorMessage,
         });
       }
     };
@@ -274,7 +309,7 @@ import {
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Form.Item name="menu_id" label="Menus" rules={[{ required: true }]}>
+              <Form.Item name="menu_id" label="เงื่อนไขเมนู" rules={[{ required: true }]}>
               <Select mode="multiple" placeholder="Select menus">
                 {menu.map((menu) => (
                 <Option key={menu.ID} value={menu.ID}>

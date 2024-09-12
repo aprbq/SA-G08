@@ -1,5 +1,6 @@
 export interface ConditionInterface {
-    ID?:                    number;
-    menu_id?:                number;
+    ID?:              number;
+    promotion_id?:    number;
+    menu_id?:         number;
     
 }

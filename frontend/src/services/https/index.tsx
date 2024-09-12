@@ -2,6 +2,7 @@ import { UsersInterface } from "../../interfaces/IUser";
 import { SignInInterface } from "../../interfaces/SignIn";
 import { IngredientInterface } from "../../interfaces/Ingre";
 import { PromotionInterface } from "../../interfaces/Promotion";
+import {ConditionInterface } from "../../interfaces/Condition";
 import { MenuInterface } from "../../interfaces/Menu";
 import { OrderInterface } from "../../interfaces/Order";
 import { OrderItemInterface } from "../../interfaces/OrderItem";
@@ -254,6 +255,13 @@ async function CreatePromotion(data: PromotionInterface) {
     .then((res) => res)
     .catch((e) => e.response);
 }
+
+async function CreateCondition(data: ConditionInterface) {
+  return await axios
+    .post(`${apiUrl}/condition`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 //Member
 
 async function GetMember() {
@@ -338,6 +346,7 @@ export {
   UpdatePromotionById,
   DeletePromotionById,
   CreatePromotion,
+  CreateCondition,
 
   GetMember,
   GetMemberById,

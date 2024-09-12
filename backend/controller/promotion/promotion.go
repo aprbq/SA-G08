@@ -74,7 +74,7 @@ func CreatePromotion(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "Created success", "data": u})
+	c.JSON(http.StatusCreated, gin.H{"message": "Created success", "data": u.ID})
 }
 
 // GetAll retrieves all promotion along with their associated class

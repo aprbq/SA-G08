@@ -3,6 +3,7 @@ package condition
 import (
     "net/http"
 
+
     "github.com/gin-gonic/gin"
     "example.com/sa-67-example/config"
     "example.com/sa-67-example/entity"
@@ -10,48 +11,49 @@ import (
 
 
 
-func CreatePromotion(c *gin.Context) {
-	var condition entity.Condition
+func CreateCondition(c *gin.Context) {
+    var conditionData struct {
+		PromotionID uint   `json:"promotion_id"`
+		MenuIDs     []uint `json:"menu_ids"` // ใช้เป็น array ของ uint
+	}
 
-    if err := c.ShouldBindJSON(&condition); err != nil {
+	if err := c.ShouldBindJSON(&conditionData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-// GetAll retrieves all condition along with their associated class
 
-db := config.DB()
-    
 
-// ค้นหา gender ด้วย id
-var promotion entity.Promotion
-db.First(&promotion,condition.PromotionID)
-if promotion.ID == 0 {
-    c.JSON(http.StatusNotFound, gin.H{"error": "promotion not found"})
-    return
-}
+	db := config.DB()
 
-var menu entity.Menu
-db.First(&menu,condition.MenuID)
-if menu.ID == 0 {
-    c.JSON(http.StatusNotFound, gin.H{"error": "menu not found"})
-    return
-}
+	// ค้นหาโปรโมชั่น
+	var promotion entity.Promotion
+	db.First(&promotion, conditionData.PromotionID)
+	if promotion.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "promotion not found"})
+		return
+	}
 
-// สร้าง User
-u := entity.Condition{
-    PromotionID:    condition.PromotionID,
-    Promotion:    promotion,
-    MenuID:    condition.MenuID,
-    Menu:    menu,
-}
+	// ค้นหาและบันทึกเงื่อนไขแต่ละรายการ
+	for _, menuID := range conditionData.MenuIDs {
+		var menu entity.Menu
+		db.First(&menu, menuID)
+		if menu.ID == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"error": "menu not found"})
+			return
+		}
 
-// บันทึก
-if err := db.Create(&u).Error; err != nil {
-    c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-    return
-}
+		condition := entity.Condition{
+			PromotionID: conditionData.PromotionID,
+			MenuID:      menuID,
+		}
 
-c.JSON(http.StatusCreated, gin.H{"message": "Created success", "data": u})
+		if err := db.Create(&condition).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"message": "Created success"})
 }
 
 // GetAll retrieves all promotion along with their associated class
