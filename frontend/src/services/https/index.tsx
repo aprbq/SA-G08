@@ -4,6 +4,7 @@ import { IngredientInterface } from "../../interfaces/Ingre";
 import { PromotionInterface } from "../../interfaces/Promotion";
 import { MenuInterface } from "../../interfaces/Menu";
 import { OrderInterface } from "../../interfaces/Order";
+import { OrderItemInterface } from "../../interfaces/OrderItem";
 import { MemberInterface } from "../../interfaces/Member";
 
 
@@ -171,7 +172,14 @@ async function DeleteOrderById(id: string) {
 
 async function CreateOrder(data: OrderInterface) {
   return await axios
-    .post(`${apiUrl}/signupingre`, data, requestOptions)
+    .post(`${apiUrl}/order`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function CreateOrderitem(data: OrderItemInterface) {
+  return await axios
+    .post(`${apiUrl}/orderitem`, data, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
@@ -283,6 +291,15 @@ async function CreateMember(data: MemberInterface) {
     .catch((e) => e.response);
 }
 
+async function GetOrdersweet() {
+  return await axios
+    .get(`${apiUrl}/ordersweet`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+
+
 export {
   SignIn,
   GetUsers,
@@ -311,6 +328,8 @@ export {
   UpdateOrderById,
   DeleteOrderById,
   CreateOrder,
+  GetOrdersweet,
+  CreateOrderitem,
 
   GetPromotion,
   GetPromotionType,

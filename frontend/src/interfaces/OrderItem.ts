@@ -3,4 +3,5 @@ export interface OrderItemInterface {
     order_quantity ?:     string;
     total_item ?:    string;
     order_id?:            number;
+    ordersweet_id?: number;
     }

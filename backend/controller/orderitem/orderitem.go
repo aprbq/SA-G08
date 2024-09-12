@@ -27,12 +27,12 @@ func CreateOrderitem(c *gin.Context) {
 		return
 	}
 
-    var order entity.Order
-	db.First(&order,orderitem.OrderID)
-	if order.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "order not found"})
-		return
-	}
+    // var order entity.Order
+	// db.First(&order,orderitem.OrderID)
+	// if order.ID == 0 {
+	// 	c.JSON(http.StatusNotFound, gin.H{"error": "order not found"})
+	// 	return
+	// }
 
     // var discount_type entity.DiscountType
 	// db.First(&discount_type, promotion.DiscountTypeID)
@@ -60,8 +60,8 @@ func CreateOrderitem(c *gin.Context) {
 		
 		OrdersweetID:    orderitem.OrdersweetID,
         Ordersweet:    &ordersweet,
-        OrderID:    orderitem.OrderID,
-        Order:    &order,
+        // OrderID:    orderitem.OrderID,
+        // Order:    &order,
         // StatusID:    promotion.StatusID,
         // Status:    status,
         // EmployeeID: promotion.EmployeeID,
