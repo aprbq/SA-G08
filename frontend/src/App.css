@@ -185,10 +185,10 @@ body {
 
 .front-1{
   color: #000000 !important;
-  font-family: "Mitr", sans-serif;
-  font-weight: normal;
-  font-size: 13px;
-  font-style: normal;
+  font-family: "Mitr", sans-serif!important;
+  font-weight: normal!important;
+  font-size: 13px!important;
+  font-style: normal!important;
 
 }
 
