@@ -1,4 +1,4 @@
-package order
+package orderitem
 
 import (
 	"net/http"
@@ -8,10 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateOrder(c *gin.Context) {
-	var order entity.Order
+func CreateOrderitem(c *gin.Context) {
+	var orderitem entity.Orderitem
 
-    if err := c.ShouldBindJSON(&order); err != nil {
+    if err := c.ShouldBindJSON(&orderitem); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -20,17 +20,17 @@ func CreateOrder(c *gin.Context) {
     
 
 	// ค้นหา gender ด้วย id
-	var promotion entity.Promotion
-	db.First(&promotion, order.PromotionID)
-	if promotion.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "promotion not found"})
+	var ordersweet entity.Ordersweet
+	db.First(&ordersweet, orderitem.OrdersweetID)
+	if ordersweet.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "ordersweet not found"})
 		return
 	}
 
-    var paymentmethod entity.Paymentmethod
-	db.First(&paymentmethod,order.PaymentmethodID)
-	if paymentmethod.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "paymentmethod not found"})
+    var order entity.Order
+	db.First(&order,orderitem.OrderID)
+	if order.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "order not found"})
 		return
 	}
 
@@ -41,31 +41,31 @@ func CreateOrder(c *gin.Context) {
 	// 	return
 	// }
 
-    var employee entity.Employee
-    db.First(&employee, order.Employee)
-	if employee.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "employee not found"})
-		return
-	}
+    // var employee entity.Employee
+    // db.First(&employee, promotion.Employee)
+	// if employee.ID == 0 {
+	// 	c.JSON(http.StatusNotFound, gin.H{"error": "employee not found"})
+	// 	return
+	// }
 
 	// สร้าง User
-	u := entity.Order{
-		OrderDate: order.OrderDate, //  
-		PaymentAmount:  order.PaymentAmount,  //  
+	u := entity.Orderitem{
+		Quantity: orderitem.Quantity, //  
+		TotalItem:  orderitem.TotalItem,  //  
 		// StartDate:     promotion.StartDate,     //  
 		// EndDate:  promotion.EndDate,
 		// PointsAdded:  promotion.PointsAdded,
 		// PointsUse:   promotion.PointsUse, //  
 		// DiscountValue:  promotion.DiscountValue,
-		// DiscountTypeID:    promotion.DiscountTypeID,
-        // DiscountType:    discount_type,
-        
-        PaymentmethodID:    order.PaymentmethodID,
-        Paymentmethod:    &paymentmethod,
-        PromotionID:    order.PromotionID,
-        Promotion:    &promotion,
-        EmployeeID: order.EmployeeID,
-        Employee: &employee,
+		
+		OrdersweetID:    orderitem.OrdersweetID,
+        Ordersweet:    &ordersweet,
+        OrderID:    orderitem.OrderID,
+        Order:    &order,
+        // StatusID:    promotion.StatusID,
+        // Status:    status,
+        // EmployeeID: promotion.EmployeeID,
+        // Employee: employee,
 
 	}
 
@@ -80,53 +80,53 @@ func CreateOrder(c *gin.Context) {
 
 // GetAll retrieves all promotion along with their associated class
 func GetAll(c *gin.Context) {
-    var order []entity.Order
+    var orderitem []entity.Orderitem
     db := config.DB()
-    results := db.Preload("Paymentmethod").Preload("Promotion").Preload("Employee").Find(&order)
+    results := db.Preload("Ordersweet").Preload("Order").Find(&orderitem)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
         return
     }
-    c.JSON(http.StatusOK, order)
+    c.JSON(http.StatusOK, orderitem)
 }
 
 // Get retrieves a single promotion by ID along with their associated class
 func Get(c *gin.Context) {
     ID := c.Param("id")
-    var order entity.Order
+    var orderitem entity.Orderitem
     db := config.DB()
-    results := db.Preload("Paymentmethod").Preload("Promotion").Preload("Employee").Find(&order,ID)
+    results := db.Preload("Ordersweet").Preload("Order").First(&orderitem, ID)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
         return
     }
-    if order.ID == 0 {
+    if orderitem.ID == 0 {
         c.JSON(http.StatusNoContent, gin.H{})
         return
     }
-    c.JSON(http.StatusOK, order)
+    c.JSON(http.StatusOK, orderitem)
 }
 
 // Update updates the details of an existing menu
 func Update(c *gin.Context) {
-    var order entity.Order
-    OrderID := c.Param("id")
+    var orderitem entity.Orderitem
+    OrderitemID := c.Param("id")
     db := config.DB()
 
-    result := db.First(&order, OrderID)
+    result := db.First(&orderitem, OrderitemID)
     if result.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": "id not found"})
         return
     }
 
-    if err := c.ShouldBindJSON(&order); err != nil {
+    if err := c.ShouldBindJSON(&orderitem); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request, unable to map payload"})
         return
     }
 
-    result = db.Save(&order)
+    result = db.Save(&orderitem)
     if result.Error != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
         return
@@ -139,7 +139,7 @@ func Delete(c *gin.Context) {
     id := c.Param("id")
     db := config.DB()
 
-    if tx := db.Exec("DELETE FROM orders WHERE id = ?", id); tx.RowsAffected == 0 {
+    if tx := db.Exec("DELETE FROM orderitems WHERE id = ?", id); tx.RowsAffected == 0 {
         c.JSON(http.StatusBadRequest, gin.H{"error": "id not found"})
         return
     }

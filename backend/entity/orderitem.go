@@ -22,4 +22,5 @@ type Orderitem struct {
 
 	
 	OrderHasMenu []OrderHasMenu `gorm:"foreignKey:OrderitemID"`
+	
 }

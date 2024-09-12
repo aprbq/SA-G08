@@ -12,13 +12,13 @@ type Order struct {
 	PaymentAmount float32 `json:"payment_amount"`
 
 	EmployeeID uint      `json:"employee_id"`
-	Employee   *Employee `gorm:"foreignKey:EmployeeID" json:"users"`
+	Employee   *Employee `gorm:"foreignKey:EmployeeID" json:"employee"`
 
 	PromotionID 	uint		`json:"promotion_id"`
-	Promotion    	*Promotion   	`gorm:"foreignKey: PromotionID" json:"promotion"`
+	Promotion    	*Promotion   	`gorm:"foreignKey:PromotionID" json:"promotion"`
 
-	 PaymentmethodID 	uint		`json:"paymentmethod_id"`
-	 Paymentmethod    	*Paymentmethod   	`gorm:"foreignKey: PaymentmethodID" json:"paymentmethod"`
+	PaymentmethodID 	uint		`json:"paymentmethod_id"`
+	Paymentmethod    	*Paymentmethod   	`gorm:"foreignKey:PaymentmethodID" json:"paymentmethod"`
 
 	Orderitem []Orderitem `gorm:"foreignKey:OrderID"`
 
