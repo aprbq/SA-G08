@@ -123,7 +123,7 @@ import {
       <div>
         {contextHolder}
         <Card>
-          <h2>เพิ่มโปรโมชั่น</h2>
+          <h2 className="name-table">เพิ่มโปรโมชั่น</h2>
           <Divider />
   
           <Form
@@ -131,6 +131,7 @@ import {
             layout="vertical"
             onFinish={onFinish}
             autoComplete="off"
+
           >
           <Row gutter={[16, 0]}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
