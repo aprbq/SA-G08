@@ -185,6 +185,14 @@ async function CreateOrderitem(data: OrderItemInterface) {
     .catch((e) => e.response);
 }
 
+async function SaveOrderItems(orderItems: OrderItemInterface[]): Promise<any> {
+  return await axios
+    .post(`${apiUrl}/orderitems`, { orderItems }, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+
 // Menu
 async function GetMenu() {
   return await axios
@@ -338,6 +346,7 @@ export {
   CreateOrder,
   GetOrdersweet,
   CreateOrderitem,
+  SaveOrderItems,
 
   GetPromotion,
   GetPromotionType,
