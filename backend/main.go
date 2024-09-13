@@ -101,6 +101,7 @@ func main() {
 		router.GET("/discounttype", discounttype.GetAll)
 		router.POST("/condition", condition.CreateCondition)
 
+		router.POST("/member", member.CreateMember)
 		router.PUT("/member/:id", member.Update)
         router.GET("/member", member.GetAll)
         router.GET("/member/:id", member.Get)

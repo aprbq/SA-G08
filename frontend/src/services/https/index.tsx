@@ -309,7 +309,7 @@ async function DeleteMemberById(id: string) {
 
 async function CreateMember(data: MemberInterface) {
   return await axios
-    .post(`${apiUrl}/signupMember`, data, requestOptions)
+    .post(`${apiUrl}/member`, data, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }

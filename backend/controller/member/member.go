@@ -35,7 +35,6 @@ func CreateMember(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "status not found"})
 		return
 	}
-	// สร้าง User
 	u := entity.Member{
 		FristName: member.FristName,   
 		LastName:  member.LastName,   
