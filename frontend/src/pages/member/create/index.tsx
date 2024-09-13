@@ -1,62 +1,111 @@
+import React, { useState, useEffect } from "react";
 import {
-  Space,
-  Button,
-  Col,
-  Row,
-  Divider,
-  Form,
-  Input,
-  Card,
-  message,
-  DatePicker,
-  InputNumber,
-  Select,
-} from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { MemberInterface } from "../../../interfaces/Member";
-import { CreateMember } from "../../../services/https";
-import { useNavigate, Link } from "react-router-dom";
+    Space,
+    Button,
+    Col,
+    Row,
+    Divider,
+    Form,
+    Input,
+    Card,
+    message,
+    DatePicker,
+    InputNumber,
+    Select,
+  } from "antd";
+  import { PlusOutlined } from "@ant-design/icons";
+  import { MemberInterface } from "../../../interfaces/Member";
+  import { StatusInterface } from "../../../interfaces/Status";
+  // import { DiscountTypeInterface } from "../../../interfaces/Discounttype";
+  // import { PromotionTypeInterface } from "../../../interfaces/Promotiontype";
+  import { GenderInterface } from "../../../interfaces/Gender";
+  import { CreateMember,GetStatus,GetGender } from "../../../services/https";
+  import { useNavigate, Link } from "react-router-dom";
 
-function MemberCreate() {
-  const navigate = useNavigate();
 
-  const [messageApi, contextHolder] = message.useMessage();
+  const { Option } = Select;
 
-  const onFinish = async (values: MemberInterface) => {
+  function MemberCreate() {
+    const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
+    const [status, setStatus] = useState<StatusInterface[]>([]);
+    // const [promotiontype, setPromotionType] = useState<PromotionTypeInterface[]>([]);
+    // const [discounttype, setDiscountType] = useState<DiscountTypeInterface[]>([]);
+    const [gender, setGender] = useState<GenderInterface[]>([]);
 
-    let res = await CreateMember(values);
-   
-    if (res.status == 201) {
-      messageApi.open({
-        type: "success",
-        content: res.data.message,
-      });
-      setTimeout(function () {
-        navigate("/Member");
-      }, 2000);
+    const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
+
+    const onFinish = async (values: MemberInterface) => {
+      let payload = {
+        ...values,
+        "employee_id": Number(accountid)
+      }
+      console.log(payload);
+      let res = await CreateMember(values);
+      console.log(res);
+      if (res) {
+        messageApi.open({
+          type: "success",
+          content: "บันทึกข้อมูลสำเร็จ",
+        });
+        setTimeout(function () {
+          navigate("/member");
+        }, 2000);
+      } else {
+        messageApi.open({
+          type: "error",
+          content: "เกิดข้อผิดพลาด !",
+        });
+      }
+    };
+
+    const getStatus = async () => {
+      let res = await GetStatus();
+    if (res.status == 200) {
+      setStatus(res.data);
     } else {
+      setStatus([]);
       messageApi.open({
         type: "error",
         content: res.data.error,
       });
     }
-  };
+    };
 
-  return (
-    <div>
-      {contextHolder}
-      <Card>
-        <h2>เพิ่มสมาชิก</h2>
-        <Divider />
+    const getGender = async () => {
+      let res = await GetGender();
+    if (res.status == 200) {
+      setGender(res.data);
+    } else {
+      setGender([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
+    }
+    };
 
-        <Form
-          name="basic"
-          layout="vertical"
-          onFinish={onFinish}
-          autoComplete="off"
-        >
+    useEffect(() => {
+      getStatus();
+      getGender();
+      console.log(accountid)
+    }, []);
+  
+    return (
+      <div>
+        {contextHolder}
+        <Card>
+          <h2>เพิ่มสมาชิก</h2>
+          <Divider />
+  
+          <Form
+            name="basic"
+            layout="vertical"
+            onFinish={onFinish}
+            autoComplete="off"
+          >
           <Row gutter={[16, 0]}>
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
                   label="ชื่อ"
                   name="frist_name"
@@ -70,27 +119,30 @@ function MemberCreate() {
                   <Input />
                 </Form.Item>
               </Col>
-          
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                label="นามสกุล"
-                name="last_name"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณากรอกนามสกุล !",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Form.Item
+                  label="นามสกุล"
+                  name="last_name"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณากรอกนามสกุล !",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
 
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label="อีเมล"
                 name="email"
                 rules={[
+                  {
+                    type: "email",
+                    message: "รูปแบบอีเมลไม่ถูกต้อง !",
+                  },
                   {
                     required: true,
                     message: "กรุณากรอกอีเมล !",
@@ -101,158 +153,121 @@ function MemberCreate() {
               </Form.Item>
             </Col>
 
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                label="เบอร์โทรศัพท์"
-                name="phone_number"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณากรอกโทรศัพท์ !",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                label="แต้ม"
-                name="points"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณากรอกแต้ม !",
-                  },
-                ]}
-              >
-                <InputNumber
-                  min={0}
-                  max={200}
-                  defaultValue={0}
-                  style={{ width: "100%" }}
-                />
-              </Form.Item>
-            </Col> 
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-            <Form.Item
-              label="เพศ"
-              name="gender"
-              rules={[
-                {
-                  required: true,
-                  message: "กรุณาเลือกประเภท !",
-                },
-              ]}
-            >
-              <Select
-                defaultValue=""
-                style={{ width: "100%" }}
-                options={[
-                  { value: "", label: "กรุณาเลือกประเภท", disabled: true },
-                  { value: 1, label: "ชาย" },
-                  { value: 2, label: "หญิง" },
-                  { value: 3, label: "อื่นๆ" },
-                ]}
-              />
-            </Form.Item>
-            </Col>
-
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                label="สถานะ"
-                name="status"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาเลือกสถานะ !",
-                  },
-                ]}
-              >
-                <Select
-                defaultValue=""
-                style={{ width: "100%" }}
-                options={[
-                  { value: "", label: "กรุณาเลือกสถานะ", disabled: true },
-                  { value: 1, label: "Active" },
-                  { value: 2, label: "Inactive" },
-                ]}
-              />
-              </Form.Item>
-            </Col>
-            
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                label="วัน/เดือน/ปี เกิดของสมาชิก"
-                name="end_date"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาเลือกวัน/เดือน/ปี เกิดของสมาชิก !",
-                  },
-                ]}
-              >
-                <DatePicker style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
-
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                label="วัน/เดือน/ปี เริ่มเป็นสมาชิก"
-                name="start_date"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาเลือกวัน/เดือน/ปี เริ่มเป็นสมาชิก !",
-                  },
-                ]}
-              >
-                <DatePicker style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
-
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                label="วัน/เดือน/ปี ยกเลิกการเป็นสมาชิก"
-                name="end_date"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาเลือกวัน/เดือน/ปี ยกเลิกการเป็นสมาชิก !",
-                  },
-                ]}
-              >
-                <DatePicker style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
-        </Row>
-
-        <Row justify="end">
-          <Col style={{ marginTop: "40px" }}>
-            <Form.Item>
-              <Space>
-                <Link to="/member">
-                  <Button htmlType="button" style={{ marginRight: "10px" }}>
-                    ย้อนกลับ
-                  </Button>
-                </Link>
-
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  icon={<PlusOutlined />}
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Form.Item
+                  label="เบอร์โทรศัพท์"
+                  name="phone_number"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณากรอกเบอร์โทรศัพท์ !",
+                    },
+                  ]}
                 >
-                  ตกลง
-                </Button>
-              </Space>
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
-    </Card>
-  </div>
-);
-}
+                  <Input />
+                </Form.Item>
+              </Col>
 
-export default MemberCreate;
+
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Form.Item
+                  label="แต้ม"
+                  name="points"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณากรอกแต้ม !",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    min={0}
+                    max={99}
+                    defaultValue={0}
+                    style={{ width: "100%" }}
+                  />
+                </Form.Item>
+              </Col>
+
+
+              
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+              <Form.Item
+                name="status_id"
+                label="สถานะ"
+                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
+              >
+                <Select allowClear>
+                  {status.map((item) => (
+                    <Option value={item.ID} key={item.status_name}>
+                      {item.status_name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+              <Form.Item
+                name="gender_id"
+                label="เพศ"
+                rules={[{ required: true, message: "กรุณาระบุเพศ !" }]}
+              >
+                <Select allowClear>
+                  {gender.map((item) => (
+                    <Option value={item.ID} key={item.gender_name}>
+                      {item.gender_name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={12} lg={6} xl={6}>
+              <Form.Item
+                label="วัน/เดือน/ปี สมัคร"
+                name="start_date"
+                rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี สมัคร !" }]}
+              >
+                <DatePicker style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={12} lg={6} xl={6}>
+              <Form.Item
+                label="วัน/เดือน/ปี ยกเลิก"
+                name="end_date"
+                rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี ยกเลิก !" }]}
+              >
+                <DatePicker style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+          </Row>
+          
+            <Row justify="end">
+              <Col style={{ marginTop: "40px" }}>
+                <Form.Item>
+                  <Space>
+                    <Link to="/member">
+                      <Button className="back-button" htmlType="button" style={{ marginRight: "10px" }}>
+                        ย้อนกลับ
+                      </Button>
+                    </Link>
+  
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      className="confirm-button"
+                      icon={<PlusOutlined />}
+                    >
+                      ตกลง
+                    </Button>
+                  </Space>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        </Card>
+      </div>
+    );
+  }
+  
+  export default MemberCreate;
