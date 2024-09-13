@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message, Modal } from "antd";
-import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined , EditOutlined,HistoryOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetPromotion, DeletePromotionById } from "../../services/https/index";
 import { PromotionInterface } from "../../interfaces/Promotion";
@@ -122,6 +122,22 @@ function Promotion() {
                 icon={<DeleteOutlined />}
                 onClick={() => showDeleteConfirm(record.ID)}
             ></Button>
+          </>
+        ),
+      },
+
+      {
+        title: "",
+        render: (record) => (
+          <>
+            <Button
+              type="default"
+              className="btn-history"
+              icon={<HistoryOutlined />}
+              onClick={() => navigate(`/promotion/history/${record.ID}`)}
+            >
+              การใช้งาน
+            </Button>
           </>
         ),
       },

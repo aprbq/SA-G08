@@ -123,8 +123,8 @@ const FullLayout: React.FC = () => {
             </Routes>
           </div>
         </Content>
-        <Footer style={{ textAlign: "center", backgroundColor: "#533f38", color: "black" }}>
-          System Analysis and Design 1/67
+        <Footer style={{ textAlign: "center", backgroundColor: "#533f38", color: "black" }}className="front-1">
+          System Analysis and Design Group 08
         </Footer>
       </Layout>
     </Layout>

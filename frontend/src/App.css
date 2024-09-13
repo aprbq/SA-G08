@@ -206,6 +206,33 @@ body {
   transform: translate(-3px, -3px);
 }
 
+.btn-history {
+  background-color: #d8d8d8; /* Primary color */
+  border: none;
+  color: rgb(0, 0, 0);
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.btn-history:hover {
+  background-color: #000000 !important;
+  color: #ffffff!important; /* Lighter shade on hover */
+}
+
+.btn-history:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2); /* Focus state */
+}
+
+.btn-history .anticon {
+  margin-right: 8px; /* Space between icon and text */
+}
+
 .header-buttons {
   display: flex;
   flex-wrap: wrap;

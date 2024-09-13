@@ -170,7 +170,7 @@ import {
       <div>
         {contextHolder}
         <Card>
-          <h2>เพิ่มโปรโมชั่น</h2>
+          <h2 className="name-table">แก้ไขข้อมูล โปรโมชั่น</h2>
           <Divider />
   
           <Form
