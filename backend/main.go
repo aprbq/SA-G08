@@ -91,7 +91,7 @@ func main() {
         router.GET("/menuingredient/:id", menuingredient.Get)
         router.DELETE("/menuingredient/:id", menuingredient.Delete)
 
-		router.PATCH("/promotion/:id", promotion.Update)
+		router.PUT("/promotion/:id", promotion.Update)
 		router.POST("/promotion", promotion.CreatePromotion)
         router.GET("/promotion", promotion.GetAll)
         router.GET("/promotion/:id", promotion.Get)
@@ -100,6 +100,7 @@ func main() {
 		router.GET("/promotiontype", promotiontype.GetAll)
 		router.GET("/discounttype", discounttype.GetAll)
 		router.POST("/condition", condition.CreateCondition)
+		router.GET("/condition", condition.GetAll)
 
 		router.POST("/member", member.CreateMember)
 		router.PUT("/member/:id", member.Update)

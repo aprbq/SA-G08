@@ -243,7 +243,7 @@ async function GetPromotion() {
     .catch((e) => e.response);
 }
 
-async function GetPromotionById(id: Number ) {
+async function GetPromotionById(id: string ) {
   return await axios
     .get(`${apiUrl}/promotion/${id}`, requestOptions)
     .then((res) => res)
@@ -274,6 +274,13 @@ async function CreatePromotion(data: PromotionInterface) {
 async function CreateCondition(data: ConditionInterface) {
   return await axios
     .post(`${apiUrl}/condition`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function GetCondition() {
+  return await axios
+    .get(`${apiUrl}/condition`, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
@@ -357,6 +364,7 @@ export {
   SaveOrderItems,
 
   GetPromotion,
+  GetCondition,
   GetPromotionType,
   GetDiscountType,
   GetPromotionById,

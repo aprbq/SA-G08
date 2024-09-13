@@ -78,14 +78,14 @@ function Promotion() {
     {
       title: "วันเริ่ม",
       key: "start_date",
-      render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
+      render: (record) => <>{dayjs(record.start_date).format("DD/MM/YYYY")}</>,
       className:  "front-1",
     },
 
     {
       title: "วันสิ้นสุด",
       key: "end_date",
-      render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
+      render: (record) => <>{dayjs(record.end_date).format("DD/MM/YYYY")}</>,
       className:  "front-1",
     },
 
@@ -96,7 +96,7 @@ function Promotion() {
     render: (item) => Object.values(item.status_name),
     className:  "front-1",
     },
-
+    
     {
       title: "",
       render: (record) => (

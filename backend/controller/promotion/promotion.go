@@ -119,12 +119,10 @@ func Update(c *gin.Context) {
         c.JSON(http.StatusNotFound, gin.H{"error": "id not found"})
         return
     }
-
     if err := c.ShouldBindJSON(&promotion); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request, unable to map payload"})
         return
     }
-
     result = db.Save(&promotion)
     if result.Error != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})

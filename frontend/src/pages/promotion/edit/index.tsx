@@ -19,29 +19,60 @@ import {
   import { DiscountTypeInterface } from "../../../interfaces/Discounttype";
   import { PromotionTypeInterface } from "../../../interfaces/Promotiontype";
   import { MenuInterface } from "../../../interfaces/Menu";
-  import { CreatePromotion,GetStatus,GetDiscountType,GetPromotionType,GetMenu } from "../../../services/https";
-  import { useNavigate, Link } from "react-router-dom";
+  import { ConditionInterface } from "../../../interfaces/Condition";
+  import { GetCondition,GetStatus,GetDiscountType,GetPromotionType,GetMenu,GetPromotionById, UpdatePromotionById } from "../../../services/https";
+  import { useNavigate, Link, useParams } from "react-router-dom";
+  import dayjs from "dayjs";
 
 
   const { Option } = Select;
 
-  function PromotionCreate() {
+  function PromotionEdit() {
     const navigate = useNavigate();
+    const { id } = useParams<{ id: any }>();
     const [messageApi, contextHolder] = message.useMessage();
     const [status, setStatus] = useState<StatusInterface[]>([]);
     const [promotiontype, setPromotionType] = useState<PromotionTypeInterface[]>([]);
     const [discounttype, setDiscountType] = useState<DiscountTypeInterface[]>([]);
     const [menu, setMenu] = useState<MenuInterface[]>([]);
+    const [condition, setCondition] = useState<ConditionInterface[]>([]);
+    const [promotion, setPromotion] = useState<PromotionInterface[]>([]);
 
-    const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
+    const [form] = Form.useForm();
+    const getPromotionById = async (id: string) => {
+      let res = await GetPromotionById(id);
+      if (res.status === 200) {
+        setPromotion(res.data);
+        form.setFieldsValue({
+          promotion_name: res.data.promotion_name,
+          description: res.data.description,
+          start_date: dayjs(res.data.start_date),
+          end_date: dayjs(res.data.end_date),
+          points_added: res.data.points_added,
+          points_use: res.data.points_use,
+          discount_value: res.data.discount_value,
+          discount_type_id: res.data.discount_type_id,
+          promotion_type_id: res.data.promotion_type_id,
+          status_id: res.data.status_id,
+          menu_id: res.data.conditions ? res.data.conditions.map((condition: any) => condition.menuID) : [],
+        });
+      } else {
+        messageApi.open({
+          type: "error",
+          content: "ไม่พบข้อมูล",
+        });
+        setTimeout(() => {
+          navigate("/promotion");
+        }, 2000);
+      }
+    };
 
     const onFinish = async (values: PromotionInterface) => {
       let payload = {
         ...values,
-        "employee_id": Number(accountid)
       }
       console.log(payload);
-      let res = await CreatePromotion(values);
+      let res = await UpdatePromotionById(id,values);
       console.log(res);
       if (res) {
         messageApi.open({
@@ -100,10 +131,25 @@ import {
 
     const getMenu = async () => {
       let res = await GetMenu();
+      console.log("API Response for Menu:", res);
     if (res.status == 200) {
       setMenu(res.data);
     } else {
       setMenu([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
+    }
+    };
+
+    const getCondition = async () => {
+      let res = await GetCondition();
+      console.log("API Response for Menu:", res);
+    if (res.status == 200) {
+      setCondition(res.data);
+    } else {
+      setCondition([]);
       messageApi.open({
         type: "error",
         content: res.data.error,
@@ -116,8 +162,9 @@ import {
       getPromotionType();
       getDiscountType();
       getMenu();
-      console.log(accountid)
-    }, []);
+      getCondition();
+      getPromotionById(id);
+    }, [id]);
   
     return (
       <div>
@@ -129,6 +176,7 @@ import {
           <Form
             name="basic"
             layout="vertical"
+            form={form}
             onFinish={onFinish}
             autoComplete="off"
           >
@@ -273,7 +321,7 @@ import {
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Form.Item name="menuID" label="Menus" rules={[{ required: true }]}>
+              <Form.Item name="menu_id" label="Menus" rules={[{ required: true }]}>
               <Select mode="multiple" placeholder="Select menus">
                 {menu.map((menu) => (
                 <Option key={menu.ID} value={menu.name}>
@@ -331,4 +379,4 @@ import {
     );
   }
   
-  export default PromotionCreate;
+  export default PromotionEdit;

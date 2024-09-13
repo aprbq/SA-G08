@@ -21,7 +21,6 @@ import {
   import { MenuInterface } from "../../../interfaces/Menu";
   import { CreatePromotion,GetStatus,GetDiscountType,GetPromotionType,GetMenu,CreateCondition } from "../../../services/https";
   import { useNavigate, Link } from "react-router-dom";
-  import moment from 'moment';
 
 
   const { Option } = Select;
@@ -40,8 +39,6 @@ import {
       let payload = {
         ...values,
         "employee_id": Number(accountid),
-        "start_date": values.start_date ? moment(values.start_date).format() : undefined,
-        "end_date": values.end_date ? moment(values.end_date).format() : undefined,
         "menu_ids": values.menu_id // ส่งค่า menu_id ที่เป็น array
       };
     
@@ -166,6 +163,10 @@ import {
             layout="vertical"
             onFinish={onFinish}
             autoComplete="off"
+            initialValues={{
+              points_added: 0,
+              points_use: 0,
+            }}
 
           >
           <Row gutter={[16, 0]}>
