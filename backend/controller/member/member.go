@@ -10,49 +10,49 @@ import (
 
 func CreateMember(c *gin.Context) {
 	var member entity.Member
-
-
-	db := config.DB()
-
-	// ค้นหา gender ด้วย id
-	var status entity.Status
-	db.First(&status, member.StatusID)
-	if status.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Status not found"})
+    if err := c.ShouldBindJSON(&member); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-    // var employee entity.Employee
-	// db.First(&Employee, member.EmployeeID)
-	// if Employee.ID == 0 {
-	// 	c.JSON(http.StatusNotFound, gin.H{"error": "Employee not found"})
-	// 	return
-	// }
+	db := config.DB()
 
+    var employee entity.Employee
+    db.First(&employee, member.Employee)
+	if employee.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "employee not found"})
+		return
+	}
     var gender entity.Gender
-	db.First(&gender,member.GenderID)
+	db.First(&gender,member.Gender)
 	if gender.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
 		return
 	}
+    var status entity.Status
+	db.First(&status, member.Status)
+	if status.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "status not found"})
+		return
+	}
 	// สร้าง User
 	u := entity.Member{
-		FristName: member.FristName, //  
-		LastName:  member.LastName,  //  
-		Email:     member.Email,     //  
+		FristName: member.FristName,   
+		LastName:  member.LastName,   
+		Email:     member.Email,      
 		PhoneNumber:  member.PhoneNumber,
 		DateOfBirth:  member.DateOfBirth,
-		StartDate:   member.StartDate, //  
+		StartDate:   member.StartDate,  
 		EndDate:  member.EndDate,
 		Points:    member.Points,
-        // DiscountType:    discount_type,
-        // PromotionTypeID:    promotion.PromotionTypeID,
-        // PromotionType:    promotion_type,
+
+
         StatusID:    member.StatusID,
-        //Status:    status,
-        EmployeeID:    member.EmployeeID,
-        //Users:    users, //   
-        //GenderID:    member.GenderID,
+        Status:    status,
+        EmployeeID: member.EmployeeID,
+        Employee: employee,
+        GenderID: member.GenderID,
+        Gender: gender,
 	}
 
 	// บันทึก
