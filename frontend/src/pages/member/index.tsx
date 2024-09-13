@@ -50,17 +50,17 @@ function Member() {
     {
       title: "วันเกิด",
       key: "date_of_birth",
-      render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
+      render: (record) => <>{dayjs(record.date_of_birth).format("DD/MM/YYYY")}</>,
     },
     {
       title: "วันเริ่มเป็นสมาชิก",
       key: "start_date",
-      render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
+      render: (record) => <>{dayjs(record.start_date).format("DD/MM/YYYY")}</>,
     },
     {
       title: "วันสิ้นสุดการเป็นสมาชิก",
       key: "end_date",
-      render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
+      render: (record) => <>{dayjs(record.end_date).format("DD/MM/YYYY")}</>,
     },
     {
       title: "แต้ม",

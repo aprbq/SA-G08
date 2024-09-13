@@ -240,6 +240,15 @@ import {
                 <DatePicker style={{ width: "100%" }} />
               </Form.Item>
             </Col>
+            <Col xs={24} sm={24} md={12} lg={6} xl={6}>
+              <Form.Item
+                label="วัน/เดือน/ปี เกิด"
+                name="date_of_birth"
+                rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี เกิด !" }]}
+              >
+                <DatePicker style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
           </Row>
           
             <Row justify="end">
