@@ -18,6 +18,7 @@ import (
 	"example.com/sa-67-example/controller/promotion"
 	"example.com/sa-67-example/controller/employee"
 	"example.com/sa-67-example/controller/order"
+	"example.com/sa-67-example/controller/payment"
 	"example.com/sa-67-example/controller/orderitem"
 	"example.com/sa-67-example/controller/ordersweet"
 	//"example.com/sa-67-example/controller/payment"
@@ -71,6 +72,7 @@ func main() {
         router.GET("/order/:id", order.Get)
         router.DELETE("/order/:id", order.Delete)
 		router.GET("/ordersweet", ordersweet.GetAll)
+		router.GET("/payment", payment.GetAll)
 
 		// router.PUT("/orderitem/:id", orderitem.Update)
         // router.GET("/orderitem", orderitem.GetAll)
@@ -99,7 +101,6 @@ func main() {
 		router.GET("/discounttype", discounttype.GetAll)
 		router.POST("/condition", condition.CreateCondition)
 
-		router.POST("/member", member.CreateMember)
 		router.PUT("/member/:id", member.Update)
         router.GET("/member", member.GetAll)
         router.GET("/member/:id", member.Get)

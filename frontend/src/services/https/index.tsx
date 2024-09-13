@@ -192,6 +192,13 @@ async function SaveOrderItems(orderItems: OrderItemInterface[]): Promise<any> {
     .catch((e) => e.response);
 }
 
+async function GetPaymentMethods() {
+  return await axios
+    .get(`${apiUrl}/payment`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 
 // Menu
 async function GetMenu() {
@@ -302,7 +309,7 @@ async function DeleteMemberById(id: string) {
 
 async function CreateMember(data: MemberInterface) {
   return await axios
-    .post(`${apiUrl}/member`, data, requestOptions)
+    .post(`${apiUrl}/signupMember`, data, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
@@ -341,6 +348,7 @@ export {
 
   GetOrder,
   GetOrderById,
+  GetPaymentMethods,
   UpdateOrderById,
   DeleteOrderById,
   CreateOrder,
