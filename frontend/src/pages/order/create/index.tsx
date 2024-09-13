@@ -5,7 +5,7 @@ import { MenuInterface } from '../../../interfaces/Menu';
 import { OrdersweetInterface } from '../../../interfaces/Ordersweet';
 import { OrderItemInterface } from '../../../interfaces/OrderItem';
 import { Link, useNavigate } from 'react-router-dom';
-import { GetMenu, GetOrdersweet, CreateOrder, CreateOrderitem } from '../../../services/https';
+import { GetMenu, GetOrdersweet } from '../../../services/https';
 
 const { Option } = Select;
 
@@ -19,11 +19,8 @@ function OrderitemCreate() {
   const navigate = useNavigate();
 
   const addOrderItem = (values: OrderItemInterface) => {
-    // ตรวจสอบและแปลงค่า order_quantity เป็น number
     const quantity = values.order_quantity ? Number(values.order_quantity) : 0;
-    // ตรวจสอบว่า selectedMenuPrice มีค่าเป็น number หรือไม่
     const price = selectedMenuPrice || 0;
-    // คำนวณ totalItem
     const totalItem = quantity * price;
 
     const newOrderItem: OrderItemInterface = {
@@ -31,11 +28,8 @@ function OrderitemCreate() {
       total_item: totalItem,
     };
 
-    // เพิ่มรายการใหม่ใน orderItems
-    const newOrderItems = [...orderItems, newOrderItem];
-    setOrderItems(newOrderItems);
+    setOrderItems([...orderItems, newOrderItem]);
 
-    // แสดงข้อความสำเร็จ
     messageApi.open({
       type: 'success',
       content: 'เพิ่มรายการสำเร็จ',
@@ -44,7 +38,7 @@ function OrderitemCreate() {
 
   const onFinish = (values: OrderItemInterface) => {
     addOrderItem(values);
-    form.resetFields(); // รีเซ็ตฟอร์มหลังจากส่งข้อมูล
+    form.resetFields();
   };
 
   const handleMenuChange = (menu_id: number) => {
@@ -88,38 +82,6 @@ function OrderitemCreate() {
     }
   };
 
-  const saveOrder = async () => {
-    try {
-      let orderData = { /* ข้อมูลที่คุณต้องการส่งไปยัง CreateOrder */ };
-      const orderResponse = await CreateOrder(orderData);
-      if (orderResponse.status === 200) {
-        const orderId = orderResponse.data.ID;
-
-        for (const item of orderItems) {
-          await CreateOrderitem({ ...item, order_id: orderId });
-        }
-
-        messageApi.open({
-          type: 'success',
-          content: 'บันทึกออเดอร์สำเร็จ',
-        });
-
-        navigate('/order');
-      } else {
-        messageApi.open({
-          type: 'error',
-          content: 'ไม่สามารถบันทึกออเดอร์ได้',
-        });
-      }
-    } catch (error) {
-      console.error("Error saving order:", error);
-      messageApi.open({
-        type: 'error',
-        content: 'เกิดข้อผิดพลาดในการบันทึกออเดอร์',
-      });
-    }
-  };
-
   useEffect(() => {
     getMenu();
     getOrdersweet();
@@ -156,6 +118,16 @@ function OrderitemCreate() {
       },
     },
   ];
+
+  const goToNextPage = () => {
+    navigate('/order/create/createorder', {
+      state: {
+        orderItems,
+        menu,
+        ordersweet
+      },
+    });
+  };
 
   return (
     <div>
@@ -233,9 +205,9 @@ function OrderitemCreate() {
                   </Button>
                   <Button
                     type="primary"
-                    onClick={saveOrder}
+                    onClick={goToNextPage}
                   >
-                    ยืนยันออเดอร์
+                    ไปยังหน้าถัดไป
                   </Button>
                 </Space>
               </Form.Item>

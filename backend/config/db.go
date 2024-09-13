@@ -82,6 +82,10 @@ func SetupDatabase() {
 	OrdersweetLot := entity.Ordersweet{OrderSweets: "120%"}
 	OrdersweetLittle := entity.Ordersweet{OrderSweets: "50%"}
 
+	PaymentMoney := entity.Paymentmethod{PaymentMethods: "เงินสด"}
+	PaymentQR := entity.Paymentmethod{PaymentMethods: "QR Code"}
+	PaymentCard := entity.Paymentmethod{PaymentMethods: "Credit Card"}
+
 	db.FirstOrCreate(&GenderMale, &entity.Gender{GenderName: "Male"})
 	db.FirstOrCreate(&GenderFemale, &entity.Gender{GenderName: "Female"})
 
@@ -110,6 +114,10 @@ func SetupDatabase() {
 	db.FirstOrCreate(&OrdersweetNormal, &entity.Ordersweet{OrderSweets: "100%"})
 	db.FirstOrCreate(&OrdersweetLot, &entity.Ordersweet{OrderSweets: "120%"})
 	db.FirstOrCreate(&OrdersweetLittle, &entity.Ordersweet{OrderSweets: "50%"})
+
+	db.FirstOrCreate(&PaymentMoney, &entity.Paymentmethod{PaymentMethods: "เงินสด"})
+	db.FirstOrCreate(&PaymentQR, &entity.Paymentmethod{PaymentMethods: "QR Code"})
+	db.FirstOrCreate(&PaymentCard, &entity.Paymentmethod{PaymentMethods: "Credit Card"})
 
 	hashedPassword, _ := HashPassword("123456")
 	BirthDay, _ := time.Parse("2006-01-02", "1988-11-12")
