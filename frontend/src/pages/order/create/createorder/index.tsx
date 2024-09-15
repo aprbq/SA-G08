@@ -7,13 +7,14 @@ import { OrdersweetInterface } from '../../../../interfaces/Ordersweet';
 import { OrderItemInterface } from '../../../../interfaces/OrderItem';
 import { PaymentmethodInterface } from '../../../../interfaces/Paymentmethod';
 import { GetPromotion, GetPaymentMethods, CreateOrder } from '../../../../services/https';
+import { OrderInterface } from '../../../../interfaces/Order';
 
 const { Option } = Select;
 
 function OrderConfirm() {
   const [messageApi, contextHolder] = message.useMessage();
   const [promotions, setPromotions] = useState<PromotionInterface[]>([]);
-  const [paymentMethods, setPaymentMethods] = useState<PaymentmethodInterface[]>([]); // สมมุติว่าเรามีประเภทข้อมูลนี้
+  const [paymentMethods, setPaymentMethods] = useState<PaymentmethodInterface[]>([]);
   const [selectedPromotion, setSelectedPromotion] = useState<number | undefined>(undefined);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<number | undefined>(undefined);
   const [orderItems, setOrderItems] = useState<OrderItemInterface[]>([]);
@@ -57,20 +58,40 @@ function OrderConfirm() {
   };
 
   const saveOrder = async () => {
-    const orderData = {
+    // คำนวณราคาทั้งหมดสำหรับออเดอร์
+    const total_price = orderItems.reduce((total, item) => total + (item.total_item || 0), 0);
+  
+    // ตรวจสอบให้แน่ใจว่า orderItems ไม่ว่างเปล่า
+    if (orderItems.length === 0) {
+      messageApi.open({
+        type: 'error',
+        content: 'กรุณาเพิ่มรายการในออเดอร์ก่อนทำการบันทึก',
+      });
+      return;
+    }
+  
+    // สร้างข้อมูลออเดอร์
+    const orderData: OrderInterface = {
+      ID: 0, // ใช้ค่าตัวอย่างหรือตั้งค่า ID ให้เหมาะสม
+      name: "Order Name", // ตั้งชื่อออเดอร์
       promotion_id: selectedPromotion,
       payment_method_id: selectedPaymentMethod,
-      orderItems: orderItems
+      orderItems: orderItems,
+      order_date: new Date().toISOString(), // ใช้วันที่ปัจจุบัน
+      total_price: total_price, // คำนวณราคาทั้งหมด
     };
-
+  
+    console.log("Order Data:", orderData); // ตรวจสอบข้อมูลที่ส่งไป
+  
     try {
       const orderResponse = await CreateOrder(orderData);
+      console.log("API Response:", orderResponse); // ตรวจสอบข้อมูลที่ตอบกลับ
       if (orderResponse.status === 200) {
         messageApi.open({
           type: 'success',
           content: 'บันทึกออเดอร์สำเร็จ',
         });
-        navigate('/order');
+        navigate('/order'); // นำทางไปยังหน้า Order หลังจากการบันทึกสำเร็จ
       } else {
         messageApi.open({
           type: 'error',
@@ -85,6 +106,7 @@ function OrderConfirm() {
       });
     }
   };
+  
 
   useEffect(() => {
     if (location.state) {

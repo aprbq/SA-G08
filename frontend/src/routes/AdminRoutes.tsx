@@ -81,17 +81,20 @@ const AdminRoutes = (isLoggedIn: boolean): RouteObject => {
           {
             path: "create",
             element: <CreateOrder />,
-            children:[{
-              path: "createorder",
-              element: <ConfirmOrder />,
-          },],
+            children: [
+              {
+                path: "createorder",
+                element: <ConfirmOrder />,
+              },
+            ],
           },
           {
             path: "edit/:id",
             element: <EditOrder />,
           },
         ],
-      },
+      }
+      ,
 
       {
         path: "ingredient",

@@ -1,57 +1,62 @@
 import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message } from "antd";
-import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetOrder, DeleteOrderById } from "../../services/https/index";
 import { OrderInterface } from "../../interfaces/Order";
+import { OrderItemInterface } from "../../interfaces/OrderItem";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 
 function Order() {
   const navigate = useNavigate();
-  const [Order , setOrder] = useState<OrderInterface[]>([]);
+  const [Order, setOrder] = useState<OrderInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
+
+  const orderItemsList: OrderItemInterface[] = [
+    // ตัวอย่างข้อมูล orderItems
+    { ID: 1, name: "เมนู 1", order_quantity: 2, price: 100, total_item: 200 },
+    { ID: 2, name: "เมนู 2", order_quantity: 1, price: 150, total_item: 150 },
+  ];
+
+  //const selectedPromotionId = 1; // หรือ undefined หากไม่มีการเลือกโปรโมชั่น
+  //const selectedPaymentMethodId = 2; // หรือ undefined หากไม่มีการเลือกวิธีการชำระเงิน
+  const totalOrderPrice = orderItemsList.reduce(
+    (total, item) => total + (item.total_item || 0), // ตรวจสอบ item.total_item เป็น 0 ถ้า undefined
+    0
+  ); // ราคารวม
 
 
   const columns: ColumnsType<OrderInterface> = [
-
-
     {
-      title: "ลำดับ",
+      title: "รายการที่",
       dataIndex: "ID",
       key: "id",
     },
-
-     {
-       title: "ชื่อเมนู",
-       dataIndex: "name",
-       key: "name",
-     },
-
-     {
-       title: "จำนวน",
-       dataIndex: "order_quantity",
-       key: "order_quantity",
-     },
-
-     {
-       title: "ราคา",
-       dataIndex: "Price",
-       key: "Price",
-     },
-
-     {
-       title: "ราคารวมของเมนู",
-       dataIndex: "total_item",
-       key: "total_item",
-     },
-
-     {
-       title: "วันทำรายการ",
-       key: "order_date",
-       render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
-     },
     
+    {
+      title: "ราคารวมของเมนู",
+      dataIndex: "payment_amount",
+      key: "payment_amount",
+    },
+    {
+      title: "วิธีการชำระเงิน",
+      dataIndex: "paymentmethod",
+      key: "paymentmethod_id", // แสดงวิธีการชำระเงินที่เลือก
+      render: (item) => Object.values(item.payment_methods),
+    },
+    {
+      title: "โปรโมชั่นที่เลือกใช้",
+      dataIndex: "promotion",
+      key: "promotion_id", // แสดงโปรโมชั่นที่เลือก
+      render: (item) => Object.values(item.promotion_name),
+    },
+    {
+      title: "วันทำรายการ",
+      key: "order_date",
+      render: (record) => <>{dayjs(record.order_date).format("DD/MM/YYYY")}</>,
+    },
+
     {
       title: "",
       render: (record) => (
@@ -68,33 +73,33 @@ function Order() {
       ),
     },
     {
-        title: "",
-        render: (record) => (
-          <>
-            <Button
-                type="primary"
-                className="btn-delete"
-                icon={<DeleteOutlined />}
-                onClick={() => deleteOrderById(record.ID)}
-            ></Button>
-          </>
-        ),
-      },
+      title: "",
+      render: (record) => (
+        <>
+          <Button
+            type="primary"
+            className="btn-delete"
+            icon={<DeleteOutlined />}
+            onClick={() => deleteOrderById(record.ID)}
+          ></Button>
+        </>
+      ),
+    },
   ];
 
   const deleteOrderById = async (id: string) => {
     let res = await DeleteOrderById(id);
-  
-    if (res) { // ถ้า res เป็น true
+
+    if (res) {
       messageApi.open({
         type: "success",
-        content: "ลบออเดอร์สำเร็จ", // ข้อความเมื่อการลบสำเร็จ
+        content: "ลบออเดอร์สำเร็จ",
       });
-      await getOrder(); // โหลดข้อมูลใหม่หลังจากลบสำเร็จ
+      await getOrder();
     } else {
       messageApi.open({
         type: "error",
-        content: "เกิดข้อผิดพลาดในการลบ", // ข้อความเมื่อการลบล้มเหลว
+        content: "เกิดข้อผิดพลาดในการลบ",
       });
     }
   };
@@ -102,24 +107,14 @@ function Order() {
   const getOrder = async () => {
     let res = await GetOrder();
 
-   
-
-    if (res.status == 200) {
-
+    if (res.status === 200) {
       setOrder(res.data);
-
     } else {
-
       setOrder([]);
-
       messageApi.open({
-
         type: "error",
-
         content: res.data.error,
-
       });
-
     }
   };
 
@@ -131,13 +126,13 @@ function Order() {
     <>
       {contextHolder}
       <Row>
-        <Col className = "name-table" span={12}>
+        <Col className="name-table" span={12}>
           <h2>จัดการออเดอร์</h2>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
             <Link to="/order/create">
-              <Button className = "btn-1" type="primary" icon={<PlusOutlined />}>
+              <Button className="btn-1" type="primary" icon={<PlusOutlined />}>
                 สร้างออเดอร์
               </Button>
             </Link>

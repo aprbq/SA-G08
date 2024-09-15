@@ -219,4 +219,18 @@ func SetupDatabase() {
 	db.FirstOrCreate(Member, &entity.Member{
 		FristName: "Sut",
 	})
+
+	//TestDate, _ := time.Parse("2006-01-02", "1999-05-05")
+	Order := &entity.Order{
+		
+    	OrderDate:     exp_date,
+    	//menu_id: "กาแฟ",
+    	PaymentAmount: 50,
+    	EmployeeID:        1,
+    	PromotionID:         1,
+    	PaymentmethodID:        1,
+	}
+	db.FirstOrCreate(Order, &entity.Order{
+		PaymentAmount: 50,
+	})
 }
