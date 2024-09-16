@@ -64,7 +64,7 @@ func CreateMenuIngredient(c *gin.Context) {
 func GetAll(c *gin.Context) {
     var menuingredient []entity.MenuIngredient
     db := config.DB()
-    results := db.Preload("Menu").Preload("Ingredient").Find(&menuingredient)
+    results := db.Preload("Menu").Preload("Ingredients").Find(&menuingredient)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
@@ -78,7 +78,7 @@ func Get(c *gin.Context) {
     ID := c.Param("id")
     var menuingredient entity.MenuIngredient
     db := config.DB()
-    results := db.Preload("Menu").Preload("Ingredient").First(&menuingredient, ID)
+    results := db.Preload("Menu").Preload("Ingredients").First(&menuingredient, ID)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
