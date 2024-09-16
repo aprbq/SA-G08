@@ -4,14 +4,13 @@ import (
 	"net/http"
 
 	"example.com/sa-67-example/config"
-	// "example.com/sa-67-example/controller/employee"
 	"example.com/sa-67-example/entity"
 	"github.com/gin-gonic/gin"
 )
 
 func CreateMenu(c *gin.Context) {
     var menu entity.Menu
-    var menuIngredients []entity.MenuIngredient
+    // var menuIngredients []entity.MenuIngredient
 
     // Bind the JSON payload to the menu struct
     if err := c.ShouldBindJSON(&menu); err != nil {
@@ -65,19 +64,19 @@ func CreateMenu(c *gin.Context) {
         return
     }
 
-    // Process MenuIngredients (assuming you get this as part of the request)
-    if menu.MenuIngredients != nil {
-        for _, mi := range menu.MenuIngredients {
-            mi.MenuID = u.ID // Associate the MenuIngredient with the newly created menu
-            menuIngredients = append(menuIngredients, mi)
-        }
+    // // Process MenuIngredients (assuming you get this as part of the request)
+    // if menu.MenuIngredients != nil {
+    //     for _, mi := range menu.MenuIngredients {
+    //         mi.MenuID = u.ID // Associate the MenuIngredient with the newly created menu
+    //         menuIngredients = append(menuIngredients, mi)
+    //     }
 
-        // Save the MenuIngredients to the database
-        if err := db.Create(&menuIngredients).Error; err != nil {
-            c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-            return
-        }
-    }
+    //     // Save the MenuIngredients to the database
+    //     if err := db.Create(&menuIngredients).Error; err != nil {
+    //         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+    //         return
+    //     }
+    // }
 
     c.JSON(http.StatusCreated, gin.H{"message": "Created successfully", "data": u})
 }

@@ -8,6 +8,58 @@ import (
     "example.com/sa-67-example/entity"
 )
 
+func CreateMenuIngredient(c *gin.Context) {
+    var menuIngredientData struct {
+        MenuID       uint `json:"menu_id"`
+        Ingredients  []struct {
+            IngredientID uint `json:"ingredient_id"`
+            Quantity     uint `json:"quantity"`
+        } `json:"ingredients"` // ใช้ struct เพื่อรองรับ IngredientID และ Quantity
+    }
+
+    // ผูกข้อมูลจาก JSON ที่ส่งเข้ามา
+    if err := c.ShouldBindJSON(&menuIngredientData); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    db := config.DB()
+
+    // ตรวจสอบว่าเมนูที่ระบุมีอยู่หรือไม่
+    var menu entity.Menu
+    db.First(&menu, menuIngredientData.MenuID)
+    if menu.ID == 0 {
+        c.JSON(http.StatusNotFound, gin.H{"error": "menu not found"})
+        return
+    }
+
+    // ตรวจสอบและบันทึกส่วนประกอบ (ingredient) แต่ละรายการพร้อมกับ quantity
+    for _, ingredientData := range menuIngredientData.Ingredients {
+        var ingredient entity.Ingredients
+        db.First(&ingredient, ingredientData.IngredientID)
+        if ingredient.ID == 0 {
+            c.JSON(http.StatusNotFound, gin.H{"error": "ingredient not found"})
+            return
+        }
+
+        // สร้าง MenuIngredient พร้อมกับ quantity
+        menuIngredient := entity.MenuIngredient{
+            MenuID:       menuIngredientData.MenuID,
+            IngredientsID: ingredientData.IngredientID,
+            Quantity:     ingredientData.Quantity, // บันทึก quantity ด้วย
+        }
+
+        // บันทึกลงในฐานข้อมูล
+        if err := db.Create(&menuIngredient).Error; err != nil {
+            c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+            return
+        }
+    }
+
+    c.JSON(http.StatusCreated, gin.H{"message": "MenuIngredient created successfully"})
+}
+
+
 // GetAll retrieves all menu along with their associated class
 func GetAll(c *gin.Context) {
     var menuingredient []entity.MenuIngredient

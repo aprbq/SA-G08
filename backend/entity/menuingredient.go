@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type MenuIngredient struct {
 	gorm.Model
-	Quantity int `json:"quantity"` // Field to store the quantity of the ingredient
+	Quantity uint `json:"quantity"` // Field to store the quantity of the ingredient
 
 	IngredientsID uint `json:"ingredients_id"` // Foreign key for Ingredients
 	Ingredients   Ingredients `gorm:"foreignKey:IngredientsID;constraint:OnDelete:CASCADE;" json:"ingredient"` // Foreign key relationship

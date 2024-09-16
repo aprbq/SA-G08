@@ -7,9 +7,10 @@ import { MenuInterface } from "../../interfaces/Menu";
 import { OrderInterface } from "../../interfaces/Order";
 import { OrderItemInterface } from "../../interfaces/OrderItem";
 import { MemberInterface } from "../../interfaces/Member";
-
+import { MenuIngredientInterface } from "../../interfaces/MenuIngredient";
 
 import axios from "axios";
+
 
 const apiUrl = "http://localhost:8000";
 const Authorization = localStorage.getItem("token");
@@ -235,6 +236,21 @@ async function CreateMenu(data: MenuInterface) {
     .then((res) => res)
     .catch((e) => e.response);
 }
+
+async function CreateMenuIngredient(data: MenuIngredientInterface) {
+  return await axios
+    .post(`${apiUrl}/menuingredient`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function GetMenuIngredient() {
+  return await axios
+    .get(`${apiUrl}/menuingredient`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 // Promotion
 async function GetPromotion() {
   return await axios
@@ -352,6 +368,8 @@ export {
   UpdateMenuById,
   DeleteMenuById,
   CreateMenu,
+  CreateMenuIngredient,
+  GetMenuIngredient,
 
   GetOrder,
   GetOrderById,
