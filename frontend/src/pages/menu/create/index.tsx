@@ -14,10 +14,11 @@ import {
   Upload,
 } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import { MenuInterface } from "../../../interfaces/Menu";
 import { CategoryInterface } from "../../../interfaces/Category";
 import { StockInterface } from "../../../interfaces/Stock";
 import { IngredientInterface } from "../../../interfaces/Ingre";
-import { CreateMenu, GetCategory, GetStock, GetIngredients } from "../../../services/https/index";
+import { CreateMenu, CreateMenuIngredient, GetCategory, GetStock, GetIngredients } from "../../../services/https/index";
 import { useNavigate, Link } from "react-router-dom";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 import ImgCrop from "antd-img-crop";
@@ -64,7 +65,7 @@ function MenuCreate() {
     return false;  // No duplicates
   };
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: MenuInterface) => {
     if (!values.menu_ingredients || values.menu_ingredients.length === 0) {
       messageApi.open({
         type: "error",
@@ -72,7 +73,7 @@ function MenuCreate() {
       });
       return;
     }
-
+  
     // Check for duplicates
     if (checkForDuplicates(values.menu_ingredients)) {
       messageApi.open({
@@ -81,36 +82,61 @@ function MenuCreate() {
       });
       return;
     }
-
-    let payload = {
+  
+    // Prepare payload for creating menu
+    let menuPayload = {
       ...values,
       "employee_id": Number(accountid),
-      "picture": fileList[0]?.thumbUrl,
-      "menu_ingredients": values.menu_ingredients.map((item: any) => ({
-        ingredients_id: item.ingredients_id,
-        quantity: item.quantity
-      }))
+      "picture": fileList[0]?.thumbUrl || "", // Ensure picture is either URL or empty string
     };
-
-    console.log(payload);
-
-    let res = await CreateMenu(payload);
-    console.log(res);
+  
+    // Create menu
+    let res = await CreateMenu(menuPayload);
+  
     if (res.status === 201) {
       messageApi.open({
         type: "success",
         content: res.data.message,
       });
-      setTimeout(() => {
-        navigate("/menus");
-      }, 2000);
+  
+      // Extract menu ID from the response
+      const menuId = Number(res.data.data);
+  
+      // Prepare payload for creating menu ingredients
+      let ingredientsPayload = {
+        menu_id: Number(menuId),
+        ingredients: values.menu_ingredients.map((item: any) => ({
+          ingredient_id: item.ingredients_id,
+          quantity: item.quantity,
+        })),
+      };
+  
+      // Create menu ingredients
+      let ingredientsRes = await CreateMenuIngredient(ingredientsPayload);
+  
+      if (ingredientsRes.status === 201) {
+        messageApi.open({
+          type: "success",
+          content: "เมนูและวัตถุดิบถูกเพิ่มเรียบร้อยแล้ว!",
+        });
+        setTimeout(() => {
+          navigate("/menus");
+        }, 2000);
+      } else {
+        messageApi.open({
+          type: "error",
+          content: ingredientsRes.data.error || "ไม่สามารถเพิ่มวัตถุดิบได้",
+        });
+      }
     } else {
       messageApi.open({
         type: "error",
-        content: res.data.error,
+        content: res.data.error || "ไม่สามารถสร้างเมนูได้",
       });
     }
   };
+  
+  
 
   const getCategory = async () => {
     let res = await GetCategory();

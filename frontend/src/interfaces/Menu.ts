@@ -5,7 +5,11 @@ export interface MenuInterface {
 	price?: number;
 	picture?: string;
 	category_id?: number;
-	// MenuIngredientID?: number;
 	stock_id?: number;
-	employee_id?: string;
+	employee_id?: number;
+	// menu_ingredients_id?: number[];
+	menu_ingredients?: {
+		ingredient_id: number;
+		quantity: number;
+	  }[];
   }

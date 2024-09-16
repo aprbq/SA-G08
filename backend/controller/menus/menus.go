@@ -78,7 +78,7 @@ func CreateMenu(c *gin.Context) {
     //     }
     // }
 
-    c.JSON(http.StatusCreated, gin.H{"message": "Created successfully", "data": u})
+    c.JSON(http.StatusCreated, gin.H{"message": "Created successfully", "data": u.ID})
 }
 
 
