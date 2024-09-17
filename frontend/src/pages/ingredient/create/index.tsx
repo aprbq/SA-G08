@@ -24,8 +24,15 @@ import {
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const [classes, setClass] = useState<ClassInterface[]>([]); 
+    const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
 
     const onFinish = async (values: IngredientInterface) => {
+      let payload = {
+        ...values,
+        "employee_id": Number(accountid)
+      };
+      console.log(payload);
+      
       let res = await CreateIngredients(values);
       if (res.status == 201) {
         messageApi.open({
