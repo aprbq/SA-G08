@@ -8,5 +8,5 @@ export interface IngredientInterface {
 	supplier?: string;
 	exp_date?: string;
 	class_id?: number;
-	users_id?: number;
+	employee_id?: number;
   }

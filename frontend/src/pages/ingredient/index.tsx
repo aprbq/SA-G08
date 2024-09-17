@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message } from "antd";
-import { PlusOutlined, DeleteOutlined , EditOutlined, ScheduleOutlined} from "@ant-design/icons";
+import { Space, Table, Button, Col, Row, Divider, message, Modal } from "antd";
+import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetIngredients, DeleteIngredientsById } from "../../services/https/index";
-import { IngredientInterface } from "../../interfaces/Ingre";
+import { IngredientInterface } from "../../interfaces/Ingredient";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+
+const { confirm } = Modal;
 
 function Ingredients() {
   const navigate = useNavigate();
   const [ingredients , setIngredients] = useState<IngredientInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-  //const myId = localStorage.getItem("id");
 
   const columns: ColumnsType<IngredientInterface> = [
     {
@@ -75,18 +76,8 @@ function Ingredients() {
           >
             แก้ไขข้อมูล
           </Button>
-        </>
-      ),
-    },
-    {
-      title: "",
-      render: (record) => (
-        <>
-            <Button
-              type="primary"
-              className="btn-delete"
-              icon={<DeleteOutlined />}
-              onClick={() => deleteIngredientsById(record.ID)}
+          <Button type="primary" className="button" icon={<DeleteOutlined />}
+              onClick={() => showDeleteConfirm(record.ID)}
             ></Button>
         </>
       ),
@@ -109,6 +100,22 @@ function Ingredients() {
       });
     }
   };
+
+  const showDeleteConfirm = (id: string) => {
+    confirm({
+      title: "คุณแน่ใจหรือว่าต้องการลบ'วัตถุดิบ'",
+      content: "การลบจะไม่สามารถยกเลิกได้",
+      okText: "ยืนยัน",
+      okType: "danger",
+      cancelText: "ยกเลิก",
+      className:  "front-1",
+      onOk() {
+        deleteIngredientsById(id);
+      },
+      onCancel() {
+        console.log("ยกเลิกการลบ");
+      },
+    })};
 
   const getIngredients = async () => {
     let res = await GetIngredients();
@@ -140,11 +147,6 @@ function Ingredients() {
               <Button type="primary" icon={<PlusOutlined />}>
                 เพิ่มวัตถุดิบ
               </Button>
-            </Link>
-            <Link to="/ingredient/create">
-                <Button type="primary" icon={<ScheduleOutlined />} style={{ background: '#E48F44' }}>
-                    ประวัติการนำเข้า
-                </Button>
             </Link>
           </Space>
         </Col>

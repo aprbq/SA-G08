@@ -1,6 +1,6 @@
 import { UsersInterface } from "../../interfaces/IUser";
 import { SignInInterface } from "../../interfaces/SignIn";
-import { IngredientInterface } from "../../interfaces/Ingre";
+import { IngredientInterface } from "../../interfaces/Ingredient";
 import { PromotionInterface } from "../../interfaces/Promotion";
 import {ConditionInterface } from "../../interfaces/Condition";
 import { MenuInterface } from "../../interfaces/Menu";
@@ -138,7 +138,21 @@ async function DeleteIngredientsById(id: string) {
 
 async function CreateIngredients(data: IngredientInterface) {
   return await axios
-    .post(`${apiUrl}/signupingre`, data, requestOptions)
+    .post(`${apiUrl}/ingredient`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function UpdateIngredient(data: UsersInterface) {
+  return await axios
+    .put(`${apiUrl}/ingredient/${data}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function GetClass() {
+  return await axios
+    .get(`${apiUrl}/class`, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
@@ -360,6 +374,8 @@ export {
   UpdateIngredientsById,
   DeleteIngredientsById,
   CreateIngredients,
+  UpdateIngredient,
+  GetClass,
 
   GetCategory,
   GetStock,

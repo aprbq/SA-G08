@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Space,
   Button,
@@ -14,18 +14,22 @@ import {
   Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { IngredientInterface } from "../../../interfaces/Ingre";
-import { GetIngredientsById, UpdateIngredientsById } from "../../../services/https/index";
+import { IngredientInterface } from "../../../interfaces/Ingredient";
+import { ClassInterface } from "../../../interfaces/ClassInterface";
+import { GetClass, GetIngredientsById, UpdateIngredientsById } from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 
+const { Option } = Select;
+
 function IngredientEdit() {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: any }>();
+  let { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
+  const [Class, setClass] = useState<ClassInterface[]>([]);
   const [form] = Form.useForm();
 
-  const getIngredientsById = async (id: string) => {
+  const getIngredientsById = async (id: string | undefined) => {
     let res = await GetIngredientsById(id);
     if (res.status == 200) {
       form.setFieldsValue({
@@ -53,17 +57,30 @@ function IngredientEdit() {
     let payload = {
       ...values,
     };
-
-    const res = await UpdateIngredientsById(id, payload);
+    console.log(payload)
+    const res = await UpdateIngredientsById(id, values);
     if (res.status == 200) {
       messageApi.open({
         type: "success",
-        content: res.data.message,
+        content: "update successsfully",
       });
       setTimeout(() => {
         navigate("/ingredient");
       }, 2000);
     } else {
+      messageApi.open({
+        type: "error",
+        content: "error update",
+      });
+    }
+  };
+
+  const getClass = async () => {
+    let res = await GetClass();
+    if (res.status == 200) {
+      setClass(res.data);
+    } else {
+      setClass([]);
       messageApi.open({
         type: "error",
         content: res.data.error,
@@ -73,7 +90,8 @@ function IngredientEdit() {
 
   useEffect(() => {
     getIngredientsById(id);
-  }, []);
+    getClass();
+  }, [id]);
 
   return (
     <div>
@@ -116,17 +134,13 @@ function IngredientEdit() {
                   },
                 ]}
               >
-                <Select
-                  defaultValue=""
-                  style={{ width: "100%" }}
-                  options={[
-                    { value: "", label: "กรุณาเลือกประเภท", disabled: true },
-                    { value: 1, label: "Milk" },
-                    { value: 2, label: "Tea" },
-                    { value: 3, label: "Coffee" },
-                    { value: 4, label: "Syrups" },
-                  ]}
-                />
+                <Select allowClear>
+                  {Class.map((item) => (
+                    <Option value={item.ID} key={item.class}>
+                      {item.class}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
               </Col>
 
@@ -143,7 +157,6 @@ function IngredientEdit() {
                 >
                   <InputNumber
                     min={0}
-                    max={99}
                     defaultValue={0}
                     style={{ width: "100%" }}
                   />
@@ -178,7 +191,6 @@ function IngredientEdit() {
                 >
                   <InputNumber
                     min={0}
-                    max={9999}
                     defaultValue={0}
                     style={{ width: "100%" }}
                     step={0.01} 
@@ -199,7 +211,6 @@ function IngredientEdit() {
                 >
                   <InputNumber
                     min={0}
-                    max={9999}
                     defaultValue={0}
                     style={{ width: "100%" }}
                     step={0.01} 
