@@ -129,7 +129,7 @@ async function UpdateIngredientsById(id: string, data: IngredientInterface) {
     .catch((e) => e.response);
 }
 
-async function DeleteIngredientsById(id: string) {
+async function DeleteIngredientsById(id: string | undefined) {
   return await axios
     .delete(`${apiUrl}/ingredient/${id}`, requestOptions)
     .then((res) => res)

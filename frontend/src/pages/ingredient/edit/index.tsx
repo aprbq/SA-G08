@@ -24,7 +24,8 @@ const { Option } = Select;
 
 function IngredientEdit() {
   const navigate = useNavigate();
-  let { id } = useParams();
+  //let { id } = useParams();
+  const { id } = useParams<{ id: any }>();
   const [messageApi, contextHolder] = message.useMessage();
   const [Class, setClass] = useState<ClassInterface[]>([]);
   const [form] = Form.useForm();

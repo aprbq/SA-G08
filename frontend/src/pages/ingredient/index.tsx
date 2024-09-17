@@ -75,7 +75,7 @@ function Ingredients() {
             icon={<EditOutlined />}
           >
           </Button>
-          <Button type="primary" className="button" icon={<DeleteOutlined />}
+          <Button type="primary" className="btn-delete" icon={<DeleteOutlined />}
               onClick={() => showDeleteConfirm(record.ID)}
             ></Button>
         </>
