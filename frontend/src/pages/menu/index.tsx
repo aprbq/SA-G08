@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message, Modal } from "antd";
+import { Space, Table, Button, Col, Row, Divider, message, Modal, List, Typography } from "antd";
 import { PlusOutlined, DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetMenu, DeleteMenuById } from "../../services/https/index";
+import { GetMenu, DeleteMenuById, GetMenuIngredientById } from "../../services/https/index";
 import { MenuInterface } from "../../interfaces/Menu";
+import { IngredientInterface } from "../../interfaces/Ingredient";
 import { Link, useNavigate } from "react-router-dom";
 
 const { confirm } = Modal;
+const { Title, Text } = Typography;
 
 function Menus() {
   const navigate = useNavigate();
   const [menus, setMenu] = useState<MenuInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]); // เก็บข้อมูลวัตถุดิบ
+  const [selectedIngredients, setSelectedIngredients] = useState<IngredientInterface[]>([]);
 
   const columns: ColumnsType<MenuInterface> = [
     {
@@ -64,7 +66,7 @@ function Menus() {
         <Button
           type="default"
           icon={<EyeOutlined />}
-          onClick={() => handleViewIngredients(record.ingredients)} // ฟังก์ชันดูวัตถุดิบ
+          onClick={() => handleViewIngredients(record.ID)} // แก้ไขเป็นดึงจาก API
         >
           ดูวัตถุดิบ
         </Button>
@@ -100,45 +102,57 @@ function Menus() {
     },
   ];
 
-  // ฟังก์ชันดูวัตถุดิบ
-  const handleViewIngredients = (ingredients: string[]) => {
-    setSelectedIngredients(ingredients); // เซ็ตข้อมูลวัตถุดิบที่เลือก
-    setIsModalVisible(true); // เปิด Modal
+  const handleViewIngredients = async (menuId: string) => {
+    try {
+      const res = await GetMenuIngredientById(menuId);
+      console.log('API Response:', res);
+  
+      if (res.status === 200) {
+        console.log('Ingredients:', res.data);
+        setSelectedIngredients(res.data || []);
+        setIsModalVisible(true);
+      } else if (res.status === 204) {
+        messageApi.error("ไม่พบวัตถุดิบ");
+      } else {
+        messageApi.error("เกิดข้อผิดพลาดในการดึงข้อมูลวัตถุดิบ");
+      }
+    } catch (error) {
+      console.error("Error fetching ingredients:", error);
+      messageApi.error("เกิดข้อผิดพลาดในการดึงข้อมูลวัตถุดิบ");
+    }
   };
 
-  // ปิด Modal
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
   const deleteMenuById = async (id: string) => {
     try {
-        let res = await DeleteMenuById(id);
+      let res = await DeleteMenuById(id);
 
-        if (res.status === 200) {
-            messageApi.open({
-                type: "success",
-                content: res.data.message,
-            });
-            await getMenu();  // รีเฟรชเมนู
-        } else {
-            messageApi.open({
-                type: "error",
-                content: res.data.error,
-            });
-        }
-    } catch (error) {
+      if (res.status === 200) {
         messageApi.open({
-            type: "error",
-            content: "เกิดข้อผิดพลาดในการลบเมนู",
+          type: "success",
+          content: res.data.message,
         });
+        await getMenu();  // รีเฟรชเมนู
+      } else {
+        messageApi.open({
+          type: "error",
+          content: res.data.error,
+        });
+      }
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "เกิดข้อผิดพลาดในการลบเมนู",
+      });
     }
-};
-
+  };
 
   const getMenu = async () => {
     let res = await GetMenu();
-    if (res.status == 200) {
+    if (res.status === 200) {
       setMenu(res.data);
     } else {
       setMenu([]);
@@ -174,7 +188,7 @@ function Menus() {
       {contextHolder}
       <Row>
         <Col className="name-table" span={12}>
-          <h2>จัดการเมนู</h2>
+          <h2 >จัดการเมนู</h2>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
@@ -199,19 +213,26 @@ function Menus() {
       {/* Modal สำหรับแสดงวัตถุดิบ */}
       <Modal
         title="วัตถุดิบของเมนู"
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={handleCancel}
-        footer={[
-          <Button key="close" onClick={handleCancel}>
-            ปิด
-          </Button>,
-        ]}
+        footer={null}
       >
-        <ul>
-          {selectedIngredients.map((ingredient, index) => (
-            <li key={index}>{ingredient}</li>
-          ))}
-        </ul>
+        {selectedIngredients.length > 0 ? (
+          <List
+            itemLayout="horizontal"
+            dataSource={selectedIngredients}
+            renderItem={(ingredient) => (
+              <List.Item>
+                <List.Item.Meta
+                  title={<Text strong>{ingredient.name}</Text>}
+                  description={`จำนวน: ${ingredient.quantity}`}
+                />
+              </List.Item>
+            )}
+          />
+        ) : (
+          <p>ไม่มีวัตถุดิบสำหรับเมนูนี้</p>
+        )}
       </Modal>
     </>
   );

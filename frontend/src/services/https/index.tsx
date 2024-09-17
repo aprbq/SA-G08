@@ -265,6 +265,13 @@ async function GetMenuIngredient() {
     .catch((e) => e.response);
 }
 
+async function GetMenuIngredientById(id: string) {
+  return await axios
+    .get(`${apiUrl}/menuingredient/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 // Promotion
 async function GetPromotion() {
   return await axios
@@ -386,6 +393,7 @@ export {
   CreateMenu,
   CreateMenuIngredient,
   GetMenuIngredient,
+  GetMenuIngredientById,
 
   GetOrder,
   GetOrderById,

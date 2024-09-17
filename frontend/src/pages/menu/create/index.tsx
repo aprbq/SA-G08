@@ -17,7 +17,7 @@ import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { MenuInterface } from "../../../interfaces/Menu";
 import { CategoryInterface } from "../../../interfaces/Category";
 import { StockInterface } from "../../../interfaces/Stock";
-import { IngredientInterface } from "../../../interfaces/Ingre";
+import { IngredientInterface } from "../../../interfaces/Ingredient";
 import { CreateMenu, CreateMenuIngredient, GetCategory, GetStock, GetIngredients } from "../../../services/https/index";
 import { useNavigate, Link } from "react-router-dom";
 import type { GetProp, UploadFile, UploadProps } from "antd";

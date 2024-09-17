@@ -75,20 +75,33 @@ func GetAll(c *gin.Context) {
 
 // Get retrieves a single menu by ID along with their associated class
 func Get(c *gin.Context) {
-    ID := c.Param("id")
-    var menuingredient entity.MenuIngredient
+    menuID := c.Param("id")
+
+    var ingredients []entity.MenuIngredient
     db := config.DB()
-    results := db.Preload("Menu").Preload("Ingredients").First(&menuingredient, ID)
+    results := db.Preload("Menu").Preload("Ingredients").Where("menu_id = ?", menuID).Find(&ingredients)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
         return
     }
-    if menuingredient.ID == 0 {
-        c.JSON(http.StatusNoContent, gin.H{})
+
+    if len(ingredients) == 0 {
+        c.JSON(http.StatusNoContent, nil) // No content found
         return
     }
-    c.JSON(http.StatusOK, menuingredient)
+
+    // Format the response to include ingredients information
+    var response []map[string]interface{}
+    for _, ingredient := range ingredients {
+        response = append(response, map[string]interface{}{
+            "ingredient_id": ingredient.IngredientsID,
+            "quantity":      ingredient.Quantity,
+            "name": ingredient.Ingredients.Name, // Assuming Ingredient has a Name field
+        })
+    }
+
+    c.JSON(http.StatusOK, response)
 }
 
 // Update updates the details of an existing menu
