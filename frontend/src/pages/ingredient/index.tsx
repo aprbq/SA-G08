@@ -74,7 +74,6 @@ function Ingredients() {
             className='btn-1'
             icon={<EditOutlined />}
           >
-            แก้ไขข้อมูล
           </Button>
           <Button type="primary" className="button" icon={<DeleteOutlined />}
               onClick={() => showDeleteConfirm(record.ID)}
