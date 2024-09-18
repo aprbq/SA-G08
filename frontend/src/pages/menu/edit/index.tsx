@@ -11,14 +11,20 @@ import {
   message,
   InputNumber,
   Select,
-  Upload,
 } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
-import { MenuInterface } from "../../../interfaces/Menu";
 import { CategoryInterface } from "../../../interfaces/Category";
 import { StockInterface } from "../../../interfaces/Stock";
 import { IngredientInterface } from "../../../interfaces/Ingredient";
-import { GetMenuById, UpdateMenuById, GetCategory, GetStock, GetIngredients } from "../../../services/https/index";
+import {
+  GetMenuById,
+  UpdateMenuById,
+  GetCategory,
+  GetStock,
+  GetMenuIngredientById,
+  UpdateMenuIngredientById,
+  GetIngredients,   // <-- Import the new service here
+} from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 
 const { Option } = Select;
@@ -30,7 +36,6 @@ function MenuEdit() {
   const [category, setCategory] = useState<CategoryInterface[]>([]);
   const [stock, setStock] = useState<StockInterface[]>([]);
   const [ingredients, setIngredients] = useState<IngredientInterface[]>([]);
-  
   const [form] = Form.useForm();
 
   const getMenuById = async (id: string) => {
@@ -44,8 +49,8 @@ function MenuEdit() {
         description: menuData.description,
         category_id: menuData.category_id,
         stock_id: menuData.stock_id,
-        menu_ingredients: menuData.menu_ingredients || [], // Assuming menu_ingredients is an array of objects
       });
+      getMenuIngredientsById(id);  // <-- Fetch ingredients after setting menu data
     } else {
       messageApi.open({
         type: "error",
@@ -57,31 +62,71 @@ function MenuEdit() {
     }
   };
 
-  const onFinish = async (values: any) => {
-    let payload = {
-      ...values,
-      menu_ingredients: values.menu_ingredients.map((item: any) => ({
-        ingredients_id: item.ingredients_id,
-        quantity: item.quantity,
-      })),
-    };
-
-    const res = await UpdateMenuById(id, payload);
+  const getMenuIngredientsById = async (id: string) => {
+    let res = await GetMenuIngredientById(id);
     if (res.status === 200) {
-      messageApi.open({
-        type: "success",
-        content: res.data.message,
+      const ingredientData = res.data;
+      console.log('Ingredient Data:', ingredientData);  // ตรวจสอบข้อมูลที่ได้รับ
+      form.setFieldsValue({
+        menu_ingredients: ingredientData.map((item: any) => ({
+          ingredients_id: item.name,
+          quantity: item.quantity,
+        })),
       });
-      setTimeout(() => {
-        navigate("/menus");
-      }, 2000);
     } else {
       messageApi.open({
         type: "error",
-        content: res.data.error,
+        content: "ไม่สามารถดึงข้อมูลวัตถุดิบได้",
       });
     }
   };
+  
+  const onFinish = async (values: any) => {
+    try {
+      let payload = {
+        ...values,
+        menu_ingredients: values.menu_ingredients.map((item: any) => ({
+          ingredients_id: item.ingredients_id,
+          quantity: item.quantity,
+        })),
+      };
+  
+      // Update the menu
+      const menuRes = await UpdateMenuById(id, payload);
+      if (menuRes.status === 200) {
+        messageApi.open({
+          type: "success",
+          content: menuRes.data.message,
+        });
+  
+        // Now update the menu ingredients
+        const ingredientsRes = await UpdateMenuIngredientById(id, values.menu_ingredients);
+        if (ingredientsRes.status === 200) {
+          messageApi.open({
+            type: "success",
+            content: 'Menu ingredients updated successfully!',
+          });
+        } else {
+          throw new Error('Failed to update menu ingredients');
+        }
+  
+        setTimeout(() => {
+          navigate("/menus");
+        }, 2000);
+      } else {
+        messageApi.open({
+          type: "error",
+          content: menuRes.data.error,
+        });
+      }
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: 'An error occurred while updating the menu.',
+      });
+    }
+  };
+  
 
   const getCategory = async () => {
     let res = await GetCategory();
@@ -110,7 +155,7 @@ function MenuEdit() {
   };
 
   const getIngredients = async () => {
-    let res = await GetIngredients();
+    let res = await GetIngredients();console.log("Ingredients state:", ingredients);
     if (res.status === 200) {
       setIngredients(res.data);
     } else {
@@ -127,6 +172,7 @@ function MenuEdit() {
     getCategory();
     getStock();
     getIngredients();
+    
   }, [id]);
 
   return (
@@ -213,64 +259,75 @@ function MenuEdit() {
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-              <Form.List name="menu_ingredients">
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, fieldKey, ...restField }) => (
-                      <Row key={key} gutter={[16, 0]} align="middle">
-                        <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-                          <Form.Item
-                            {...restField}
-                            name={[name, 'ingredients_id']}
-                            label="วัตถุดิบ"
-                            rules={[{ required: true, message: 'กรุณากรอกวัตถุดิบ!' }]}
-                          >
-                            <Select placeholder="Select ingredient">
-                              {ingredients.map((item) => (
-                                <Option value={item.ID} key={item.ID}>
-                                  {item.name}
-                                </Option>
-                              ))}
-                            </Select>
-                          </Form.Item>
-                        </Col>
+            <Form.List name="menu_ingredients">
+  {(fields, { add, remove }) => (
+    <>
+      {fields.map(({ key, name, ...restField }) => (
+        <Row key={key} gutter={[16, 0]} align="middle">
+          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
+            <Form.Item
+              {...restField}
+              name={[name, 'ingredients_id']}
+              label="วัตถุดิบ"
+              rules={[{ required: true, message: 'กรุณากรอกวัตถุดิบ!' }]}
+            >
+              <Select
+                placeholder="เลือกวัตถุดิบ"
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.children as unknown as string)
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+              >
+                {ingredients.map((item) => (
+                  <Option value={item.ID} key={item.ID}>
+                    {item.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
 
-                        <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-                          <Form.Item
-                            {...restField}
-                            name={[name, 'quantity']}
-                            label="จำนวน"
-                            rules={[{ required: true, message: 'กรุณากรอกจำนวน!' }]}
-                          >
-                            <InputNumber min={0} style={{ width: "100%" }} />
-                          </Form.Item>
-                        </Col>
+          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
+            <Form.Item
+              {...restField}
+              name={[name, 'quantity']}
+              label="จำนวน"
+              rules={[{ required: true, message: 'กรุณากรอกจำนวน!' }]}
+            >
+              <InputNumber min={0} style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
 
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                          <Button
-                            type="link"
-                            icon={<MinusCircleOutlined />}
-                            onClick={() => remove(name)}
-                          >
-                            ลบ
-                          </Button>
-                        </Col>
-                      </Row>
-                    ))}
+          <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+            <Button
+              type="link"
+              icon={<MinusCircleOutlined />}
+              onClick={() => remove(name)}
+            >
+              ลบ
+            </Button>
+          </Col>
+        </Row>
+      ))}
 
-                    <Form.Item>
-                      <Button
-                        type="dashed"
-                        onClick={() => add()}
-                        block
-                        icon={<PlusOutlined />}
-                      >
-                        เพิ่มวัตถุดิบ
-                      </Button>
-                    </Form.Item>
-                  </>
-                )}
-              </Form.List>
+      <Form.Item>
+        <Button
+          type="dashed"
+          onClick={() => add()}
+          block
+          icon={<PlusOutlined />}
+        >
+          เพิ่มวัตถุดิบ
+        </Button>
+      </Form.Item>
+    </>
+  )}
+</Form.List>
+
+
             </Col>
           </Row>
 

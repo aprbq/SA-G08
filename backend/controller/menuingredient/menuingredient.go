@@ -12,7 +12,7 @@ func CreateMenuIngredient(c *gin.Context) {
     var menuIngredientData struct {
         MenuID       uint `json:"menu_id"`
         Ingredients  []struct {
-            IngredientID uint `json:"ingredient_id"`
+            IngredientID uint `json:"ingredients_id"`
             Quantity     uint `json:"quantity"`
         } `json:"ingredients"` // ใช้ struct เพื่อรองรับ IngredientID และ Quantity
     }
@@ -95,7 +95,7 @@ func Get(c *gin.Context) {
     var response []map[string]interface{}
     for _, ingredient := range ingredients {
         response = append(response, map[string]interface{}{
-            "ingredient_id": ingredient.IngredientsID,
+            "ingredients_id": ingredient.IngredientsID,
             "quantity":      ingredient.Quantity,
             "name": ingredient.Ingredients.Name, // Assuming Ingredient has a Name field
         })
@@ -104,30 +104,64 @@ func Get(c *gin.Context) {
     c.JSON(http.StatusOK, response)
 }
 
-// Update updates the details of an existing menu
+// Update updates the details of an existing menu's ingredients
 func Update(c *gin.Context) {
-    var menuingredient entity.MenuIngredient
-    MenuIngredientID := c.Param("id")
+    var menuIngredientData struct {
+        MenuID      uint `json:"menu_id"`
+        Ingredients []struct {
+            IngredientID uint `json:"ingredients_id"`
+            Quantity     uint `json:"quantity"`
+        } `json:"ingredients"`
+    }
+
+    // Bind the incoming JSON payload to the struct
+    if err := c.ShouldBindJSON(&menuIngredientData); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
     db := config.DB()
 
-    result := db.First(&menuingredient, MenuIngredientID)
-    if result.Error != nil {
-        c.JSON(http.StatusNotFound, gin.H{"error": "id not found"})
+    // Check if the menu exists
+    var menu entity.Menu
+    db.First(&menu, menuIngredientData.MenuID)
+    if menu.ID == 0 {
+        c.JSON(http.StatusNotFound, gin.H{"error": "Menu not found"})
         return
     }
 
-    if err := c.ShouldBindJSON(&menuingredient); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request, unable to map payload"})
+    // Delete existing ingredients for this menu
+    if err := db.Where("menu_id = ?", menuIngredientData.MenuID).Delete(&entity.MenuIngredient{}).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete existing ingredients"})
         return
     }
 
-    result = db.Save(&menuingredient)
-    if result.Error != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
-        return
+    // Add new ingredients
+    for _, ingredientData := range menuIngredientData.Ingredients {
+        var ingredient entity.Ingredients
+        db.First(&ingredient, ingredientData.IngredientID)
+        if ingredient.ID == 0 {
+            c.JSON(http.StatusNotFound, gin.H{"error": "Ingredient not found"})
+            return
+        }
+
+        // Create MenuIngredient entry
+        menuIngredient := entity.MenuIngredient{
+            MenuID:        menuIngredientData.MenuID,
+            IngredientsID: ingredientData.IngredientID,
+            Quantity:      ingredientData.Quantity,
+        }
+
+        // Save the new MenuIngredient
+        if err := db.Create(&menuIngredient).Error; err != nil {
+            c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+            return
+        }
     }
-    c.JSON(http.StatusOK, gin.H{"message": "Updated successful"})
+
+    c.JSON(http.StatusOK, gin.H{"message": "Menu ingredients updated successfully"})
 }
+
 
 // Delete removes a menu by ID
 func Delete(c *gin.Context) {

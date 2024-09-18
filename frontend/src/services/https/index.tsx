@@ -272,6 +272,13 @@ async function GetMenuIngredientById(id: string) {
     .catch((e) => e.response);
 }
 
+async function UpdateMenuIngredientById(id: string, data: MenuIngredientInterface) {
+  return await axios
+    .put(`${apiUrl}/menuingredient/${id}`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 // Promotion
 async function GetPromotion() {
   return await axios
@@ -394,6 +401,7 @@ export {
   CreateMenuIngredient,
   GetMenuIngredient,
   GetMenuIngredientById,
+  UpdateMenuIngredientById,
 
   GetOrder,
   GetOrderById,
