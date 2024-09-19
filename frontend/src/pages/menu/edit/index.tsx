@@ -69,7 +69,7 @@ function MenuEdit() {
       console.log('Ingredient Data:', ingredientData);  // ตรวจสอบข้อมูลที่ได้รับ
       form.setFieldsValue({
         menu_ingredients: ingredientData.map((item: any) => ({
-          ingredients_id: item.name,
+          ingredients_id: item.ingredients_id,
           quantity: item.quantity,
         })),
       });
@@ -83,24 +83,29 @@ function MenuEdit() {
   
   const onFinish = async (values: any) => {
     try {
-      let payload = {
-        ...values,
-        menu_ingredients: values.menu_ingredients.map((item: any) => ({
-          ingredients_id: item.ingredients_id,
-          quantity: item.quantity,
-        })),
-      };
-  
-      // Update the menu
-      const menuRes = await UpdateMenuById(id, payload);
+      const { menu_ingredients, ...menuData } = values;
+      console.log('Menu Ingredients Payload:', menu_ingredients);
+      
+      // Proceed with menu update
+      const menuRes = await UpdateMenuById(id, menuData);
       if (menuRes.status === 200) {
         messageApi.open({
           type: "success",
           content: menuRes.data.message,
         });
   
-        // Now update the menu ingredients
-        const ingredientsRes = await UpdateMenuIngredientById(id, values.menu_ingredients);
+        // Ingredients payload now includes menu_id
+        const ingredientsPayload = {
+          menu_id: Number(id),  // <-- Ensure you send the menu_id
+          ingredients: menu_ingredients.map((item: any) => ({
+            ingredients_id: item.ingredients_id,
+            quantity: item.quantity,
+          })),
+        };
+  
+        console.log('Sending Ingredients Payload:', ingredientsPayload);
+        const ingredientsRes = await UpdateMenuIngredientById(id, ingredientsPayload);
+  
         if (ingredientsRes.status === 200) {
           messageApi.open({
             type: "success",
@@ -126,6 +131,9 @@ function MenuEdit() {
       });
     }
   };
+  
+  
+  
   
 
   const getCategory = async () => {

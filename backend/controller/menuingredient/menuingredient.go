@@ -130,32 +130,32 @@ func Update(c *gin.Context) {
         return
     }
 
-    // Delete existing ingredients for this menu
-    if err := db.Where("menu_id = ?", menuIngredientData.MenuID).Delete(&entity.MenuIngredient{}).Error; err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete existing ingredients"})
-        return
-    }
-
-    // Add new ingredients
+    // Loop through the ingredients
     for _, ingredientData := range menuIngredientData.Ingredients {
-        var ingredient entity.Ingredients
-        db.First(&ingredient, ingredientData.IngredientID)
-        if ingredient.ID == 0 {
-            c.JSON(http.StatusNotFound, gin.H{"error": "Ingredient not found"})
-            return
-        }
+        var menuIngredient entity.MenuIngredient
 
-        // Create MenuIngredient entry
-        menuIngredient := entity.MenuIngredient{
-            MenuID:        menuIngredientData.MenuID,
-            IngredientsID: ingredientData.IngredientID,
-            Quantity:      ingredientData.Quantity,
-        }
+        // Check if the ingredient already exists for this menu
+        result := db.Where("menu_id = ? AND ingredients_id = ?", menuIngredientData.MenuID, ingredientData.IngredientID).First(&menuIngredient)
 
-        // Save the new MenuIngredient
-        if err := db.Create(&menuIngredient).Error; err != nil {
-            c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-            return
+        if result.RowsAffected > 0 {
+            // If it exists, update the quantity
+            menuIngredient.Quantity = ingredientData.Quantity
+            if err := db.Save(&menuIngredient).Error; err != nil {
+                c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update ingredient"})
+                return
+            }
+        } else {
+            // If it doesn't exist, create a new MenuIngredient
+            newMenuIngredient := entity.MenuIngredient{
+                MenuID:        menuIngredientData.MenuID,
+                IngredientsID: ingredientData.IngredientID,
+                Quantity:      ingredientData.Quantity,
+            }
+
+            if err := db.Create(&newMenuIngredient).Error; err != nil {
+                c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+                return
+            }
         }
     }
 
