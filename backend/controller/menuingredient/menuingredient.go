@@ -130,7 +130,17 @@ func Update(c *gin.Context) {
         return
     }
 
-    // Loop through the ingredients
+    // Get the current ingredients for this menu
+    var currentMenuIngredients []entity.MenuIngredient
+    db.Where("menu_id = ?", menuIngredientData.MenuID).Find(&currentMenuIngredients)
+
+    // Create a map to track the new ingredients from the request
+    newIngredientsMap := make(map[uint]uint)
+    for _, ingredientData := range menuIngredientData.Ingredients {
+        newIngredientsMap[ingredientData.IngredientID] = ingredientData.Quantity
+    }
+
+    // Update or add new ingredients
     for _, ingredientData := range menuIngredientData.Ingredients {
         var menuIngredient entity.MenuIngredient
 
@@ -159,8 +169,19 @@ func Update(c *gin.Context) {
         }
     }
 
+    // Remove ingredients that are no longer in the new update
+    for _, currentIngredient := range currentMenuIngredients {
+        if _, exists := newIngredientsMap[currentIngredient.IngredientsID]; !exists {
+            if err := db.Delete(&entity.MenuIngredient{}, "menu_id = ? AND ingredients_id = ?", menuIngredientData.MenuID, currentIngredient.IngredientsID).Error; err != nil {
+                c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete ingredient"})
+                return
+            }
+        }
+    }
+
     c.JSON(http.StatusOK, gin.H{"message": "Menu ingredients updated successfully"})
 }
+
 
 
 // Delete removes a menu by ID
