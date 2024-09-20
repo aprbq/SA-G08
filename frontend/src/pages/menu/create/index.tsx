@@ -54,35 +54,18 @@ function MenuCreate() {
     imgWindow?.document.write(image.outerHTML);
   };
 
-  const checkForDuplicates = (ingredientsList: any[]) => {
-    const ids = new Set();
-    for (const item of ingredientsList) {
-      if (ids.has(item.ingredients_id)) {
-        return true;  // Duplicate found
-      }
-      ids.add(item.ingredients_id);
-    }
-    return false;  // No duplicates
-  };
+  // const checkForDuplicates = (ingredientsList: any[]) => {
+  //   const ids = new Set();
+  //   for (const item of ingredientsList) {
+  //     if (ids.has(item.ingredients_id)) {
+  //       return true;  // Duplicate found
+  //     }
+  //     ids.add(item.ingredients_id);
+  //   }
+  //   return false;  // No duplicates
+  // };
 
   const onFinish = async (values: MenuInterface) => {
-    if (!values.menu_ingredients || values.menu_ingredients.length === 0) {
-      messageApi.open({
-        type: "error",
-        content: "กรุณาเพิ่มวัตถุดิบ!",
-      });
-      return;
-    }
-  
-    // Check for duplicates
-    if (checkForDuplicates(values.menu_ingredients)) {
-      messageApi.open({
-        type: "error",
-        content: "วัตถุดิบมีการเพิ่มซ้ำ!",
-      });
-      return;
-    }
-  
     // Prepare payload for creating menu
     let menuPayload = {
       ...values,
@@ -105,7 +88,7 @@ function MenuCreate() {
       // Prepare payload for creating menu ingredients
       let ingredientsPayload = {
         menu_id: Number(menuId),
-        ingredients: values.menu_ingredients.map((item: any) => ({
+        ingredients: values.menu_ingredients!.map((item: any) => ({
           ingredient_id: item.ingredients_id,
           quantity: item.quantity,
         })),
@@ -135,6 +118,8 @@ function MenuCreate() {
       });
     }
   };
+  
+  
   
   
 
@@ -191,7 +176,9 @@ function MenuCreate() {
         <h2>เพิ่มข้อมูลเมนู</h2>
         <Divider />
 
-        <Form name="basic" layout="vertical" onFinish={onFinish} autoComplete="off">
+        <Form name="basic" layout="vertical" onFinish={onFinish}onFinishFailed={() => {
+            messageApi.error('กรุณาตรวจสอบข้อมูลและเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ');
+          }} autoComplete="off">
           <Row gutter={[16, 0]}>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
@@ -291,70 +278,110 @@ function MenuCreate() {
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-              <Form.List
-                name="menu_ingredients"
-                initialValue={[]}
+            <Form.List
+  name="menu_ingredients"
+  rules={[
+    {
+      validator: async (_, menu_ingredients) => {
+        if (!menu_ingredients || menu_ingredients.length < 1) {
+          return Promise.reject(
+            new Error('กรุณาเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ!')
+          );
+        }
+      },
+    },
+  ]}
+>
+  {(fields, { add, remove }) => (
+    <>
+      {fields.map(({ key, name, ...restField }, index) => (
+        <Row key={key} gutter={[16, 0]} align="middle">
+          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
+            <Form.Item
+              {...restField}
+              name={[name, 'ingredients_id']}
+              label="วัตถุดิบ"
+              rules={[
+                { required: true, message: 'กรุณาเลือกวัตถุดิบ!' },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    const ingredients = getFieldValue('menu_ingredients') || [];
+                    const selectedIngredients = ingredients.map(
+                      (ingredient: any) => ingredient.ingredients_id
+                    );
+                    if (
+                      selectedIngredients.filter(
+                        (ingredientId: number) => ingredientId === value
+                      ).length > 1
+                    ) {
+                      return Promise.reject(
+                        new Error('วัตถุดิบนี้ถูกเพิ่มแล้ว!')
+                      );
+                    }
+                    return Promise.resolve();
+                  },
+                }),
+              ]}
+            >
+              <Select
+                placeholder="เลือกวัตถุดิบ"
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.children as unknown as string)
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
               >
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, ...restField }) => (
-                      <Row key={key} gutter={[16, 0]} align="middle">
-                        <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-                          <Form.Item
-                            {...restField}
-                            name={[name, 'ingredients_id']}
-                            label="วัตถุดิบ"
-                            rules={[{ required: true, message: 'กรุณากรอกวัตถุดิบ!' }]}
-                          >
-                            <Select placeholder="Select ingredient">
-                              {ingredients.map((item) => (
-                                <Option value={item.ID} key={item.ID}>
-                                  {item.name}
-                                </Option>
-                              ))}
-                            </Select>
-                          </Form.Item>
-                        </Col>
+                {ingredients.map((item) => (
+                  <Option value={item.ID} key={item.ID}>
+                    {item.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
 
-                        <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-                          <Form.Item
-                            {...restField}
-                            name={[name, 'quantity']}
-                            label="จำนวน"
-                            rules={[{ required: true, message: 'กรุณากรอกจำนวน!' }]}
-                          >
-                            <InputNumber
-                              min={0}
-                              style={{ width: "100%" }}
-                            />
-                          </Form.Item>
-                        </Col>
+          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
+            <Form.Item
+              {...restField}
+              name={[name, 'quantity']}
+              label="จำนวน"
+              rules={[
+                { required: true, message: 'กรุณากรอกจำนวน!' },
+                { type: 'number', min: 1, message: 'จำนวนต้องมากกว่า 0!' },
+              ]}
+            >
+              <InputNumber min={1} style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
 
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                          <Button
-                            type="link"
-                            icon={<MinusCircleOutlined />}
-                            onClick={() => remove(name)}
-                          >
-                            ลบ
-                          </Button>
-                        </Col>
-                      </Row>
-                    ))}
+          <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+            <Button
+              type="link"
+              icon={<MinusCircleOutlined />}
+              onClick={() => remove(name)}
+            >
+              ลบ
+            </Button>
+          </Col>
+        </Row>
+      ))}
 
-                    <Form.Item>
-                      <Button
-                        type="dashed"
-                        onClick={() => add()}
-                        block
-                        icon={<PlusOutlined />}
-                      >
-                        เพิ่มวัตถุดิบ
-                      </Button>
-                    </Form.Item>
-                  </>
-                )}
-              </Form.List>
+      <Form.Item>
+        <Button
+          type="dashed"
+          onClick={() => add()}
+          block
+          icon={<PlusOutlined />}
+        >
+          เพิ่มวัตถุดิบ
+        </Button>
+      </Form.Item>
+    </>
+  )}
+</Form.List>
+
             </Col>
           </Row>
 

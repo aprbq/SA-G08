@@ -80,12 +80,12 @@ function MenuEdit() {
       });
     }
   };
-  
+
   const onFinish = async (values: any) => {
     try {
       const { menu_ingredients, ...menuData } = values;
       console.log('Menu Ingredients Payload:', menu_ingredients);
-      
+
       // Proceed with menu update
       const menuRes = await UpdateMenuById(id, menuData);
       if (menuRes.status === 200) {
@@ -93,7 +93,7 @@ function MenuEdit() {
           type: "success",
           content: menuRes.data.message,
         });
-  
+
         // Ingredients payload now includes menu_id
         const ingredientsPayload = {
           menu_id: Number(id),  // <-- Ensure you send the menu_id
@@ -102,10 +102,10 @@ function MenuEdit() {
             quantity: item.quantity,
           })),
         };
-  
+
         console.log('Sending Ingredients Payload:', ingredientsPayload);
         const ingredientsRes = await UpdateMenuIngredientById(id, ingredientsPayload);
-  
+
         if (ingredientsRes.status === 200) {
           messageApi.open({
             type: "success",
@@ -114,7 +114,7 @@ function MenuEdit() {
         } else {
           throw new Error('Failed to update menu ingredients');
         }
-  
+
         setTimeout(() => {
           navigate("/menus");
         }, 2000);
@@ -131,10 +131,10 @@ function MenuEdit() {
       });
     }
   };
-  
-  
-  
-  
+
+
+
+
 
   const getCategory = async () => {
     let res = await GetCategory();
@@ -163,7 +163,7 @@ function MenuEdit() {
   };
 
   const getIngredients = async () => {
-    let res = await GetIngredients();console.log("Ingredients state:", ingredients);
+    let res = await GetIngredients(); console.log("Ingredients state:", ingredients);
     if (res.status === 200) {
       setIngredients(res.data);
     } else {
@@ -180,7 +180,7 @@ function MenuEdit() {
     getCategory();
     getStock();
     getIngredients();
-    
+
   }, [id]);
 
   return (
@@ -195,6 +195,9 @@ function MenuEdit() {
           form={form}
           layout="vertical"
           onFinish={onFinish}
+          onFinishFailed={() => {
+            messageApi.error('กรุณาตรวจสอบข้อมูลและเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ');
+          }}
           autoComplete="off"
         >
           <Row gutter={[16, 0]}>
@@ -267,73 +270,107 @@ function MenuEdit() {
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-            <Form.List name="menu_ingredients">
-  {(fields, { add, remove }) => (
-    <>
-      {fields.map(({ key, name, ...restField }) => (
-        <Row key={key} gutter={[16, 0]} align="middle">
-          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-            <Form.Item
-              {...restField}
-              name={[name, 'ingredients_id']}
-              label="วัตถุดิบ"
-              rules={[{ required: true, message: 'กรุณากรอกวัตถุดิบ!' }]}
-            >
-              <Select
-                placeholder="เลือกวัตถุดิบ"
-                showSearch
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  (option?.children as unknown as string)
-                    .toLowerCase()
-                    .includes(input.toLowerCase())
-                }
+              <Form.List
+                name="menu_ingredients"
+                rules={[
+                  {
+                    validator: async (_, menu_ingredients) => {
+                      if (!menu_ingredients || menu_ingredients.length < 1) {
+                        return Promise.reject(new Error('กรุณาเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ!'));
+                      }
+                    },
+                  },
+                ]}
               >
-                {ingredients.map((item) => (
-                  <Option value={item.ID} key={item.ID}>
-                    {item.name}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }, index) => (
+                      <Row key={key} gutter={[16, 0]} align="middle">
+                        <Col xs={12} sm={12} md={8} lg={8} xl={8}>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'ingredients_id']}
+                            label="วัตถุดิบ"
+                            rules={[
+                              { required: true, message: 'กรุณาเลือกวัตถุดิบ!' },
+                              ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                  const ingredients = getFieldValue('menu_ingredients') || [];
+                                  const selectedIngredients = ingredients.map(
+                                    (ingredient: any) => ingredient.ingredients_id
+                                  );
+                                  if (
+                                    selectedIngredients.filter(
+                                      (ingredientId: number) => ingredientId === value
+                                    ).length > 1
+                                  ) {
+                                    return Promise.reject(new Error('วัตถุดิบนี้ถูกเพิ่มแล้ว!'));
+                                  }
+                                  return Promise.resolve();
+                                },
+                              }),
+                            ]}
+                          >
+                            <Select
+                              placeholder="เลือกวัตถุดิบ"
+                              showSearch
+                              optionFilterProp="children"
+                              filterOption={(input, option) =>
+                                (option?.children as unknown as string)
+                                  .toLowerCase()
+                                  .includes(input.toLowerCase())
+                              }
+                            >
+                              {ingredients.map((item) => (
+                                <Option value={item.ID} key={item.ID}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                            </Select>
+                          </Form.Item>
+                        </Col>
 
-          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-            <Form.Item
-              {...restField}
-              name={[name, 'quantity']}
-              label="จำนวน"
-              rules={[{ required: true, message: 'กรุณากรอกจำนวน!' }]}
-            >
-              <InputNumber min={0} style={{ width: '100%' }} />
-            </Form.Item>
-          </Col>
+                        <Col xs={12} sm={12} md={8} lg={8} xl={8}>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'quantity']}
+                            label="จำนวน"
+                            rules={[
+                              { required: true, message: 'กรุณากรอกจำนวน!' },
+                              { type: 'number', min: 1, message: 'จำนวนต้องมากกว่า 0!' },
+                            ]}
+                          >
+                            <InputNumber min={1} style={{ width: '100%' }} />
+                          </Form.Item>
+                        </Col>
 
-          <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-            <Button
-              type="link"
-              icon={<MinusCircleOutlined />}
-              onClick={() => remove(name)}
-            >
-              ลบ
-            </Button>
-          </Col>
-        </Row>
-      ))}
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                          <Button
+                            type="link"
+                            icon={<MinusCircleOutlined />}
+                            onClick={() => remove(name)}
+                          >
+                            ลบ
+                          </Button>
+                        </Col>
+                      </Row>
+                    ))}
 
-      <Form.Item>
-        <Button
-          type="dashed"
-          onClick={() => add()}
-          block
-          icon={<PlusOutlined />}
-        >
-          เพิ่มวัตถุดิบ
-        </Button>
-      </Form.Item>
-    </>
-  )}
-</Form.List>
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        เพิ่มวัตถุดิบ
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+
+
 
 
             </Col>

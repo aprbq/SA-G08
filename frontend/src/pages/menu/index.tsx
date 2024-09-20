@@ -106,7 +106,7 @@ function Menus() {
     try {
       const res = await GetMenuIngredientById(menuId);
       console.log('API Response:', res);
-  
+
       if (res.status === 200) {
         console.log('Ingredients:', res.data);
         setSelectedIngredients(res.data || []);
