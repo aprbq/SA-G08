@@ -1,0 +1,139 @@
+import React, { useState, useEffect } from "react";
+import {
+  Space,
+  Button,
+  Col,
+  Row,
+  Divider,
+  Form,
+  Input,
+  Card,
+  message,
+  Table,
+} from "antd";
+import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import { GetOrder } from "../../../services/https"; // Import GetOrders service
+import { useNavigate, Link } from "react-router-dom";
+import dayjs from "dayjs";
+
+function PromotionHistory() {
+  const navigate = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
+  const [orders, setOrders] = useState<any[]>([]); // Store orders from API
+  const [filteredOrders, setFilteredOrders] = useState<any[]>([]); // Store filtered results
+  const [searchText, setSearchText] = useState<string>(""); // State for search input
+
+  const getOrders = async () => {
+    try {
+      const res = await GetOrder();
+      if (res.status === 200) {
+        setOrders(res.data);
+        setFilteredOrders(res.data); // Initially show all orders
+      } else {
+        messageApi.open({
+          type: "error",
+          content: "Failed to fetch orders",
+        });
+      }
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "An error occurred while fetching orders",
+      });
+    }
+  };
+
+  useEffect(() => {
+    getOrders();
+  }, []);
+
+  const handleSearch = (value: string) => {
+    setSearchText(value);
+    const filtered = orders.filter((order) =>
+      Object.values(order).some((val) =>
+        String(val as string | number).toLowerCase().includes(value.toLowerCase())
+      )
+    );
+    setFilteredOrders(filtered);
+  };
+
+  const columns = [
+    {
+      title: "Order ID",
+      dataIndex: "ID",
+      key: "id",
+    },
+    {
+      title: "Promotion ID",
+      dataIndex: "promotion_id",
+      key: "promotion_id",
+    },
+    {
+      title: "Order Date",
+      dataIndex: "order_date",
+      key: "order_date",
+      render: (order_date: string) => {
+        return new Date(order_date).toLocaleDateString(); // แสดงเฉพาะวันที่
+      },
+    },
+    {
+      title: "Total Amount",
+      dataIndex: "payment_amount",
+      key: "payment_amount",
+    },
+    // Add more columns as needed
+  ];
+
+  return (
+    <div>
+      {contextHolder}
+      <Card>
+        <h2 className="name-table">ประวัติการใช้งาน</h2>
+        <Divider />
+
+        {/* Search Input for Promotion History */}
+        <Row gutter={[16, 0]} style={{ marginBottom: "20px" }}>
+          <Col span={12}>
+            <Input
+              placeholder="Search Order History"
+              prefix={<SearchOutlined />}
+              value={searchText}
+              onChange={(e) => handleSearch(e.target.value)}
+            />
+          </Col>
+        </Row>
+
+        {/* Display Filtered Orders in a Table */}
+        <Table
+          columns={columns}
+          dataSource={filteredOrders}
+          rowKey="id"
+          pagination={{ pageSize: 10 }} // Optional: Adjust page size
+        />
+
+        <Row justify="end">
+          <Col style={{ marginTop: "40px" }}>
+            <Space>
+              <Link to="/promotion">
+                <Button className="back-button" htmlType="button">
+                  ย้อนกลับ
+                </Button>
+              </Link>
+
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="confirm-button"
+                icon={<PlusOutlined />}
+              >
+                ตกลง
+              </Button>
+            </Space>
+          </Col>
+        </Row>
+      </Card>
+    </div>
+  );
+}
+
+export default PromotionHistory;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message, Modal,List, Typography } from "antd";
-import { PlusOutlined, DeleteOutlined , EditOutlined,HistoryOutlined,EyeOutlined} from "@ant-design/icons";
+import { Space, Table, Button, Col, Row, Divider, message, Modal,List, Typography,Input } from "antd";
+import { PlusOutlined, DeleteOutlined , EditOutlined,HistoryOutlined,EyeOutlined,SearchOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetPromotion, DeletePromotionById,GetConditionById } from "../../services/https/index";
 import { PromotionInterface } from "../../interfaces/Promotion";
@@ -16,6 +16,8 @@ function Promotion() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [Promotion , setPromotion] = useState<PromotionInterface[]>([]);
   const [selectedMenu, setSelectedMenu] = useState<MenuInterface[]>([]);
+  const [searchText, setSearchText] = useState("");
+  const [filteredPromotion, setFilteredPromotion] = useState<PromotionInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
 
   
@@ -234,6 +236,20 @@ function Promotion() {
     }
   };
 
+  const handleSearch = (value: string) => {
+    setSearchText(value);
+    if (value === "") {
+      setFilteredPromotion(Promotion); // คืนข้อมูลทั้งหมดถ้าค้นหาว่างเปล่า
+    } else {
+      const filtered = Promotion.filter((promo) =>
+        promo.promotion_name
+          ? promo.promotion_name.toLowerCase().includes(value.toLowerCase()) // ตรวจสอบว่า promotion_name ไม่เป็น undefined
+          : false // ถ้าเป็น undefined ให้ข้ามไป
+      );
+      setFilteredPromotion(filtered);
+    }
+  };
+
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -256,7 +272,7 @@ function Promotion() {
                 สร้างโปรโมชั่น
               </Button>
             </Link>
-            <Link to="/promotion/create">
+            <Link to="/promotion/history">
               <Button className = "btn-history" type="primary" icon={<HistoryOutlined />}>
                 ประวัติการใช้งาน
               </Button>
@@ -264,9 +280,17 @@ function Promotion() {
           </Space>
         </Col>
       </Row>
-
-      
       <Divider />
+      <Row gutter={[16, 16]} style={{ marginBottom: "20px" }}>
+        <Col span={8}>
+          <Input
+            placeholder="ค้นหาโปรโมชั่น"
+            prefix={<SearchOutlined />}
+            value={searchText}
+            onChange={(e) => handleSearch(e.target.value)} // เรียกใช้ handleSearch เมื่อมีการเปลี่ยนแปลง
+          />
+        </Col>
+      </Row>
       <div style={{ marginTop: 20 }}>
         <Table
           rowKey="ID"

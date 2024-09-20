@@ -17,6 +17,7 @@ const EditIngredient = Loadable(lazy(() => import("../pages/ingredient/edit")));
 const Promotion = Loadable(lazy(() => import("../pages/promotion")));
 const CreatePromotion = Loadable(lazy(() => import("../pages/promotion/create")));
 const EditPromotion = Loadable(lazy(() => import("../pages/promotion/edit")));
+const HistoryPromotion = Loadable(lazy(() => import("../pages/promotion/history")));
 
 const Order = Loadable(lazy(() => import("../pages/order")));
 const CreateOrder = Loadable(lazy(() => import("../pages/order/create")));
@@ -127,6 +128,10 @@ const AdminRoutes = (isLoggedIn: boolean): RouteObject => {
           {
             path: "edit/:id",
             element: <EditPromotion />,
+          },
+          {
+            path: "history",
+            element: <HistoryPromotion />,
           },
         ],
       },

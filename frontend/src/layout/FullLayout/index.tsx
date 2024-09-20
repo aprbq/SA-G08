@@ -17,6 +17,7 @@ import MenuEdit from "../../pages/menu/edit";
 import Promotion from "../../pages/promotion";
 import PromotionCreate from "../../pages/promotion/create";
 import PromotionEdit from "../../pages/promotion/edit";
+import PromotionHistory from "../../pages/promotion/history";
 
 import Order from "../../pages/order";
 import OrderCreate from "../../pages/order/create";
@@ -117,6 +118,7 @@ const FullLayout: React.FC = () => {
               <Route path="/promotion" element={<Promotion />} />
               <Route path="/promotion/create" element={<PromotionCreate />} />
               <Route path="/promotion/edit/:id" element={<PromotionEdit />} />
+              <Route path="/promotion/history" element={<PromotionHistory />} />
               <Route path="/member" element={<Member />} />
               <Route path="/member/create" element={<MemberCreate />} />
               <Route path="/member/edit/:id" element={<MemberEdit />} />
