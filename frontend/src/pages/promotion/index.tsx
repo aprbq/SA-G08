@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message, Modal } from "antd";
-import { PlusOutlined, DeleteOutlined , EditOutlined,HistoryOutlined} from "@ant-design/icons";
+import { Space, Table, Button, Col, Row, Divider, message, Modal,List, Typography } from "antd";
+import { PlusOutlined, DeleteOutlined , EditOutlined,HistoryOutlined,EyeOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetPromotion, DeletePromotionById } from "../../services/https/index";
+import { GetPromotion, DeletePromotionById,GetConditionById } from "../../services/https/index";
 import { PromotionInterface } from "../../interfaces/Promotion";
+import { MenuInterface } from "../../interfaces/Menu";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 
 const { confirm } = Modal;
+const { Title, Text } = Typography;
 
 function Promotion() {
   const navigate = useNavigate();
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [Promotion , setPromotion] = useState<PromotionInterface[]>([]);
+  const [selectedMenu, setSelectedMenu] = useState<MenuInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
 
-
+  
   const columns: ColumnsType<PromotionInterface> = [
 
     {
@@ -22,8 +26,9 @@ function Promotion() {
       dataIndex: "ID",
       key: "id",
       className:  "front-1",
+      
     },
-
+  
     {
       title: "ชื่อ",
       dataIndex: "promotion_name",
@@ -93,8 +98,37 @@ function Promotion() {
     title: "สถานะ",
     dataIndex: "Status",
     key: "status_id",
-    render: (item) => Object.values(item.status_name),
-    className:  "front-1",
+    render: (item) => {
+      const statusColor = item.status_name.toLowerCase() === "active" ? "green" : 
+                          item.status_name.toLowerCase() === "unactive" ? "red" : "";
+      return (
+        <span
+          style={{
+            backgroundColor: statusColor,
+            padding: "4px 8px",
+            borderRadius: "4px",
+            color: "white",
+          }}
+        >
+          {item.status_name}
+        </span>
+      );
+    },
+    className: "front-1",
+    },
+
+    {
+      title: "เงื่อนไข",
+      key: "menu",
+      render: (record) => (
+        <Button
+          type="default"
+          icon={<EyeOutlined />}
+          onClick={() => handleViewMenu(record.ID)} // แก้ไขเป็นดึงจาก API
+        >
+          ดูเมนู
+        </Button>
+      ),
     },
     
     {
@@ -122,22 +156,6 @@ function Promotion() {
                 icon={<DeleteOutlined />}
                 onClick={() => showDeleteConfirm(record.ID)}
             ></Button>
-          </>
-        ),
-      },
-
-      {
-        title: "",
-        render: (record) => (
-          <>
-            <Button
-              type="default"
-              className="btn-history"
-              icon={<HistoryOutlined />}
-              onClick={() => navigate(`/promotion/history/${record.ID}`)}
-            >
-              การใช้งาน
-            </Button>
           </>
         ),
       },
@@ -196,6 +214,30 @@ function Promotion() {
     }
   };
 
+  const handleViewMenu = async (promotionID: string) => {
+    try {
+      const res = await GetConditionById(promotionID);
+      console.log('API Response:', res);
+  
+      if (res.status === 200) {
+        console.log('Menu:', res.data);
+        setSelectedMenu(res.data || []);
+        setIsModalVisible(true);
+      } else if (res.status === 204) {
+        messageApi.error("ไม่พบเมนู");
+      } else {
+        messageApi.error("เกิดข้อผิดพลาดในการดึงข้อมูลเมนู");
+      }
+    } catch (error) {
+      console.error("Error fetching menu:", error);
+      messageApi.error("เกิดข้อผิดพลาดในการดึงข้อมูลเมนู");
+    }
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   useEffect(() => {
     getPromotion();
   }, []);
@@ -208,15 +250,22 @@ function Promotion() {
           <h2>จัดการโปรโมชั่น</h2>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
-          <Space>
+          <Space direction="vertical">
             <Link to="/promotion/create">
               <Button className = "btn-1" type="primary" icon={<PlusOutlined />}>
                 สร้างโปรโมชั่น
               </Button>
             </Link>
+            <Link to="/promotion/create">
+              <Button className = "btn-history" type="primary" icon={<HistoryOutlined />}>
+                ประวัติการใช้งาน
+              </Button>
+            </Link>
           </Space>
         </Col>
       </Row>
+
+      
       <Divider />
       <div style={{ marginTop: 20 }}>
         <Table
@@ -224,8 +273,34 @@ function Promotion() {
           columns={columns}
           dataSource={Promotion}
           style={{ width: "100%", overflow: "scroll" }}
+          className="custom-table" // ใส่คลาสที่กำหนดให้กับตาราง
+          rowClassName={(record, index) => 
+            index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"
+          }
         />
       </div>
+      <Modal
+        title="เมนูเงื่อนไข"
+        open={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        {selectedMenu.length > 0 ? (
+          <List
+            itemLayout="horizontal"
+            dataSource={selectedMenu}
+            renderItem={(menu) => (
+              <List.Item>
+                <List.Item.Meta
+                  title={<Text strong>{menu.name}</Text>}
+                />
+              </List.Item>
+            )}
+          />
+        ) : (
+          <p>ไม่มีวัตถุดิบสำหรับเมนูนี้</p>
+        )}
+      </Modal>
     </>
   );
 }

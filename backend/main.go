@@ -104,6 +104,7 @@ func main() {
 		rounter.GET("/discounttype", discounttype.GetAll)
 		rounter.POST("/condition", condition.CreateCondition)
 		rounter.GET("/condition", condition.GetAll)
+		rounter.GET("/condition/:id", condition.Get)
 
 		rounter.POST("/member", member.CreateMember)
 		rounter.PUT("/member/:id", member.Update)

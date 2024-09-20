@@ -144,12 +144,74 @@ body {
   border-radius: 22px;
 }
 
+
+.btn-history {
+  appearance: none;
+  background-color: #FFFFFF;
+  border-width: 0;
+  box-sizing: border-box;
+  color: #000000;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Clarkson,Helvetica,sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1em;
+  margin: 0;
+  opacity: 1;
+  outline: 0;
+  padding: 1.5em 2.2em;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-rendering: geometricprecision;
+  text-transform: uppercase;
+  transition: opacity 300ms cubic-bezier(.694, 0, 0.335, 1),background-color 100ms cubic-bezier(.694, 0, 0.335, 1),color 100ms cubic-bezier(.694, 0, 0.335, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+.btn-history {
+  background-color: #f8f9fa;
+  border: 1px solid #f8f9fa;
+  border-radius: 4px;
+  color: #3c4043;
+  cursor: pointer;
+  font-family: arial,sans-serif;
+  font-size: 14px;
+  height: 25px;
+  line-height: 27px;
+  min-width: 54px;
+  padding: 0 16px;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: pre;
+
+}
+
+.btn-history:hover {
+  border-color: #dadce0;
+  box-shadow: rgba(224, 222, 86, 0.1) 0 1px 1px;
+  color: #202124;
+}
+
+.btn-history:focus {
+  border-color: #4285f4;
+  outline: none;
+}
+
 .btn-1 {
   outline: none;
   box-shadow: none;
   background: #000;
   color: #fff;
-  border-radius: 30px;
+  border-radius: 4px;
   transition: all .25s ease;
   
 }
@@ -278,4 +340,23 @@ body {
 .header-menu .ant-menu-item-active a,
 .header-menu .ant-menu-item-selected a {
   color: #ffffff;
+}
+
+/* กำหนดสไตล์สำหรับหัวตาราง */
+.table-header {
+  background-color: #1890ff ; /* เปลี่ยนสีพื้นหลังของหัวตาราง */
+  color: white; /* เปลี่ยนสีข้อความในหัวตาราง */
+}
+
+/* สไตล์สำหรับแถวของตาราง */
+.table-row-light {
+  background-color: #e7e7e7; /* สีพื้นหลังของแถวที่เป็นสีอ่อน */
+}
+
+.table-row-dark {
+  background-color: #e7e7e7; /* สีพื้นหลังของแถวที่เป็นสีเข้ม */
+}
+
+.table-row-hover:hover {
+  background-color: #ffffff !important; /* สีพื้นหลังเมื่อวางเมาส์เหนือแถว */
 }

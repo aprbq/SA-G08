@@ -328,6 +328,13 @@ async function GetCondition() {
     .then((res) => res)
     .catch((e) => e.response);
 }
+
+async function GetConditionById(id: string) {
+  return await axios
+    .get(`${apiUrl}/condition/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 //Member
 
 async function GetMember() {
@@ -415,6 +422,7 @@ export {
 
   GetPromotion,
   GetCondition,
+  GetConditionById,
   GetPromotionType,
   GetDiscountType,
   GetPromotionById,

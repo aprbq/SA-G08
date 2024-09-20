@@ -12,4 +12,8 @@ promotion_type_id?: number;
 status_id?:        number;
 employee_id?:         number;
 menu_id?:         number;
+
+condition?: {
+    menu_id: number;
+  }[];
 }

@@ -71,55 +71,66 @@ c.JSON(http.StatusOK, condition)
 
 // Get retrieves a single promotion by ID along with their associated class
 func Get(c *gin.Context) {
-ID := c.Param("id")
-var condition entity.Condition
-db := config.DB()
-results := db.Preload("Menu").Preload("Promotion").First(&condition, ID)
+	promotionID := c.Param("id")
 
-if results.Error != nil {
-    c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
-    return
-}
-if condition.ID == 0 {
-    c.JSON(http.StatusNoContent, gin.H{})
-    return
-}
-c.JSON(http.StatusOK, condition)
+    var menus []entity.Condition
+    db := config.DB()
+    results := db.Preload("Promotion").Preload("Menu").Where("promotion_id = ?", promotionID).Find(&menus)
+
+    if results.Error != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
+        return
+    }
+
+    if len(menus) == 0 {
+        c.JSON(http.StatusNoContent, nil) 
+        return
+    }
+
+    var response []map[string]interface{}
+    for _, menu := range menus {
+        response = append(response, map[string]interface{}{
+            "menu_id": menu.MenuID,
+            "name": menu.Menu.Name, 
+        })
+    }
+
+    c.JSON(http.StatusOK, response)
 }
 
 // Update updates the details of an existing menu
 func Update(c *gin.Context) {
-var condition entity.Condition
-ConditionID := c.Param("id")
-db := config.DB()
+	var condition entity.Condition
+	ConditionID := c.Param("id")
+	db := config.DB()
 
-result := db.First(&condition, ConditionID)
-if result.Error != nil {
-    c.JSON(http.StatusNotFound, gin.H{"error": "id not found"})
-    return
-}
+	result := db.First(&condition, ConditionID)
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "id not found"})
+		return
+	}
 
-if err := c.ShouldBindJSON(&condition); err != nil {
-    c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request, unable to map payload"})
-    return
-}
+	if err := c.ShouldBindJSON(&condition); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request, unable to map payload"})
+		return
+	}
 
-result = db.Save(&condition)
-if result.Error != nil {
-    c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
-    return
-}
-c.JSON(http.StatusOK, gin.H{"message": "Updated successful"})
+	result = db.Save(&condition)
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Updated successful"})
 }
 
 // Delete removes a menu by ID
 func Delete(c *gin.Context) {
-id := c.Param("id")
-db := config.DB()
+	id := c.Param("id")
+	db := config.DB()
 
-if tx := db.Exec("DELETE FROM promotions WHERE id = ?", id); tx.RowsAffected == 0 {
-    c.JSON(http.StatusBadRequest, gin.H{"error": "id not found"})
-    return
-}
-c.JSON(http.StatusOK, gin.H{"message": "Deleted successful"})
+	if tx := db.Exec("DELETE FROM promotions WHERE id = ?", id); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id not found"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Deleted successful"})
 }
