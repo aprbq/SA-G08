@@ -254,6 +254,14 @@ body {
 
 }
 
+.front-2{
+  color: #378f04 !important;
+  font-family: "Mitr", sans-serif!important;
+  font-weight: normal!important;
+  font-style: normal!important;
+
+}
+
 .btn-delete {
   background: #FF4D4F;
   color: #000;
@@ -268,7 +276,7 @@ body {
   transform: translate(-3px, -3px);
 }
 
-.btn-history {
+.btn-3 {
   background-color: #d8d8d8; /* Primary color */
   border: none;
   color: rgb(0, 0, 0);
@@ -282,17 +290,17 @@ body {
   font-family: "Mitr", sans-serif;
 }
 
-.btn-history:hover {
+.btn-3:hover {
   background-color: #000000 !important;
   color: #ffffff!important; /* Lighter shade on hover */
 }
 
-.btn-history:focus {
+.btn-3:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2); /* Focus state */
 }
 
-.btn-history .anticon {
+.btn-3 .anticon {
   margin-right: 8px; /* Space between icon and text */
 }
 

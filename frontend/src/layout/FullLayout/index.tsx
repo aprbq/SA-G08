@@ -58,7 +58,7 @@ const FullLayout: React.FC = () => {
           <h2>BIG DOOK CAFE</h2>
       </div>
       <div className = "logout" >
-        <Button className="btn-2" onClick={Logout} icon={<LogoutOutlined />}>
+        <Button className="btn-3" onClick={Logout} icon={<LogoutOutlined />}>
           ออกจากระบบ
         </Button>
       </div>
@@ -125,9 +125,6 @@ const FullLayout: React.FC = () => {
             </Routes>
           </div>
         </Content>
-        <Footer style={{ textAlign: "center", backgroundColor: "#533f38", color: "black" }}className="front-1">
-          System Analysis and Design Group 08
-        </Footer>
       </Layout>
     </Layout>
   );

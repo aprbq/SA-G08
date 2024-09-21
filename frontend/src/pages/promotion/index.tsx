@@ -276,7 +276,7 @@ function Promotion() {
               </Button>
             </Link>
             <Link to="/promotion/history">
-              <Button className = "btn-history" type="primary" icon={<HistoryOutlined />}>
+              <Button className = "btn-3" type="primary" icon={<HistoryOutlined />}>
                 ประวัติการใช้งาน
               </Button>
             </Link>
@@ -307,7 +307,8 @@ function Promotion() {
         />
       </div>
       <Modal
-        title="เมนูเงื่อนไข"
+        className= "front-1"
+        title="เมนูที่ใช้งานได้"
         open={isModalVisible}
         onCancel={handleCancel}
         footer={null}
@@ -319,13 +320,13 @@ function Promotion() {
             renderItem={(menu) => (
               <List.Item>
                 <List.Item.Meta
-                  title={<Text strong>{menu.name}</Text>}
+                  title={<Text className= "front-2" strong>{menu.name}</Text>}
                 />
               </List.Item>
             )}
           />
         ) : (
-          <p className=  "front-1">ไม่มีวัตถุดิบสำหรับเมนูนี้</p>
+          <p className=  "front-1">ไม่มี</p>
         )}
       </Modal>
     </>
