@@ -120,13 +120,34 @@ func Update(c *gin.Context) {
 }
 
 // Delete removes a menu by ID
-func Delete(c *gin.Context) {
-    id := c.Param("id")
-    db := config.DB()
+// func Delete(c *gin.Context) {
+//     id := c.Param("id")
+//     db := config.DB()
 
-    if tx := db.Exec("DELETE FROM member WHERE id = ?", id); tx.RowsAffected == 0 {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "id not found"})
-        return
-    }
-    c.JSON(http.StatusOK, gin.H{"message": "Deleted successful"})
+//     if tx := db.Exec("DELETE FROM member WHERE id = ?", id); tx.RowsAffected == 0 {
+//         c.JSON(http.StatusBadRequest, gin.H{"error": "id not found"})
+//         return
+//     }
+//     c.JSON(http.StatusOK, gin.H{"message": "Deleted successful"})
+// }
+func Delete(c *gin.Context) {
+    var member entity.Member
+	memberID := c.Param("id")
+
+	// ค้นหาข้อมูลโปรโมชั่น
+	db := config.DB()
+	db.First(&member, memberID)
+	if member.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "promotion not found"})
+		return
+	}
+
+
+	// ลบสมาชิก
+	if err := db.Delete(&member).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Member deleted successfully"})
 }
