@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"example.com/sa-67-example/config"
+	//"example.com/sa-67-example/controller/supplier"
 	"example.com/sa-67-example/entity"
 	"github.com/gin-gonic/gin"
 )
@@ -14,11 +15,13 @@ func GetAll(c *gin.Context) {
 
 	db := config.DB()
 
-	results := db.Preload("Class").Find(&ingredients)
+	results := db.Preload("Class").Preload("Unit").Preload("Suppliers").Find(&ingredients)
 	if results.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
 		return
 	}
+
+	
 
 	c.JSON(http.StatusOK, ingredients)
 }
@@ -85,54 +88,65 @@ func Delete(c *gin.Context) {
 }
 
 func CreateIngredient(c *gin.Context) {
+    var ingredient entity.Ingredients
+    // bind JSON เข้าตัวแปร ingredient
+    if err := c.ShouldBindJSON(&ingredient); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
 
-	var ingredient entity.Ingredients
-	// bind เข้าตัวแปร ingredient
-	if err := c.ShouldBindJSON(&ingredient); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+    db := config.DB()
 
-	db := config.DB()
+    // ค้นหา class ด้วย id
+    var class entity.Class
+    if db.First(&class, ingredient.ClassID).RowsAffected == 0 {
+        c.JSON(http.StatusNotFound, gin.H{"error": "class not found"})
+        return
+    }
 
-	// ค้นหา class ด้วย id
-	var class entity.Class
-	db.First(&class, ingredient.ClassID)
-	if class.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "class not found"})
-		return
-	}
+    // ค้นหา unit ด้วย id
+    var unit entity.Unit
+    if db.First(&unit, ingredient.UnitID).RowsAffected == 0 {
+        c.JSON(http.StatusNotFound, gin.H{"error": "unit not found"})
+        return
+    }
 
-	var employee entity.Employee
-	// bind เข้าตัวแปร user
-	db.First(&employee, ingredient.Employees)
-	if employee.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "employee not found"})
-		return
-	}
+    // ค้นหา suppliers ด้วย id
+    var suppliers entity.Suppliers
+    if db.First(&suppliers, ingredient.SuppliersID).RowsAffected == 0 {
+        c.JSON(http.StatusNotFound, gin.H{"error": "supplier not found"}) // แก้ไขข้อความ
+        return
+    }
 
-	// สร้าง User
-	i := entity.Ingredients{
-		Name:      ingredient.Name,     // ตั้งค่าฟิลด์ FirstName
-		Quantity:  ingredient.Quantity, // ตั้งค่าฟิลด์ LastName
-		Unit:      ingredient.Unit,     // ตั้งค่าฟิลด์ Email
-		UnitPrice: ingredient.UnitPrice,
-		Price:     ingredient.Price,
-		Supplier:  ingredient.Supplier,
-		ExpDate:   ingredient.ExpDate,
+    // ค้นหา employee ด้วย id
+    var employee entity.Employee
+    if db.First(&employee, ingredient.EmployeeID).RowsAffected == 0 {
+        c.JSON(http.StatusNotFound, gin.H{"error": "employee not found"})
+        return
+    }
 
-		ClassID: ingredient.ClassID, // โยงความสัมพันธ์กับ Entity Class
-		Class:   class,
+    // สร้าง Ingredient ใหม่
+    i := entity.Ingredients{
+        Name:       ingredient.Name,
+        Quantity:   ingredient.Quantity,
+        UnitPrice:  ingredient.UnitPrice,
+        Price:      ingredient.Price,
+        ExpDate:    ingredient.ExpDate,
+        ClassID:    ingredient.ClassID,
+        Class:      class,
+        EmployeeID: ingredient.EmployeeID,
+        Employees:  employee,
+        SuppliersID: ingredient.SuppliersID,
+        Suppliers:  suppliers,
+        UnitID:     ingredient.UnitID,
+        Unit:       unit,
+    }
 
-		EmployeeID: ingredient.EmployeeID, // โยงความสัมพันธ์กับ Entity User
-		Employees:  employee,
-	}
+    // บันทึกในฐานข้อมูล
+    if err := db.Create(&i).Error; err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
 
-	// บันทึก
-	if err := db.Create(&i).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusCreated, gin.H{"message": "Created success", "data": i})
+    c.JSON(http.StatusCreated, gin.H{"message": "Created success", "data": i})
 }

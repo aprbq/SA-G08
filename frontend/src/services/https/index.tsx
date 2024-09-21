@@ -5,6 +5,7 @@ import { PromotionInterface } from "../../interfaces/Promotion";
 import {ConditionInterface } from "../../interfaces/Condition";
 import { MenuInterface } from "../../interfaces/Menu";
 import { OrderInterface } from "../../interfaces/Order";
+import { SupplierInterface } from "../../interfaces/Supplier";
 import { OrderItemInterface } from "../../interfaces/OrderItem";
 import { MemberInterface } from "../../interfaces/Member";
 import { MenuIngredientInterface } from "../../interfaces/MenuIngredient";
@@ -74,7 +75,7 @@ async function GetStock() {
 
 async function GetUsers() {
   return await axios
-    .get(`${apiUrl}/users`, requestOptions)
+    .get(`${apiUrl}/employee`, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
@@ -110,35 +111,35 @@ async function CreateUser(data: UsersInterface) {
 // Ingredients
 async function GetIngredients() {
   return await axios
-    .get(`${apiUrl}/ingredient`, requestOptions)
+    .get(`${apiUrl}/ingredients`, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
 
 async function GetIngredientsById(id: string) {
   return await axios
-    .get(`${apiUrl}/ingredient/${id}`, requestOptions)
+    .get(`${apiUrl}/ingredients/${id}`, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
 
 async function UpdateIngredientsById(id: string, data: IngredientInterface) {
   return await axios
-    .put(`${apiUrl}/ingredient/${id}`, data, requestOptions)
+    .put(`${apiUrl}/ingredients/${id}`, data, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
 
 async function DeleteIngredientsById(id: string | undefined) {
   return await axios
-    .delete(`${apiUrl}/ingredient/${id}`, requestOptions)
+    .delete(`${apiUrl}/ingredients/${id}`, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
 
 async function CreateIngredients(data: IngredientInterface) {
   return await axios
-    .post(`${apiUrl}/ingredient`, data, requestOptions)
+    .post(`${apiUrl}/ingredients`, data, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
@@ -146,6 +147,49 @@ async function CreateIngredients(data: IngredientInterface) {
 async function UpdateIngredient(data: UsersInterface) {
   return await axios
     .put(`${apiUrl}/ingredient/${data}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function GetUnits() {
+  return await axios
+    .get(`${apiUrl}/unit`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+// Ingredients
+async function GetSuppliers() {
+  return await axios
+    .get(`${apiUrl}/suppliers`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function GetSupplierById(id: string) {
+  return await axios
+    .get(`${apiUrl}/supplier/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function UpdateSupplierById(id: string, data: SupplierInterface) {
+  return await axios
+    .put(`${apiUrl}/supplier/${id}`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function DeleteSupplierById(id: string | undefined) {
+  return await axios
+    .delete(`${apiUrl}/supplier/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function CreateSupplier(data: SupplierInterface) {
+  return await axios
+    .post(`${apiUrl}/supplier`, data, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
@@ -436,4 +480,14 @@ export {
   UpdateMemberById,
   DeleteMemberById,
   CreateMember,
+
+
+  GetSuppliers,
+  GetSupplierById,
+  UpdateSupplierById,
+  DeleteSupplierById,
+  CreateSupplier,
+  GetUnits,
+  
+
 };

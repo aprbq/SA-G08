@@ -16,7 +16,9 @@ import {
 import { PlusOutlined } from "@ant-design/icons";
 import { IngredientInterface } from "../../../interfaces/Ingredient";
 import { ClassInterface } from "../../../interfaces/ClassInterface";
-import { GetClass, GetIngredientsById, UpdateIngredientsById } from "../../../services/https/index";
+import { SupplierInterface } from "../../../interfaces/Supplier";
+import { UnitInterface } from "../../../interfaces/Unit";
+import { GetClass, GetIngredientsById, UpdateIngredientsById, GetSuppliers, GetUnits } from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 
@@ -28,20 +30,22 @@ function IngredientEdit() {
   const { id } = useParams<{ id: any }>();
   const [messageApi, contextHolder] = message.useMessage();
   const [Class, setClass] = useState<ClassInterface[]>([]);
+  const [unit, setUnit] = useState<UnitInterface[]>([]); 
+  const [supplier, setSupplier] = useState<SupplierInterface[]>([]); 
   const [form] = Form.useForm();
 
-  const getIngredientsById = async (id: string | undefined) => {
+  const getIngredientsById = async (id: string) => {
     let res = await GetIngredientsById(id);
     if (res.status == 200) {
       form.setFieldsValue({
         name: res.data.name,
         quantity: res.data.quantity,
-        unit: res.data.unit,
+        unit_id: res.data.unit_id,
         unit_price: res.data.unit_price,
         price: res.data.price,
-        supplier: res.data.supplier,
+        suppliers_id: res.data.suppliers_id,
         exp_date: dayjs(res.data.exp_date),
-        class_id: res.data.class?.ID,
+        class_id: res.data.class_id,
       });
     } else {
       messageApi.open({
@@ -89,9 +93,37 @@ function IngredientEdit() {
     }
   };
 
+  const getUnit = async () => {
+    let res = await GetUnits();
+    if (res.status == 200) {
+      setUnit(res.data);
+    } else {
+      setUnit([]);
+      messageApi.open({
+        type: "error",
+        content: "เกิดข้อผิดพลาด",
+      });
+    }
+  };
+
+  const getSuppliers = async () => {
+    let res = await GetSuppliers();
+    if (res.status == 200) {
+      setSupplier(res.data);
+    } else {
+      setSupplier([]);
+      messageApi.open({
+        type: "error",
+        content: "เกิดข้อผิดพลาด",
+      });
+    }
+  };
+
   useEffect(() => {
     getIngredientsById(id);
     getClass();
+    getUnit();
+    getSuppliers();
   }, [id]);
 
   return (
@@ -167,7 +199,7 @@ function IngredientEdit() {
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
                   label="หน่วย"
-                  name="unit"
+                  name="unit_id"
                   rules={[
                     {
                       required: true,
@@ -175,7 +207,13 @@ function IngredientEdit() {
                     },
                   ]}
                 >
-                  <Input />
+                  <Select allowClear>
+                  {unit.map((item) => (
+                    <Option value={item.ID} key={item.ID}>
+                      {item.unit}
+                    </Option>
+                  ))}
+                </Select>
                 </Form.Item>
               </Col>
   
@@ -222,7 +260,7 @@ function IngredientEdit() {
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <Form.Item
                   label="ผู้ผลิต"
-                  name="supplier"
+                  name="suppliers_id"
                   rules={[
                     {
                       required: true,
@@ -230,7 +268,13 @@ function IngredientEdit() {
                     },
                   ]}
                 >
-                  <Input />
+                  <Select allowClear>
+                  {supplier.map((item) => (
+                    <Option value={item.ID} key={item.name}>
+                      {item.name}
+                    </Option>
+                  ))}
+                </Select>
                 </Form.Item>
               </Col>
 

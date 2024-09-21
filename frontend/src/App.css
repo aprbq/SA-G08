@@ -304,6 +304,17 @@ body {
   margin-right: 8px; /* Space between icon and text */
 }
 
+.card-data {
+  border: 1px solid hsla(216, 100%, 58%, 0.1);
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px hsla(0, 0%, 0%, 0.083);
+  padding: 20px;
+  margin: 10px;
+  text-align: center;
+  width: 100%;
+  display: inline-block;
+}
+
 .header-buttons {
   display: flex;
   flex-wrap: wrap;

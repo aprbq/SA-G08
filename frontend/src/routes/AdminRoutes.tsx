@@ -28,6 +28,10 @@ const Member = Loadable(lazy(() => import("../pages/member")));
 const CreateMember = Loadable(lazy(() => import("../pages/member/create")));
 const EditMember = Loadable(lazy(() => import("../pages/member/edit")));
 
+const Supplier = Loadable(lazy(() => import("../pages/supplier")));
+const CreateSupplier = Loadable(lazy(() => import("../pages/supplier/create")));
+const EditSupplier = Loadable(lazy(() => import("../pages/supplier/edit")));
+
 const AdminRoutes = (isLoggedIn: boolean): RouteObject => {
   return {
     path: "/",
@@ -111,6 +115,23 @@ const AdminRoutes = (isLoggedIn: boolean): RouteObject => {
           {
             path: "edit/:id",
             element: <EditIngredient />,
+          },
+        ],
+      },
+      {
+        path: "supplier",
+        children: [
+          {
+            path: "",
+            element: <Supplier />,
+          },
+          {
+            path: "create",
+            element: <CreateSupplier />,
+          },
+          {
+            path: "edit/:id",
+            element: <EditSupplier />,
           },
         ],
       },

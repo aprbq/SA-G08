@@ -2,19 +2,18 @@ import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message, Modal } from "antd";
 import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetIngredients, DeleteIngredientsById } from "../../services/https/index";
-import { IngredientInterface } from "../../interfaces/Ingredient";
+import { GetSuppliers, DeleteSupplierById } from "../../services/https/index";
+import { SupplierInterface } from "../../interfaces/Supplier";
 import { Link, useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
 
 const { confirm } = Modal;
 
-function Ingredients() {
+function Supplier() {
   const navigate = useNavigate();
-  const [ingredients , setIngredients] = useState<IngredientInterface[]>([]);
+  const [supplier , setSupplier] = useState<SupplierInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const columns: ColumnsType<IngredientInterface> = [
+  const columns: ColumnsType<SupplierInterface> = [
     {
       title: "ลำดับ",
       dataIndex: "ID",
@@ -28,50 +27,22 @@ function Ingredients() {
     },
 
     {
-      title: "จำนวน",
-      dataIndex: "quantity",
-      key: "quantity",
+      title: "ที่อยู่ผู้ผลิต",
+      dataIndex: "address",
+      key: "address",
     },
 
     {
-      title: "หน่วย",
-      dataIndex: "unit",
-      render: (item) => Object.values(item.unit),
+      title: "เบอร์โทร",
+      dataIndex: "tel",
+      key: "tel",
     },
-    {
-      title: "ราคาต่อหน่วย",
-      dataIndex: "unit_price",
-      key: "unit_price",
-    },
-    {
-      title: "ราคา",
-      dataIndex: "price",
-      key: "price",
-    },
-    {
-      title: "ผู้ผลิต",
-      dataIndex: "suppliers",
-      key: "supplier_id",
-      render: (item) => Object.values(item.name),
-    },
-    {
-      title: "วัน/เดือน/ปี หมดอายุ",
-      key: "exp_date",
-      render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
-    },
-    {
-      title: "ประเภท",
-      dataIndex: "class",
-      key: "class",
-      render: (item) => Object.values(item.class),
-    },
-
     {
       title: "แก้ไข/ลบข้อมูล",
       render: (record) => (
         <>
           <Button
-          onClick={() => navigate(`/ingredient/edit/${record.ID}`)}
+          onClick={() => navigate(`/supplier/edit/${record.ID}`)}
             type="primary" 
             className='btn-1'
             icon={<EditOutlined />}
@@ -85,15 +56,15 @@ function Ingredients() {
     },
   ];
 
-  const deleteIngredientsById = async (id: string) => {
-    let res = await DeleteIngredientsById(id);
+  const deleteSupplierById = async (id: string) => {
+    let res = await DeleteSupplierById(id);
 
     if (res.status == 200) {
       messageApi.open({
         type: "success",
         content: res.data.message,
       });
-      await getIngredients();
+      await getSupplier();
     } else {
       messageApi.open({
         type: "error",
@@ -104,26 +75,26 @@ function Ingredients() {
 
   const showDeleteConfirm = (id: string) => {
     confirm({
-      title: "คุณแน่ใจหรือว่าต้องการลบ'วัตถุดิบ'",
+      title: "คุณแน่ใจหรือว่าต้องการลบ'ผู้ผลิต'",
       content: "การลบจะไม่สามารถยกเลิกได้",
       okText: "ยืนยัน",
       okType: "danger",
       cancelText: "ยกเลิก",
       className:  "front-1",
       onOk() {
-        deleteIngredientsById(id);
+        deleteSupplierById(id);
       },
       onCancel() {
         console.log("ยกเลิกการลบ");
       },
     })};
 
-  const getIngredients = async () => {
-    let res = await GetIngredients();
+  const getSupplier = async () => {
+    let res = await GetSuppliers();
     if (res.status == 200) {
-      setIngredients(res.data);
+      setSupplier(res.data);
     } else {
-      setIngredients([]);
+      setSupplier([]);
       messageApi.open({
         type: "error",
         content: res.data.error,
@@ -132,26 +103,20 @@ function Ingredients() {
   };
 
   useEffect(() => {
-    getIngredients();
+    getSupplier();
   }, []);
 
   return (
     <div>
-      {contextHolder}
       <Row>
         <Col span={12}>
-          <h2>จัดการวัตถุดิบ</h2>
+          <h2>จัดการข้อมูลผู้ผลิต</h2>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
-            <Link to="/ingredient/create">
+            <Link to="/supplier/create">
               <Button type="primary" icon={<PlusOutlined />}>
-                เพิ่มวัตถุดิบ
-              </Button>
-            </Link>
-            <Link to="/supplier">
-              <Button type="primary" icon={<PlusOutlined />}>
-                จัดการ Supplier
+                เพิ่มผู้ผลิต
               </Button>
             </Link>
           </Space>
@@ -162,11 +127,11 @@ function Ingredients() {
         <Table
           rowKey="ID"
           columns={columns}
-          dataSource={ingredients}
+          dataSource={supplier}
           style={{ width: "100%", overflow: "scroll" }}
         />
       </div>
     </div>
   );
 }
-export default Ingredients;
+export default Supplier;

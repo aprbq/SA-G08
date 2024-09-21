@@ -33,6 +33,8 @@ func SetupDatabase() {
 		&entity.Class{},
 		&entity.Category{},
 		&entity.Users{},
+		&entity.Unit{},
+		&entity.Suppliers{},
 		&entity.Ingredients{},
 		&entity.Menu{},
 		&entity.MenuIngredient{},
@@ -72,6 +74,10 @@ func SetupDatabase() {
 	ClassCoffee := entity.Class{Class: "Coffee"}
 	ClassSyrups := entity.Class{Class: "Syrups"}
 
+	UnitGram := entity.Unit{Unit: "Gram"}
+	UnitLit := entity.Unit{Unit: "Lit"}
+
+
 	CategoryHot := entity.Category{Category: "Hot"}
 	CategoryIce := entity.Category{Category: "Ice"}
 	CategoryFrappe := entity.Category{Category: "Frappe"}
@@ -96,6 +102,9 @@ func SetupDatabase() {
 
 	db.FirstOrCreate(&StockIn, &entity.Stock{Stock: "In stock"})
 	db.FirstOrCreate(&StockOut, &entity.Stock{Stock: "Out of stock"})
+
+	db.FirstOrCreate(&UnitGram, &entity.Unit{Unit: "Gram"})
+	db.FirstOrCreate(&UnitLit, &entity.Unit{Unit: "Lit"})
 
 	db.FirstOrCreate(&PromotionTypeMember, &entity.PromotionType{PromotionTypeName: "Member"})
 	db.FirstOrCreate(&PromotionTypeAll, &entity.PromotionType{PromotionTypeName: "All"})
@@ -154,10 +163,10 @@ func SetupDatabase() {
 	Ingre := &entity.Ingredients{
 		Name:       "Nom",
 		Quantity:   10,
-		Unit:       "kilogram",
+		UnitID:       1,
 		UnitPrice:  80,
 		Price:      800,
-		Supplier:   "mild",
+		SuppliersID:   1,
 		ExpDate:    exp_date,
 		ClassID:    1,
 		EmployeeID: 1,

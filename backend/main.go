@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"example.com/sa-67-example/config"
+	"example.com/sa-67-example/controller/unit"
+	"example.com/sa-67-example/controller/supplier"
 	"example.com/sa-67-example/controller/category"
 	"example.com/sa-67-example/controller/class"
 	"example.com/sa-67-example/controller/condition"
@@ -55,12 +57,24 @@ func main() {
 		//  r.DELETE("/user/:id", users.Delete)
 		rounter.GET("/employee", employee.Get)
 
-		rounter.PUT("/ingredient/:id", ingredients.Update)
-		rounter.GET("/ingredient", ingredients.GetAll)
-		rounter.GET("/ingredient/:id", ingredients.Get)
-		rounter.POST("/ingredient", ingredients.CreateIngredient)
-		rounter.DELETE("/ingredient/:id", ingredients.Delete)
+		rounter.PUT("/ingredients/:id", ingredients.Update)
+		rounter.GET("/ingredients", ingredients.GetAll)
+		rounter.GET("/ingredients/:id", ingredients.Get)
+		rounter.POST("/ingredients", ingredients.CreateIngredient)
+		rounter.DELETE("/ingredients/:id", ingredients.Delete)
 		rounter.GET("/class", class.GetAll)
+
+		rounter.POST("/unit", unit.CreateUnit)
+		rounter.GET("/unit", unit.GetUnits)
+		rounter.GET("/unit/:id", unit.GetUnit)
+		rounter.PUT("/unit/:id", unit.UpdateUnit)
+		rounter.DELETE("/unit/:id", unit.DeleteUnit)
+
+		rounter.POST("/supplier", supplier.CreateSupplier)
+		rounter.GET("/suppliers", supplier.GetSuppliers)
+		rounter.GET("/supplier/:id", supplier.GetSupplier)
+		rounter.PUT("/supplier/:id", supplier.UpdateSupplier)
+		rounter.DELETE("/supplier/:id", supplier.DeleteSupplier)
 
 		rounter.PUT("/menu/:id", menus.Update)
 		rounter.POST("/menu", menus.CreateMenu)

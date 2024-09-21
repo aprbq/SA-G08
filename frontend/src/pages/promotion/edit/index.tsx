@@ -20,7 +20,7 @@ import {
   import { PromotionTypeInterface } from "../../../interfaces/Promotiontype";
   import { MenuInterface } from "../../../interfaces/Menu";
   import { ConditionInterface } from "../../../interfaces/Condition";
-  import { GetCondition,GetStatus,GetDiscountType,GetPromotionType,GetMenu,GetPromotionById, UpdatePromotionById } from "../../../services/https";
+  import { GetCondition,GetStatus,GetDiscountType,GetPromotionType,GetMenu,GetPromotionById, UpdatePromotionById,GetConditionById } from "../../../services/https";
   import { useNavigate, Link, useParams } from "react-router-dom";
   import dayjs from "dayjs";
 
@@ -37,6 +37,7 @@ import {
     const [menu, setMenu] = useState<MenuInterface[]>([]);
     const [condition, setCondition] = useState<ConditionInterface[]>([]);
     const [promotion, setPromotion] = useState<PromotionInterface[]>([]);
+    const [isBogo, setIsBogo] = useState(false);
 
     const [form] = Form.useForm();
     const getPromotionById = async (id: string) => {
@@ -56,6 +57,7 @@ import {
           status_id: res.data.status_id,
           menu_id: res.data.conditions ? res.data.conditions.map((condition: any) => condition.menuID) : [],
         });
+
       } else {
         messageApi.open({
           type: "error",
@@ -143,18 +145,31 @@ import {
     }
     };
 
-    const getCondition = async () => {
-      let res = await GetCondition();
-      console.log("API Response for Menu:", res);
-    if (res.status == 200) {
-      setCondition(res.data);
-    } else {
-      setCondition([]);
-      messageApi.open({
-        type: "error",
-        content: res.data.error,
-      });
-    }
+    const getConditionById = async (id: string) => {
+      let res = await GetConditionById(id);
+      if (res.status === 200) {
+        const conData = res.data;
+        console.log('Condition Data:', conData);  // ตรวจสอบข้อมูลที่ได้รับ
+        form.setFieldsValue({
+          condition: conData.map((item: any) => ({
+            ingredients_id: item.ingredients_id,
+            quantity: item.quantity,
+          })),
+        });
+      } else {
+        messageApi.open({
+          type: "error",
+          content: "ไม่สามารถดึงข้อมูลเมนูได้",
+        });
+      }
+    };
+
+    const handleDiscountTypeChange = (value: number) => {
+      if (value === 2) {
+        setIsBogo(true); // If Bogo is selected, set to true
+      } else {
+        setIsBogo(false);
+      }
     };
 
     useEffect(() => {
@@ -162,7 +177,7 @@ import {
       getPromotionType();
       getDiscountType();
       getMenu();
-      getCondition();
+      getConditionById();
       getPromotionById(id);
     }, [id]);
   
@@ -258,7 +273,10 @@ import {
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกจำนวน !",
+                      message: isBogo
+                        ? "กรุณากรอกจำนวนเต็มสำหรับ Bogo !"
+                        : "กรุณากรอกจำนวน !",
+                      type: isBogo ? "integer" : "number",
                     },
                   ]}
                 >
@@ -267,7 +285,7 @@ import {
                     max={9999}
                     defaultValue={0}
                     style={{ width: "100%" }}
-                    step={0.01} 
+                    step={isBogo ? 1 : 0.01} 
                   />
                 </Form.Item>
               </Col>
@@ -278,7 +296,7 @@ import {
                 label="ประเภทส่วนลด"
                 rules={[{ required: true, message: "กรุณาระบุประเภทส่วนลด !" }]}
               >
-                <Select allowClear>
+                <Select allowClear onChange={handleDiscountTypeChange}>
                   {discounttype.map((item) => (
                     <Option value={item.ID} key={item.discount_type_name}>
                       {item.discount_type_name}
@@ -321,10 +339,10 @@ import {
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Form.Item name="menu_id" label="Menus" rules={[{ required: true }]}>
+              <Form.Item name="menu_id" label="เมนูสำหรับโปรโมชั่น" rules={[{ required: true,message: "กรุณาระบุเมนู !" }]}>
               <Select mode="multiple" placeholder="Select menus">
                 {menu.map((menu) => (
-                <Option key={menu.ID} value={menu.name}>
+                <Option key={menu.ID} value={menu.ID}>
                   {menu.name}
                 </Option>
                 ))}

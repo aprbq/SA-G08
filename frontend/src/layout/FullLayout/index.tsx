@@ -11,6 +11,11 @@ import CustomerEdit from "../../pages/customer/edit";
 import Ingredient from "../../pages/ingredient";
 import IngredientCreate from "../../pages/ingredient/create";
 import IngredientEdit from "../../pages/ingredient/edit";
+
+import Supplier from "../../pages/supplier";
+import SupplierCreate from "../../pages/supplier/create";
+import SupplierEdit from "../../pages/supplier/edit";
+
 import Menus from "../../pages/menu";
 import MenuCreate from "../../pages/menu/create";
 import MenuEdit from "../../pages/menu/edit";
@@ -111,6 +116,9 @@ const FullLayout: React.FC = () => {
               <Route path="/ingredient" element={<Ingredient />} />
               <Route path="/ingredient/create" element={<IngredientCreate />} />
               <Route path="/ingredient/edit/:id" element={<IngredientEdit />} />
+              <Route path="/supplier" element={<Supplier />} />
+              <Route path="/supplier/create" element={<SupplierCreate />} />
+              <Route path="/supplier/edit/:id" element={<SupplierEdit />} />
               <Route path="/order" element={<Order />} />
               <Route path="/order/create" element={<OrderCreate />} />
               <Route path="/order/create/createorder" element={<ConfirmOrder />} />

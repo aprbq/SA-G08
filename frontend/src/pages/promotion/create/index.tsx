@@ -32,7 +32,7 @@ import {
     const [promotiontype, setPromotionType] = useState<PromotionTypeInterface[]>([]);
     const [discounttype, setDiscountType] = useState<DiscountTypeInterface[]>([]);
     const [menu, setMenu] = useState<MenuInterface[]>([]);
-
+    const [isBogo, setIsBogo] = useState(false);
     const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
 
     const onFinish = async (values: PromotionInterface) => {
@@ -143,6 +143,14 @@ import {
     }
     };
 
+    const handleDiscountTypeChange = (value: number) => {
+      if (value === 2) {
+        setIsBogo(true); // If Bogo is selected, set to true
+      } else {
+        setIsBogo(false);
+      }
+    };
+
     useEffect(() => {
       getStatus();
       getPromotionType();
@@ -247,7 +255,10 @@ import {
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกจำนวน !",
+                      message: isBogo
+                        ? "กรุณากรอกจำนวนเต็มสำหรับ Bogo !"
+                        : "กรุณากรอกจำนวน !",
+                      type: isBogo ? "integer" : "number",
                     },
                   ]}
                 >
@@ -256,7 +267,7 @@ import {
                     max={9999}
                     defaultValue={0}
                     style={{ width: "100%" }}
-                    step={0.01} 
+                    step={isBogo ? 1 : 0.01} 
                   />
                 </Form.Item>
               </Col>
@@ -267,7 +278,7 @@ import {
                 label="ประเภทส่วนลด"
                 rules={[{ required: true, message: "กรุณาระบุประเภทส่วนลด !" }]}
               >
-                <Select allowClear>
+                <Select allowClear onChange={handleDiscountTypeChange}>
                   {discounttype.map((item) => (
                     <Option value={item.ID} key={item.discount_type_name}>
                       {item.discount_type_name}
@@ -310,7 +321,7 @@ import {
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Form.Item name="menu_id" label="เงื่อนไขเมนู" rules={[{ required: true }]}>
+              <Form.Item name="menu_id" label="เมนูสำหรับโปรโมชั่น" rules={[{ required: true,message: "กรุณาระบุเมนู !" }]}>
               <Select mode="multiple" placeholder="Select menus">
                 {menu.map((menu) => (
                 <Option key={menu.ID} value={menu.ID}>
