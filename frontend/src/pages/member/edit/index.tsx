@@ -46,7 +46,7 @@ import {
           start_date: dayjs(res.data.start_date),
           end_date: dayjs(res.data.end_date),
           points: res.data.points,
-          GenderID: res.data.GenderID,
+          gender_id: res.data.gender_id,
           status_id: res.data.status_id,
         });
       } else {
@@ -126,6 +126,7 @@ import {
           <Form
             name="basic"
             layout="vertical"
+            form={form}
             onFinish={onFinish}
             autoComplete="off"
           >
