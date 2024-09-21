@@ -28,16 +28,16 @@ func CreatePromotion(c *gin.Context) {
 	}
 
     var promotion_type entity.PromotionType
-	db.First(&promotion_type,promotion.DiscountTypeID)
+	db.First(&promotion_type,promotion.PromotionType)
 	if promotion_type.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "promotion_type not found"})
 		return
 	}
 
     var discount_type entity.DiscountType
 	db.First(&discount_type, promotion.DiscountTypeID)
 	if discount_type.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "discount_type not found"})
 		return
 	}
 

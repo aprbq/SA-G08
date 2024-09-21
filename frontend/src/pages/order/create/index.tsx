@@ -4,6 +4,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { MenuInterface } from '../../../interfaces/Menu';
 import { OrdersweetInterface } from '../../../interfaces/Ordersweet';
 import { OrderItemInterface } from '../../../interfaces/OrderItem';
+// import { PromotionTypeInterface } from '../../../interfaces/Promotiontype';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { GetMenu, GetOrdersweet } from '../../../services/https';
 
@@ -14,6 +15,7 @@ function OrderitemCreate() {
   const [menu, setMenu] = useState<MenuInterface[]>([]);
   const [ordersweet, setOrdersweet] = useState<OrdersweetInterface[]>([]);
   const [orderItems, setOrderItems] = useState<OrderItemInterface[]>([]);
+  // const [promotiontype, setPromotiontype] = useState<PromotionTypeInterface[]>([]);
   const [selectedMenuPrice, setSelectedMenuPrice] = useState<number>(0);
   const location = useLocation();
   const [form] = Form.useForm();

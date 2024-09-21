@@ -36,19 +36,18 @@ function Order() {
     {
       title: "โปรโมชั่นที่เลือกใช้",
       dataIndex: "promotion",
-      key: "promotion_id",
       render: (item) => Object.values(item.promotion_name),
     },
     
     
     
-    {
-      title: "วันทำรายการ",
-      key: "order_date",
-      render: (record: OrderInterface) => (
-        <>{dayjs(record.order_date).format("DD/MM/YYYY")}</>
-      ),
-    },
+    // {
+    //   title: "วันทำรายการ",
+    //   key: "order_date",
+    //   render: (record: OrderInterface) => (
+    //     <>{dayjs(record.order_date).format("DD/MM/YYYY")}</>
+    //   ),
+    // },
     {
       title: "",
       render: (record: OrderInterface) => (

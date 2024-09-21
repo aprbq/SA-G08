@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, Col, Row, Divider, Form, Select, Card, message } from 'antd';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PromotionInterface } from '../../../../interfaces/Promotion';
 import { MenuInterface } from '../../../../interfaces/Menu';
 import { OrdersweetInterface } from '../../../../interfaces/Ordersweet';
 import { OrderItemInterface } from '../../../../interfaces/OrderItem';
+import { PromotionTypeInterface } from '../../../../interfaces/Promotiontype';
 import { PaymentmethodInterface } from '../../../../interfaces/Paymentmethod';
-import { GetPromotion, GetPaymentMethods, CreateOrder, CreateOrderitem } from '../../../../services/https';
+import { GetPromotion, GetPaymentMethods, CreateOrder, CreateOrderitem ,GetPromotionType,GetCondition } from '../../../../services/https';
 import { OrderInterface } from '../../../../interfaces/Order';
 
 const { Option } = Select;
@@ -17,12 +18,13 @@ function OrderConfirm() {
   const [paymentMethods, setPaymentMethods] = useState<PaymentmethodInterface[]>([]);
   const [orderItems, setOrderItems] = useState<OrderItemInterface[]>([]);
   const [menu, setMenu] = useState<MenuInterface[]>([]);
+  const [promotiontype, setPromotionType] = useState<PromotionTypeInterface[]>([]);
   const [ordersweet, setOrdersweet] = useState<OrdersweetInterface[]>([]);
+  const [filteredPromotions, setFilteredPromotions] = useState<PromotionInterface[]>([]);
+  const [conditions, setConditions] = useState<any[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const [selectedPromotion, setSelectedPromotion] = useState<number | undefined>(undefined);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<number | undefined>(undefined);
-
+  const [selectedPromotionType, setSelectedPromotionType] = useState<number | undefined>(undefined);
 
   const getPromotions = async () => {
     try {
@@ -41,6 +43,36 @@ function OrderConfirm() {
     }
   };
 
+  const getConditions = async () => {
+    try {
+      let res = await GetCondition(); // ฟังก์ชันดึงข้อมูลจาก API
+      if (res.status === 200) {
+        setConditions(res.data);
+      } else {
+        setConditions([]);
+        messageApi.open({
+          type: 'error',
+          content: 'ไม่สามารถดึงข้อมูลเงื่อนไขได้',
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching conditions data:", error);
+    }
+  };
+
+  const getPromotionType = async () => {
+    let res = await GetPromotionType();
+    if (res.status == 200) {
+      setPromotionType(res.data);
+    } else {
+      setPromotionType([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
+    }
+  };
+
   const goToBackPage = () => {
     navigate('/order/create', {
       state: {
@@ -54,7 +86,7 @@ function OrderConfirm() {
   const removeOrderItem = (itemToRemove: OrderItemInterface) => {
     const updatedOrderItems = orderItems.filter(item => item !== itemToRemove);
     setOrderItems(updatedOrderItems);
-    localStorage.setItem("orderItems", JSON.stringify(updatedOrderItems)); // อัปเดต localStorage
+    localStorage.setItem("orderItems", JSON.stringify(updatedOrderItems));
     messageApi.open({
       type: 'success',
       content: 'ยกเลิกรายการสำเร็จ',
@@ -78,12 +110,21 @@ function OrderConfirm() {
     }
   };
 
-  const onFinish = async (values: { promotion_id: number; payment_method_id: number }) => {
+  const handlePromotionTypeChange = (promotionTypeId: number) => {
+     setSelectedPromotionType(promotionTypeId);
+    // กรองโปรโมชั่นตามประเภทที่เลือก
+    const filtered = promotions.filter((promotion) => promotion.promotion_type_id === promotionTypeId);
+    setFilteredPromotions(filtered);
+  };
+
+  
+
+  const onFinish = async (values: { promotion_id: number; payment_method_id: number; promotion_type_id: number }) => {
     const accountid = localStorage.getItem("id");
     const orderPayload: OrderInterface = {
       promotion_id: values.promotion_id,
+      promotion_type_id: values.promotion_type_id,
       paymentmethod_id: values.payment_method_id,
-      order_date: new Date().toISOString(),
       employee_id: Number(accountid),
       payment_amount: orderItems.reduce((total, item) => total + (item.total_item || 0), 0),
     };
@@ -118,11 +159,13 @@ function OrderConfirm() {
       setOrderItems(orderItems);
       setMenu(menu);
       setOrdersweet(ordersweet);
-      localStorage.setItem("orderItems", JSON.stringify(orderItems)); // บันทึกลง localStorage
+      localStorage.setItem("orderItems", JSON.stringify(orderItems));
     }
 
     getPromotions();
     getPaymentMethods();
+    getPromotionType();
+    getConditions();
   }, [location.state]);
 
   return (
@@ -135,12 +178,28 @@ function OrderConfirm() {
           <Row gutter={[16, 0]}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
+                name="promotion_type_id"
+                label="สำหรับ"
+                rules={[{ required: true, message: "กรุณาระบุสำหรับ !" }]}
+              >
+                <Select allowClear onChange={handlePromotionTypeChange}>
+                  {promotiontype.map((item) => (
+                    <Option value={item.ID} key={item.promotion_type_name}>
+                      {item.promotion_type_name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+              <Form.Item
                 label="โปรโมชั่น"
                 name="promotion_id"
                 rules={[{ required: true, message: 'เลือกโปรโมชั่น !' }]}
               >
-                <Select allowClear onChange={(value) => setSelectedPromotion(value)}>
-                  {promotions.map((item) => (
+                <Select allowClear>
+                  {filteredPromotions.map((item) => (
                     <Option value={item.ID} key={item.ID}>
                       {item.promotion_name}
                     </Option>
@@ -155,7 +214,7 @@ function OrderConfirm() {
                 name="payment_method_id"
                 rules={[{ required: true, message: 'เลือกช่องทางการจ่ายเงิน !' }]}
               >
-                <Select allowClear onChange={(value) => setSelectedPaymentMethod(value)}>
+                <Select allowClear>
                   {paymentMethods.map((item) => (
                     <Option value={item.ID} key={item.ID}>
                       {item.payment_methods}
@@ -170,8 +229,7 @@ function OrderConfirm() {
             <Col style={{ marginTop: '40px' }}>
               <Form.Item>
                 <Space>
-                    <Button type="primary"
-                    onClick={goToBackPage}>
+                    <Button type="primary" onClick={goToBackPage}>
                       ย้อนกลับ
                     </Button>
                   <Button type="primary" htmlType="submit">

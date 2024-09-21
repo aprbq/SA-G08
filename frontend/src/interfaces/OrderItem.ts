@@ -6,4 +6,6 @@ export interface OrderItemInterface {
     ordersweet_id?:  number;   // ID ของการเลือกความหวาน
     name?:           string;   // ชื่อของเมนู
     price?:          number;       // ราคาของเมนู
+    menu_id?:       number;
+
 }
