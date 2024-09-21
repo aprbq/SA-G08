@@ -4,9 +4,10 @@ import { PlusOutlined } from '@ant-design/icons';
 import { MenuInterface } from '../../../interfaces/Menu';
 import { OrdersweetInterface } from '../../../interfaces/Ordersweet';
 import { OrderItemInterface } from '../../../interfaces/OrderItem';
-// import { PromotionTypeInterface } from '../../../interfaces/Promotiontype';
+import { PromotionInterface } from '../../../interfaces/Promotion';
+import { PromotionTypeInterface } from '../../../interfaces/Promotiontype';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { GetMenu, GetOrdersweet } from '../../../services/https';
+import { GetMenu, GetOrdersweet, GetPromotion } from '../../../services/https';
 
 const { Option } = Select;
 
@@ -20,6 +21,10 @@ function OrderitemCreate() {
   const location = useLocation();
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  
+  // สถานะสำหรับโปรโมชั่น
+  const [promotions, setPromotions] = useState<PromotionInterface[]>([]);
+  const [filteredPromotions, setFilteredPromotions] = useState<PromotionInterface[]>([]);
 
   const addOrderItem = (values: OrderItemInterface) => {
     const quantity = values.order_quantity ? Number(values.order_quantity) : 0;
@@ -85,6 +90,24 @@ function OrderitemCreate() {
     }
   };
 
+  const getPromotions = async () => {
+    // ฟังก์ชันเพื่อดึงโปรโมชั่น
+    try {
+      let res = await GetPromotion(); // เพิ่มฟังก์ชันที่ดึงโปรโมชั่น
+      if (res.status === 200) {
+        setPromotions(res.data);
+      } else {
+        setPromotions([]);
+        messageApi.open({
+          type: 'error',
+          content: 'ไม่สามารถดึงข้อมูลโปรโมชั่นได้',
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching promotions data:", error);
+    }
+  };
+
   useEffect(() => {
     if (location.state) {
       const { orderItems, menu, ordersweet } = location.state;
@@ -94,8 +117,8 @@ function OrderitemCreate() {
     }
     getOrdersweet();
     getMenu();
+    getPromotions(); // เรียกใช้เพื่อดึงข้อมูลโปรโมชั่น
   }, [location.state]);
-  
 
   const columns = [
     {
@@ -130,7 +153,7 @@ function OrderitemCreate() {
     {
       title: 'การจัดการ',
       key: 'action',
-      render: (_:undefined, record: OrderItemInterface) => (
+      render: (_: undefined, record: OrderItemInterface) => (
         <Button type="link" onClick={() => removeOrderItem(record)}>
           ยกเลิก
         </Button>
@@ -148,14 +171,32 @@ function OrderitemCreate() {
     });
   };
 
+  const getPromotionsForMenu = (menuId: number) => {
+    return promotions.filter(promotion => 
+      promotion.menu?.includes(menuId) && promotion.promotion_type_id === 1 // เปลี่ยน 1 เป็น promotion_type_id ที่ต้องการ
+    );
+  };
+
   const goToNextPage = () => {
-    navigate('/order/create/createorder', {
-      state: {
-        orderItems,
-        menu,
-        ordersweet
-      },
-    });
+    const selectedMenuId = orderItems[0]?.menu_id; // หรือดึงจากข้อมูลที่ต้องการ
+    if (selectedMenuId) {
+      const promotionsForMenu = getPromotionsForMenu(selectedMenuId);
+      setFilteredPromotions(promotionsForMenu); // ตั้งค่าโปรโมชั่นที่กรองแล้ว
+
+      navigate('/order/create/createorder', {
+        state: {
+          orderItems,
+          menu,
+          ordersweet,
+          promotions: promotionsForMenu // ส่งโปรโมชั่นที่กรองแล้วไปด้วย
+        },
+      });
+    } else {
+      messageApi.open({
+        type: 'warning',
+        content: 'กรุณาเลือกเมนูก่อน',
+      });
+    }
   };
 
   return (
@@ -245,46 +286,7 @@ function OrderitemCreate() {
         </Form>
 
         <Divider />
-        <Table columns={[
-          {
-            title: 'ชื่อเมนู',
-            dataIndex: 'menu_id',
-            key: 'menu_id',
-            render: (text: number) => {
-              const menuItem = menu.find(item => item.ID === text);
-              return menuItem ? menuItem.name : 'ไม่พบเมนู';
-            },
-          },
-          {
-            title: 'จำนวน',
-            dataIndex: 'order_quantity',
-            key: 'order_quantity',
-          },
-          {
-            title: 'ราคาของเมนู',
-            dataIndex: 'total_item',
-            key: 'total_item',
-            render: (text: number) => `${text} บาท`,
-          },
-          {
-            title: 'ระดับความหวาน',
-            dataIndex: 'ordersweet_id',
-            key: 'ordersweet_id',
-            render: (text: number) => {
-              const sweetItem = ordersweet.find(item => item.ID === text);
-              return sweetItem ? sweetItem.order_sweet_name : 'ไม่พบระดับความหวาน';
-            },
-          },
-          {
-            title: 'การจัดการ',
-            key: 'action',
-            render: (_: undefined, record: OrderItemInterface) => (
-              <Button type="link" onClick={() => removeOrderItem(record)}>
-                ยกเลิก
-              </Button>
-            ),
-          },
-        ]} dataSource={orderItems} rowKey="ID" />
+        <Table columns={columns} dataSource={orderItems} rowKey="ID" />
       </Card>
     </div>
   );

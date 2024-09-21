@@ -7,7 +7,7 @@ import { OrdersweetInterface } from '../../../../interfaces/Ordersweet';
 import { OrderItemInterface } from '../../../../interfaces/OrderItem';
 import { PromotionTypeInterface } from '../../../../interfaces/Promotiontype';
 import { PaymentmethodInterface } from '../../../../interfaces/Paymentmethod';
-import { GetPromotion, GetPaymentMethods, CreateOrder, CreateOrderitem ,GetPromotionType,GetCondition } from '../../../../services/https';
+import { GetPromotion, GetPaymentMethods, CreateOrder, CreateOrderitem, GetPromotionType, GetCondition } from '../../../../services/https';
 import { OrderInterface } from '../../../../interfaces/Order';
 
 const { Option } = Select;
@@ -33,10 +33,7 @@ function OrderConfirm() {
         setPromotions(res.data);
       } else {
         setPromotions([]);
-        messageApi.open({
-          type: 'error',
-          content: 'ไม่สามารถดึงข้อมูลโปรโมชั่นได้',
-        });
+        messageApi.open({ type: 'error', content: 'ไม่สามารถดึงข้อมูลโปรโมชั่นได้' });
       }
     } catch (error) {
       console.error("Error fetching promotions data:", error);
@@ -45,15 +42,12 @@ function OrderConfirm() {
 
   const getConditions = async () => {
     try {
-      let res = await GetCondition(); // ฟังก์ชันดึงข้อมูลจาก API
+      let res = await GetCondition();
       if (res.status === 200) {
         setConditions(res.data);
       } else {
         setConditions([]);
-        messageApi.open({
-          type: 'error',
-          content: 'ไม่สามารถดึงข้อมูลเงื่อนไขได้',
-        });
+        messageApi.open({ type: 'error', content: 'ไม่สามารถดึงข้อมูลเงื่อนไขได้' });
       }
     } catch (error) {
       console.error("Error fetching conditions data:", error);
@@ -66,10 +60,7 @@ function OrderConfirm() {
       setPromotionType(res.data);
     } else {
       setPromotionType([]);
-      messageApi.open({
-        type: "error",
-        content: res.data.error,
-      });
+      messageApi.open({ type: "error", content: res.data.error });
     }
   };
 
@@ -87,10 +78,7 @@ function OrderConfirm() {
     const updatedOrderItems = orderItems.filter(item => item !== itemToRemove);
     setOrderItems(updatedOrderItems);
     localStorage.setItem("orderItems", JSON.stringify(updatedOrderItems));
-    messageApi.open({
-      type: 'success',
-      content: 'ยกเลิกรายการสำเร็จ',
-    });
+    messageApi.open({ type: 'success', content: 'ยกเลิกรายการสำเร็จ' });
   };
 
   const getPaymentMethods = async () => {
@@ -100,23 +88,32 @@ function OrderConfirm() {
         setPaymentMethods(res.data);
       } else {
         setPaymentMethods([]);
-        messageApi.open({
-          type: 'error',
-          content: 'ไม่สามารถดึงข้อมูลช่องทางการจ่ายเงินได้',
-        });
+        messageApi.open({ type: 'error', content: 'ไม่สามารถดึงข้อมูลช่องทางการจ่ายเงินได้' });
       }
     } catch (error) {
       console.error("Error fetching payment methods data:", error);
     }
   };
 
-  const handlePromotionTypeChange = (promotionTypeId: number) => {
-     setSelectedPromotionType(promotionTypeId);
-    // กรองโปรโมชั่นตามประเภทที่เลือก
-    const filtered = promotions.filter((promotion) => promotion.promotion_type_id === promotionTypeId);
-    setFilteredPromotions(filtered);
+  const getPromotionsForMenu = (menuId: number, promotionTypeId: number) => {
+    return promotions.filter(promotion => 
+      promotion.promotion_type_id === promotionTypeId && // ต้องตรงกับประเภทโปรโมชั่น
+      conditions.some(condition => condition.menu_id === menuId && condition.promotion_id === promotion.ID) // เช็ค menu_id กับ promotion_id
+    );
   };
-
+  
+  const handlePromotionTypeChange = (promotionTypeId: number) => {
+    setSelectedPromotionType(promotionTypeId);
+    const selectedMenuId = orderItems[0]?.menu_id;
+  
+    if (selectedMenuId) {
+      const promotionsForMenu = getPromotionsForMenu(selectedMenuId, promotionTypeId);
+      console.log("Filtered Promotions:", promotionsForMenu); // Debugging line
+      setFilteredPromotions(promotionsForMenu);
+    } else {
+      setFilteredPromotions([]);
+    }
+  };
   
 
   const onFinish = async (values: { promotion_id: number; payment_method_id: number; promotion_type_id: number }) => {
@@ -191,23 +188,26 @@ function OrderConfirm() {
                 </Select>
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Form.Item
-                label="โปรโมชั่น"
-                name="promotion_id"
-                rules={[{ required: true, message: 'เลือกโปรโมชั่น !' }]}
-              >
-                <Select allowClear>
-                  {filteredPromotions.map((item) => (
+            <Form.Item
+              label="โปรโมชั่น"
+              name="promotion_id"
+              rules={[{ required: true, message: 'เลือกโปรโมชั่น !' }]}
+            >
+              <Select allowClear>
+                {filteredPromotions.length > 0 ? (
+                  filteredPromotions.map((item) => (
                     <Option value={item.ID} key={item.ID}>
-                      {item.promotion_name}
+                      {item.promotion_name} {/* แสดงชื่อโปรโมชั่น */}
                     </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
+                  ))
+                ) : (
+                  <Option disabled key="no-promotions">ไม่มีโปรโมชั่นที่เลือก</Option>
+                )}
+              </Select>
+            </Form.Item>
 
+            </Col>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 label="ช่องทางการจ่ายเงิน"
@@ -224,14 +224,13 @@ function OrderConfirm() {
               </Form.Item>
             </Col>
           </Row>
-
           <Row justify="end">
             <Col style={{ marginTop: '40px' }}>
               <Form.Item>
                 <Space>
-                    <Button type="primary" onClick={goToBackPage}>
-                      ย้อนกลับ
-                    </Button>
+                  <Button type="primary" onClick={goToBackPage}>
+                    ย้อนกลับ
+                  </Button>
                   <Button type="primary" htmlType="submit">
                     ยืนยันออเดอร์
                   </Button>
@@ -270,6 +269,15 @@ function OrderConfirm() {
             render: (text: number) => {
               const sweetItem = ordersweet.find(item => item.ID === text);
               return sweetItem ? sweetItem.order_sweet_name : 'ไม่พบระดับความหวาน';
+            },
+          },
+          {
+            title: 'โปรโมชั่น',
+            dataIndex: 'promotion_id',
+            key: 'promotion_id',
+            render: (text: number) => {
+              const promotionItem = promotions.find(item => item.ID === text);
+              return promotionItem ? promotionItem.promotion_name : 'ไม่พบโปรโมชั่น';
             },
           },
           {
