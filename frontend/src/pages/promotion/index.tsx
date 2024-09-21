@@ -120,11 +120,13 @@ function Promotion() {
     },
 
     {
-      title: "เงื่อนไข",
+      title: "เมนูที่ใช้งานได้",
       key: "menu",
+      className:  "front-1",
       render: (record) => (
         <Button
           type="default"
+          className=  "front-1"
           icon={<EyeOutlined />}
           onClick={() => handleViewMenu(record.ID)} // แก้ไขเป็นดึงจาก API
         >
@@ -182,6 +184,7 @@ function Promotion() {
     } catch (error) {
       messageApi.open({
         type: "error",
+        className:  "front-1",
         content: "เกิดข้อผิดพลาดในการลบโปรโมชั่น",
       });
     }
@@ -284,6 +287,7 @@ function Promotion() {
       <Row gutter={[16, 16]} style={{ marginBottom: "20px" }}>
         <Col span={8}>
           <Input
+            className=  "front-1"
             placeholder="ค้นหาโปรโมชั่น"
             prefix={<SearchOutlined />}
             value={searchText}
@@ -296,7 +300,6 @@ function Promotion() {
           rowKey="ID"
           columns={columns}
           dataSource={Promotion}
-          style={{ width: "100%", overflow: "scroll" }}
           className="custom-table" // ใส่คลาสที่กำหนดให้กับตาราง
           rowClassName={(record, index) => 
             index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"
@@ -322,7 +325,7 @@ function Promotion() {
             )}
           />
         ) : (
-          <p>ไม่มีวัตถุดิบสำหรับเมนูนี้</p>
+          <p className=  "front-1">ไม่มีวัตถุดิบสำหรับเมนูนี้</p>
         )}
       </Modal>
     </>

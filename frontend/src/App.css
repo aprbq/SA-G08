@@ -213,6 +213,7 @@ body {
   color: #fff;
   border-radius: 4px;
   transition: all .25s ease;
+  font-family: "Mitr", sans-serif;
   
 }
 
@@ -249,7 +250,6 @@ body {
   color: #000000 !important;
   font-family: "Mitr", sans-serif!important;
   font-weight: normal!important;
-  font-size: 13px!important;
   font-style: normal!important;
 
 }
@@ -279,6 +279,7 @@ body {
   transition: background-color 0.3s ease;
   display: flex;
   align-items: center;
+  font-family: "Mitr", sans-serif;
 }
 
 .btn-history:hover {
@@ -343,18 +344,22 @@ body {
 }
 
 /* กำหนดสไตล์สำหรับหัวตาราง */
-.table-header {
-  background-color: #1890ff ; /* เปลี่ยนสีพื้นหลังของหัวตาราง */
+.custom-table .ant-table-thead > tr > th {
+  background-color: #ffffff; /* เปลี่ยนสีพื้นหลังของหัวตาราง */
   color: white; /* เปลี่ยนสีข้อความในหัวตาราง */
+  font-size: 16px; /* ขนาดตัวอักษรของหัวตาราง */
 }
 
 /* สไตล์สำหรับแถวของตาราง */
 .table-row-light {
-  background-color: #e7e7e7; /* สีพื้นหลังของแถวที่เป็นสีอ่อน */
+  background-color: #e7e7e7;
+  font-size: 14px;
+   /* สีพื้นหลังของแถวที่เป็นสีอ่อน */
 }
 
 .table-row-dark {
-  background-color: #e7e7e7; /* สีพื้นหลังของแถวที่เป็นสีเข้ม */
+  background-color: #e7e7e7;
+  font-size: 14px; /* สีพื้นหลังของแถวที่เป็นสีเข้ม */
 }
 
 .table-row-hover:hover {
