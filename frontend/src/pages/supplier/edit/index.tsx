@@ -83,7 +83,7 @@ function IngredientEdit() {
       </Row>
 
       <Row gutter={[16, 16]} justify="center" style={{ marginTop: "0px" }}>
-        <Col xs={24} sm={24} md={16} lg={14} xl={12}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
           <Card className="card-style">
             <Form
               name="basic"
@@ -92,8 +92,8 @@ function IngredientEdit() {
               onFinish={onFinish}
               autoComplete="off"
             >
-              <Row gutter={[16, 16]}>
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Row gutter={[16, 10]} >
+              <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                     <Form.Item
                       className="front-1"
                       label="ชื่อ"
@@ -105,13 +105,13 @@ function IngredientEdit() {
                         },
                       ]}
                     >
-                      <Input />
+                      <Input className="front-1"/>
                     </Form.Item>
                   </Col>
                   
               </Row>
 
-                  <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+                  <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                     <Form.Item
                       label="ที่อยู่ผู้ผลิต"
                       name="address"
@@ -122,11 +122,11 @@ function IngredientEdit() {
                         },
                       ]}
                     >
-                      <Input />
+                      <Input className="front-1"/>
                     </Form.Item>
                   </Col>
       
-                  <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+                  <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                     <Form.Item
                       label="เบอร์โทร"
                       name="tel"
@@ -137,7 +137,7 @@ function IngredientEdit() {
                         },
                       ]}
                     >
-                      <Input />
+                      <Input className="front-1"/>
                     </Form.Item>
                   </Col>
               <Row justify="space-between">
@@ -145,13 +145,14 @@ function IngredientEdit() {
                   <Form.Item>
                     <Space>
                       <Link to="/ingredient">
-                        <Button htmlType="button" style={{ marginRight: "10px" }}>
+                        <Button htmlType="button" className="front-1" style={{ marginRight: "10px" }}>
                           ย้อนกลับ
                         </Button>
                       </Link>
 
                       <Button
                         type="primary"
+                        className="front-1"
                         htmlType="submit"
                         icon={<PlusOutlined />}
                       >

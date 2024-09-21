@@ -391,3 +391,25 @@ body {
 .table-row-hover:hover {
   background-color: #ffffff !important; /* สีพื้นหลังเมื่อวางเมาส์เหนือแถว */
 }
+
+.card-style {
+  background-color: #FEF6E4; /* Light cream with warmth */
+  padding: 24px;
+  font-family: "Mitr", sans-serif!important;;
+  border-radius: 12px;
+  border: 1px solid #F0E0D0; /* Subtle, warm border */
+  box-shadow: 0 4px 12px rgba(228, 170, 112, 0.3); /* Soft, warm peach shadow */
+  width: 100%; /* Make the card take the full width */
+  max-width: 350px; /* Set a max width */
+  margin: 0 auto; /* Center the card */
+}
+
+.heading-style {
+  text-align: center;
+  color: #D9773D; /* Warm orange for consistency */
+  font-weight: bold;
+  font-family: "Mitr", sans-serif!important;;
+  font-size: 2rem; /* Slightly larger font size for emphasis */
+  margin: 20px 0; /* Balanced margin for spacing */
+  line-height: 1.2; /* Improved readability with line height */
+}
