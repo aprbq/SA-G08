@@ -16,17 +16,20 @@ function Menus() {
   const [messageApi, contextHolder] = message.useMessage();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedIngredients, setSelectedIngredients] = useState<IngredientInterface[]>([]);
+  const [menuName, setMenuName] = useState<string>(''); // New state for menu name
 
   const columns: ColumnsType<MenuInterface> = [
     {
       title: "ลำดับ",
       dataIndex: "ID",
       key: "id",
+      className:  "front-1",
     },
     {
       title: "รูปเมนู",
       dataIndex: "Picture",
       key: "picture",
+      className:  "front-1",
       width: "15%",
       render: (text, record, index) => (
         <img src={record.picture} className="w3-left w3-circle w3-margin-right" width="100%" />
@@ -36,37 +39,43 @@ function Menus() {
       title: "ชื่อ",
       dataIndex: "name",
       key: "name",
+      className:  "front-1",
     },
     {
       title: "คำอธิบาย",
       dataIndex: "description",
       key: "description",
+      className:  "front-1",
     },
     {
       title: "ราคา",
       dataIndex: "price",
       key: "price",
+      className:  "front-1",
     },
     {
       title: "ประเภท",
       dataIndex: "Category",
       key: "category_id",
+      className:  "front-1",
       render: (item) => Object.values(item.category),
     },
     {
       title: "สถานะเมนู",
       dataIndex: "Stock",
       key: "stock_id",
+      className:  "front-1",
       render: (item) => Object.values(item.stock),
     },
     {
       title: "ดูวัตถุดิบ",
       key: "ingredients",
+      className:  "front-1",
       render: (record) => (
         <Button
           type="default"
           icon={<EyeOutlined />}
-          onClick={() => handleViewIngredients(record.ID)} // แก้ไขเป็นดึงจาก API
+          onClick={() => handleViewIngredients(record.ID, record.name)} // Pass the menu name here
         >
           ดูวัตถุดิบ
         </Button>
@@ -75,34 +84,30 @@ function Menus() {
     {
       title: "",
       render: (record) => (
-        <>
-          <Button
-            onClick={() => navigate(`/menus/edit/${record.ID}`)}
-            type="primary"
-            className="btn-1"
-            icon={<EditOutlined />}
-          >
-            แก้ไขข้อมูล
-          </Button>
-        </>
+        <Button
+          onClick={() => navigate(`/menus/edit/${record.ID}`)}
+          type="primary"
+          className="btn-1"
+          icon={<EditOutlined />}
+        >
+          แก้ไขข้อมูล
+        </Button>
       ),
     },
     {
       title: "",
       render: (record) => (
-        <>
-          <Button
-            type="primary"
-            className="btn-delete"
-            icon={<DeleteOutlined />}
-            onClick={() => showDeleteConfirm(record.ID)}
-          />
-        </>
+        <Button
+          type="primary"
+          className="btn-delete"
+          icon={<DeleteOutlined />}
+          onClick={() => showDeleteConfirm(record.ID)}
+        />
       ),
     },
   ];
 
-  const handleViewIngredients = async (menuId: string) => {
+  const handleViewIngredients = async (menuId: string, name: string) => {
     try {
       const res = await GetMenuIngredientById(menuId);
       console.log('API Response:', res);
@@ -110,6 +115,7 @@ function Menus() {
       if (res.status === 200) {
         console.log('Ingredients:', res.data);
         setSelectedIngredients(res.data || []);
+        setMenuName(name); // Set the menu name here
         setIsModalVisible(true);
       } else if (res.status === 204) {
         messageApi.error("ไม่พบวัตถุดิบ");
@@ -212,7 +218,11 @@ function Menus() {
 
       {/* Modal สำหรับแสดงวัตถุดิบ */}
       <Modal
-        title="วัตถุดิบของเมนู"
+        title={
+          <div>
+            วัตถุดิบของเมนู: {menuName}
+          </div>
+        }
         open={isModalVisible}
         onCancel={handleCancel}
         footer={null}

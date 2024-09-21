@@ -13,7 +13,7 @@ func CreateMenuIngredient(c *gin.Context) {
 		MenuID      uint `json:"menu_id"`
 		Ingredients []struct {
 			IngredientID uint `json:"ingredient_id"`
-			Quantity     uint `json:"quantity"`
+			Quantity     string `json:"quantity"`
 		} `json:"ingredients"` // ใช้ struct เพื่อรองรับ IngredientID และ Quantity
 	}
 
@@ -109,7 +109,7 @@ func Update(c *gin.Context) {
 		MenuID      uint `json:"menu_id"`
 		Ingredients []struct {
 			IngredientID uint `json:"ingredients_id"`
-			Quantity     uint `json:"quantity"`
+			Quantity     string `json:"quantity"`
 		} `json:"ingredients"`
 	}
 
@@ -134,7 +134,7 @@ func Update(c *gin.Context) {
 	db.Where("menu_id = ?", menuIngredientData.MenuID).Find(&currentMenuIngredients)
 
 	// Create a map to track the new ingredients from the request
-	newIngredientsMap := make(map[uint]uint)
+	newIngredientsMap := make(map[uint]string)
 	for _, ingredientData := range menuIngredientData.Ingredients {
 		newIngredientsMap[ingredientData.IngredientID] = ingredientData.Quantity
 	}

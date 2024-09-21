@@ -92,54 +92,55 @@ function IngredientEdit() {
               onFinish={onFinish}
               autoComplete="off"
             >
-              <Row gutter={[16, 10]} >
-              <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                    <Form.Item
-                      className="front-1"
-                      label="ชื่อ"
-                      name="name"
-                      rules={[
-                        {
-                          required: true,
-                          message: "กรุณากรอกชื่อ !",
-                        },
-                      ]}
-                    >
-                      <Input className="front-1"/>
-                    </Form.Item>
-                  </Col>
-                  
+              <Row gutter={[16, 16]} >
+                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                  <Form.Item
+                    label={<span className="front-1">ชื่อ</span>}
+                    name="name"
+                    rules={[
+                      {
+                        required: true,
+                        message: "กรุณากรอกชื่อ !",
+                      },
+                    ]}
+                  >
+                    <Input className="front-1" />
+                  </Form.Item>
+
+                </Col>
+                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                  <Form.Item
+                    label={<span className="front-1">ที่อยู่ผู้ผลิต</span>}
+                    name="address"
+                    rules={[
+                      {
+                        required: true,
+                        message: "กรุณากรอกที่อยู่ผู้ผลิต !",
+                      },
+                    ]}
+                  >
+                    <Input className="front-1" />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                  <Form.Item
+                    label={<span className="front-1">เบอร์โทร</span>}
+                    name="tel"
+                    rules={[
+                      {
+                        required: true,
+                        message: "กรุณากรอกเบอร์โทร !",
+                      },
+                    ]}
+                  >
+                    <Input className="front-1" />
+                  </Form.Item>
+                </Col>
+
               </Row>
 
-                  <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                    <Form.Item
-                      label="ที่อยู่ผู้ผลิต"
-                      name="address"
-                      rules={[
-                        {
-                          required: true,
-                          message: "กรุณากรอกที่อยู่ผู้ผลิต !",
-                        },
-                      ]}
-                    >
-                      <Input className="front-1"/>
-                    </Form.Item>
-                  </Col>
-      
-                  <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                    <Form.Item
-                      label="เบอร์โทร"
-                      name="tel"
-                      rules={[
-                        {
-                          required: true,
-                          message: "กรุณากรอกเบอร์โทร !",
-                        },
-                      ]}
-                    >
-                      <Input className="front-1"/>
-                    </Form.Item>
-                  </Col>
+
+
               <Row justify="space-between">
                 <Col style={{ marginTop: "40px" }}>
                   <Form.Item>
@@ -164,7 +165,7 @@ function IngredientEdit() {
               </Row>
             </Form>
           </Card>
-      </Col>
+        </Col>
       </Row>
     </div>
   );

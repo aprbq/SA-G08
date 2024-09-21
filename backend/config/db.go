@@ -193,7 +193,7 @@ func SetupDatabase() {
 	MenuIngredient := &entity.MenuIngredient{
 		MenuID:        1,
 		IngredientsID: 1,
-		Quantity:      10,
+		Quantity:      "10 ml",
 	}
 	db.FirstOrCreate(MenuIngredient, &entity.MenuIngredient{})
 	Promotion := &entity.Promotion{

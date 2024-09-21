@@ -16,15 +16,7 @@ import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { CategoryInterface } from "../../../interfaces/Category";
 import { StockInterface } from "../../../interfaces/Stock";
 import { IngredientInterface } from "../../../interfaces/Ingredient";
-import {
-  GetMenuById,
-  UpdateMenuById,
-  GetCategory,
-  GetStock,
-  GetMenuIngredientById,
-  UpdateMenuIngredientById,
-  GetIngredients,   // <-- Import the new service here
-} from "../../../services/https/index";
+import { GetMenuById, UpdateMenuById, GetCategory, GetStock, GetMenuIngredientById, UpdateMenuIngredientById, GetIngredients } from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 
 const { Option } = Select;
@@ -131,10 +123,6 @@ function MenuEdit() {
       });
     }
   };
-
-
-
-
 
   const getCategory = async () => {
     let res = await GetCategory();
@@ -291,36 +279,9 @@ function MenuEdit() {
                             {...restField}
                             name={[name, 'ingredients_id']}
                             label="วัตถุดิบ"
-                            rules={[
-                              { required: true, message: 'กรุณาเลือกวัตถุดิบ!' },
-                              ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                  const ingredients = getFieldValue('menu_ingredients') || [];
-                                  const selectedIngredients = ingredients.map(
-                                    (ingredient: any) => ingredient.ingredients_id
-                                  );
-                                  if (
-                                    selectedIngredients.filter(
-                                      (ingredientId: number) => ingredientId === value
-                                    ).length > 1
-                                  ) {
-                                    return Promise.reject(new Error('วัตถุดิบนี้ถูกเพิ่มแล้ว!'));
-                                  }
-                                  return Promise.resolve();
-                                },
-                              }),
-                            ]}
+                            rules={[{ required: true, message: 'กรุณาเลือกวัตถุดิบ!' }]}
                           >
-                            <Select
-                              placeholder="เลือกวัตถุดิบ"
-                              showSearch
-                              optionFilterProp="children"
-                              filterOption={(input, option) =>
-                                (option?.children as unknown as string)
-                                  .toLowerCase()
-                                  .includes(input.toLowerCase())
-                              }
-                            >
+                            <Select placeholder="เลือกวัตถุดิบ" showSearch optionFilterProp="children">
                               {ingredients.map((item) => (
                                 <Option value={item.ID} key={item.ID}>
                                   {item.name}
@@ -337,19 +298,15 @@ function MenuEdit() {
                             label="จำนวน"
                             rules={[
                               { required: true, message: 'กรุณากรอกจำนวน!' },
-                              { type: 'number', min: 1, message: 'จำนวนต้องมากกว่า 0!' },
+                              { type: 'string', message: 'กรุณากรอกข้อความ!' },
                             ]}
                           >
-                            <InputNumber min={1} style={{ width: '100%' }} />
+                            <Input placeholder="กรุณากรอกจำนวนเป็นข้อความ" />
                           </Form.Item>
                         </Col>
 
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                          <Button
-                            type="link"
-                            icon={<MinusCircleOutlined />}
-                            onClick={() => remove(name)}
-                          >
+                          <Button type="link" icon={<MinusCircleOutlined />} onClick={() => remove(name)}>
                             ลบ
                           </Button>
                         </Col>
@@ -357,21 +314,13 @@ function MenuEdit() {
                     ))}
 
                     <Form.Item>
-                      <Button
-                        type="dashed"
-                        onClick={() => add()}
-                        block
-                        icon={<PlusOutlined />}
-                      >
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
                         เพิ่มวัตถุดิบ
                       </Button>
                     </Form.Item>
                   </>
                 )}
               </Form.List>
-
-
-
 
             </Col>
           </Row>

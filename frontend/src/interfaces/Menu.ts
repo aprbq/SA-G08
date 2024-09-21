@@ -7,9 +7,8 @@ export interface MenuInterface {
 	category_id?: number;
 	stock_id?: number;
 	employee_id?: number;
-	// menu_ingredients_id?: number[];
 	menu_ingredients?: {
 		ingredient_id: number;
-		quantity: number;
+		quantity: string;
 	  }[];
   }
