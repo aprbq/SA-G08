@@ -26,7 +26,7 @@ body {
 .header {
   text-align: center;
   height: 75px;
-  background-color: #978479;
+  background-color: #f5debc;
   background-position: center;
   background-size: cover;
   padding: 10px 20px;
@@ -130,8 +130,11 @@ body {
   }
 }
 
+.bg{
+  background-color: #ffe8bf;/*พื้นหลังใต้แถบเลือกหน้า*/
+}
 .middle-bg{
-  background-color: #fffef7;
+  background-color: #ffe8bf;/*พื้นหลังในหน้าต่างๆ*/
 }
 
 .confirm-button{
@@ -324,6 +327,7 @@ body {
 }
 
 
+
 .header-button {
   display: flex;
   align-items: last baseline;
@@ -333,9 +337,11 @@ body {
   color: inherit;
   text-decoration: none;
 }
-
+.header-menu {
+  background-color: #f5d5a6; /* สีheadermenu แถบเลือกหน้า */
+}
 .header-menu .ant-menu-item {
-  color: #ffffff !important;
+  color: #5C2C06 !important;
   font-family: "Mitr", sans-serif;
   font-weight: normal;
   font-size: 18px;
@@ -348,18 +354,19 @@ body {
 }
 
 .header-menu .ant-menu-item:hover {
-  background-color: #533f38!important; /* Hover color */
+  border-bottom: 4px solid #622a0f;/*997950*/
+  background-color: #f5d5a6!important; /*Hover color */
 }
 
 .header-menu .ant-menu-item-active,
 .header-menu .ant-menu-item-selected {
-  background-color: #533f38!important; /* Active/selected color */
-  border-bottom: 2px solid #ffffff; /* Optional: adds a bottom border */
+  background-color: #f5d5a6!important; /* Active/selected color 533f38*/
+  border-bottom: 4px solid #622a0f; /* Optional: adds a bottom border */
 }
 
 .header-menu .ant-menu-item-active a,
 .header-menu .ant-menu-item-selected a {
-  color: #ffffff;
+  color: #5C2C06;
 }
 
 /* กำหนดสไตล์สำหรับหัวตาราง */

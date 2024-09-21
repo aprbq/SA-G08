@@ -47,7 +47,7 @@ const data: DataType[] = [];
 
 export default function Index() {
   return (
-    <>
+    <div style={{ backgroundColor: "#ffe8bf", minHeight: "100vh" }}>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={24} md={24} lg={24} xl={24}>
           <h2>แดชบอร์ด</h2>
@@ -111,6 +111,6 @@ export default function Index() {
           <Table columns={columns} dataSource={data} />
         </Col>
       </Row>
-    </>
+    </div>
   );
 }

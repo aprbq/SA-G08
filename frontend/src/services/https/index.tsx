@@ -401,7 +401,16 @@ async function UpdateMemberById(id: string, data: MemberInterface) {
     .then((res) => res)
     .catch((e) => e.response);
 }
-
+async function UpdateMemberStatusById(id: string, status_id: number) {
+  return await axios
+    .put(
+      `${apiUrl}/member/${id}`,
+      { status_id },  // ส่งเฉพาะ status_id ในรูปแบบ JSON
+      requestOptions
+    )
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 async function DeleteMemberById(id: string) {
   return await axios
     .delete(`${apiUrl}/member/${id}`, requestOptions)
@@ -480,7 +489,7 @@ export {
   UpdateMemberById,
   DeleteMemberById,
   CreateMember,
-
+  UpdateMemberStatusById,
 
   GetSuppliers,
   GetSupplierById,

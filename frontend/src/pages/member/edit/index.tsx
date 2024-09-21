@@ -120,7 +120,7 @@ import {
       <div>
         {contextHolder}
         <Card>
-          <h2>เพิ่มสมาชิก</h2>
+          <h2>แก้ไขข้อมูลสมาชิก</h2>
           <Divider />
   
           <Form

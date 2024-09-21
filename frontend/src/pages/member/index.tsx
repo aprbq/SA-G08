@@ -1,19 +1,25 @@
 import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message ,Card,Statistic} from "antd";
+import { Space, Table, Button, Col, Row, Divider, message ,Modal,Card,Statistic, Input} from "antd";
 import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetMember, DeleteMemberById } from "../../services/https/index";
+import { GetMember, DeleteMemberById ,UpdateMemberStatusById} from "../../services/https/index";
 import { MemberInterface } from "../../interfaces/Member";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+const { confirm } = Modal;
 function Member() {
   const navigate = useNavigate();
   const [member , setMember] = useState<MemberInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const myId = localStorage.getItem("id");
+  
+  const [searchId, setSearchId] = useState<string>("");
 
-  // const navigate = useNavigate();
-  // const [Promotion , setPromotion] = useState<PromotionInterface[]>([]);
+  const activeMembers = member.filter((m) => m.Status.status_name === "Active");
+
+  // const inactiveMembers = ;
+
+  const myId = localStorage.getItem("id");
+  
   // const [messageApi, contextHolder] = message.useMessage();
   const columns: ColumnsType<MemberInterface> = [
     {
@@ -45,7 +51,22 @@ function Member() {
         title: "สถานะ",
         dataIndex: "Status",
         key: "status",
-        render: (item) => Object.values(item.status_name),
+        render: (item) => {
+          const statusColor = item.status_name.toLowerCase() === "active" ? "green" : 
+                              item.status_name.toLowerCase() === "unactive" ? "red" : "";
+          return (
+            <span
+              style={{
+                backgroundColor: statusColor,
+                padding: "4px 8px",
+                borderRadius: "4px",
+                color: "white",
+              }}
+            >
+              {item.status_name}
+            </span>
+          );
+        },
     },
     {
       title: "วันเกิด",
@@ -97,16 +118,36 @@ function Member() {
               <></>
             ) : (
               <Button
-                type="dashed"
-                danger
-                icon={<DeleteOutlined />}
-                onClick={() => deleteMemberById(record.ID)}
-              ></Button>
+            type="primary"
+            className="btn-delete"
+            icon={<EditOutlined />}
+            onClick={() => showCancelConfirm(record.ID)}
+            
+            />
+            )}
+          </>
+        ),
+      },
+      {
+        title: "",
+        render: (record) => (
+          <>
+            {myId == record?.ID ? (
+              <></>
+            ) : (
+              <Button
+            type="primary"
+            className="btn-delete"
+            icon={<DeleteOutlined />}
+            onClick={() => showDeleteConfirm(record.ID)}
+            />
             )}
           </>
         ),
       },
   ];
+
+
   const deleteMemberById = async (id: string) => {
     let res = await DeleteMemberById(id);
     if (res.status == 200) {
@@ -122,6 +163,54 @@ function Member() {
       });
     }
   };
+
+  const updateMemberStatusById = async (id: string) => {
+    let res = await UpdateMemberStatusById(id,2);
+    if (res.status == 200) {
+      messageApi.open({
+        type: "success",
+        content: res.data.message,
+      });
+      await getMember();
+    } else {
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
+    }
+  };
+
+  const showDeleteConfirm = (id: string) => {
+    confirm({
+      title: "คุณแน่ใจหรือว่าต้องการลบข้อมูลสมาชิกลูกค้านี้?",
+      content: "การลบจะไม่สามารถยกเลิกได้",
+      okText: "ยืนยัน",
+      okType: "danger",
+      cancelText: "ยกเลิก",
+      onOk() {
+        deleteMemberById(id);
+      },
+      onCancel() {
+        console.log("ยกเลิกการลบ");
+      },
+    });
+  };
+  const showCancelConfirm = (id: string) => {
+    confirm({
+      title: "คุณแน่ใจหรือว่าต้องการยกเลิกสมาชิกของลูกค้าคนนี้?",
+      content: "การยกเลิกสมาชิกของลูกค้าคนนี้จะทำการเปลี่ยนสถานะของลูกค้าคนนี้",
+      okText: "ยืนยัน",
+      okType: "danger",
+      cancelText: "ยกเลิก",
+      onOk() {
+        updateMemberStatusById(id);
+      },
+      onCancel() {
+        console.log("ยกเลิกการลบ");
+      },
+    });
+  };
+
   const getMember = async () => {
     let res = await GetMember();
     if (res.status == 200) {
@@ -137,6 +226,16 @@ function Member() {
   useEffect(() => {
     getMember();
   }, []);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchId(e.target.value); // อัปเดตการค้นหา
+  };
+
+  const filteredMembers = member.filter((m) =>
+    m.ID.toString().includes(searchId) // กรองสมาชิกตาม ID
+  );
+
+
   return (
     <>
       {contextHolder}
@@ -161,7 +260,7 @@ function Member() {
                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                   }}
                 >
-              <Statistic title="Total Members" value={3000} valueStyle={{ color: "black" }}  />
+              <Statistic title="Total Members" value={member.length} valueStyle={{ color: "black" }}  />
             </Card>
         </Col>
         <Col span={5}>
@@ -170,7 +269,7 @@ function Member() {
                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                   }}
                 >
-              <Statistic title="Active Members" value={3000} valueStyle={{ color: "black" }}  />
+              <Statistic title="Active Members" value={activeMembers.length} valueStyle={{ color: "black" }}  />
             </Card>
         </Col>
         <Col span={5}>
@@ -179,25 +278,28 @@ function Member() {
                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                   }}
                 >
-              <Statistic title="Inactive Members" value={3000} valueStyle={{ color: "black" }}  />
-            </Card>
-        </Col>
-        <Col span={5}>
-        <Card bordered={false}
-                  style={{
-                    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-                  }}
-                >
-              <Statistic title="New This Month" value={3000} valueStyle={{ color: "black" }}  />
+              <Statistic title="Unactive Members" value={member.length-activeMembers.length} valueStyle={{ color: "black" }}  />
             </Card>
         </Col>
       </Row>
+
+      <Row style={{ marginTop: 20 }}>
+        <Col span={12}>
+          <Input
+            placeholder="ค้นหาด้วย ID"
+            value={searchId}
+            onChange={handleSearch}
+            style={{ width: "50%" }}
+          />
+        </Col>
+      </Row>
+
       <Divider />
       <div style={{ marginTop: 20 }}>
         <Table
           rowKey="ID"
           columns={columns}
-          dataSource={member}
+          dataSource={filteredMembers}
           style={{ width: "100%", overflow: "scroll" }}
         />
       </div>
