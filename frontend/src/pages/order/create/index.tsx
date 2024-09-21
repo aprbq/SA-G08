@@ -4,7 +4,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { MenuInterface } from '../../../interfaces/Menu';
 import { OrdersweetInterface } from '../../../interfaces/Ordersweet';
 import { OrderItemInterface } from '../../../interfaces/OrderItem';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { GetMenu, GetOrdersweet } from '../../../services/https';
 
 const { Option } = Select;
@@ -15,6 +15,7 @@ function OrderitemCreate() {
   const [ordersweet, setOrdersweet] = useState<OrdersweetInterface[]>([]);
   const [orderItems, setOrderItems] = useState<OrderItemInterface[]>([]);
   const [selectedMenuPrice, setSelectedMenuPrice] = useState<number>(0);
+  const location = useLocation();
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
@@ -83,9 +84,16 @@ function OrderitemCreate() {
   };
 
   useEffect(() => {
-    getMenu();
+    if (location.state) {
+      const { orderItems, menu, ordersweet } = location.state;
+      setOrderItems(orderItems); // นำ orderItems กลับมาใช้
+      setMenu(menu);
+      setOrdersweet(ordersweet);
+    }
     getOrdersweet();
-  }, []);
+    getMenu();
+  }, [location.state]);
+  
 
   const columns = [
     {
@@ -117,7 +125,26 @@ function OrderitemCreate() {
         return sweetItem ? sweetItem.order_sweet_name : 'ไม่พบระดับความหวาน';
       },
     },
+    {
+      title: 'การจัดการ',
+      key: 'action',
+      render: (_:undefined, record: OrderItemInterface) => (
+        <Button type="link" onClick={() => removeOrderItem(record)}>
+          ยกเลิก
+        </Button>
+      ),
+    },
   ];
+
+  const removeOrderItem = (itemToRemove: OrderItemInterface) => {
+    const updatedOrderItems = orderItems.filter(item => item !== itemToRemove);
+    setOrderItems(updatedOrderItems);
+  
+    messageApi.open({
+      type: 'success',
+      content: 'ยกเลิกรายการสำเร็จ',
+    });
+  };
 
   const goToNextPage = () => {
     navigate('/order/create/createorder', {
@@ -192,7 +219,7 @@ function OrderitemCreate() {
                 <Space>
                   <Link to="/order">
                     <Button className="back-button" htmlType="button" style={{ marginRight: '10px' }}>
-                      ย้อนกลับ
+                      ยกเลิก
                     </Button>
                   </Link>
                   <Button
@@ -216,7 +243,46 @@ function OrderitemCreate() {
         </Form>
 
         <Divider />
-        <Table columns={columns} dataSource={orderItems} rowKey="ID" />
+        <Table columns={[
+          {
+            title: 'ชื่อเมนู',
+            dataIndex: 'menu_id',
+            key: 'menu_id',
+            render: (text: number) => {
+              const menuItem = menu.find(item => item.ID === text);
+              return menuItem ? menuItem.name : 'ไม่พบเมนู';
+            },
+          },
+          {
+            title: 'จำนวน',
+            dataIndex: 'order_quantity',
+            key: 'order_quantity',
+          },
+          {
+            title: 'ราคาของเมนู',
+            dataIndex: 'total_item',
+            key: 'total_item',
+            render: (text: number) => `${text} บาท`,
+          },
+          {
+            title: 'ระดับความหวาน',
+            dataIndex: 'ordersweet_id',
+            key: 'ordersweet_id',
+            render: (text: number) => {
+              const sweetItem = ordersweet.find(item => item.ID === text);
+              return sweetItem ? sweetItem.order_sweet_name : 'ไม่พบระดับความหวาน';
+            },
+          },
+          {
+            title: 'การจัดการ',
+            key: 'action',
+            render: (_: undefined, record: OrderItemInterface) => (
+              <Button type="link" onClick={() => removeOrderItem(record)}>
+                ยกเลิก
+              </Button>
+            ),
+          },
+        ]} dataSource={orderItems} rowKey="ID" />
       </Card>
     </div>
   );

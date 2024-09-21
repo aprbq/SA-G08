@@ -1,31 +1,20 @@
-import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message } from "antd";
-import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Space, Col, Row, Divider, message,Modal, Typography,List} from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import type { ColumnsType } from "antd/es/table";
-import { GetOrder, DeleteOrderById } from "../../services/https/index";
-import { OrderInterface } from "../../interfaces/Order";
-import { OrderItemInterface } from "../../interfaces/OrderItem";
-import { Link, useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
-
+import { GetOrder, DeleteOrderById } from '../../services/https';
+import { OrderInterface } from '../../interfaces/Order';
+import { MenuInterface } from '../../interfaces/Menu';
+import dayjs from 'dayjs';
+const { confirm } = Modal;
+const { Title, Text } = Typography;
 function Order() {
   const navigate = useNavigate();
-  const [Order, setOrder] = useState<OrderInterface[]>([]);
+  const [orders, setOrders] = useState<OrderInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-
-  const orderItemsList: OrderItemInterface[] = [
-    // ตัวอย่างข้อมูล orderItems
-    { ID: 1, name: "เมนู 1", order_quantity: 2, price: 100, total_item: 200 },
-    { ID: 2, name: "เมนู 2", order_quantity: 1, price: 150, total_item: 150 },
-  ];
-
-  //const selectedPromotionId = 1; // หรือ undefined หากไม่มีการเลือกโปรโมชั่น
-  //const selectedPaymentMethodId = 2; // หรือ undefined หากไม่มีการเลือกวิธีการชำระเงิน
-  const totalOrderPrice = orderItemsList.reduce(
-    (total, item) => total + (item.total_item || 0), // ตรวจสอบ item.total_item เป็น 0 ถ้า undefined
-    0
-  ); // ราคารวม
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedMenu, setSelectedMenu] = useState<MenuInterface[]>([]);
 
   const columns: ColumnsType<OrderInterface> = [
     {
@@ -33,7 +22,6 @@ function Order() {
       dataIndex: "ID",
       key: "id",
     },
-    
     {
       title: "ราคารวมของเมนู",
       dataIndex: "payment_amount",
@@ -42,113 +30,158 @@ function Order() {
     {
       title: "วิธีการชำระเงิน",
       dataIndex: "paymentmethod",
-      key: "paymentmethod_id", // แสดงวิธีการชำระเงินที่เลือก
+      key: "paymentmethod_id",
       render: (item) => Object.values(item.payment_methods),
     },
     {
       title: "โปรโมชั่นที่เลือกใช้",
       dataIndex: "promotion",
-      key: "promotion_id", // แสดงโปรโมชั่นที่เลือก
+      key: "promotion_id",
       render: (item) => Object.values(item.promotion_name),
     },
+    
+    
+    
     {
       title: "วันทำรายการ",
       key: "order_date",
-      render: (record) => <>{dayjs(record.order_date).format("DD/MM/YYYY")}</>,
+      render: (record: OrderInterface) => (
+        <>{dayjs(record.order_date).format("DD/MM/YYYY")}</>
+      ),
     },
-
     {
       title: "",
-      render: (record) => (
-        <>
-          <Button
-            className="btn-1"
-            type="primary"
-            icon={<EditOutlined />}
-            onClick={() => navigate(`/order/edit/${record.ID}`)}
-          >
-            แก้ไขข้อมูล
-          </Button>
-        </>
+      render: (record: OrderInterface) => (
+        <Button
+          className="btn-1"
+          type="primary"
+          icon={<EditOutlined />}
+          onClick={() => navigate(`/order/edit/${record.ID}`)}
+        >
+          แก้ไขข้อมูล
+        </Button>
       ),
     },
     {
       title: "",
       render: (record) => (
-        <>
-          <Button
-            type="primary"
-            className="btn-delete"
-            icon={<DeleteOutlined />}
-            onClick={() => deleteOrderById(record.ID)}
-          ></Button>
-        </>
+        <Button
+          type="primary"
+          className="btn-delete"
+          icon={<DeleteOutlined />}
+          onClick={() => showDeleteConfirm(record.ID)}
+        ></Button>
       ),
     },
   ];
 
   const deleteOrderById = async (id: string) => {
-    let res = await DeleteOrderById(id);
-
-    if (res) {
-      messageApi.open({
-        type: "success",
-        content: "ลบออเดอร์สำเร็จ",
-      });
-      await getOrder();
-    } else {
+    try {
+      // เรียกฟังก์ชันที่ลบโปรโมชั่นและลบเงื่อนไข
+      let res = await DeleteOrderById(id);
+      if (res.status === 200) {
+        messageApi.open({
+          type: "success",
+          content: res.data.message,
+        });
+        await getOrders(); // รีเฟรชรายการโปรโมชั่น
+      } else {
+        messageApi.open({
+          type: "error",
+          content: res.data.error,
+        });
+      }
+    } catch (error) {
       messageApi.open({
         type: "error",
-        content: "เกิดข้อผิดพลาดในการลบ",
+        content: "เกิดข้อผิดพลาดในการลบโปรโมชั่น",
       });
     }
   };
 
-  const getOrder = async () => {
-    let res = await GetOrder();
+  const showDeleteConfirm = (id: string) => {
+    confirm({
+      title: "คุณแน่ใจหรือว่าต้องการลบ'โปรโมชั่น'",
+      content: "การลบจะไม่สามารถยกเลิกได้",
+      okText: "ยืนยัน",
+      okType: "danger",
+      cancelText: "ยกเลิก",
+      className:  "front-1",
+      onOk() {
+        deleteOrderById(id);
+      },
+      onCancel() {
+        console.log("ยกเลิกการลบ");
+      },
+    })};
 
+  const getOrders = async () => {
+    let res = await GetOrder();
     if (res.status === 200) {
-      setOrder(res.data);
+      setOrders(res.data);
     } else {
-      setOrder([]);
+      setOrders([]);
       messageApi.open({
         type: "error",
         content: res.data.error,
       });
     }
   };
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   useEffect(() => {
-    getOrder();
+    getOrders();
+    
   }, []);
 
   return (
     <>
       {contextHolder}
       <Row>
-        <Col className="name-table" span={12}>
+        <Col span={12}>
           <h2>จัดการออเดอร์</h2>
         </Col>
-        <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
+        <Col span={12} style={{ textAlign: "end" }}>
           <Space>
-            <Link to="/order/create">
-              <Button className="btn-1" type="primary" icon={<PlusOutlined />}>
-                สร้างออเดอร์
-              </Button>
-            </Link>
+            <Button className="btn-1" type="primary" onClick={() => navigate('/order/create')}>
+              สร้างออเดอร์
+            </Button>
           </Space>
         </Col>
       </Row>
       <Divider />
-      <div style={{ marginTop: 20 }}>
-        <Table
-          rowKey="ID"
-          columns={columns}
-          dataSource={Order}
-          style={{ width: "100%", overflow: "scroll" }}
-        />
-      </div>
+      <Table
+        rowKey="ID"
+        columns={columns}
+        dataSource={orders}
+        style={{ width: "100%", overflow: "scroll" }}
+      />
+      <Modal
+        title="เมนูเงื่อนไข"
+        open={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        {selectedMenu.length > 0 ? (
+          <List
+            itemLayout="horizontal"
+            dataSource={selectedMenu}
+            renderItem={(menu) => (
+              <List.Item>
+                <List.Item.Meta
+                  title={<Text strong>{menu.name}</Text>}
+                />
+              </List.Item>
+            )}
+          />
+        ) : (
+          <p>ไม่มีวัตถุดิบสำหรับเมนูนี้</p>
+        )}
+      </Modal>
     </>
   );
 }
+
 export default Order;

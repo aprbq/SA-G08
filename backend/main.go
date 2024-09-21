@@ -72,6 +72,7 @@ func main() {
 
 		rounter.PUT("/order/:id", order.Update)
 		rounter.GET("/order", order.GetAll)
+		rounter.POST("/order", order.CreateOrder)
 		rounter.GET("/order/:id", order.Get)
 		rounter.DELETE("/order/:id", order.Delete)
 		rounter.GET("/ordersweet", ordersweet.GetAll)

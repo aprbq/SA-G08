@@ -1,17 +1,41 @@
+// package ordersweet
+
+// import (
+// 	"net/http"
+
+//     "example.com/sa-67-example/config"
+//     "example.com/sa-67-example/entity"
+//     "github.com/gin-gonic/gin"
+// )
+
+// func GetAll(c *gin.Context) {
+//     var ordersweet []entity.Ordersweet
+//     db := config.DB()
+//     db.Find(&ordersweet)
+
+//     c.JSON(http.StatusOK, &ordersweet)
+// }
+
 package ordersweet
 
 import (
 	"net/http"
 
-    "example.com/sa-67-example/config"
-    "example.com/sa-67-example/entity"
-    "github.com/gin-gonic/gin"
+	"example.com/sa-67-example/config"
+	"example.com/sa-67-example/entity"
+	"github.com/gin-gonic/gin"
 )
 
+// GetAll retrieves all Ordersweets
 func GetAll(c *gin.Context) {
-    var ordersweet []entity.Ordersweet
-    db := config.DB()
-    db.Find(&ordersweet)
+	var ordersweet []entity.Ordersweet
+	db := config.DB()
 
-    c.JSON(http.StatusOK, &ordersweet)
+	// ค้นหาข้อมูล Ordersweet
+	if err := db.Find(&ordersweet).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve ordersweets"})
+		return
+	}
+
+	c.JSON(http.StatusOK, ordersweet)
 }

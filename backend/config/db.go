@@ -221,16 +221,32 @@ func SetupDatabase() {
 	})
 
 	//TestDate, _ := time.Parse("2006-01-02", "1999-05-05")
-	Order := &entity.Order{
+	// Order := &entity.Order{
 
-		OrderDate: exp_date,
-		//menu_id: "กาแฟ",
+	// 	OrderDate: exp_date,
+	// 	//menu_id: "กาแฟ",
+	// 	PaymentAmount:   50,
+	// 	EmployeeID:      1,
+	// 	PromotionID:     1,
+	// 	PaymentmethodID: 1,
+	// }
+	// db.FirstOrCreate(Order, &entity.Order{
+	// 	PaymentAmount: 50,
+	// })
+
+	Order := &entity.Order{
+		OrderDate:       exp_date,
 		PaymentAmount:   50,
 		EmployeeID:      1,
 		PromotionID:     1,
 		PaymentmethodID: 1,
 	}
+	
 	db.FirstOrCreate(Order, &entity.Order{
-		PaymentAmount: 50,
+		EmployeeID:      1,
+		PromotionID:     1,
+		PaymentmethodID: 1,
+		// เพิ่มฟิลด์อื่น ๆ ที่จำเป็นที่คุณต้องการตรวจสอบ
 	})
+	
 }
