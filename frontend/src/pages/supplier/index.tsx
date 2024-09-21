@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message, Modal } from "antd";
-import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined , EditOutlined, LeftOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetSuppliers, DeleteSupplierById } from "../../services/https/index";
 import { SupplierInterface } from "../../interfaces/Supplier";
@@ -18,27 +18,32 @@ function Supplier() {
       title: "ลำดับ",
       dataIndex: "ID",
       key: "id",
+      className:  "front-1",
     },
 
     {
       title: "ชื่อ",
       dataIndex: "name",
       key: "name",
+      className:  "front-1",
     },
 
     {
       title: "ที่อยู่ผู้ผลิต",
       dataIndex: "address",
       key: "address",
+      className:  "front-1",
     },
 
     {
       title: "เบอร์โทร",
       dataIndex: "tel",
       key: "tel",
+      className:  "front-1",
     },
     {
       title: "แก้ไข/ลบข้อมูล",
+      className:  "front-1",
       render: (record) => (
         <>
           <Button
@@ -108,8 +113,12 @@ function Supplier() {
 
   return (
     <div>
+      {contextHolder}
       <Row>
         <Col span={12}>
+        <Link to="/ingredient">
+        <Button type="primary" icon={<LeftOutlined />}/>
+        </Link>
           <h2>จัดการข้อมูลผู้ผลิต</h2>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>

@@ -76,87 +76,95 @@ function IngredientEdit() {
   return (
     <div>
       {contextHolder}
-      <Card>
-        <h2>แก้ไขข้อมูล ผู้ผลิต</h2>
-        <Divider />
+      <Row gutter={[16, 16]} justify="center" style={{ marginBottom: "20px" }}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+          <h1 className="heading-style">แก้ไขข้อมูลผู้ผลิต</h1>
+        </Col>
+      </Row>
 
-        <Form
-          name="basic"
-          form={form}
-          layout="vertical"
-          onFinish={onFinish}
-          autoComplete="off"
-        >
-          <Row gutter={[16, 0]}>
-          <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="ชื่อ"
-                  name="name"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกชื่อ !",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-              
+      <Row gutter={[16, 16]} justify="center" style={{ marginTop: "0px" }}>
+        <Col xs={24} sm={24} md={16} lg={14} xl={12}>
+          <Card className="card-style">
+            <Form
+              name="basic"
+              form={form}
+              layout="vertical"
+              onFinish={onFinish}
+              autoComplete="off"
+            >
+              <Row gutter={[16, 16]}>
               <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="ที่อยู่ผู้ผลิต"
-                  name="address"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกที่อยู่ผู้ผลิต !",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-  
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="เบอร์โทร"
-                  name="tel"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกเบอร์โทร !",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-          </Row>
+                    <Form.Item
+                      className="front-1"
+                      label="ชื่อ"
+                      name="name"
+                      rules={[
+                        {
+                          required: true,
+                          message: "กรุณากรอกชื่อ !",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                  
+              </Row>
 
-          <Row justify="end">
-            <Col style={{ marginTop: "40px" }}>
-              <Form.Item>
-                <Space>
-                  <Link to="/ingredient">
-                    <Button htmlType="button" style={{ marginRight: "10px" }}>
-                      ย้อนกลับ
-                    </Button>
-                  </Link>
+                  <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+                    <Form.Item
+                      label="ที่อยู่ผู้ผลิต"
+                      name="address"
+                      rules={[
+                        {
+                          required: true,
+                          message: "กรุณากรอกที่อยู่ผู้ผลิต !",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
+      
+                  <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+                    <Form.Item
+                      label="เบอร์โทร"
+                      name="tel"
+                      rules={[
+                        {
+                          required: true,
+                          message: "กรุณากรอกเบอร์โทร !",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
+              <Row justify="space-between">
+                <Col style={{ marginTop: "40px" }}>
+                  <Form.Item>
+                    <Space>
+                      <Link to="/ingredient">
+                        <Button htmlType="button" style={{ marginRight: "10px" }}>
+                          ย้อนกลับ
+                        </Button>
+                      </Link>
 
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    icon={<PlusOutlined />}
-                  >
-                    ตกลง
-                  </Button>
-                </Space>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </Card>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        icon={<PlusOutlined />}
+                      >
+                        ตกลง
+                      </Button>
+                    </Space>
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form>
+          </Card>
+      </Col>
+      </Row>
     </div>
   );
 }

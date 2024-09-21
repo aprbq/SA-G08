@@ -36,6 +36,7 @@ function Ingredients() {
     {
       title: "หน่วย",
       dataIndex: "unit",
+      key: "unit",
       render: (item) => Object.values(item.unit),
     },
     {

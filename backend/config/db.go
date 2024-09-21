@@ -76,6 +76,7 @@ func SetupDatabase() {
 
 	UnitGram := entity.Unit{Unit: "Gram"}
 	UnitLit := entity.Unit{Unit: "Lit"}
+	Supplierfirst := entity.Suppliers{Name: "บุ๊ค",Address:"บ้านหนองแก", Tel:"0998882222" }
 
 
 	CategoryHot := entity.Category{Category: "Hot"}
@@ -95,6 +96,7 @@ func SetupDatabase() {
 
 	db.FirstOrCreate(&StatusActive, &entity.Status{StatusName: "Active"})
 	db.FirstOrCreate(&StatusUnactive, &entity.Status{StatusName: "Unactive"})
+	db.FirstOrCreate(&Supplierfirst, &entity.Suppliers{Name: "บุ๊ค",Address:"บ้านหนองแก", Tel:"0998882222"})
 
 	db.FirstOrCreate(&DiscountTypePercen, &entity.DiscountType{DiscountTypeName: "Percen"})
 	db.FirstOrCreate(&DiscountTypeBogo, &entity.DiscountType{DiscountTypeName: "Bogo"})
@@ -163,10 +165,10 @@ func SetupDatabase() {
 	Ingre := &entity.Ingredients{
 		Name:       "Nom",
 		Quantity:   10,
-		UnitID:       1,
+		UnitID:      1,
 		UnitPrice:  80,
 		Price:      800,
-		SuppliersID:   1,
+		SuppliersID:  1,
 		ExpDate:    exp_date,
 		ClassID:    1,
 		EmployeeID: 1,
