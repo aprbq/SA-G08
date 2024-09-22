@@ -237,7 +237,7 @@ function Member() {
 
 
   return (
-    <>
+    <div style={{ backgroundColor: "#ffe8bf", minHeight: "100vh" }}>
       {contextHolder}
       <Row>
         <Col span={12}>
@@ -257,7 +257,8 @@ function Member() {
         <Col span={5}>
             <Card bordered={false}
                   style={{
-                    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                    backgroundColor: "#dafafa",
+                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                   }}
                 >
               <Statistic title="Total Members" value={member.length} valueStyle={{ color: "black" }}  />
@@ -266,15 +267,17 @@ function Member() {
         <Col span={5}>
             <Card bordered={false}
                   style={{
+                    backgroundColor: "#e4f3d8",
                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                   }}
                 >
-              <Statistic title="Active Members" value={activeMembers.length} valueStyle={{ color: "black" }}  />
+              <Statistic title="Active Members"  value={activeMembers.length} valueStyle={{ color: "black" }}  />
             </Card>
         </Col>
         <Col span={5}>
         <Card bordered={false}
                   style={{
+                    backgroundColor: "#fc9994",
                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                   }}
                 >
@@ -300,10 +303,13 @@ function Member() {
           rowKey="ID"
           columns={columns}
           dataSource={filteredMembers}
-          style={{ width: "100%", overflow: "scroll" }}
+          // style={{ width: "100%", overflow: "scroll" }}
+          rowClassName={(record, index) => 
+            index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"
+          }
         />
       </div>
-    </>
+    </div>
   );
 }
 export default Member;

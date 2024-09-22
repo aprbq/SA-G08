@@ -61,7 +61,7 @@ body {
 
 .card-login {
 
-  overflow-y: scroll;
+  overflow-y: hidden;
 
   width: 70%;
 
