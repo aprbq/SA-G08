@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Space, Col, Row, Divider, Form, Select, Card, message } from 'antd';
+import { Table, Button, Space, Col, Row, Divider, Form, Select, Card, message ,Input } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PromotionInterface } from '../../../../interfaces/Promotion';
 import { MenuInterface } from '../../../../interfaces/Menu';
@@ -22,6 +22,7 @@ function OrderConfirm() {
   const [ordersweet, setOrdersweet] = useState<OrdersweetInterface[]>([]);
   const [filteredPromotions, setFilteredPromotions] = useState<PromotionInterface[]>([]);
   const [conditions, setConditions] = useState<any[]>([]);
+  const [phoneNumber, setPhoneNumber] = useState<string | undefined>(undefined); // เพิ่ม state สำหรับเบอร์โทรศัพท์
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedPromotionType, setSelectedPromotionType] = useState<number | undefined>(undefined);
@@ -204,6 +205,32 @@ function OrderConfirm() {
                 </Select>
               </Form.Item>
             </Col>
+            
+            {/* เพิ่มช่องกรอกเบอร์โทรศัพท์ */}
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+              <Form.Item
+                label="เบอร์โทรศัพท์"
+                name="phone_number"
+                rules={[
+                  {
+                    required: selectedPromotionType === 1, // จำเป็นถ้าเลือก Member
+                    message: 'กรุณากรอกเบอร์โทรศัพท์ !',
+                  },
+                  {
+                    pattern: /^[0-9]{10}$/,
+                    message: 'กรุณากรอกเบอร์โทรศัพท์ที่ถูกต้อง (10 หลัก)',
+                  },
+                ]}
+              >
+                <Input
+                  placeholder="กรอกเบอร์โทรศัพท์"
+                  disabled={selectedPromotionType !== 1} // ปิดการใช้งานถ้าไม่ใช่ Member
+                  value={phoneNumber}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
+                />
+              </Form.Item>
+            </Col>
+            
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
             <Form.Item
               label="โปรโมชั่น"
