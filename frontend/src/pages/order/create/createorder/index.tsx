@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Space, Col, Row, Divider, Form, Select, Card, message } from 'antd';
+import { Table, Button, Space, Col, Row, Divider, Form, Select, Card, message ,Input } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PromotionInterface } from '../../../../interfaces/Promotion';
 import { MenuInterface } from '../../../../interfaces/Menu';
@@ -22,6 +22,7 @@ function OrderConfirm() {
   const [ordersweet, setOrdersweet] = useState<OrdersweetInterface[]>([]);
   const [filteredPromotions, setFilteredPromotions] = useState<PromotionInterface[]>([]);
   const [conditions, setConditions] = useState<any[]>([]);
+  const [phoneNumber, setPhoneNumber] = useState<string | undefined>(undefined); // เพิ่ม state สำหรับเบอร์โทรศัพท์
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedPromotionType, setSelectedPromotionType] = useState<number | undefined>(undefined);
@@ -74,6 +75,16 @@ function OrderConfirm() {
     });
   };
 
+  const getPromotionsForAllMenus = (menuIds: number[], promotionTypeId: number) => {
+    return promotions.filter(promotion => 
+      promotion.promotion_type_id === promotionTypeId && // ต้องตรงกับประเภทโปรโมชั่น
+      conditions.some(condition => 
+        menuIds.includes(condition.menu_id) && condition.promotion_id === promotion.ID // เช็คว่า menu_id ใด ๆ ในเงื่อนไขตรงกับ promotion_id
+      ) &&
+      promotion.status_id !== 2 // เพิ่มเงื่อนไขให้ตรวจสอบ status_id ว่าไม่ใช่ Unactive
+    );
+  };
+
   const removeOrderItem = (itemToRemove: OrderItemInterface) => {
     const updatedOrderItems = orderItems.filter(item => item !== itemToRemove);
     setOrderItems(updatedOrderItems);
@@ -95,21 +106,27 @@ function OrderConfirm() {
     }
   };
 
-  const getPromotionsForMenu = (menuId: number, promotionTypeId: number) => {
+  const getPromotionsForMenu = (menuIds: number[], promotionTypeId: number) => {
     return promotions.filter(promotion => 
       promotion.promotion_type_id === promotionTypeId && // ต้องตรงกับประเภทโปรโมชั่น
-      conditions.some(condition => condition.menu_id === menuId && condition.promotion_id === promotion.ID) // เช็ค menu_id กับ promotion_id
+      conditions.some(condition => 
+        menuIds.includes(condition.menu_id) && condition.promotion_id === promotion.ID // เช็คว่า menu_id ใด ๆ ในเงื่อนไขตรงกับ promotion_id
+      )&& 
+      promotion.status_id !== 2 // เช็ค menu_id กับ promotion_id
     );
   };
   
   const handlePromotionTypeChange = (promotionTypeId: number) => {
     setSelectedPromotionType(promotionTypeId);
-    const selectedMenuId = orderItems[0]?.menu_id;
-  
-    if (selectedMenuId) {
-      const promotionsForMenu = getPromotionsForMenu(selectedMenuId, promotionTypeId);
-      console.log("Filtered Promotions:", promotionsForMenu); // Debugging line
-      setFilteredPromotions(promotionsForMenu);
+
+    // ดึง menu_id ของทุกเมนูจาก orderItems
+    const selectedMenuIds = orderItems.map(item => item.menu_id).filter((id): id is number => id !== undefined);
+
+    if (selectedMenuIds.length > 0) {
+      // กรองโปรโมชั่นสำหรับเมนูทั้งหมด
+      const promotionsForMenus = getPromotionsForAllMenus(selectedMenuIds, promotionTypeId);
+      console.log("Filtered Promotions for all menus:", promotionsForMenus); // Debugging line
+      setFilteredPromotions(promotionsForMenus);
     } else {
       setFilteredPromotions([]);
     }
@@ -188,6 +205,32 @@ function OrderConfirm() {
                 </Select>
               </Form.Item>
             </Col>
+            
+            {/* เพิ่มช่องกรอกเบอร์โทรศัพท์ */}
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+              <Form.Item
+                label="เบอร์โทรศัพท์"
+                name="phone_number"
+                rules={[
+                  {
+                    required: selectedPromotionType === 1, // จำเป็นถ้าเลือก Member
+                    message: 'กรุณากรอกเบอร์โทรศัพท์ !',
+                  },
+                  {
+                    pattern: /^[0-9]{10}$/,
+                    message: 'กรุณากรอกเบอร์โทรศัพท์ที่ถูกต้อง (10 หลัก)',
+                  },
+                ]}
+              >
+                <Input
+                  placeholder="กรอกเบอร์โทรศัพท์"
+                  disabled={selectedPromotionType !== 1} // ปิดการใช้งานถ้าไม่ใช่ Member
+                  value={phoneNumber}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
+                />
+              </Form.Item>
+            </Col>
+            
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
             <Form.Item
               label="โปรโมชั่น"
