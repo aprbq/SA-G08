@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message, Modal, List, Typography } from "antd";
 import { PlusOutlined, DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetMenu, DeleteMenuById, GetMenuIngredientById ,GetIngredients, GetIngredientsById, UpdateMenuById} from "../../services/https/index";
+import { GetMenu,GetMenuById, DeleteMenuById, GetMenuIngredientById ,GetIngredients, GetIngredientsById, UpdateMenuById} from "../../services/https/index";
 import { MenuInterface } from "../../interfaces/Menu";
 import { MenuIngredientInterface } from "../../interfaces/MenuIngredient";
 import { IngredientInterface } from "../../interfaces/Ingredient";
@@ -188,9 +188,13 @@ function Menus() {
             if (menu.stock_id !== newStockId) {
               // อัปเดต stock_id ของเมนูใน backend
               await UpdateMenuById(String(menu.ID), { stock_id: newStockId });
+  
+              // อัปเดตเมนูใหม่จาก backend ทันทีหลังจากอัปเดต stock_id สำเร็จ
+              const updatedMenuRes = await GetMenuById(String(menu.ID)); // ดึงข้อมูลเมนูใหม่หลังจากการอัปเดต
+              return updatedMenuRes.data; // ส่งคืนเมนูที่อัปเดตแล้ว
             }
   
-            // อัปเดตเมนูใน state
+            // ถ้าไม่มีการอัปเดต ส่งคืนเมนูปัจจุบัน
             return { ...menu, stock_id: newStockId };
           }
   
@@ -198,7 +202,7 @@ function Menus() {
         })
       );
   
-      setMenu(updatedMenus); // อัปเดตเมนูทั้งหมดที่มีการอัปเดต stock_id
+      setMenu(updatedMenus); // อัปเดตเมนูทั้งหมดใน state
     } else {
       setMenu([]);
       messageApi.open({
@@ -207,6 +211,7 @@ function Menus() {
       });
     }
   };
+  
   
   
   
