@@ -141,7 +141,7 @@ function Ingredients() {
       {contextHolder}
       <Row>
         <Col span={12}> 
-          <h1>จัดการวัตถุดิบ</h1>
+          <h1 className="title"> จัดการวัตถุดิบ</h1>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
@@ -151,8 +151,8 @@ function Ingredients() {
               </Button>
             </Link>
             <Link to="/supplier">
-              <Button type="primary"  className='btn-1' icon={<PlusOutlined />}>
-                จัดการ Supplier
+              <Button type="primary"  className='button-normal'>
+                ดูข้อมูล Supplier
               </Button>
             </Link>
           </Space>

@@ -10,7 +10,6 @@ import {
   Card,
   message,
   DatePicker,
-  InputNumber,
   Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
@@ -26,7 +25,6 @@ const { Option } = Select;
 
 function IngredientEdit() {
   const navigate = useNavigate();
-  //let { id } = useParams();
   const { id } = useParams<{ id: any }>();
   const [messageApi, contextHolder] = message.useMessage();
   const [Class, setClass] = useState<ClassInterface[]>([]);
@@ -36,7 +34,7 @@ function IngredientEdit() {
 
   const getIngredientsById = async (id: string) => {
     let res = await GetIngredientsById(id);
-    if (res.status == 200) {
+    if (res.status === 200) {
       form.setFieldsValue({
         name: res.data.name,
         quantity: res.data.quantity,
@@ -59,17 +57,20 @@ function IngredientEdit() {
   };
 
   const onFinish = async (values: IngredientInterface) => {
-    let payload = {
+    // Convert string inputs to numbers
+    const payload = {
       ...values,
+      quantity: Number(values.quantity),
+      unit_price: Number(values.unit_price),
+      price: Number(values.price),
     };
-    console.log(payload)
-    const res = await UpdateIngredientsById(id, values);
-    if (res.status == 200) {
+    console.log(payload);
+    const res = await UpdateIngredientsById(id, payload);
+    if (res.status === 200) {
       messageApi.open({
         type: "success",
         content: "update successsfully",
       });
-      await getMenu();
       setTimeout(() => {
         navigate("/ingredient");
       }, 2000);
@@ -81,11 +82,9 @@ function IngredientEdit() {
     }
   };
 
-  
-
   const getClass = async () => {
     let res = await GetClass();
-    if (res.status == 200) {
+    if (res.status === 200) {
       setClass(res.data);
     } else {
       setClass([]);
@@ -98,7 +97,7 @@ function IngredientEdit() {
 
   const getUnit = async () => {
     let res = await GetUnits();
-    if (res.status == 200) {
+    if (res.status === 200) {
       setUnit(res.data);
     } else {
       setUnit([]);
@@ -111,7 +110,7 @@ function IngredientEdit() {
 
   const getSuppliers = async () => {
     let res = await GetSuppliers();
-    if (res.status == 200) {
+    if (res.status === 200) {
       setSupplier(res.data);
     } else {
       setSupplier([]);
@@ -132,10 +131,12 @@ function IngredientEdit() {
   return (
     <div>
       {contextHolder}
-      <Card>
-        <h2>แก้ไขข้อมูล วัตถุดิบ</h2>
-        <Divider />
-
+      <Row gutter={[16, 16]} justify="center" style={{ marginBottom: "20px" }}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+          <h1 className="heading-style">แก้ไขข้อมูลวัตถุดิบ</h1>
+        </Col>
+      </Row>
+      <Card className="card-ingredient">
         <Form
           name="basic"
           form={form}
@@ -143,34 +144,24 @@ function IngredientEdit() {
           onFinish={onFinish}
           autoComplete="off"
         >
-          <Row gutter={[16, 0]}>
-          <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="ชื่อ"
-                  name="name"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกชื่อ !",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-              
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+          <Row gutter={[16, 16]} justify="center" style={{ marginTop: "0px" }}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="ประเภท"
-                name="class_id"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาเลือกประเภท !",
-                  },
-                ]}
+                label={<span className="front-1">ชื่อ</span>}
+                name="name"
+                rules={[{ required: true, message: "กรุณากรอกชื่อ !" }]}
               >
-                <Select allowClear>
+                <Input className="front-1" />
+              </Form.Item>
+            </Col>
+            
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                label={<span className="front-1">ประเภท</span>}
+                name="class_id"
+                rules={[{ required: true, message: "กรุณาเลือกประเภท !" }]}
+              >
+                <Select className="front-1" allowClear>
                   {Class.map((item) => (
                     <Option value={item.ID} key={item.class}>
                       {item.class}
@@ -178,137 +169,115 @@ function IngredientEdit() {
                   ))}
                 </Select>
               </Form.Item>
-              </Col>
+            </Col>
 
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="จำนวน"
-                  name="quantity"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกจำนวน !",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    defaultValue={0}
-                    style={{ width: "100%" }}
-                  />
-                </Form.Item>
-              </Col>
-  
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="หน่วย"
-                  name="unit_id"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกหน่วย !",
-                    },
-                  ]}
-                >
-                  <Select allowClear>
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                label={<span className="front-1">จำนวน</span>}
+                name="quantity"
+                rules={[{ required: true, message: "กรุณากรอกจำนวน !" }]}
+              >
+                <Input
+                  className="front-1"
+                  min={0}
+                  type="number"
+                  defaultValue={0}
+                  style={{ width: "100%" }}
+                  onChange={(e) => form.setFieldsValue({ quantity: e.target.value })}
+                />
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                label={<span className="front-1">หน่วย</span>}
+                name="unit_id"
+                rules={[{ required: true, message: "กรุณากรอกหน่วย !" }]}
+              >
+                <Select className="front-1" allowClear>
                   {unit.map((item) => (
                     <Option value={item.ID} key={item.ID}>
                       {item.unit}
                     </Option>
                   ))}
                 </Select>
-                </Form.Item>
-              </Col>
-  
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="ราคาต่อหน่วย"
-                  name="unit_price"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกราคาต่อหน่วย !",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    defaultValue={0}
-                    style={{ width: "100%" }}
-                    step={0.01} 
-                  />
-                </Form.Item>
-              </Col>
-              
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="ราคา"
-                  name="price"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกราคา !",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    defaultValue={0}
-                    style={{ width: "100%" }}
-                    step={0.01} 
-                  />
-                </Form.Item>
-              </Col>
+              </Form.Item>
+            </Col>
 
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="ผู้ผลิต"
-                  name="suppliers_id"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณากรอกชื่อผู้ผลิต !",
-                    },
-                  ]}
-                >
-                  <Select allowClear>
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                label={<span className="front-1">ราคาต่อหน่วย</span>}
+                name="unit_price"
+                rules={[{ required: true, message: "กรุณากรอกราคาต่อหน่วย !" }]}
+              >
+                <Input
+                  min={0}
+                  className="front-1"
+                  type="number"
+                  defaultValue={0}
+                  style={{ width: "100%" }}
+                  onChange={(e) => form.setFieldsValue({ unit_price: e.target.value })}
+                />
+              </Form.Item>
+            </Col>
+            
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                label={<span className="front-1">ราคา</span>}
+                name="price"
+                rules={[{ required: true, message: "กรุณากรอกราคา !" }]}
+              >
+                <Input
+                  min={0}
+                  className="front-1"
+                  type="number"
+                  defaultValue={0}
+                  style={{ width: "100%" }}
+                  onChange={(e) => form.setFieldsValue({ price: e.target.value })}
+                />
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                label={<span className="front-1">ผู้ผลิต</span>}
+                name="suppliers_id"
+                rules={[{ required: true, message: "กรุณากรอกชื่อผู้ผลิต !" }]}
+              >
+                <Select className="front-1" allowClear>
                   {supplier.map((item) => (
                     <Option value={item.ID} key={item.name}>
                       {item.name}
                     </Option>
                   ))}
                 </Select>
-                </Form.Item>
-              </Col>
+              </Form.Item>
+            </Col>
 
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <Form.Item
-                  label="วัน/เดือน/ปี หมดอายุ"
-                  name="exp_date"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณาเลือกวัน/เดือน/ปี หมดอายุ !",
-                    },
-                  ]}
-                >
-                  <DatePicker style={{ width: "100%" }} />
-                </Form.Item>
-              </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                label={<span className="front-1">วันหมดอายุ</span>}
+                name="exp_date"
+                rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี หมดอายุ !" }]}
+              >
+                <DatePicker style={{ width: "100%" }} className="front-1" />
+              </Form.Item>
+            </Col>
           </Row>
 
-          <Row justify="end">
+          <Row justify="center">
             <Col style={{ marginTop: "40px" }}>
               <Form.Item>
                 <Space>
                   <Link to="/ingredient">
-                    <Button htmlType="button" style={{ marginRight: "10px" }}>
+                    <Button htmlType="button" className="front-1" style={{ marginRight: "10px" }}>
                       ย้อนกลับ
                     </Button>
                   </Link>
 
                   <Button
                     type="primary"
+                    className="button-ok"
                     htmlType="submit"
                     icon={<PlusOutlined />}
                   >

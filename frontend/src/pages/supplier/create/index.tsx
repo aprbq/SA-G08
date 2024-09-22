@@ -52,20 +52,23 @@ import {
     return (
       <div>
         {contextHolder}
-        <Card>
-          <h2>เพิ่มข้อมูล ผู้ผลิต</h2>
-          <Divider />
-  
+        <Row gutter={[16, 16]} justify="center" style={{ marginBottom: "20px" }}>
+          <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+          <h1 className="heading-style">เพิ่มข้อมูลผู้ผลิต</h1>
+          </Col>
+        </Row>
+        <Row gutter={[16, 16]}>
+          <Card className="card-style">
           <Form
             name="basic"
             layout="vertical"
             onFinish={onFinish}
             autoComplete="off"
           >
-            <Row gutter={[16, 0]}>
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            
+              <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <Form.Item
-                  label="ชื่อ"
+                  label={<span className="front-1">ชื่อ</span>}
                   name="name"
                   rules={[
                     { required: true, message: "กรุณากรอกชื่อผู้ผลิต !" },
@@ -74,24 +77,24 @@ import {
                       message: "กรุณากรอกชื่อที่มีแค่ตัวอักษรเท่านั้น !" 
                     },]}
                 >
-                  <Input />
+                  <Input className="front-1"/>
                 </Form.Item>
               </Col>
 
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <Form.Item
-                  label="ที่อยู่"
+                  label={<span className="front-1">ที่อยู่ผู้ผลิต</span>}
                   name="address"
                   rules={[
                     { required: true, message: "กรุณากรอกที่อยู่ผู้ผลิต !",},]}
                 >
-                  <Input />
+                  <Input className="front-1"/>
                 </Form.Item>
               </Col>
 
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <Form.Item
-                  label="เบอร์โทร"
+                  label={<span className="front-1">เบอร์โทร</span>}
                   name="tel"
                   rules={[
                     { required: true, message: "กรุณากรอกเบอร์ติดต่อผู้ผลิต !"},
@@ -101,24 +104,24 @@ import {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input className="front-1"/>
                 </Form.Item>
               </Col>
 
-            </Row>
   
-            <Row justify="end">
+            <Row justify="center">
               <Col style={{ marginTop: "40px" }}>
                 <Form.Item>
                   <Space>
                     <Link to="/supplier">
-                      <Button htmlType="button" style={{ marginRight: "10px" }}>
+                      <Button htmlType="button" className="front-1" style={{ marginRight: "10px" }}>
                         ย้อนกลับ
                       </Button>
                     </Link>
   
                     <Button
                       type="primary"
+                      className="front-1"
                       htmlType="submit"
                       icon={<PlusOutlined />}
                     >
@@ -130,6 +133,7 @@ import {
             </Row>
           </Form>
         </Card>
+        </Row>
       </div>
     );
   }

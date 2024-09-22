@@ -95,7 +95,7 @@ function IngredientEdit() {
               <Row gutter={[16, 16]} >
                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                   <Form.Item
-                    label={<span className="front-1">ชื่อ</span>}
+                    label={<span className="front-1">ชื่อผู้ผลิต</span>}
                     name="name"
                     rules={[
                       {
@@ -145,7 +145,7 @@ function IngredientEdit() {
                 <Col style={{ marginTop: "40px" }}>
                   <Form.Item>
                     <Space>
-                      <Link to="/ingredient">
+                      <Link to="/supplier">
                         <Button htmlType="button" className="front-1" style={{ marginRight: "10px" }}>
                           ย้อนกลับ
                         </Button>
@@ -153,7 +153,7 @@ function IngredientEdit() {
 
                       <Button
                         type="primary"
-                        className="front-1"
+                        className="button-ok"
                         htmlType="submit"
                         icon={<PlusOutlined />}
                       >

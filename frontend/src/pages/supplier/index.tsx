@@ -117,14 +117,14 @@ function Supplier() {
       <Row>
         <Col span={12}>
         <Link to="/ingredient">
-        <Button type="primary" icon={<LeftOutlined />}/>
+        <Button className="button-back" icon={<LeftOutlined />}/>
         </Link>
-          <h2>จัดการข้อมูลผู้ผลิต</h2>
+          <h1 className="title">จัดการข้อมูลผู้ผลิต</h1>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
             <Link to="/supplier/create">
-              <Button type="primary" icon={<PlusOutlined />}>
+              <Button type="primary" className='btn-1' icon={<PlusOutlined />}>
                 เพิ่มผู้ผลิต
               </Button>
             </Link>
@@ -137,7 +137,6 @@ function Supplier() {
           rowKey="ID"
           columns={columns}
           dataSource={supplier}
-          style={{ width: "100%", overflow: "scroll" }}
         />
       </div>
     </div>

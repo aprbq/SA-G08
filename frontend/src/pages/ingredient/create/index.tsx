@@ -4,13 +4,11 @@ import {
   Button,
   Col,
   Row,
-  Divider,
   Form,
   Input,
   Card,
   message,
   DatePicker,
-  InputNumber,
   Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
@@ -29,11 +27,14 @@ function IngredientsCreate() {
   const [unit, setUnit] = useState<UnitInterface[]>([]); 
   const [supplier, setSupplier] = useState<SupplierInterface[]>([]); 
   const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
-
+  const [form] = Form.useForm();
   const onFinish = async (values: IngredientInterface) => {
     let payload = {
       ...values,
       "employee_id": Number(accountid),
+      quantity: Number(values.quantity),
+      unit_price: Number(values.unit_price),
+      price: Number(values.price),
     };
     console.log(payload);
     
@@ -102,34 +103,37 @@ function IngredientsCreate() {
   return (
     <div>
       {contextHolder}
-      <Card>
-        <h2>เพิ่มข้อมูล วัตถุดิบ</h2>
-        <Divider />
-
+      <Row gutter={[16, 16]} justify="center" style={{ marginBottom: "20px" }}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+          <h1 className="heading-style">แก้ไขข้อมูลวัตถุดิบ</h1>
+        </Col>
+      </Row>
+      <Card className="card-ingredient">
         <Form
           name="basic"
+          form={form}
           layout="vertical"
           onFinish={onFinish}
           autoComplete="off"
         >
-          <Row gutter={[16, 0]}>
+          <Row gutter={[16, 16]} justify="center" style={{ marginTop: "0px" }}>
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="ชื่อ"
+                label={<span className="front-1">ชื่อ</span>}
                 name="name"
                 rules={[{ required: true, message: "กรุณากรอกชื่อ !" }]}
               >
-                <Input />
+                <Input className="front-1" />
               </Form.Item>
             </Col>
             
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="ประเภท"
+                label={<span className="front-1">ประเภท</span>}
                 name="class_id"
-                rules={[{ required: true, message: "กรุณาระบุประเภท !" }]}
+                rules={[{ required: true, message: "กรุณาเลือกประเภท !" }]}
               >
-                <Select allowClear>
+                <Select className="front-1" allowClear>
                   {classes.map((item) => (
                     <Option value={item.ID} key={item.class}>
                       {item.class}
@@ -141,27 +145,30 @@ function IngredientsCreate() {
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="จำนวน"
+                label={<span className="front-1">จำนวน</span>}
                 name="quantity"
                 rules={[{ required: true, message: "กรุณากรอกจำนวน !" }]}
               >
-                <InputNumber
+                <Input
+                  className="front-1"
                   min={0}
+                  type="number"
                   defaultValue={0}
                   style={{ width: "100%" }}
+                  onChange={(e) => form.setFieldsValue({ quantity: e.target.value })}
                 />
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="หน่วย"
+                label={<span className="front-1">หน่วย</span>}
                 name="unit_id"
                 rules={[{ required: true, message: "กรุณากรอกหน่วย !" }]}
               >
-                <Select allowClear>
+                <Select className="front-1" allowClear>
                   {unit.map((item) => (
-                    <Option value={item.ID} key={item.unit}>
+                    <Option value={item.ID} key={item.ID}>
                       {item.unit}
                     </Option>
                   ))}
@@ -171,41 +178,45 @@ function IngredientsCreate() {
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="ราคาต่อหน่วย"
+                label={<span className="front-1">ราคาต่อหน่วย</span>}
                 name="unit_price"
                 rules={[{ required: true, message: "กรุณากรอกราคาต่อหน่วย !" }]}
               >
-                <InputNumber
+                <Input
                   min={0}
+                  className="front-1"
+                  type="number"
                   defaultValue={0}
                   style={{ width: "100%" }}
-                  step={0.01} 
+                  onChange={(e) => form.setFieldsValue({ unit_price: e.target.value })}
                 />
               </Form.Item>
             </Col>
             
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="ราคา"
+                label={<span className="front-1">ราคา</span>}
                 name="price"
                 rules={[{ required: true, message: "กรุณากรอกราคา !" }]}
               >
-                <InputNumber
+                <Input
                   min={0}
+                  className="front-1"
+                  type="number"
                   defaultValue={0}
                   style={{ width: "100%" }}
-                  step={0.01} 
+                  onChange={(e) => form.setFieldsValue({ price: e.target.value })}
                 />
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="ผู้ผลิต"
+                label={<span className="front-1">ผู้ผลิต</span>}
                 name="suppliers_id"
                 rules={[{ required: true, message: "กรุณากรอกชื่อผู้ผลิต !" }]}
               >
-                <Select allowClear>
+                <Select className="front-1" allowClear>
                   {supplier.map((item) => (
                     <Option value={item.ID} key={item.name}>
                       {item.name}
@@ -217,27 +228,28 @@ function IngredientsCreate() {
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="วัน/เดือน/ปี หมดอายุ"
-                name="exp_date" 
+                label={<span className="front-1">วันหมดอายุ</span>}
+                name="exp_date"
                 rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี หมดอายุ !" }]}
               >
-                <DatePicker style={{ width: "100%" }} />
+                <DatePicker style={{ width: "100%" }} className="front-1" />
               </Form.Item>
             </Col>
           </Row>
 
-          <Row justify="end">
+          <Row justify="center">
             <Col style={{ marginTop: "40px" }}>
               <Form.Item>
                 <Space>
                   <Link to="/ingredient">
-                    <Button htmlType="button" style={{ marginRight: "10px" }}>
+                    <Button htmlType="button" className="front-1" style={{ marginRight: "10px" }}>
                       ย้อนกลับ
                     </Button>
                   </Link>
 
                   <Button
                     type="primary"
+                    className="button-ok"
                     htmlType="submit"
                     icon={<PlusOutlined />}
                   >

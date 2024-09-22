@@ -249,13 +249,14 @@ body {
 
 }
 
-.front-1{
+.front-1,
+.front-1.ant-input-number {
   color: #000000 !important;
-  font-family: "Mitr", sans-serif!important;
-  font-weight: normal!important;
-  font-style: normal!important;
-
+  font-family: "Mitr", sans-serif !important;
+  font-weight: normal !important;
+  font-style: normal !important;
 }
+
 
 .front-2{
   color: #378f04 !important;
@@ -372,8 +373,11 @@ body {
 /* กำหนดสไตล์สำหรับหัวตาราง */
 .custom-table .ant-table-thead > tr > th {
   background-color: #ffffff; /* เปลี่ยนสีพื้นหลังของหัวตาราง */
-  color: white; /* เปลี่ยนสีข้อความในหัวตาราง */
+  color: rgb(0, 0, 0); /* เปลี่ยนสีข้อความในหัวตาราง */
   font-size: 16px; /* ขนาดตัวอักษรของหัวตาราง */
+  font-family: "Mitr", sans-serif!important;
+  font-weight: normal!important;
+  font-style: normal!important;
 }
 
 /* สไตล์สำหรับแถวของตาราง */
@@ -381,11 +385,17 @@ body {
   background-color: #e7e7e7;
   font-size: 14px;
    /* สีพื้นหลังของแถวที่เป็นสีอ่อน */
+   font-family: "Mitr", sans-serif!important;
+  font-weight: normal!important;
+  font-style: normal!important;
 }
 
 .table-row-dark {
   background-color: #e7e7e7;
   font-size: 14px; /* สีพื้นหลังของแถวที่เป็นสีเข้ม */
+  font-family: "Mitr", sans-serif!important;
+  font-weight: normal!important;
+  font-style: normal!important;
 }
 
 .table-row-hover:hover {
@@ -404,6 +414,24 @@ body {
   margin: 0 auto; /* Center the card */
 }
 
+.custom-input {
+  width: 100%;
+  font-family: "Mitr", sans-serif;
+}
+
+
+.card-ingredient {
+  background-color: #FEF6E4; /* Light cream with warmth */
+  padding: 24px;
+  font-family: "Mitr", sans-serif!important;
+  border-radius: 12px;
+  border: 1px solid #F0E0D0; /* Subtle, warm border */
+  box-shadow: 0 4px 12px rgba(228, 170, 112, 0.3); /* Soft, warm peach shadow */
+  width: 100%; /* Make the card take the full width */
+  max-width: 625px; /* Set a max width */
+  margin: 0 auto; /* Center the card */
+}
+
 .heading-style {
   text-align: center;
   color: #D9773D; /* Warm orange for consistency */
@@ -412,4 +440,57 @@ body {
   font-size: 2rem; /* Slightly larger font size for emphasis */
   margin: 20px 0; /* Balanced margin for spacing */
   line-height: 1.2; /* Improved readability with line height */
+}
+
+h1 {
+  color: #ff0000 !important;
+  font-family: "Mitr", sans-serif!important;
+  font-weight: 450!important;
+  font-style: normal!important;
+  font-size: 2.2rem;
+}
+
+.title {
+  text-align: right; /* จัดแนวข้อความไปทางขวา */
+  margin: 0; /* ลบระยะขอบเพื่อให้ชิดขวา */
+}
+
+.button-normal {
+  outline: none;
+  box-shadow: none;
+  background: #ffffff;
+  color: #000000;
+  border-radius: 4px;
+  transition: all .25s ease;
+  font-family: "Mitr", sans-serif;
+  
+}
+.button-normal:hover {
+  background: #000000 !important;
+  color: #ffffff !important;
+  transform: translate(-2px, -2px);
+}
+
+.button-back {
+  background: transparent; /* ทำให้พื้นหลังโปร่งใส */
+  border: none; /* ลบขอบ */
+  color: black; /* เปลี่ยนสีข้อความเป็นดำ */
+}
+.button-back:hover {
+  color: rgb(0, 0, 0)!important; /* เปลี่ยนสีข้อความเมื่อ hover */
+}
+
+.button-ok {
+  outline: none;
+  box-shadow: none;
+  background: hsl(215, 100%, 54%);
+  color: #000000;
+  border-radius: 4px;
+  transition: all .25s ease;
+  font-family: "Mitr", sans-serif;
+  
+}
+.button-ok:hover {
+  background: hsl(215, 100%, 34%);
+  color: #000000 ;
 }
