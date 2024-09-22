@@ -345,6 +345,13 @@ async function UpdatePromotionById(id: string, data: PromotionInterface) {
     .catch((e) => e.response);
 }
 
+async function UpdatePromotionStatusById(id: string, data: PromotionInterface) {
+  return await axios
+    .put(`${apiUrl}/promotion/${id}`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 async function DeletePromotionById(id: string) {
   return await axios
     .delete(`${apiUrl}/promotion/${id}`, requestOptions)
@@ -491,6 +498,7 @@ export {
   CreatePromotion,
   CreateCondition,
   UpdateConditionById,
+  UpdatePromotionStatusById,
 
   GetMember,
   GetMemberById,

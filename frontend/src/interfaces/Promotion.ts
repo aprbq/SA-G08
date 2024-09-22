@@ -1,5 +1,6 @@
 export interface PromotionInterface {
 ID?:            number;
+promo?:         number;
 promotion_name?: string;
 description?:   string;
 start_date?:     string;

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message, Modal,List, Typography,Input } from "antd";
 import { PlusOutlined, DeleteOutlined , EditOutlined,HistoryOutlined,EyeOutlined,SearchOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetPromotion, DeletePromotionById,GetConditionById } from "../../services/https/index";
+import { GetPromotion, DeletePromotionById,GetConditionById,UpdatePromotionById } from "../../services/https/index";
 import { PromotionInterface } from "../../interfaces/Promotion";
 import { MenuInterface } from "../../interfaces/Menu";
 import { Link, useNavigate } from "react-router-dom";
@@ -19,6 +19,20 @@ function Promotion() {
   const [searchText, setSearchText] = useState("");
   const [filteredPromotion, setFilteredPromotion] = useState<PromotionInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
+
+  const updatePromotionStatus = async (id: string) => {
+    try {
+      // เรียก API เพื่ออัปเดตสถานะเป็น "Unactive"
+      const res = await UpdatePromotionById(id, { status_id: 2 });
+      if (res.status === 200) {
+        messageApi.success("สถานะโปรโมชั่นได้ถูกอัปเดตเป็น Unactive");
+      } else {
+        messageApi.error(res.data.error);
+      }
+    } catch (error) {
+      messageApi.error("เกิดข้อผิดพลาดในการอัปเดตสถานะโปรโมชั่น");
+    }
+  };
 
   
   const columns: ColumnsType<PromotionInterface> = [
@@ -206,18 +220,32 @@ function Promotion() {
       },
     })};
 
-  const getPromotion = async () => {
-    let res = await GetPromotion();
-    if (res.status == 200) {
-      setPromotion(res.data);
-    } else {
-      setPromotion([]);
-      messageApi.open({
-        type: "error",
-        content: res.data.error,
-      });
-    }
-  };
+    const getPromotion = async () => {
+      let res = await GetPromotion();
+      if (res.status === 200) {
+        const currentTime = dayjs();
+        const updatedPromotions = res.data.map((promo: PromotionInterface) => {
+          // เช็คว่า end_date น้อยกว่าปัจจุบันและสถานะไม่ใช่ Unactive
+          if (dayjs(promo.end_date).isBefore(currentTime) && promo.status_id !== 2) {
+            // อัปเดตสถานะในฐานข้อมูล
+            if (promo.ID !== undefined) {
+              // อัปเดตสถานะในฐานข้อมูล
+              updatePromotionStatus(promo.ID.toString()); // แปลงเป็น string
+            }
+            // อัปเดตสถานะใน React state
+            return { ...promo, Status: { status_id: 2, status_name: "Unactive" } };
+          }
+          return promo; // คืนโปรโมชั่นที่ไม่เปลี่ยนแปลง
+        });
+        setPromotion(updatedPromotions);
+      } else {
+        setPromotion([]);
+        messageApi.open({
+          type: "error",
+          content: res.data.error,
+        });
+      }
+    };
 
   const handleViewMenu = async (promotionID: string) => {
     try {
