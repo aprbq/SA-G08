@@ -140,18 +140,18 @@ function Ingredients() {
     <div>
       {contextHolder}
       <Row>
-        <Col span={12}>
-          <h2>จัดการวัตถุดิบ</h2>
+        <Col span={12}> 
+          <h1>จัดการวัตถุดิบ</h1>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
             <Link to="/ingredient/create">
-              <Button type="primary" icon={<PlusOutlined />}>
+              <Button type="primary" className='btn-1' icon={<PlusOutlined />}>
                 เพิ่มวัตถุดิบ
               </Button>
             </Link>
             <Link to="/supplier">
-              <Button type="primary" icon={<PlusOutlined />}>
+              <Button type="primary"  className='btn-1' icon={<PlusOutlined />}>
                 จัดการ Supplier
               </Button>
             </Link>
@@ -162,12 +162,16 @@ function Ingredients() {
       <div className="card-data" style={{ marginTop: 20 }}>
         <Table
           rowKey="ID"
+          className="custom-table" // ใส่คลาสที่กำหนดให้กับตาราง
+          rowClassName={(record, index) => 
+            index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"}
           columns={columns}
           dataSource={ingredients}
-          style={{ width: "100%", overflow: "scroll" }}
+
         />
       </div>
     </div>
   );
 }
+
 export default Ingredients;

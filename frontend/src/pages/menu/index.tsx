@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message, Modal, List, Typography } from "antd";
 import { PlusOutlined, DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetMenu, DeleteMenuById, GetMenuIngredientById } from "../../services/https/index";
+import { GetMenu, DeleteMenuById, GetMenuIngredientById ,GetIngredients} from "../../services/https/index";
 import { MenuInterface } from "../../interfaces/Menu";
 import { IngredientInterface } from "../../interfaces/Ingredient";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ const { Title, Text } = Typography;
 function Menus() {
   const navigate = useNavigate();
   const [menus, setMenu] = useState<MenuInterface[]>([]);
+  const [ingredients , setIngredients] = useState<IngredientInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedIngredients, setSelectedIngredients] = useState<IngredientInterface[]>([]);
@@ -168,6 +169,18 @@ function Menus() {
       });
     }
   };
+  const getIngredients = async () => {
+    let res = await GetIngredients();
+    if (res.status == 200) {
+      setIngredients(res.data);
+    } else {
+      setIngredients([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
+    }
+  };
 
   const showDeleteConfirm = (id: string) => {
     confirm({
@@ -187,6 +200,7 @@ function Menus() {
 
   useEffect(() => {
     getMenu();
+    getIngredients();
   }, []);
 
   return (
@@ -212,7 +226,7 @@ function Menus() {
           rowKey="ID"
           columns={columns}
           dataSource={menus}
-          style={{ width: "100%", overflow: "scroll" }}
+          // style={{ width: "100%", overflow: "scroll" }}
         />
       </div>
 
