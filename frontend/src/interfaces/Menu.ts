@@ -11,4 +11,8 @@ export interface MenuInterface {
 		ingredient_id: number;
 		quantity: string;
 	  }[];
+	condition?: {
+	menu_id: number;
+	}[];
   }
+  

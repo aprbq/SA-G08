@@ -20,7 +20,7 @@ import {
   import { PromotionTypeInterface } from "../../../interfaces/Promotiontype";
   import { MenuInterface } from "../../../interfaces/Menu";
   import { ConditionInterface } from "../../../interfaces/Condition";
-  import { GetCondition,GetStatus,GetDiscountType,GetPromotionType,GetMenu,GetPromotionById, UpdatePromotionById,GetConditionById } from "../../../services/https";
+  import { UpdateConditionById,GetStatus,GetDiscountType,GetPromotionType,GetMenu,GetPromotionById, UpdatePromotionById,GetConditionById } from "../../../services/https";
   import { useNavigate, Link, useParams } from "react-router-dom";
   import dayjs from "dayjs";
 
@@ -43,21 +43,20 @@ import {
     const getPromotionById = async (id: string) => {
       let res = await GetPromotionById(id);
       if (res.status === 200) {
-        setPromotion(res.data);
+        const promotionData = res.data;
         form.setFieldsValue({
-          promotion_name: res.data.promotion_name,
-          description: res.data.description,
-          start_date: dayjs(res.data.start_date),
-          end_date: dayjs(res.data.end_date),
-          points_added: res.data.points_added,
-          points_use: res.data.points_use,
-          discount_value: res.data.discount_value,
-          discount_type_id: res.data.discount_type_id,
-          promotion_type_id: res.data.promotion_type_id,
-          status_id: res.data.status_id,
-          menu_id: res.data.conditions ? res.data.conditions.map((condition: any) => condition.menuID) : [],
+          promotion_name: promotionData.promotion_name,
+          description: promotionData.description,
+          start_date: dayjs(promotionData.start_date),
+          end_date: dayjs(promotionData.end_date),
+          points_added: promotionData.points_added,
+          points_use: promotionData.points_use,
+          discount_value: promotionData.discount_value,
+          discount_type_id: promotionData.discount_type_id,
+          promotion_type_id: promotionData.promotion_type_id,
+          status_id: promotionData.status_id,
         });
-
+        getConditionById(id);
       } else {
         messageApi.open({
           type: "error",
@@ -69,29 +68,74 @@ import {
       }
     };
 
-    const onFinish = async (values: PromotionInterface) => {
-      let payload = {
-        ...values,
-      }
-      console.log(payload);
-      let res = await UpdatePromotionById(id,values);
-      console.log(res);
-      if (res) {
-        messageApi.open({
-          type: "success",
-          content: "บันทึกข้อมูลสำเร็จ",
-        });
-        setTimeout(function () {
-          navigate("/promotion");
-        }, 2000);
-      } else {
+    const onFinish = async (values: any) => {
+      console.log('ค่าของฟอร์ม:', values); // แสดงค่าของฟอร์ม
+      try {
+        const { menu_id, start_date, end_date, ...promotionData } = values;
+    
+        // ฟอร์แมตวันที่ก่อนส่งใน payload ของโปรโมชั่น
+        const formattedStartDate = start_date?.$d ? start_date.$d.toISOString() : null;
+        const formattedEndDate = end_date?.$d ? end_date.$d.toISOString() : null;
+    
+        const promotionPayload = {
+          ...promotionData,
+          start_date: formattedStartDate,
+          end_date: formattedEndDate,
+        };
+    
+        console.log('ข้อมูลโปรโมชั่นที่ส่ง:', promotionPayload);
+        console.log('ข้อมูลเงื่อนไข:', menu_id);
+    
+        // ดำเนินการอัปเดตโปรโมชั่น
+        const promotionRes = await UpdatePromotionById(id, promotionPayload);
+        console.log('ผลลัพธ์จากการอัปเดตโปรโมชั่น:', promotionRes); // เพิ่มการพิมพ์ผลลัพธ์จาก API
+        if (promotionRes.status === 200) {
+          messageApi.open({
+            type: "success",
+            content: promotionRes.data.message,
+          });
+    
+          console.log('ข้อมูลเงื่อนไขที่ส่ง:', menu_id);
+          // เพิ่ม promotion_id ลงใน payload ของเงื่อนไข
+          const menu_idPayload = {
+            promotion_id: Number(id),
+            menu: menu_id.map((item: any) => ({
+              menu_id: item, // ตรวจสอบให้แน่ใจว่า key นี้ตรงกับโครงสร้างข้อมูลฟอร์ม
+            })),
+          };
+          console.log('ppppp:', menu_idPayload);
+    
+          const menu_idRes = await UpdateConditionById(id, menu_idPayload);
+          console.log('ผลลัพธ์จากการอัปเดตเงื่อนไข:', menu_idRes); // เพิ่มการพิมพ์ผลลัพธ์จาก API
+    
+          if (menu_idRes.status === 200) {
+            messageApi.open({
+              type: "success",
+              content: "อัปเดตเงื่อนไขโปรโมชั่นสำเร็จ!",
+            });
+            setTimeout(() => {
+              navigate("/promotion");
+            }, 2000);
+          } else {
+            throw new Error("ไม่สามารถอัปเดตเงื่อนไขโปรโมชั่นได้");
+          }
+        } else {
+          messageApi.open({
+            type: "error",
+            content: promotionRes.data.error,
+          });
+        }
+      } catch (error) {
+        console.error('ข้อผิดพลาด:', error); // แสดงข้อผิดพลาดในคอนโซล
         messageApi.open({
           type: "error",
-          content: "เกิดข้อผิดพลาด !",
+          content: "เกิดข้อผิดพลาดขณะอัปเดตโปรโมชั่น",
         });
       }
     };
-
+    
+    
+    
     const getStatus = async () => {
       let res = await GetStatus();
     if (res.status == 200) {
@@ -149,12 +193,9 @@ import {
       let res = await GetConditionById(id);
       if (res.status === 200) {
         const conData = res.data;
-        console.log('Condition Data:', conData);  // ตรวจสอบข้อมูลที่ได้รับ
+        console.log('con Data:', conData);
         form.setFieldsValue({
-          condition: conData.map((item: any) => ({
-            ingredients_id: item.ingredients_id,
-            quantity: item.quantity,
-          })),
+          menu_id: conData.map((item: any) => item.menu_id),
         });
       } else {
         messageApi.open({
@@ -177,7 +218,7 @@ import {
       getPromotionType();
       getDiscountType();
       getMenu();
-      getConditionById();
+      getConditionById(id);
       getPromotionById(id);
     }, [id]);
   
@@ -339,16 +380,20 @@ import {
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Form.Item name="menu_id" label="เมนูสำหรับโปรโมชั่น" rules={[{ required: true,message: "กรุณาระบุเมนู !" }]}>
-              <Select mode="multiple" placeholder="Select menus">
-                {menu.map((menu) => (
-                <Option key={menu.ID} value={menu.ID}>
-                  {menu.name}
-                </Option>
-                ))}
-              </Select>
+              <Form.Item
+                name="menu_id"
+                label="เมนูสำหรับโปรโมชั่น"
+                rules={[{ required: true, message: "กรุณาระบุเมนู !" }]}
+              >
+                <Select mode="multiple" placeholder="Select menus">
+                  {menu.map((menuItem) => (
+                    <Option key={menuItem.ID} value={menuItem.ID}>
+                      {menuItem.name}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
-            </Col>  
+            </Col>
             <Col xs={24} sm={24} md={12} lg={6} xl={6}>
               <Form.Item
                 label="วัน/เดือน/ปี เริ่มโปรโมชั่น"

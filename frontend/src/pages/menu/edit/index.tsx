@@ -74,6 +74,7 @@ function MenuEdit() {
   };
 
   const onFinish = async (values: any) => {
+    console.log('vaa Payload:', values);
     try {
       const { menu_ingredients, ...menuData } = values;
       console.log('Menu Ingredients Payload:', menu_ingredients);

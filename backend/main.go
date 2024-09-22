@@ -120,6 +120,7 @@ func main() {
 		rounter.POST("/condition", condition.CreateCondition)
 		rounter.GET("/condition", condition.GetAll)
 		rounter.GET("/condition/:id", condition.Get)
+		rounter.PUT("/condition/:id", condition.Update)
 
 		rounter.POST("/member", member.CreateMember)
 		rounter.PUT("/member/:id", member.Update)

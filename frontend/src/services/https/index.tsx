@@ -379,6 +379,13 @@ async function GetConditionById(id: string) {
     .then((res) => res)
     .catch((e) => e.response);
 }
+
+async function UpdateConditionById(id: string, data: ConditionInterface) {
+  return await axios
+    .put(`${apiUrl}/condition/${id}`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 //Member
 
 async function GetMember() {
@@ -483,6 +490,7 @@ export {
   DeletePromotionById,
   CreatePromotion,
   CreateCondition,
+  UpdateConditionById,
 
   GetMember,
   GetMemberById,
