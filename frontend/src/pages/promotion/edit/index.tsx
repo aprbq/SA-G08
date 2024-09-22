@@ -226,15 +226,20 @@ import {
       <div>
         {contextHolder}
         <Card>
-          <h2 className="name-table">แก้ไขข้อมูล โปรโมชั่น</h2>
+          <h2 className="name-table">เพิ่มโปรโมชั่น</h2>
           <Divider />
   
           <Form
             name="basic"
             layout="vertical"
-            form={form}
             onFinish={onFinish}
             autoComplete="off"
+            initialValues={{
+              points_added: 0,
+              points_use: 0,
+              discount_value: 0,
+            }}
+
           >
           <Row gutter={[16, 0]}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
@@ -309,24 +314,20 @@ import {
 
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
-                  label="จำนวน"
+                  label="ส่วนลด"
                   name="discount_value"
                   rules={[
                     {
                       required: true,
-                      message: isBogo
-                        ? "กรุณากรอกจำนวนเต็มสำหรับ Bogo !"
-                        : "กรุณากรอกจำนวน !",
-                      type: isBogo ? "integer" : "number",
+                      message: "กรุณากรอกส่วนลด !",
                     },
                   ]}
                 >
                   <InputNumber
                     min={0}
-                    max={9999}
                     defaultValue={0}
                     style={{ width: "100%" }}
-                    step={isBogo ? 1 : 0.01} 
+                    step={1}
                   />
                 </Form.Item>
               </Col>
@@ -380,20 +381,16 @@ import {
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Form.Item
-                name="menu_id"
-                label="เมนูสำหรับโปรโมชั่น"
-                rules={[{ required: true, message: "กรุณาระบุเมนู !" }]}
-              >
-                <Select mode="multiple" placeholder="Select menus">
-                  {menu.map((menuItem) => (
-                    <Option key={menuItem.ID} value={menuItem.ID}>
-                      {menuItem.name}
-                    </Option>
-                  ))}
-                </Select>
+              <Form.Item name="menu_id" label="เมนูสำหรับโปรโมชั่น" rules={[{ required: true,message: "กรุณาระบุเมนู !" }]}>
+              <Select mode="multiple" placeholder="Select menus">
+                {menu.map((menu) => (
+                <Option key={menu.ID} value={menu.ID}>
+                  {menu.name}
+                </Option>
+                ))}
+              </Select>
               </Form.Item>
-            </Col>
+            </Col>  
             <Col xs={24} sm={24} md={12} lg={6} xl={6}>
               <Form.Item
                 label="วัน/เดือน/ปี เริ่มโปรโมชั่น"
@@ -404,13 +401,26 @@ import {
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={12} lg={6} xl={6}>
-              <Form.Item
-                label="วัน/เดือน/ปี หมดโปรโมชั่น"
-                name="end_date"
-                rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี หมดโปรโมชั่น !" }]}
-              >
-                <DatePicker style={{ width: "100%" }} />
-              </Form.Item>
+                <Form.Item
+                  label="วัน/เดือน/ปี หมดโปรโมชั่น"
+                  name="end_date"
+                  rules={[
+                    { 
+                      required: true, 
+                      message: "กรุณาเลือกวัน/เดือน/ปี หมดโปรโมชั่น !" 
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || !getFieldValue('start_date') || value.isAfter(getFieldValue('start_date'))) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('วันหมดโปรโมชั่นต้องมากกว่วันเริ่มโปรโมชั่น!'));
+                      },
+                    }),
+                  ]}
+                >
+                  <DatePicker style={{ width: "100%" }} />
+                </Form.Item>
             </Col>
           </Row>
           
