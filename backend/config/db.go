@@ -129,6 +129,7 @@ func SetupDatabase() {
 	db.FirstOrCreate(&PaymentCard, &entity.Paymentmethod{PaymentMethods: "Credit Card"})
 
 	hashedPassword, _ := HashPassword("123456")
+	hashedPassword01, _ := HashPassword("111111")
 	BirthDay, _ := time.Parse("2006-01-02", "1988-11-12")
 	User := &entity.Users{
 		FirstName: "Software",
@@ -155,6 +156,18 @@ func SetupDatabase() {
 	}
 	db.FirstOrCreate(Employee, &entity.Employee{
 		Email: "sa@gmail.com",
+	})
+	Employee1 := &entity.Employee{
+		FirstName: "Software1",
+		LastName:  "Analysis2",
+		Email:     "sa67@gmail.com",
+		Username:  "test",
+		Password:  hashedPassword01,
+		Role:      "aa",
+		GenderID:  1,
+	}
+	db.FirstOrCreate(Employee1, &entity.Employee{
+		Username: "test",
 	})
 
 	exp_date, err := time.Parse("2006-01-02", "2024-08-14")
@@ -224,7 +237,7 @@ func SetupDatabase() {
 		Points:      20,
 		StatusID:    1,
 		GenderID:    1,
-		EmployeeID:  1,
+		EmployeeID:  2,
 	}
 
 	db.FirstOrCreate(Member, &entity.Member{

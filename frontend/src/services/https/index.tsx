@@ -415,11 +415,11 @@ async function UpdateMemberById(id: string, data: MemberInterface) {
     .then((res) => res)
     .catch((e) => e.response);
 }
-async function UpdateMemberStatusById(id: string, status_id: number) {
+async function UpdateMemberStatusById(id: string, status_id: number,end_date:Date) {
   return await axios
     .put(
       `${apiUrl}/member/${id}`,
-      { status_id },  // ส่งเฉพาะ status_id ในรูปแบบ JSON
+      { status_id,end_date },  // ส่งเฉพาะ status_id และend_dateในรูปแบบ JSON
       requestOptions
     )
     .then((res) => res)

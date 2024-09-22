@@ -41,7 +41,7 @@ import {
         "employee_id": Number(accountid)
       }
       console.log(payload);
-      let res = await CreateMember(values);
+      let res = await CreateMember(payload);
       console.log(res);
       if (res) {
         messageApi.open({

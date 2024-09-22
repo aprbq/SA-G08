@@ -18,19 +18,19 @@ func CreateMember(c *gin.Context) {
 	db := config.DB()
 
     var employee entity.Employee
-    db.First(&employee, member.Employee)
+    db.First(&employee, member.EmployeeID)
 	if employee.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"error": "employee not found"})
 		return
 	}
     var gender entity.Gender
-	db.First(&gender,member.Gender)
+	db.First(&gender,member.GenderID)
 	if gender.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"error": "gender not found"})
 		return
 	}
     var status entity.Status
-	db.First(&status, member.Status)
+	db.First(&status, member.StatusID)
 	if status.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"error": "status not found"})
 		return
@@ -44,8 +44,6 @@ func CreateMember(c *gin.Context) {
 		StartDate:   member.StartDate,  
 		EndDate:  member.EndDate,
 		Points:    member.Points,
-
-
         StatusID:    member.StatusID,
         Status:    status,
         EmployeeID: member.EmployeeID,

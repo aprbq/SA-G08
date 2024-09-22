@@ -3,11 +3,12 @@ import { Table, Button, Space, Col, Row, Divider, Form, Select, Card, message ,I
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PromotionInterface } from '../../../../interfaces/Promotion';
 import { MenuInterface } from '../../../../interfaces/Menu';
+import { MemberInterface } from '../../../../interfaces/Member';
 import { OrdersweetInterface } from '../../../../interfaces/Ordersweet';
 import { OrderItemInterface } from '../../../../interfaces/OrderItem';
 import { PromotionTypeInterface } from '../../../../interfaces/Promotiontype';
 import { PaymentmethodInterface } from '../../../../interfaces/Paymentmethod';
-import { GetPromotion, GetPaymentMethods, CreateOrder, CreateOrderitem, GetPromotionType, GetCondition } from '../../../../services/https';
+import { GetPromotion, GetPaymentMethods, CreateOrder, CreateOrderitem, GetPromotionType, GetCondition ,GetMember } from '../../../../services/https';
 import { OrderInterface } from '../../../../interfaces/Order';
 
 const { Option } = Select;
@@ -62,6 +63,22 @@ function OrderConfirm() {
     } else {
       setPromotionType([]);
       messageApi.open({ type: "error", content: res.data.error });
+    }
+  };
+
+  const getMember = async (phoneNumber: string) => {
+    try {
+      const res = await GetMember(); // ดึงข้อมูลสมาชิก
+      if (res.status === 200) {
+        const members: MemberInterface[] = res.data; // กำหนดประเภทของ members
+        const member = members.find((member: MemberInterface) => member.phone_number === phoneNumber);
+        return member ? member.status_id !== 2 : false; // ตรวจสอบว่า status_id ไม่เท่ากับ 2
+      } else {
+        throw new Error('ไม่สามารถดึงข้อมูลสมาชิกได้');
+      }
+    } catch (error) {
+      console.error("Error fetching members data:", error);
+      return false;
     }
   };
 
@@ -134,6 +151,13 @@ function OrderConfirm() {
   
 
   const onFinish = async (values: { promotion_id: number; payment_method_id: number; promotion_type_id: number }) => {
+    const isMemberValid = await getMember(phoneNumber!); // ตรวจสอบเบอร์โทรศัพท์และสถานะสมาชิก
+  
+    if (!isMemberValid) {
+      messageApi.open({ type: "error", content: "เบอร์โทรศัพท์ไม่ถูกต้องหรือต้องห้ามการสั่งซื้อ!" });
+      return; // หยุดการดำเนินการถ้าเบอร์ไม่ถูกต้องหรือ status_id เท่ากับ 2
+    }
+  
     const accountid = localStorage.getItem("id");
     const orderPayload: OrderInterface = {
       promotion_id: values.promotion_id,
@@ -142,16 +166,17 @@ function OrderConfirm() {
       employee_id: Number(accountid),
       payment_amount: orderItems.reduce((total, item) => total + (item.total_item || 0), 0),
     };
+  
     try {
       const orderRes = await CreateOrder(orderPayload);
       if (orderRes && orderRes.status === 201) {
         const orderId = orderRes.data.data;
-
+  
         await Promise.all(orderItems.map(async (item) => {
           const itemPayload = { ...item, order_id: orderId.ID };
           await CreateOrderitem(itemPayload);
         }));
-
+  
         messageApi.open({ type: "success", content: "บันทึกข้อมูลออเดอร์สำเร็จ" });
         setTimeout(() => navigate("/order"), 2000);
       } else {
@@ -161,7 +186,7 @@ function OrderConfirm() {
       messageApi.open({ type: "error", content: error instanceof Error ? error.message : "เกิดข้อผิดพลาด !" });
     }
   };
-
+  
   useEffect(() => {
     const storedOrderItems = localStorage.getItem("orderItems");
     if (storedOrderItems) {

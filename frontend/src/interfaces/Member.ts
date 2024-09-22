@@ -9,7 +9,7 @@ export interface MemberInterface {
 	start_date?:      string;
 	end_date?:       string;
 	points?:         number;
-	users_id?:		number;
+	employee_id?:		number;
 	status_id?:		number;
 	GenderID?: 		number;
 	
