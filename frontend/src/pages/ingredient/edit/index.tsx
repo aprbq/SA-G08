@@ -69,6 +69,7 @@ function IngredientEdit() {
         type: "success",
         content: "update successsfully",
       });
+      await getMenu();
       setTimeout(() => {
         navigate("/ingredient");
       }, 2000);
@@ -79,6 +80,8 @@ function IngredientEdit() {
       });
     }
   };
+
+  
 
   const getClass = async () => {
     let res = await GetClass();

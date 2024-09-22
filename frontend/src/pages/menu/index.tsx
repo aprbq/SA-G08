@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message, Modal, List, Typography } from "antd";
 import { PlusOutlined, DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetMenu, DeleteMenuById, GetMenuIngredientById ,GetIngredients} from "../../services/https/index";
+import { GetMenu, DeleteMenuById, GetMenuIngredientById ,GetIngredients, GetIngredientsById, UpdateMenuById} from "../../services/https/index";
 import { MenuInterface } from "../../interfaces/Menu";
+import { MenuIngredientInterface } from "../../interfaces/MenuIngredient";
 import { IngredientInterface } from "../../interfaces/Ingredient";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -68,6 +69,7 @@ function Menus() {
       className:  "front-1",
       render: (item) => Object.values(item.stock),
     },
+    
     {
       title: "ดูวัตถุดิบ",
       key: "ingredients",
@@ -160,7 +162,43 @@ function Menus() {
   const getMenu = async () => {
     let res = await GetMenu();
     if (res.status === 200) {
-      setMenu(res.data);
+      const updatedMenus = await Promise.all(
+        res.data.map(async (menu: MenuInterface) => {
+          const menuIngredientRes = await GetMenuIngredientById(String(menu.ID));
+  
+          if (menuIngredientRes.status === 200) {
+            const menuIngredients: MenuIngredientInterface[] = menuIngredientRes.data;
+  
+            // ดึงข้อมูล Ingredient ที่เกี่ยวข้องกับ Menu นี้
+            const ingredientRes = await Promise.all(
+              menuIngredients.map(async (menuIngredient) => {
+                const ingredientData = await GetIngredientsById(String(menuIngredient.ingredients_id));
+                return ingredientData.data;
+              })
+            );
+  
+            // ตรวจสอบว่า ingredients มีวัตถุดิบไหนที่ quantity เป็น 0 หรือไม่
+            const isOutOfStock = ingredientRes.some(
+              (ingredient: IngredientInterface) => ingredient.quantity === 0
+            );
+  
+            const newStockId = isOutOfStock ? 2 : 1;
+  
+            // ตรวจสอบว่า stock_id เปลี่ยนแปลงหรือไม่
+            if (menu.stock_id !== newStockId) {
+              // อัปเดต stock_id ของเมนูใน backend
+              await UpdateMenuById(String(menu.ID), { stock_id: newStockId });
+            }
+  
+            // อัปเดตเมนูใน state
+            return { ...menu, stock_id: newStockId };
+          }
+  
+          return menu; // ถ้าดึงวัตถุดิบไม่ได้, ส่งคืนเมนูเดิม
+        })
+      );
+  
+      setMenu(updatedMenus); // อัปเดตเมนูทั้งหมดที่มีการอัปเดต stock_id
     } else {
       setMenu([]);
       messageApi.open({
@@ -169,6 +207,10 @@ function Menus() {
       });
     }
   };
+  
+  
+  
+  
   const getIngredients = async () => {
     let res = await GetIngredients();
     if (res.status == 200) {
@@ -181,6 +223,8 @@ function Menus() {
       });
     }
   };
+
+  
 
   const showDeleteConfirm = (id: string) => {
     confirm({

@@ -40,7 +40,7 @@ function MenuEdit() {
         picture: menuData.picture,
         description: menuData.description,
         category_id: menuData.category_id,
-        stock_id: menuData.stock_id,
+        // stock_id: menuData.stock_id,
       });
       getMenuIngredientsById(id);  // <-- Fetch ingredients after setting menu data
     } else {
@@ -216,7 +216,7 @@ function MenuEdit() {
               </Form.Item>
             </Col>
 
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            {/* <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 name="stock_id"
                 label="สถานะ"
@@ -230,7 +230,7 @@ function MenuEdit() {
                   ))}
                 </Select>
               </Form.Item>
-            </Col>
+            </Col> */}
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
