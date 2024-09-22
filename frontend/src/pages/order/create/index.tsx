@@ -45,6 +45,18 @@ function OrderitemCreate() {
   };
 
   const onFinish = (values: OrderItemInterface) => {
+    const selectedMenu = menu.find((item) => item.ID === values.menu_id);
+  
+  // ตรวจสอบว่าสินค้า out of stock หรือไม่
+  if (selectedMenu?.stock_id === 2) {
+    messageApi.open({
+      type: 'error',
+      content: 'สินค้าไม่พร้อมจำหน่าย',
+    });
+    return; // ยกเลิกการบันทึก order item
+  }
+
+    
     addOrderItem(values);
     form.resetFields();
   };
