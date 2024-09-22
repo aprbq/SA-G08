@@ -355,7 +355,7 @@ import {
               >
                 <Select allowClear>
                   {promotiontype.map((item) => (
-                    <Option value={item.ID} key={item.promotion_type_name}>
+                    <Option value={item.ID} key={item.ID}>
                       {item.promotion_type_name}
                     </Option>
                   ))}

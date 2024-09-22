@@ -39,7 +39,7 @@ import {
       let payload = {
         ...values,
         "employee_id": Number(accountid),
-        "menu_ids": values.menu_id // ส่งค่า menu_id ที่เป็น array
+        "menu_ids": values.menu_id, // ส่งค่า menu_id ที่เป็น array
       };
     
       console.log(payload);
@@ -48,6 +48,7 @@ import {
         // สร้างโปรโมชั่น
         let res = await CreatePromotion(payload);
         console.log('CreatePromotion response:', res);
+        console.log('pay response:', payload);
       
         if (res && res.status === 201) {
           // ดึง ID ของโปรโมชั่นหากต้องใช้ในการสร้างเงื่อนไข
@@ -296,7 +297,7 @@ import {
               >
                 <Select allowClear>
                   {promotiontype.map((item) => (
-                    <Option value={item.ID} key={item.promotion_type_name}>
+                    <Option value={item.ID} key={item.ID}>
                       {item.promotion_type_name}
                     </Option>
                   ))}

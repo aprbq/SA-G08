@@ -2,7 +2,6 @@ package promotion
 
 import (
 	"net/http"
-
 	"example.com/sa-67-example/config"
 	"example.com/sa-67-example/entity"
 	"github.com/gin-gonic/gin"
@@ -11,70 +10,74 @@ import (
 func CreatePromotion(c *gin.Context) {
 	var promotion entity.Promotion
 
-    if err := c.ShouldBindJSON(&promotion); err != nil {
+	// Bind JSON to promotion struct
+	if err := c.ShouldBindJSON(&promotion); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Validate dates
+	if promotion.StartDate.After(promotion.EndDate) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "start_date must be before end_date"})
 		return
 	}
 
 	db := config.DB()
-    
 
-	// ค้นหา gender ด้วย id
+	// Check for Status
 	var status entity.Status
-	db.First(&status, promotion.StatusID)
-	if status.ID == 0 {
+	if err := db.First(&status, promotion.StatusID).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "status not found"})
 		return
 	}
 
-    var promotion_type entity.PromotionType
-	db.First(&promotion_type,promotion.PromotionType)
-	if promotion_type.ID == 0 {
+	// Check for Promotion Type
+	var promotionType entity.PromotionType
+	if err := db.First(&promotionType, promotion.PromotionTypeID).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "promotion_type not found"})
 		return
 	}
 
-    var discount_type entity.DiscountType
-	db.First(&discount_type, promotion.DiscountTypeID)
-	if discount_type.ID == 0 {
+	// Check for Discount Type
+	var discountType entity.DiscountType
+	if err := db.First(&discountType, promotion.DiscountTypeID).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "discount_type not found"})
 		return
 	}
 
-    var employee entity.Employee
-    db.First(&employee, promotion.Employee)
-	if employee.ID == 0 {
+	// Check for Employee
+	var employee entity.Employee
+	if err := db.First(&employee, promotion.EmployeeID).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "employee not found"})
 		return
 	}
 
-	// สร้าง User
-	u := entity.Promotion{
-		PromotionName: promotion.PromotionName, //  
-		Description:  promotion.Description,  //  
-		StartDate:     promotion.StartDate,     //  
-		EndDate:  promotion.EndDate,
-		PointsAdded:  promotion.PointsAdded,
-		PointsUse:   promotion.PointsUse, //  
-		DiscountValue:  promotion.DiscountValue,
+	// Create new Promotion
+	newPromotion := entity.Promotion{
+		PromotionName:     promotion.PromotionName,
+		Description:       promotion.Description,
+		StartDate:         promotion.StartDate,
+		EndDate:           promotion.EndDate,
+		PointsAdded:       promotion.PointsAdded,
+		PointsUse:         promotion.PointsUse,
+		DiscountValue:     promotion.DiscountValue,
 		DiscountTypeID:    promotion.DiscountTypeID,
-        DiscountType:    discount_type,
-        PromotionTypeID:    promotion.PromotionTypeID,
-        PromotionType:    promotion_type,
-        StatusID:    promotion.StatusID,
-        Status:    status,
-        EmployeeID: promotion.EmployeeID,
-        Employee: employee,
-
+		DiscountType:      discountType,
+		PromotionTypeID:   promotion.PromotionTypeID,
+		PromotionType:     promotionType,
+		StatusID:          promotion.StatusID,
+		Status:            status,
+		EmployeeID:        promotion.EmployeeID,
+		Employee:          employee,
 	}
 
-	// บันทึก
-	if err := db.Create(&u).Error; err != nil {
+	// Save Promotion
+	if err := db.Create(&newPromotion).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "Created success", "data": u.ID})
+	c.JSON(http.StatusCreated, gin.H{"message": "Created success", "data": newPromotion.ID})
 }
 
 // GetAll retrieves all promotion along with their associated class
