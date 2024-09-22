@@ -151,8 +151,13 @@ function OrderConfirm() {
   
 
   const onFinish = async (values: { promotion_id: number; payment_method_id: number; promotion_type_id: number }) => {
-    const isMemberValid = await getMember(phoneNumber!); // ตรวจสอบเบอร์โทรศัพท์และสถานะสมาชิก
+    if (selectedPromotionType === 1 && !phoneNumber) { // ถ้าเลือกเป็น Member และไม่ได้กรอกเบอร์โทรศัพท์
+      messageApi.open({ type: 'error', content: 'กรุณากรอกเบอร์โทรศัพท์!' });
+      return;
+    }
   
+    const isMemberValid = await getMember(phoneNumber!); // ตรวจสอบเบอร์โทรศัพท์และสถานะสมาชิก
+    
     if (!isMemberValid) {
       messageApi.open({ type: "error", content: "เบอร์โทรศัพท์ไม่ถูกต้องหรือต้องห้ามการสั่งซื้อ!" });
       return; // หยุดการดำเนินการถ้าเบอร์ไม่ถูกต้องหรือ status_id เท่ากับ 2
@@ -186,6 +191,7 @@ function OrderConfirm() {
       messageApi.open({ type: "error", content: error instanceof Error ? error.message : "เกิดข้อผิดพลาด !" });
     }
   };
+  
   
   useEffect(() => {
     const storedOrderItems = localStorage.getItem("orderItems");
