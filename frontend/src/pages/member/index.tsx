@@ -164,8 +164,9 @@ function Member() {
     }
   };
 
-  const updateMemberStatusById = async (id: string) => {
-    let res = await UpdateMemberStatusById(id,2);
+  const updateMemberStatusById = async (id: string ) => {
+    const currentdate = new Date();
+    let res = await UpdateMemberStatusById(id,2,currentdate);
     if (res.status == 200) {
       messageApi.open({
         type: "success",
@@ -203,6 +204,7 @@ function Member() {
       okType: "danger",
       cancelText: "ยกเลิก",
       onOk() {
+         // สร้างวันที่และเวลาปัจจุบัน
         updateMemberStatusById(id);
       },
       onCancel() {
