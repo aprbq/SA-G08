@@ -183,7 +183,7 @@ function CustomerCreate() {
                   </Col>
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <Form.Item
-                      name="gender"
+                      name="gender_id"
                       label="เพศ"
                       rules={[{ required: true, message: "กรุณาระบุเพศ !" }]}
                     >
@@ -248,7 +248,7 @@ function CustomerCreate() {
                   <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                     <Form.Item
                       label="ตำแหน่งงาน"
-                      name="role"
+                      name="role_id"
                       rules={[
                         {
                           required: true,

@@ -52,16 +52,16 @@ function Employee() {
       dataIndex: "email",
       key: "email",
     },
-    // {
-    //   title: "เพศ",
-    //   dataIndex: "gender",
-    //   render: (item) => Object.values(item.gender_name),
-    // },
-    // {
-    //   title: "ตำแหน่งงาน",
-    //   dataIndex: "role",
-    //   render: (item) => Object.values(item.role_name),
-    // },
+    {
+      title: "เพศ",
+      dataIndex: "gender",
+      render: (item) => Object.values(item.gender_name),
+    },
+    {
+      title: "ตำแหน่งงาน",
+      dataIndex: "role",
+      render: (item) => Object.values(item.role_name),
+    },
 
     {
       title: "",
