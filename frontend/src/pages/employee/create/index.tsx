@@ -1,30 +1,60 @@
 import React, { useState, useEffect } from "react";
 import {
+  Space,
   Button,
-  Card,
+  Col,
+  Row,
+  Divider,
   Form,
   Input,
+  Card,
   message,
-  Flex,
-  Row,
-  Col,
+  Upload,
   Select,
 } from "antd";
-import { useNavigate } from "react-router-dom";
-import { CreateEmployee } from "../../../services/https";
+import { PlusOutlined } from "@ant-design/icons";
 import { EmployeeInterface } from "../../../interfaces/Employee";
 import { GenderInterface } from "../../../interfaces/Gender";
-import { GetGender } from "../../../services/https";
-import logo from "../../../assets/logo.png";
+import { RoleInterface } from "../../../interfaces/Role";
+import { CreateEmployee,GetGender,GetRole } from "../../../services/https";
+import { useNavigate, Link } from "react-router-dom";
+import type { GetProp, UploadFile, UploadProps } from "antd";
+import ImgCrop from "antd-img-crop";
 
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 const { Option } = Select;
 
-function SignUpPages() {
+function CustomerCreate() {
   const navigate = useNavigate();
+
   const [messageApi, contextHolder] = message.useMessage();
   const [gender, setGender] = useState<GenderInterface[]>([]);
+  const [role, setRole] = useState<RoleInterface[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+
+  const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
+
+  const onPreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as FileType);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
+
 
   const onFinish = async (values: EmployeeInterface) => {
+
     let res = await CreateEmployee(values);
 
     if (res.status == 201) {
@@ -33,7 +63,7 @@ function SignUpPages() {
         content: res.data.message,
       });
       setTimeout(function () {
-        navigate("/");
+        navigate("/employee");
       }, 2000);
     } else {
       messageApi.open({
@@ -45,48 +75,79 @@ function SignUpPages() {
 
   const getGender = async () => {
     let res = await GetGender();
-  if (res.status == 200) {
+    if (res.status == 200) {
+      setGender(res.data);
+    } else {
+      setGender([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
+    }
+  };
 
-    setGender(res.data);
-
-  } else {
-
-    setGender([]);
-
-    messageApi.open({
-
-      type: "error",
-
-      content: res.data.error,
-
-    });
-
-  }
+  const getRole = async () => {
+    let res = await GetRole();
+    if (res.status == 200) {
+      setRole(res.data);
+    } else {
+      setRole([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
+    }
   };
 
   useEffect(() => {
     getGender();
+    getRole();
   }, []);
 
+
   return (
-    <>
+    <div>
       {contextHolder}
-      <Flex justify="center" align="center" className="login">
-        <Card className="card-login" style={{ width: 600 }}>
-          <Row align={"middle"} justify={"center"}>
-            <Col xs={24} sm={24} md={24} lg={10} xl={10}>
-              <img alt="logo" src={logo} className="images-logo" />
-            </Col>
-            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-              <h2 className="header">Sign Up</h2>
-              <Form
-                name="basic"
-                layout="vertical"
-                onFinish={onFinish}
-                autoComplete="off"
+      <Card className="card-ingredient">
+        <h2>เพิ่มข้อมูล ผู้ดูแลระบบ</h2>
+        <Divider />
+
+        <Form
+          name="basic"
+          layout="vertical"
+          onFinish={onFinish}
+          autoComplete="off"
+        >
+          <Row gutter={[16, 0]}>
+
+          <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+              <Form.Item
+                label="รูปเมนู"
+                name="picture"
+                valuePropName="fileList"
               >
-                <Row gutter={[16, 0]} align={"middle"}>
-                  <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                <ImgCrop rotationSlider>
+                  <Upload
+                    fileList={fileList}
+                    onChange={onChange}
+                    onPreview={onPreview}
+                    beforeUpload={(file) => {
+                      setFileList([...fileList, file]);
+                      return false;
+                    }}
+                    maxCount={1}
+                    multiple={false}
+                    listType="picture-card"
+                  >
+                    <div>
+                      <PlusOutlined />
+                      <div style={{ marginTop: 8 }}>อัพโหลด</div>
+                    </div>
+                  </Upload>
+                </ImgCrop>
+              </Form.Item>
+            </Col>
+          <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                     <Form.Item
                       label="ชื่อจริง"
                       name="first_name"
@@ -190,31 +251,42 @@ function SignUpPages() {
                         },
                       ]}
                     >
-                      <Input />
+                     <Select allowClear>
+                        {role.map((item) => (
+                          <Option value={item.ID} key={item.role_name}>
+                            {item.role_name}
+                          </Option>
+                        ))}
+                      </Select>
                     </Form.Item>
                   </Col>
+          </Row>
 
-                  <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                    <Form.Item>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        className="login-form-button"
-                        style={{ marginBottom: 20 }}
-                      >
-                        Sign up
-                      </Button>
-                      Or <a onClick={() => navigate("/")}>signin now !</a>
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Form>
+          <Row justify="end">
+            <Col style={{ marginTop: "40px" }}>
+              <Form.Item>
+                <Space>
+                  <Link to="/employee">
+                    <Button htmlType="button" style={{ marginRight: "10px" }}>
+                      ยกเลิก
+                    </Button>
+                  </Link>
+
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    icon={<PlusOutlined />}
+                  >
+                    ยืนยัน
+                  </Button>
+                </Space>
+              </Form.Item>
             </Col>
           </Row>
-        </Card>
-      </Flex>
-    </>
+        </Form>
+      </Card>
+    </div>
   );
 }
 
-export default SignUpPages;
+export default CustomerCreate;

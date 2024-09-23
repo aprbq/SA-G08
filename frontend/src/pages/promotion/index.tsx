@@ -49,21 +49,19 @@ function Promotion() {
       title: "ชื่อ",
       dataIndex: "promotion_name",
       key: "promotion_name",
-      className:  "front-1",
     },
 
     {
       title: "คำอธิบาย",
       dataIndex: "description",
       key: "description",
-      className:  "front-1",
+
     },
 
     {
       title: "ได้แต้ม",
       dataIndex: "points_added",
       key: "points_added",
-      className:  "front-1",
     },
 
     {
@@ -77,7 +75,6 @@ function Promotion() {
         title: "จำนวน",
         dataIndex: "discount_value",
         key: "discount_value",
-        className:  "front-1",
     },
     
     {
@@ -85,7 +82,6 @@ function Promotion() {
       dataIndex: "DiscountType",
       key: "discount_type_id",
       render: (item) => Object.values(item.discount_type_name),
-      className:  "front-1",
     },
 
     {
@@ -93,21 +89,18 @@ function Promotion() {
       dataIndex:"PromotionType",
       key: "promotion_type_id",
       render: (item) => Object.values(item.promotion_type_name),
-      className:  "front-1",
     },
 
     {
       title: "วันเริ่ม",
       key: "start_date",
       render: (record) => <>{dayjs(record.start_date).format("DD/MM/YYYY")}</>,
-      className:  "front-1",
     },
 
     {
       title: "วันสิ้นสุด",
       key: "end_date",
       render: (record) => <>{dayjs(record.end_date).format("DD/MM/YYYY")}</>,
-      className:  "front-1",
     },
 
     {
@@ -130,7 +123,6 @@ function Promotion() {
         </span>
       );
     },
-    className: "front-1",
     },
 
     {
@@ -328,7 +320,7 @@ function Promotion() {
           rowKey="ID"
           columns={columns}
           dataSource={Promotion}
-          className="custom-table" // ใส่คลาสที่กำหนดให้กับตาราง
+          className="custom-table" 
           rowClassName={(record, index) => 
             index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"
           }

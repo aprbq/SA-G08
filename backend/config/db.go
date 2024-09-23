@@ -29,10 +29,10 @@ func SetupDatabase() {
 		&entity.Gender{},
 		&entity.Employee{},
 		&entity.Status{},
+		&entity.Role{},
 		&entity.Stock{},
 		&entity.Class{},
 		&entity.Category{},
-		&entity.Users{},
 		&entity.Unit{},
 		&entity.Suppliers{},
 		&entity.Ingredients{},
@@ -91,6 +91,23 @@ func SetupDatabase() {
 	PaymentQR := entity.Paymentmethod{PaymentMethods: "QR Code"}
 	PaymentCard := entity.Paymentmethod{PaymentMethods: "Credit Card"}
 
+	RoleBarista := entity.Role{RoleName: "บาริสต้า"}
+	RoleCashier := entity.Role{RoleName: "แคชเชียร์ "}
+	RoleWaiter := entity.Role{RoleName: "พนักงานเสิร์ฟ"}
+	RoleManager := entity.Role{RoleName: "ผู้จัดการร้าน"}
+	RoleCleaner := entity.Role{RoleName: "พนักงานทำความสะอาด"}
+	RoleKitchen := entity.Role{RoleName: "พนักงานครัว"}
+	RoleInventory := entity.Role{RoleName: "ผู้จัดการคลังสินค้า"}
+
+
+	db.FirstOrCreate(&RoleBarista, &entity.Role{RoleName: "บาริสต้า"})
+	db.FirstOrCreate(&RoleCashier, &entity.Role{RoleName: "แคชเชียร์"})
+	db.FirstOrCreate(&RoleWaiter, &entity.Role{RoleName: "พนักงานเสิร์ฟ"})
+	db.FirstOrCreate(&RoleManager, &entity.Role{RoleName: "ผู้จัดการร้าน"})
+	db.FirstOrCreate(&RoleCleaner, &entity.Role{RoleName: "พนักงานทำความสะอาด"})
+	db.FirstOrCreate(&RoleKitchen, &entity.Role{RoleName: "พนักงานครัว"})
+	db.FirstOrCreate(&RoleInventory, &entity.Role{RoleName: "ผู้จัดการคลังสินค้า"})
+
 	db.FirstOrCreate(&GenderMale, &entity.Gender{GenderName: "Male"})
 	db.FirstOrCreate(&GenderFemale, &entity.Gender{GenderName: "Female"})
 
@@ -130,20 +147,8 @@ func SetupDatabase() {
 
 	hashedPassword, _ := HashPassword("123456")
 	hashedPassword01, _ := HashPassword("111111")
-	BirthDay, _ := time.Parse("2006-01-02", "1988-11-12")
-	User := &entity.Users{
-		FirstName: "Software",
-		LastName:  "Analysis",
-		Email:     "sa@gmail.com",
-		Age:       80,
-		Password:  hashedPassword,
-		BirthDay:  BirthDay,
-		GenderID:  1,
-		Address:   "Korat",
-	}
-	db.FirstOrCreate(User, &entity.Users{
-		Email: "sa@gmail.com",
-	})
+
+
 
 	Employee := &entity.Employee{
 		FirstName: "Software",
@@ -151,7 +156,7 @@ func SetupDatabase() {
 		Email:     "sa67@gmail.com",
 		Username:  "nahee",
 		Password:  hashedPassword,
-		Role:      "aa",
+		RoleID:      1,
 		GenderID:  1,
 	}
 	db.FirstOrCreate(Employee, &entity.Employee{
@@ -163,7 +168,7 @@ func SetupDatabase() {
 		Email:     "sa67@gmail.com",
 		Username:  "test",
 		Password:  hashedPassword01,
-		Role:      "aa",
+		RoleID:      2,
 		GenderID:  1,
 	}
 	db.FirstOrCreate(Employee1, &entity.Employee{

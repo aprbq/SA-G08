@@ -14,8 +14,8 @@ import {
   Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { UsersInterface } from "../../../interfaces/IUser";
-import { GetUsersById, UpdateUsersById } from "../../../services/https/index";
+import { EmployeeInterface } from "../../../interfaces/Employee";
+import { GetEmployeeById, UpdateEmployeeById } from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 
@@ -26,7 +26,7 @@ function CustomerEdit() {
   const [form] = Form.useForm();
 
   const getUserById = async (id: string) => {
-    let res = await GetUsersById(id);
+    let res = await GetEmployeeById(id);
     if (res.status == 200) {
       form.setFieldsValue({
         first_name: res.data.first_name,
@@ -43,17 +43,17 @@ function CustomerEdit() {
         content: "ไม่พบข้อมูลผู้ใช้",
       });
       setTimeout(() => {
-        navigate("/customer");
+        navigate("/employee");
       }, 2000);
     }
   };
 
-  const onFinish = async (values: UsersInterface) => {
+  const onFinish = async (values: EmployeeInterface) => {
     let payload = {
       ...values,
     };
 
-    const res = await UpdateUsersById(id, payload);
+    const res = await UpdateEmployeeById(id, payload);
     if (res.status == 200) {
       messageApi.open({
         type: "success",

@@ -23,6 +23,7 @@ import (
 	"example.com/sa-67-example/controller/promotiontype"
 	"example.com/sa-67-example/controller/status"
 	"example.com/sa-67-example/controller/stock"
+	"example.com/sa-67-example/controller/role"
 
 	//"example.com/sa-67-example/controller/payment"
 	"example.com/sa-67-example/controller/member"
@@ -55,7 +56,11 @@ func main() {
 		//  r.GET("/users", users.GetAll)
 		//  r.GET("/user/:id", users.Get)
 		//  r.DELETE("/user/:id", users.Delete)
-		rounter.GET("/employee", employee.Get)
+		rounter.GET("/role", role.GetAll)
+		rounter.PUT("/employee/:id", employee.Update)
+		rounter.GET("/employee", employee.GetAll)
+		rounter.GET("/employee/:id", employee.Get)
+		rounter.DELETE("/employee/:id", employee.Delete)
 
 		rounter.PUT("/ingredients/:id", ingredients.Update)
 		rounter.GET("/ingredients", ingredients.GetAll)

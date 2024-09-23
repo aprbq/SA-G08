@@ -5,9 +5,9 @@ import FullLayout from "../layout/FullLayout";
 
 const MainPages = Loadable(lazy(() => import("../pages/authentication/Login")));
 const Dashboard = Loadable(lazy(() => import("../pages/dashboard")));
-const Customer = Loadable(lazy(() => import("../pages/customer")));
-const CreateCustomer = Loadable(lazy(() => import("../pages/customer/create")));
-const EditCustomer = Loadable(lazy(() => import("../pages/customer/edit")));
+const Employee = Loadable(lazy(() => import("../pages/employee")));
+const CreateEmployee = Loadable(lazy(() => import("../pages/employee/create")));
+const EditEmployee = Loadable(lazy(() => import("../pages/employee/edit")));
 const Menus = Loadable(lazy(() => import("../pages/menu")));
 const CreateMenu = Loadable(lazy(() => import("../pages/menu/create")));
 const EditMenu = Loadable(lazy(() => import("../pages/menu/edit")));
@@ -42,19 +42,19 @@ const AdminRoutes = (isLoggedIn: boolean): RouteObject => {
         element: <Dashboard />,
       },
       {
-        path: "/customer",
+        path: "/employee",
         children: [
           {
-            path: "/customer",
-            element: <Customer />,
+            path: "/employee",
+            element: <Employee />,
           },
           {
-            path: "/customer/create",
-            element: <CreateCustomer />,
+            path: "/employee/create",
+            element: <CreateEmployee />,
           },
           {
-            path: "/customer/edit/:id",
-            element: <EditCustomer />,
+            path: "/employee/edit/:id",
+            element: <EditEmployee />,
           },
         ],
       },

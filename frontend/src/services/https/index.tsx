@@ -1,4 +1,4 @@
-import { UsersInterface } from "../../interfaces/IUser";
+import { EmployeeInterface } from "../../interfaces/Employee";
 import { SignInInterface } from "../../interfaces/SignIn";
 import { IngredientInterface } from "../../interfaces/Ingredient";
 import { PromotionInterface } from "../../interfaces/Promotion";
@@ -11,6 +11,7 @@ import { MemberInterface } from "../../interfaces/Member";
 import { MenuIngredientInterface } from "../../interfaces/MenuIngredient";
 
 import axios from "axios";
+
 
 
 const apiUrl = "http://localhost:8000";
@@ -73,37 +74,44 @@ async function GetStock() {
     .catch((e) => e.response);
 }
 
-async function GetUsers() {
+async function GetEmployee() {
   return await axios
     .get(`${apiUrl}/employee`, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
 
-async function GetUsersById(id: string) {
+async function GetEmployeeById(id: string) {
   return await axios
-    .get(`${apiUrl}/user/${id}`, requestOptions)
+    .get(`${apiUrl}/employee/${id}`, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
 
-async function UpdateUsersById(id: string, data: UsersInterface) {
+async function UpdateEmployeeById(id: string, data: EmployeeInterface) {
   return await axios
-    .put(`${apiUrl}/user/${id}`, data, requestOptions)
+    .put(`${apiUrl}/employee/${id}`, data, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
 
-async function DeleteUsersById(id: string) {
+async function DeleteEmployeeById(id: string) {
   return await axios
-    .delete(`${apiUrl}/user/${id}`, requestOptions)
+    .delete(`${apiUrl}/employee/${id}`, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
 
-async function CreateUser(data: UsersInterface) {
+async function CreateEmployee(data: EmployeeInterface) {
   return await axios
     .post(`${apiUrl}/signup`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function GetRole() {
+  return await axios
+    .get(`${apiUrl}/role`, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
 }
@@ -144,7 +152,7 @@ async function CreateIngredients(data: IngredientInterface) {
     .catch((e) => e.response);
 }
 
-async function UpdateIngredient(data: UsersInterface) {
+async function UpdateIngredient(data: EmployeeInterface) {
   return await axios
     .put(`${apiUrl}/ingredient/${data}`, requestOptions)
     .then((res) => res)
@@ -450,12 +458,13 @@ async function GetOrdersweet() {
 
 export {
   SignIn,
-  GetUsers,
-  GetUsersById,
-  UpdateUsersById,
-  DeleteUsersById,
-  CreateUser,
+  GetEmployee,
+  GetEmployeeById,
+  UpdateEmployeeById,
+  DeleteEmployeeById,
+  CreateEmployee,
   GetStatus,
+  GetRole,
   GetGender,
   GetIngredients,
   GetIngredientsById,

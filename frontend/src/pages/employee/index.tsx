@@ -1,37 +1,19 @@
 import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message } from "antd";
-import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined,EditOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetUsers, DeleteUsersById } from "../../services/https/index";
-import { UsersInterface } from "../../interfaces/IUser";
+import { GetEmployee, DeleteEmployeeById } from "../../services/https/index";
+import { EmployeeInterface } from "../../interfaces/Employee";
 import { Link, useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
 
-function Customers() {
+function Employee() {
   const navigate = useNavigate();
-  const [users, setUsers] = useState<UsersInterface[]>([]);
+  const [employee, setEmployee] = useState<EmployeeInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const myId = localStorage.getItem("id");
 
-  const columns: ColumnsType<UsersInterface> = [
+  const columns: ColumnsType<EmployeeInterface> = [
 
-    {
-      title: "",
-      render: (record) => (
-        <>
-          {myId == record?.ID ? (
-            <></>
-          ) : (
-            <Button
-              type="dashed"
-              danger
-              icon={<DeleteOutlined />}
-              onClick={() => deleteUserById(record.ID)}
-            ></Button>
-          )}
-        </>
-      ),
-    },
 
     {
       title: "ลำดับ",
@@ -57,24 +39,15 @@ function Customers() {
       key: "email",
     },
     {
-      title: "วัน/เดือน/ปี เกิด",
-      key: "birthday",
-      render: (record) => <>{dayjs(record.birthday).format("DD/MM/YYYY")}</>,
-    },
-    {
-      title: "อายุ",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "ที่อยู่",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
       title: "เพศ",
-      key: "gender",
-      render: (record) => <>{record?.gender?.gender}</>,
+      dataIndex: "gender",
+      render: (item) => Object.values(item.gender_name),
+    },
+    {
+      title: "ตำแหน่งงาน",
+      dataIndex: "role",
+      key: "role",
+      render: (item) => Object.values(item.role_name),
     },
 
     {
@@ -83,25 +56,37 @@ function Customers() {
         <>
           <Button
             type="primary"
-            icon={<DeleteOutlined />}
-            onClick={() => navigate(`/customer/edit/${record.ID}`)}
+            icon={<EditOutlined />}
+            className="btn-1"
+            onClick={() => navigate(`/employee/edit/${record.ID}`)}
+            style={{ marginRight: "8px" }}
           >
             แก้ไขข้อมูล
           </Button>
+          {myId == record?.ID ? (
+            <></>
+          ) : (
+            <Button
+              className="btn-delete"
+              icon={<DeleteOutlined />}
+              onClick={() => deleteEmployeeById(record.ID)}
+            ></Button>
+          )}
         </>
-      ),
+      ),    
     },
+
   ];
 
-  const deleteUserById = async (id: string) => {
-    let res = await DeleteUsersById(id);
+  const deleteEmployeeById = async (id: string) => {
+    let res = await DeleteEmployeeById(id);
 
     if (res.status == 200) {
       messageApi.open({
         type: "success",
         content: res.data.message,
       });
-      await getUsers();
+      await getEmployee();
     } else {
       messageApi.open({
         type: "error",
@@ -110,12 +95,12 @@ function Customers() {
     }
   };
 
-  const getUsers = async () => {
-    let res = await GetUsers();
+  const getEmployee = async () => {
+    let res = await GetEmployee();
     if (res.status == 200) {
-      setUsers(res.data);
+      setEmployee(res.data);
     } else {
-      setUsers([]);
+      setEmployee([]);
       messageApi.open({
         type: "error",
         content: res.data.error,
@@ -124,20 +109,20 @@ function Customers() {
   };
 
   useEffect(() => {
-    getUsers();
+    getEmployee();
   }, []);
 
   return (
     <>
       {contextHolder}
       <Row>
-        <Col span={12}>
+        <Col className = "name-table" span={12}>
           <h2>จัดการข้อมูลสมาชิก</h2>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
           <Space>
-            <Link to="/customer/create">
-              <Button type="primary" icon={<PlusOutlined />}>
+            <Link to="/employee/create">
+              <Button type="primary" className = "btn-1" icon={<PlusOutlined />}>
                 สร้างข้อมูล
               </Button>
             </Link>
@@ -148,12 +133,15 @@ function Customers() {
       <div style={{ marginTop: 20 }}>
         <Table
           rowKey="ID"
+          className="custom-table"
+          rowClassName={(record, index) => 
+            index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"
+          }
           columns={columns}
-          dataSource={users}
-          style={{ width: "100%", overflow: "scroll" }}
+          dataSource={employee}
         />
       </div>
     </>
   );
 }
-export default Customers;
+export default Employee;

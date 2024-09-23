@@ -5,9 +5,9 @@ import { UserOutlined, DashboardOutlined, ShoppingOutlined, LogoutOutlined, Star
 import { Breadcrumb, Layout, Menu, Button, message } from "antd";
 import logo from "../../assets/logocafe.png";
 import Dashboard from "../../pages/dashboard";
-import Customer from "../../pages/customer";
-import CustomerCreate from "../../pages/customer/create";
-import CustomerEdit from "../../pages/customer/edit";
+import Employee from "../../pages/employee";
+import EmployeeCreate from "../../pages/employee/create";
+import EmployeeEdit from "../../pages/employee/edit";
 import Ingredient from "../../pages/ingredient";
 import IngredientCreate from "../../pages/ingredient/create";
 import IngredientEdit from "../../pages/ingredient/edit";
@@ -77,8 +77,8 @@ const FullLayout: React.FC = () => {
         <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
           <Link to="/">แดชบอร์ด</Link>
         </Menu.Item>
-        <Menu.Item key="customer" icon={<UserOutlined />}>
-          <Link to="/customer">ข้อมูลสมาชิก</Link>
+        <Menu.Item key="employee" icon={<UserOutlined />}>
+          <Link to="/employee">ข้อมูลสมาชิก</Link>
         </Menu.Item>
         <Menu.Item key="menu" icon={<ShoppingOutlined />}>
           <Link to="/menus">เมนู</Link>
@@ -107,9 +107,9 @@ const FullLayout: React.FC = () => {
           >
             <Routes>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/customer" element={<Customer />} />
-              <Route path="/customer/create" element={<CustomerCreate />} />
-              <Route path="/customer/edit/:id" element={<CustomerEdit />} />
+              <Route path="/employee" element={<Employee />} />
+              <Route path="/employee/create" element={<EmployeeCreate />} />
+              <Route path="/employee/edit/:id" element={<EmployeeEdit />} />
               <Route path="/menus" element={<Menus />} />
               <Route path="/menus/create" element={<MenuCreate />} />
               <Route path="/menus/edit/:id" element={<MenuEdit />} />
