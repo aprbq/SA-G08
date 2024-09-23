@@ -2,7 +2,7 @@ import { EmployeeInterface } from "../../interfaces/Employee";
 import { SignInInterface } from "../../interfaces/SignIn";
 import { IngredientInterface } from "../../interfaces/Ingredient";
 import { PromotionInterface } from "../../interfaces/Promotion";
-import {ConditionInterface } from "../../interfaces/Condition";
+import { ConditionInterface } from "../../interfaces/Condition";
 import { MenuInterface } from "../../interfaces/Menu";
 import { OrderInterface } from "../../interfaces/Order";
 import { SupplierInterface } from "../../interfaces/Supplier";
@@ -454,6 +454,41 @@ async function GetOrdersweet() {
     .catch((e) => e.response);
 }
 
+// async function GetRowsMenu() {
+//   return await axios
+//     .get(`${apiUrl}/countmenu`, requestOptions)
+//     .then((res) => res)
+//     .catch((e) => e.response);
+// }
+
+// async function GetRowsEm() {
+//   return await axios
+//     .get(`${apiUrl}/countemployee`, requestOptions)
+//     .then((res) => res)
+//     .catch((e) => e.response);
+// }
+
+// async function GetRowMembers() {
+//   return await axios
+//     .get(`${apiUrl}/countmember`, requestOptions)
+//     .then((res) => res)
+//     .catch((e) => e.response);
+// }
+
+// async function GetRowIngredients() {
+//   return await axios
+//     .get(`${apiUrl}/countingredient`, requestOptions)
+//     .then((res) => res)
+//     .catch((e) => e.response);
+// }
+
+// async function GetRowPromotions() {
+//   return await axios
+//     .get(`${apiUrl}/countpromotion`, requestOptions)
+//     .then((res) => res)
+//     .catch((e) => e.response);
+// }
+
 
 
 export {
@@ -522,6 +557,12 @@ export {
   DeleteSupplierById,
   CreateSupplier,
   GetUnits,
+
+  // GetRowsMenu,
+  // GetRowsEm,
+  // GetRowMembers,
+  // GetRowIngredients,
+  // GetRowPromotions,
   
 
 };

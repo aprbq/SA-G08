@@ -34,7 +34,7 @@ function CustomerCreate() {
 
 
   const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+    setFileList(newFileList.slice(-1));
   };
 
   const onPreview = async (file: UploadFile) => {
@@ -132,23 +132,25 @@ function CustomerCreate() {
                 valuePropName="fileList"
               >
                 <ImgCrop rotationSlider>
-                  <Upload
-                    fileList={fileList}
-                    onChange={onChange}
-                    onPreview={onPreview}
-                    beforeUpload={(file) => {
-                      setFileList([...fileList, file]);
-                      return false;
-                    }}
-                    maxCount={1}
-                    multiple={false}
-                    listType="picture-card"
-                  >
+                <Upload
+                  fileList={fileList}
+                  onChange={onChange}
+                  onPreview={onPreview}
+                  beforeUpload={(file) => {
+                    setFileList([file]); // รับแค่ไฟล์เดียว
+                    return false;
+                  }}
+                  maxCount={1}
+                  multiple={false} // ปิดการอัพโหลดหลายไฟล์
+                  listType="picture-card"
+                >
+                  {fileList.length < 1 && ( // ตรวจสอบว่ามีไฟล์อัพโหลดแล้วหรือไม่ ถ้ามีแล้วจะไม่แสดงปุ่มอัพโหลด
                     <div>
                       <PlusOutlined />
                       <div style={{ marginTop: 8 }}>อัพโหลด</div>
                     </div>
-                  </Upload>
+                  )}
+                </Upload>
                 </ImgCrop>
               </Form.Item>
             </Col>

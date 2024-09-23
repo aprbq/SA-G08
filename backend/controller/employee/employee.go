@@ -26,7 +26,7 @@ func Get(c *gin.Context) {
     ID := c.Param("id")
     var employee entity.Employee
     db := config.DB()
-    results := db.Preload("Gender").First(&employee, ID)
+    results := db.Preload("Gender").Preload("Role").First(&employee, ID)
 
     if results.Error != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
