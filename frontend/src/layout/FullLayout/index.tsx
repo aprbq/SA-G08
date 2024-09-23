@@ -87,7 +87,7 @@ const FullLayout: React.FC = () => {
           <Link to="/ingredient">วัตถุดิบ</Link>
         </Menu.Item>
         <Menu.Item key="Order" icon={<ShoppingOutlined />}>
-          <Link to="/Order">รายการสั่งซื้อ</Link>
+          <Link to="/Order/create">รายการสั่งซื้อ</Link>
         </Menu.Item>
         <Menu.Item key="promotion" icon={<StarOutlined />}>
           <Link to="/promotion">โปรโมชั่น</Link>

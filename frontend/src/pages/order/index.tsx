@@ -47,19 +47,19 @@ function Order() {
       dataIndex: "promotion",
       render: (item) => Object.values(item.promotion_name),
     },
-    {
-      title: "",
-      render: (record: OrderInterface) => (
-        <Button
-          className="btn-1"
-          type="primary"
-          icon={<EditOutlined />}
-          onClick={() => navigate(`/order/edit/${record.ID}`)}
-        >
-          แก้ไขข้อมูล
-        </Button>
-      ),
-    },
+    // {
+    //   title: "",
+    //   render: (record: OrderInterface) => (
+    //     <Button
+    //       className="btn-1"
+    //       type="primary"
+    //       icon={<EditOutlined />}
+    //       onClick={() => navigate(`/order/edit/${record.ID}`)}
+    //     >
+    //       แก้ไขข้อมูล
+    //     </Button>
+    //   ),
+    // },
     {
       title: "",
       render: (record) => (
