@@ -16,6 +16,8 @@ function Order() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState<MenuInterface[]>([]);
 
+  
+
   const columns: ColumnsType<OrderInterface> = [
     {
       title: "รายการที่",
@@ -24,8 +26,8 @@ function Order() {
     },
     {
       title: "ราคารวมของเมนู",
-      dataIndex: "total_amount_before_discount", // สมมติฟิลด์นี้คือราคาสุทธิก่อนใช้โปรโมชั่น
-      key: "total_amount_before_discount",
+      dataIndex: "payment_amount_before", // สมมติฟิลด์นี้คือราคาสุทธิก่อนใช้โปรโมชั่น
+      key: "payment_amount_before",
       render: (amount) => `${amount.toFixed(2)} บาท`,
     },
     {
@@ -114,6 +116,7 @@ function Order() {
   const getOrders = async () => {
     let res = await GetOrder();
     if (res.status === 200) {
+      console.log(res.data); // เช็คข้อมูลที่ได้จาก API
       setOrders(res.data);
     } else {
       setOrders([]);

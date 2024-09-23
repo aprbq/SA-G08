@@ -195,6 +195,7 @@ func CreateOrder(c *gin.Context) {
 	newOrder := entity.Order{
 		OrderDate:      order.OrderDate,
 		PaymentAmount:  order.PaymentAmount,
+		PaymentAmountBefore:  order.PaymentAmountBefore,
 		EmployeeID:     order.EmployeeID,
 		Employee:       &employee,
 		PromotionID:    order.PromotionID,

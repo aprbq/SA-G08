@@ -160,6 +160,7 @@ function OrderConfirm() {
   
     // รวมราคารวมของทุก orderitem เป็นราคาสุทธิ
     let totalAmount = orderItems.reduce((total, item) => total + (item.total_item || 0), 0);
+    let aftertotalAmount;
   
     // ตรวจสอบโปรโมชั่น
     const selectedPromotion = promotions.find(promo => promo.ID === values.promotion_id);
@@ -168,11 +169,11 @@ function OrderConfirm() {
       if (selectedPromotion.discount_type_id === 1) {
         // ถ้า discount_type_id = 1 ให้นำ discount_value มาคำนวณเป็นเปอร์เซ็นต์
         const discountPercentage = selectedPromotion.discount_value || 0; // สมมติว่า 0.2 หมายถึง 0.2%
-        totalAmount = totalAmount - totalAmount * (discountPercentage / 100); // ลดราคาสุทธิด้วย 0.2%
+        aftertotalAmount = totalAmount - totalAmount * (discountPercentage / 100); // ลดราคาสุทธิด้วย 0.2%
       } else if (selectedPromotion.discount_type_id === 3) {
         // ถ้า discount_type_id = 3 ให้นำ discount_value มาลบออกจากราคาสุทธิ
         const discountAmount = selectedPromotion.discount_value || 0; // สมมติว่า 10 หมายถึงลด 10 บาท
-        totalAmount = totalAmount - discountAmount; // ลดราคาสุทธิด้วย 10 บาท
+        aftertotalAmount = totalAmount - discountAmount; // ลดราคาสุทธิด้วย 10 บาท
       }
     }
   
@@ -182,10 +183,13 @@ function OrderConfirm() {
       promotion_type_id: values.promotion_type_id,
       paymentmethod_id: values.payment_method_id,
       employee_id: Number(accountid),
-      payment_amount: totalAmount, // ราคาสุทธิหลังจากหักส่วนลด
+      payment_amount: aftertotalAmount,
+      payment_amount_before: totalAmount,// ราคาสุทธิหลังจากหักส่วนลด
     };
   
     try {
+      console.log("v",values)
+      console.log("o",orderPayload)
       const orderRes = await CreateOrder(orderPayload);
       if (orderRes && orderRes.status === 201) {
         const orderId = orderRes.data.data;
