@@ -55,7 +55,12 @@ function CustomerCreate() {
 
   const onFinish = async (values: EmployeeInterface) => {
 
-    let res = await CreateEmployee(values);
+    let employeePayload = {
+      ...values,
+      "picture_employee": fileList[0]?.thumbUrl || "", // Ensure picture is either URL or empty string
+    };
+
+    let res = await CreateEmployee(employeePayload);
 
     if (res.status == 201) {
       messageApi.open({
@@ -120,10 +125,10 @@ function CustomerCreate() {
         >
           <Row gutter={[16, 0]}>
 
-          <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+          <Col xs={12} sm={12} md={12} lg={12} xl={12} style={{ textAlign: "center" }}>
               <Form.Item
                 label="รูปเมนู"
-                name="picture"
+                name="picture_employee"
                 valuePropName="fileList"
               >
                 <ImgCrop rotationSlider>

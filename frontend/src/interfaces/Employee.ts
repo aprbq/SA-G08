@@ -5,7 +5,7 @@ export interface EmployeeInterface {
     email?: string;
     username?: string;
     password?: string;
-    picture_employee?: string;
     role_id?: number;
     gender_id?: number;
+    picture_employee?: string;
   }

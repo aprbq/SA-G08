@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message } from "antd";
+import { Space, Table, Button, Col, Row, Divider, message,Modal, List, Typography } from "antd";
 import { PlusOutlined, DeleteOutlined,EditOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetEmployee, DeleteEmployeeById } from "../../services/https/index";
 import { EmployeeInterface } from "../../interfaces/Employee";
 import { Link, useNavigate } from "react-router-dom";
+
+const { confirm } = Modal;
+
 
 function Employee() {
   const navigate = useNavigate();
@@ -19,6 +22,17 @@ function Employee() {
       title: "ลำดับ",
       dataIndex: "ID",
       key: "id",
+    },
+
+    {
+      title: "รูป",
+      dataIndex: "picture_employee",
+      key: "picture",
+      className:  "front-1",
+      width: "15%",
+      render: (text, record, index) => (
+        <img src={record.picture_employee} className="w3-left w3-circle w3-margin-right" width="100%" />
+      ),
     },
 
     {
@@ -38,17 +52,16 @@ function Employee() {
       dataIndex: "email",
       key: "email",
     },
-    {
-      title: "เพศ",
-      dataIndex: "gender",
-      render: (item) => Object.values(item.gender_name),
-    },
-    {
-      title: "ตำแหน่งงาน",
-      dataIndex: "role",
-      key: "role",
-      render: (item) => Object.values(item.role_name),
-    },
+    // {
+    //   title: "เพศ",
+    //   dataIndex: "gender",
+    //   render: (item) => Object.values(item.gender_name),
+    // },
+    // {
+    //   title: "ตำแหน่งงาน",
+    //   dataIndex: "role",
+    //   render: (item) => Object.values(item.role_name),
+    // },
 
     {
       title: "",
