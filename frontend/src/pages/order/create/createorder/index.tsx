@@ -151,16 +151,29 @@ function OrderConfirm() {
   
 
   const onFinish = async (values: { promotion_id: number; payment_method_id: number; promotion_type_id: number }) => {
-    if (selectedPromotionType === 1 && !phoneNumber) { // ถ้าเลือกเป็น Member และไม่ได้กรอกเบอร์โทรศัพท์
-      messageApi.open({ type: 'error', content: 'กรุณากรอกเบอร์โทรศัพท์!' });
-      return;
-    }
-  
     const isMemberValid = await getMember(phoneNumber!); // ตรวจสอบเบอร์โทรศัพท์และสถานะสมาชิก
     
     if (!isMemberValid) {
       messageApi.open({ type: "error", content: "เบอร์โทรศัพท์ไม่ถูกต้องหรือต้องห้ามการสั่งซื้อ!" });
       return; // หยุดการดำเนินการถ้าเบอร์ไม่ถูกต้องหรือ status_id เท่ากับ 2
+    }
+  
+    // รวมราคารวมของทุก orderitem เป็นราคาสุทธิ
+    let totalAmount = orderItems.reduce((total, item) => total + (item.total_item || 0), 0);
+  
+    // ตรวจสอบโปรโมชั่น
+    const selectedPromotion = promotions.find(promo => promo.ID === values.promotion_id);
+  
+    if (selectedPromotion) {
+      if (selectedPromotion.discount_type_id === 1) {
+        // ถ้า discount_type_id = 1 ให้นำ discount_value มาคำนวณเป็นเปอร์เซ็นต์
+        const discountPercentage = selectedPromotion.discount_value || 0; // สมมติว่า 0.2 หมายถึง 0.2%
+        totalAmount = totalAmount - totalAmount * (discountPercentage / 100); // ลดราคาสุทธิด้วย 0.2%
+      } else if (selectedPromotion.discount_type_id === 3) {
+        // ถ้า discount_type_id = 3 ให้นำ discount_value มาลบออกจากราคาสุทธิ
+        const discountAmount = selectedPromotion.discount_value || 0; // สมมติว่า 10 หมายถึงลด 10 บาท
+        totalAmount = totalAmount - discountAmount; // ลดราคาสุทธิด้วย 10 บาท
+      }
     }
   
     const accountid = localStorage.getItem("id");
@@ -169,7 +182,7 @@ function OrderConfirm() {
       promotion_type_id: values.promotion_type_id,
       paymentmethod_id: values.payment_method_id,
       employee_id: Number(accountid),
-      payment_amount: orderItems.reduce((total, item) => total + (item.total_item || 0), 0),
+      payment_amount: totalAmount, // ราคาสุทธิหลังจากหักส่วนลด
     };
   
     try {
@@ -191,6 +204,8 @@ function OrderConfirm() {
       messageApi.open({ type: "error", content: error instanceof Error ? error.message : "เกิดข้อผิดพลาด !" });
     }
   };
+  
+  
   
   
   useEffect(() => {

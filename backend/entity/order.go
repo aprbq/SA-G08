@@ -10,6 +10,7 @@ type Order struct {
 	gorm.Model
 	OrderDate  	time.Time 	`json:"order_date"`
 	PaymentAmount float32 `json:"payment_amount"`
+	PaymentAmount_before float32 `json:"total_amount_before_discount"`
 
 	EmployeeID uint      `json:"employee_id"`
 	Employee   *Employee `gorm:"foreignKey:EmployeeID" json:"employee"`

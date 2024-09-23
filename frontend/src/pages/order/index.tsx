@@ -24,8 +24,15 @@ function Order() {
     },
     {
       title: "ราคารวมของเมนู",
-      dataIndex: "payment_amount",
+      dataIndex: "total_amount_before_discount", // สมมติฟิลด์นี้คือราคาสุทธิก่อนใช้โปรโมชั่น
+      key: "total_amount_before_discount",
+      render: (amount) => `${amount.toFixed(2)} บาท`,
+    },
+    {
+      title: "ราคาหลังใช้โปรโมชั่น",
+      dataIndex: "payment_amount", // ฟิลด์นี้คือราคาหลังใช้โปรโมชั่น
       key: "payment_amount",
+      render: (amount) => `${amount.toFixed(2)} บาท`,
     },
     {
       title: "วิธีการชำระเงิน",
@@ -38,16 +45,6 @@ function Order() {
       dataIndex: "promotion",
       render: (item) => Object.values(item.promotion_name),
     },
-    
-    
-    
-    // {
-    //   title: "วันทำรายการ",
-    //   key: "order_date",
-    //   render: (record: OrderInterface) => (
-    //     <>{dayjs(record.order_date).format("DD/MM/YYYY")}</>
-    //   ),
-    // },
     {
       title: "",
       render: (record: OrderInterface) => (
@@ -73,7 +70,7 @@ function Order() {
       ),
     },
   ];
-
+  
   const deleteOrderById = async (id: string) => {
     try {
       // เรียกฟังก์ชันที่ลบโปรโมชั่นและลบเงื่อนไข
@@ -132,6 +129,8 @@ function Order() {
 
   useEffect(() => {
     getOrders();
+    
+    console.log(orders);
     
   }, []);
 

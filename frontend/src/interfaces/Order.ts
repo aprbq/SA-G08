@@ -15,5 +15,6 @@ export interface OrderInterface {
     payment_amount?: number;
     employee_id?: number; // ใช้แทน total_price
     promotion_type_id?: number;
+    total_amount_before_discount?: number;
 }
 
