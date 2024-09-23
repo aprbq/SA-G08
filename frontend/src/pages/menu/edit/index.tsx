@@ -11,23 +11,25 @@ import {
   message,
   InputNumber,
   Select,
+  Upload,
 } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
-import { CategoryInterface } from "../../../interfaces/Category";
-import { StockInterface } from "../../../interfaces/Stock";
-import { IngredientInterface } from "../../../interfaces/Ingredient";
+import ImgCrop from "antd-img-crop";
 import { GetMenuById, UpdateMenuById, GetCategory, GetStock, GetMenuIngredientById, UpdateMenuIngredientById, GetIngredients } from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
+import type { GetProp, UploadFile, UploadProps } from "antd";
 
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 const { Option } = Select;
 
 function MenuEdit() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: any }>();
   const [messageApi, contextHolder] = message.useMessage();
-  const [category, setCategory] = useState<CategoryInterface[]>([]);
-  const [stock, setStock] = useState<StockInterface[]>([]);
-  const [ingredients, setIngredients] = useState<IngredientInterface[]>([]);
+  const [category, setCategory] = useState<any[]>([]);
+  const [stock, setStock] = useState<any[]>([]);
+  const [ingredients, setIngredients] = useState<any[]>([]);
+  const [fileList, setFileList] = useState<any[]>([]); // State for image file list
   const [form] = Form.useForm();
 
   const getMenuById = async (id: string) => {
@@ -40,9 +42,10 @@ function MenuEdit() {
         picture: menuData.picture,
         description: menuData.description,
         category_id: menuData.category_id,
-        // stock_id: menuData.stock_id,
       });
-      getMenuIngredientsById(id);  // <-- Fetch ingredients after setting menu data
+
+      setFileList([{ url: menuData.picture }]);  // Set existing image in file list
+      getMenuIngredientsById(id);
     } else {
       messageApi.open({
         type: "error",
@@ -58,7 +61,6 @@ function MenuEdit() {
     let res = await GetMenuIngredientById(id);
     if (res.status === 200) {
       const ingredientData = res.data;
-      console.log('Ingredient Data:', ingredientData);  // ตรวจสอบข้อมูลที่ได้รับ
       form.setFieldsValue({
         menu_ingredients: ingredientData.map((item: any) => ({
           ingredients_id: item.ingredients_id,
@@ -74,38 +76,38 @@ function MenuEdit() {
   };
 
   const onFinish = async (values: any) => {
-    console.log('vaa Payload:', values);
     try {
       const { menu_ingredients, ...menuData } = values;
-      console.log('Menu Ingredients Payload:', menu_ingredients);
 
-      // Proceed with menu update
-      const menuRes = await UpdateMenuById(id, menuData);
+      // Add image to payload
+      const imagePayload = {
+        picture: fileList[0]?.url || fileList[0]?.thumbUrl || "", // Use the uploaded image URL
+      };
+
+      const menuRes = await UpdateMenuById(id, { ...menuData, ...imagePayload });
       if (menuRes.status === 200) {
         messageApi.open({
           type: "success",
           content: menuRes.data.message,
         });
 
-        // Ingredients payload now includes menu_id
         const ingredientsPayload = {
-          menu_id: Number(id),  // <-- Ensure you send the menu_id
+          menu_id: Number(id),
           ingredients: menu_ingredients.map((item: any) => ({
             ingredients_id: item.ingredients_id,
             quantity: item.quantity,
           })),
         };
 
-        console.log('Sending Ingredients Payload:', ingredientsPayload);
         const ingredientsRes = await UpdateMenuIngredientById(id, ingredientsPayload);
 
         if (ingredientsRes.status === 200) {
           messageApi.open({
             type: "success",
-            content: 'Menu ingredients updated successfully!',
+            content: "อัปเดตส่วนประกอบเมนูสำเร็จ",
           });
         } else {
-          throw new Error('Failed to update menu ingredients');
+          throw new Error("อัปเดตส่วนประกอบเมนูไม่สำเร็จ");
         }
 
         setTimeout(() => {
@@ -120,9 +122,28 @@ function MenuEdit() {
     } catch (error) {
       messageApi.open({
         type: "error",
-        content: 'An error occurred while updating the menu.',
+        content: "เกิดข้อผิดพลาดขณะอัปเดตเมนู",
       });
     }
+  };
+
+  const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
+
+  const onPreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as FileType);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
   };
 
   const getCategory = async () => {
@@ -169,7 +190,6 @@ function MenuEdit() {
     getCategory();
     getStock();
     getIngredients();
-
   }, [id]);
 
   return (
@@ -184,13 +204,36 @@ function MenuEdit() {
           form={form}
           layout="vertical"
           onFinish={onFinish}
-          onFinishFailed={() => {
-            messageApi.error('กรุณาตรวจสอบข้อมูลและเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ');
-          }}
           autoComplete="off"
         >
           <Row gutter={[16, 0]}>
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+
+            {/* ส่วนอัปโหลดรูปภาพ */}
+            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+              <Form.Item label="รูปภาพเมนู" name="picture" valuePropName="fileList">
+                <ImgCrop rotationSlider>
+                  <Upload
+                    fileList={fileList}
+                    onChange={onChange}
+                    onPreview={onPreview}
+                    beforeUpload={(file) => {
+                      setFileList([...fileList, file]);
+                      return false;
+                    }}
+                    maxCount={1}
+                    multiple={false}
+                    listType="picture-card"
+                  >
+                    <div>
+                      <PlusOutlined />
+                      <div style={{ marginTop: 8 }}>อัพโหลด</div>
+                    </div>
+                  </Upload>
+                </ImgCrop>
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 label="ชื่อ"
                 name="name"
@@ -200,7 +243,7 @@ function MenuEdit() {
               </Form.Item>
             </Col>
 
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 name="category_id"
                 label="ประเภท"
@@ -216,23 +259,7 @@ function MenuEdit() {
               </Form.Item>
             </Col>
 
-            {/* <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                name="stock_id"
-                label="สถานะ"
-                rules={[{ required: true, message: "กรุณาเลือกสถานะ !" }]}
-              >
-                <Select allowClear>
-                  {stock.map((item) => (
-                    <Option value={item.ID} key={item.ID}>
-                      {item.stock}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col> */}
-
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 label="คำอธิบาย"
                 name="description"
@@ -242,7 +269,7 @@ function MenuEdit() {
               </Form.Item>
             </Col>
 
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 label="ราคา"
                 name="price"
@@ -258,6 +285,7 @@ function MenuEdit() {
               </Form.Item>
             </Col>
 
+            {/* ส่วนจัดการส่วนประกอบเมนู */}
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
               <Form.List
                 name="menu_ingredients"
@@ -273,7 +301,7 @@ function MenuEdit() {
               >
                 {(fields, { add, remove }) => (
                   <>
-                    {fields.map(({ key, name, ...restField }, index) => (
+                    {fields.map(({ key, name, ...restField }) => (
                       <Row key={key} gutter={[16, 0]} align="middle">
                         <Col xs={12} sm={12} md={8} lg={8} xl={8}>
                           <Form.Item
@@ -282,7 +310,7 @@ function MenuEdit() {
                             label="วัตถุดิบ"
                             rules={[{ required: true, message: 'กรุณาเลือกวัตถุดิบ!' }]}
                           >
-                            <Select placeholder="เลือกวัตถุดิบ" showSearch optionFilterProp="children">
+                            <Select placeholder="เลือกวัตถุดิบ" showSearch>
                               {ingredients.map((item) => (
                                 <Option value={item.ID} key={item.ID}>
                                   {item.name}
@@ -299,10 +327,9 @@ function MenuEdit() {
                             label="จำนวน"
                             rules={[
                               { required: true, message: 'กรุณากรอกจำนวน!' },
-                              { type: 'string', message: 'กรุณากรอกข้อความ!' },
                             ]}
                           >
-                            <Input placeholder="กรุณากรอกจำนวนเป็นข้อความ" />
+                            <Input placeholder="กรุณากรอกจำนวน" />
                           </Form.Item>
                         </Col>
 
@@ -322,7 +349,6 @@ function MenuEdit() {
                   </>
                 )}
               </Form.List>
-
             </Col>
           </Row>
 
@@ -336,11 +362,7 @@ function MenuEdit() {
                     </Button>
                   </Link>
 
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    icon={<PlusOutlined />}
-                  >
+                  <Button type="primary" htmlType="submit" icon={<PlusOutlined />}>
                     ตกลง
                   </Button>
                 </Space>

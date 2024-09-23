@@ -60,6 +60,7 @@ function MenuCreate() {
       ...values,
       "employee_id": Number(accountid),
       "picture": fileList[0]?.thumbUrl || "", // Ensure picture is either URL or empty string
+      "stock_id": 1,
     };
 
     // Create menu
@@ -219,22 +220,6 @@ function MenuCreate() {
                 </Select>
               </Form.Item>
             </Col>
-
-            {/* <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                name="stock_id"
-                label="สถานะ"
-                rules={[{ required: true, message: "กรุณาเลือกสถานะ !" }]}
-              >
-                <Select allowClear>
-                  {stock.map((item) => (
-                    <Option value={item.ID} key={item.ID}>
-                      {item.stock}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col> */}
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
