@@ -20,6 +20,7 @@ import { UnitInterface } from "../../../interfaces/Unit";
 import { GetClass, GetIngredientsById, UpdateIngredientsById, GetSuppliers, GetUnits } from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import dayjs from "dayjs";
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -58,11 +59,12 @@ function IngredientEdit() {
 
   const onFinish = async (values: IngredientInterface) => {
     // Convert string inputs to numbers
+    const price = Number(values.quantity) * Number(values.unit_price);
     const payload = {
       ...values,
       quantity: Number(values.quantity),
       unit_price: Number(values.unit_price),
-      price: Number(values.price),
+      price: price,
     };
     console.log(payload);
     const res = await UpdateIngredientsById(id, payload);
@@ -223,23 +225,6 @@ function IngredientEdit() {
             
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label={<span className="front-1">ราคา</span>}
-                name="price"
-                rules={[{ required: true, message: "กรุณากรอกราคา !" }]}
-              >
-                <Input
-                  min={0}
-                  className="front-1"
-                  type="number"
-                  defaultValue={0}
-                  style={{ width: "100%" }}
-                  onChange={(e) => form.setFieldsValue({ price: e.target.value })}
-                />
-              </Form.Item>
-            </Col>
-
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
                 label={<span className="front-1">ผู้ผลิต</span>}
                 name="suppliers_id"
                 rules={[{ required: true, message: "กรุณากรอกชื่อผู้ผลิต !" }]}
@@ -260,7 +245,10 @@ function IngredientEdit() {
                 name="exp_date"
                 rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี หมดอายุ !" }]}
               >
-                <DatePicker style={{ width: "100%" }} className="front-1" />
+                <DatePicker
+                  className="front-1"
+                  disabledDate={(current) => current && current < moment().startOf('day')}
+                />
               </Form.Item>
             </Col>
           </Row>

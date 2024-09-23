@@ -19,6 +19,7 @@ import { UnitInterface } from "../../../interfaces/Unit";
 import { GetClass, CreateIngredients, GetUnits, GetSuppliers } from "../../../services/https";
 import { useNavigate, Link } from "react-router-dom";
 const { Option } = Select;
+import moment from 'moment';
 
 function IngredientsCreate() {
   const navigate = useNavigate();
@@ -28,21 +29,24 @@ function IngredientsCreate() {
   const [supplier, setSupplier] = useState<SupplierInterface[]>([]); 
   const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
   const [form] = Form.useForm();
+
+  // คำนวณราคาจาก quantity และ unit_price
   const onFinish = async (values: IngredientInterface) => {
+    const price = Number(values.quantity) * Number(values.unit_price);
+    
     let payload = {
       ...values,
       "employee_id": Number(accountid),
       quantity: Number(values.quantity),
       unit_price: Number(values.unit_price),
-      price: Number(values.price),
+      price: price,
     };
-    console.log(payload);
-    
+
     let res = await CreateIngredients(payload);
     if (res.status == 201) {
       messageApi.open({
         type: "success",
-        content: "create successfully",
+        content: "create ingredient successfully",
       });
       setTimeout(function () {
         navigate("/ingredient");
@@ -50,7 +54,7 @@ function IngredientsCreate() {
     } else {
       messageApi.open({
         type: "error",
-        content: "create error",
+        content: "create ingredient error",
       });
     }
   };
@@ -105,7 +109,7 @@ function IngredientsCreate() {
       {contextHolder}
       <Row gutter={[16, 16]} justify="center" style={{ marginBottom: "20px" }}>
         <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-          <h1 className="heading-style">แก้ไขข้อมูลวัตถุดิบ</h1>
+          <h1 className="heading-style">เพิ่มข้อมูลวัตถุดิบ</h1>
         </Col>
       </Row>
       <Card className="card-ingredient">
@@ -121,7 +125,9 @@ function IngredientsCreate() {
               <Form.Item
                 label={<span className="front-1">ชื่อ</span>}
                 name="name"
-                rules={[{ required: true, message: "กรุณากรอกชื่อ !" }]}
+                rules={[{ required: true, message: "กรุณากรอกชื่อ !" },
+                  { pattern: /^[a-zA-Zก-ฮะ-์\s]+$/, message: "กรุณากรอกเฉพาะตัวอักษรภาษาไทยหรือภาษาอังกฤษเท่านั้น !" }
+                ]}
               >
                 <Input className="front-1" />
               </Form.Item>
@@ -183,29 +189,12 @@ function IngredientsCreate() {
                 rules={[{ required: true, message: "กรุณากรอกราคาต่อหน่วย !" }]}
               >
                 <Input
-                  min={0}
+                  min={1}
                   className="front-1"
                   type="number"
                   defaultValue={0}
                   style={{ width: "100%" }}
                   onChange={(e) => form.setFieldsValue({ unit_price: e.target.value })}
-                />
-              </Form.Item>
-            </Col>
-            
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                label={<span className="front-1">ราคา</span>}
-                name="price"
-                rules={[{ required: true, message: "กรุณากรอกราคา !" }]}
-              >
-                <Input
-                  min={0}
-                  className="front-1"
-                  type="number"
-                  defaultValue={0}
-                  style={{ width: "100%" }}
-                  onChange={(e) => form.setFieldsValue({ price: e.target.value })}
                 />
               </Form.Item>
             </Col>
@@ -232,7 +221,9 @@ function IngredientsCreate() {
                 name="exp_date"
                 rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี หมดอายุ !" }]}
               >
-                <DatePicker style={{ width: "100%" }} className="front-1" />
+                <DatePicker style={{ width: "100%" }} className="front-1" 
+                  disabledDate={(current) => current && current < moment().startOf('day')}
+                />
               </Form.Item>
             </Col>
           </Row>
