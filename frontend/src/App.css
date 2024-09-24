@@ -271,7 +271,8 @@ body {
 }
 
 .front-1,
-.front-1.ant-input-number {
+.front-1 .ant-input-number-input,
+.front-1 .ant-input-number-input-wrap input {
   color: #000000 !important;
   font-family: "Mitr", sans-serif !important;
   font-weight: normal !important;
@@ -279,8 +280,25 @@ body {
 }
 
 
+
 .front-2{
   color: #378f04 !important;
+  font-family: "Mitr", sans-serif!important;
+  font-weight: normal!important;
+  font-style: normal!important;
+
+}
+
+.front-white{
+  color: #fdfffc !important;
+  font-family: "Mitr", sans-serif!important;
+  font-weight: normal!important;
+  font-style: normal!important;
+
+}
+
+.front-blue{
+  color: #009ad1 !important;
   font-family: "Mitr", sans-serif!important;
   font-weight: normal!important;
   font-style: normal!important;

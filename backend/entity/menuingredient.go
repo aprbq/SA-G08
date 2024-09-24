@@ -7,8 +7,8 @@ type MenuIngredient struct {
 	Quantity string `json:"quantity"` // Field to store the quantity of the ingredient
 
 	IngredientsID uint `json:"ingredients_id"` // Foreign key for Ingredients
-	Ingredients   Ingredients `gorm:"foreignKey:IngredientsID;constraint:OnDelete:CASCADE;" json:"ingredient"` // Foreign key relationship
+	Ingredients   Ingredients `gorm:"foreignKey:IngredientsID" json:"ingredient"` // Foreign key relationship
 
 	MenuID uint `json:"menu_id"` // Foreign key for Menu
-	Menu   Menu `gorm:"foreignKey:MenuID;constraint:OnDelete:CASCADE;" json:"menu"` // Foreign key relationship
+	Menu   Menu `gorm:"foreignKey:MenuID" json:"menu"` // Foreign key relationship
 }

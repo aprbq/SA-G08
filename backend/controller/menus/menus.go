@@ -10,7 +10,6 @@ import (
 
 func CreateMenu(c *gin.Context) {
 	var menu entity.Menu
-	// var menuIngredients []entity.MenuIngredient
 
 	// Bind the JSON payload to the menu struct
 	if err := c.ShouldBindJSON(&menu); err != nil {

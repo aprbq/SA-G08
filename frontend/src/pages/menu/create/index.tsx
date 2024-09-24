@@ -70,6 +70,7 @@ function MenuCreate() {
       messageApi.open({
         type: "success",
         content: res.data.message,
+        className:"front-1"
       });
 
       // Extract menu ID from the response
@@ -91,6 +92,7 @@ function MenuCreate() {
         messageApi.open({
           type: "success",
           content: "เมนูและวัตถุดิบถูกเพิ่มเรียบร้อยแล้ว!",
+          className:"front-1"
         });
         setTimeout(() => {
           navigate("/menus");
@@ -99,12 +101,14 @@ function MenuCreate() {
         messageApi.open({
           type: "error",
           content: ingredientsRes.data.error || "ไม่สามารถเพิ่มวัตถุดิบได้",
+          className:"front-1"
         });
       }
     } else {
       messageApi.open({
         type: "error",
         content: res.data.error || "ไม่สามารถสร้างเมนูได้",
+        className:"front-1"
       });
     }
   };
@@ -118,6 +122,7 @@ function MenuCreate() {
       messageApi.open({
         type: "error",
         content: res.data.error,
+        className:"front-1"
       });
     }
   };
@@ -131,6 +136,7 @@ function MenuCreate() {
       messageApi.open({
         type: "error",
         content: res.data.error,
+        className:"front-1"
       });
     }
   };
@@ -144,6 +150,7 @@ function MenuCreate() {
       messageApi.open({
         type: "error",
         content: res.data.error,
+        className:"front-1"
       });
     }
   };
@@ -158,18 +165,18 @@ function MenuCreate() {
   return (
     <div>
       {contextHolder}
-      <Card>
+      <Card className="card-promotion">
         <h2>เพิ่มข้อมูลเมนู</h2>
         <Divider />
 
         <Form name="basic" layout="vertical" onFinish={onFinish} onFinishFailed={() => {
-          messageApi.error('กรุณาตรวจสอบข้อมูลและเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ');
+          messageApi.error({content: <span className="front-1">กรุณาตรวจสอบข้อมูลและเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ</span>,});
         }} autoComplete="off">
           <Row gutter={[16, 0]}>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
               <Form.Item
-                label="รูปเมนู"
+                label={<span className="front-1">รูปเมนู</span>}
                 name="picture"
                 valuePropName="fileList"
               >
@@ -188,7 +195,7 @@ function MenuCreate() {
                   >
                     <div>
                       <PlusOutlined />
-                      <div style={{ marginTop: 8 }}>อัพโหลด</div>
+                      <div style={{ marginTop: 8 }}  className="front-1">อัพโหลด</div>
                     </div>
                   </Upload>
                 </ImgCrop>
@@ -197,23 +204,23 @@ function MenuCreate() {
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="ชื่อ"
+                label={<span className="front-1">ชื่อ</span>}
                 name="name"
-                rules={[{ required: true, message: "กรุณากรอกชื่อ !" }]}
+                rules={[{ required: true, message: <span className="error-front">กรุณากรอกชื่อ !</span> }]}
               >
-                <Input />
+                <Input className="front-1" placeholder="กรุณากรอกชื่อ"/>
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 name="category_id"
-                label="ประเภท"
-                rules={[{ required: true, message: "กรุณาเลือกประเภท !" }]}
+                label={<span className="front-1">ประเภท</span>}
+                rules={[{ required: true, message: <span className="error-front">กรุณาเลือกประเภท !</span> }]}
               >
-                <Select allowClear>
+                <Select allowClear className="front-1" placeholder="กรุณาเลือกประเภท">
                   {category.map((item) => (
-                    <Option value={item.ID} key={item.ID}>
+                    <Option value={item.ID} key={item.ID} className="front-1">
                       {item.category}
                     </Option>
                   ))}
@@ -223,26 +230,27 @@ function MenuCreate() {
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="คำอธิบาย"
+                label={<span className="front-1">คำอธิบาย</span>}
                 name="description"
-                rules={[{ required: true, message: "กรุณากรอกคำอธิบาย !" }]}
+                rules={[{ required: true, message: <span className="error-front">กรุณากรอกคำอธิบาย !</span> }]}
               >
-                <Input />
+                <Input className="front-1" placeholder="กรุณากรอกคำอธิบาย"/>
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                label="ราคา"
+                label={<span className="front-1">ราคา</span>}
                 name="price"
-                rules={[{ required: true, message: "กรุณากรอกราคา !" }]}
+                rules={[{ required: true, message: <span className="error-front">กรุณากรอกราคา !</span> }]}
               >
                 <InputNumber
                   min={0}
                   max={9999}
                   defaultValue={0}
                   style={{ width: "100%" }}
-                  step={0.01}
+                  step={1}
+                  className="front-1"
                 />
               </Form.Item>
             </Col>
@@ -265,44 +273,15 @@ function MenuCreate() {
                     {fields.map(({ key, name, ...restField }) => (
                       <Row key={key} gutter={[16, 0]} align="middle">
                         <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-                          <Form.Item
+                        <Form.Item
                             {...restField}
                             name={[name, 'ingredients_id']}
-                            label="วัตถุดิบ"
-                            rules={[
-                              { required: true, message: 'กรุณาเลือกวัตถุดิบ!' },
-                              ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                  const ingredients = getFieldValue('menu_ingredients') || [];
-                                  const selectedIngredients = ingredients.map(
-                                    (ingredient: any) => ingredient.ingredients_id
-                                  );
-                                  if (
-                                    selectedIngredients.filter(
-                                      (ingredientId: number) => ingredientId === value
-                                    ).length > 1
-                                  ) {
-                                    return Promise.reject(
-                                      new Error('วัตถุดิบนี้ถูกเพิ่มแล้ว!')
-                                    );
-                                  }
-                                  return Promise.resolve();
-                                },
-                              }),
-                            ]}
+                            label={<span className="front-1">วัตถุดิบ</span>}
+                            rules={[{ required: true, message: <span className="error-front">กรุณาเลือกวัตถุดิบ !</span> }]}
                           >
-                            <Select
-                              placeholder="เลือกวัตถุดิบ"
-                              showSearch
-                              optionFilterProp="children"
-                              filterOption={(input, option) =>
-                                (option?.children as unknown as string)
-                                  .toLowerCase()
-                                  .includes(input.toLowerCase())
-                              }
-                            >
+                            <Select placeholder="เลือกวัตถุดิบ" className="front-1" showSearch>
                               {ingredients.map((item) => (
-                                <Option value={item.ID} key={item.ID}>
+                                <Option value={item.ID} key={item.ID} className="front-1">
                                   {item.name}
                                 </Option>
                               ))}
@@ -314,10 +293,10 @@ function MenuCreate() {
                           <Form.Item
                             {...restField}
                             name={[name, 'quantity']}
-                            label="จำนวน"
-                            rules={[{ required: true, message: 'กรุณากรอกจำนวน!' }]}
+                            label={<span className="front-1">จำนวน</span>}
+                            rules={[{ required: true, message: <span className="error-front">กรุณากรอกจำนวน !</span> }]}
                           >
-                            <Input style={{ width: '100%' }} />
+                            <Input style={{ width: '100%' }} className="front-1" placeholder="กรุณากรอกจำนวน"/>
                           </Form.Item>
                         </Col>
 
@@ -326,6 +305,7 @@ function MenuCreate() {
                             type="link"
                             icon={<MinusCircleOutlined />}
                             onClick={() => remove(name)}
+                            className="front-blue"
                           >
                             ลบ
                           </Button>
@@ -339,6 +319,7 @@ function MenuCreate() {
                         onClick={() => add()}
                         block
                         icon={<PlusOutlined />}
+                        className="front-1"
                       >
                         เพิ่มวัตถุดิบ
                       </Button>
@@ -356,12 +337,12 @@ function MenuCreate() {
               <Form.Item>
                 <Space>
                   <Link to="/menus">
-                    <Button htmlType="button" style={{ marginRight: "10px" }}>
+                    <Button htmlType="button" style={{ marginRight: "10px" }} className="front-1">
                       ย้อนกลับ
                     </Button>
                   </Link>
 
-                  <Button type="primary" htmlType="submit" icon={<PlusOutlined />}>
+                  <Button type="primary" htmlType="submit" icon={<PlusOutlined />} className="front-white">
                     ตกลง
                   </Button>
                 </Space>

@@ -77,6 +77,7 @@ function Menus() {
       render: (record) => (
         <Button
           type="default"
+          className=  "front-1"
           icon={<EyeOutlined />}
           onClick={() => handleViewIngredients(record.ID, record.name)} // Pass the menu name here
         >
@@ -155,6 +156,7 @@ function Menus() {
       messageApi.open({
         type: "error",
         content: "เกิดข้อผิดพลาดในการลบเมนู",
+        className:  "front-1",
       });
     }
   };
@@ -238,6 +240,7 @@ function Menus() {
       okText: "ยืนยัน",
       okType: "danger",
       cancelText: "ยกเลิก",
+      className:  "front-1",
       onOk() {
         deleteMenuById(id);
       },
@@ -275,12 +278,17 @@ function Menus() {
           rowKey="ID"
           columns={columns}
           dataSource={menus}
-          // style={{ width: "100%", overflow: "scroll" }}
+          pagination={{ pageSize: 10 }}
+          className="custom-table" 
+          rowClassName={(record, index) => 
+            index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"
+          }
         />
       </div>
 
       {/* Modal สำหรับแสดงวัตถุดิบ */}
       <Modal
+        className= "front-1"
         title={
           <div>
             วัตถุดิบของเมนู: {menuName}
@@ -293,18 +301,19 @@ function Menus() {
         {selectedIngredients.length > 0 ? (
           <List
             itemLayout="horizontal"
+            className= "front-1"
             dataSource={selectedIngredients}
             renderItem={(ingredient) => (
               <List.Item>
                 <List.Item.Meta
-                  title={<Text strong>{ingredient.name}</Text>}
+                  title={<Text className= "front-blue"strong>{ingredient.name}</Text>}
                   description={`จำนวน: ${ingredient.quantity}`}
                 />
               </List.Item>
             )}
           />
         ) : (
-          <p>ไม่มีวัตถุดิบสำหรับเมนูนี้</p>
+          <p className=  "front-1">ไม่มีวัตถุดิบสำหรับเมนูนี้</p>
         )}
       </Modal>
     </>

@@ -50,6 +50,7 @@ function MenuEdit() {
       messageApi.open({
         type: "error",
         content: "ไม่พบข้อมูล",
+        className:"front-1"
       });
       setTimeout(() => {
         navigate("/menus");
@@ -71,6 +72,7 @@ function MenuEdit() {
       messageApi.open({
         type: "error",
         content: "ไม่สามารถดึงข้อมูลวัตถุดิบได้",
+        className:"front-1"
       });
     }
   };
@@ -89,6 +91,7 @@ function MenuEdit() {
         messageApi.open({
           type: "success",
           content: menuRes.data.message,
+          className:"front-1"
         });
 
         const ingredientsPayload = {
@@ -105,9 +108,11 @@ function MenuEdit() {
           messageApi.open({
             type: "success",
             content: "อัปเดตส่วนประกอบเมนูสำเร็จ",
+            className:"front-1"
           });
         } else {
           throw new Error("อัปเดตส่วนประกอบเมนูไม่สำเร็จ");
+          className:"front-1"
         }
 
         setTimeout(() => {
@@ -117,12 +122,14 @@ function MenuEdit() {
         messageApi.open({
           type: "error",
           content: menuRes.data.error,
+          className:"front-1"
         });
       }
     } catch (error) {
       messageApi.open({
         type: "error",
         content: "เกิดข้อผิดพลาดขณะอัปเดตเมนู",
+        className:"front-1"
       });
     }
   };
@@ -155,6 +162,7 @@ function MenuEdit() {
       messageApi.open({
         type: "error",
         content: res.data.error,
+        className:"front-1"
       });
     }
   };
@@ -168,6 +176,7 @@ function MenuEdit() {
       messageApi.open({
         type: "error",
         content: res.data.error,
+        className:"front-1"
       });
     }
   };
@@ -181,6 +190,7 @@ function MenuEdit() {
       messageApi.open({
         type: "error",
         content: res.data.error,
+        className:"front-1"
       });
     }
   };
@@ -195,7 +205,7 @@ function MenuEdit() {
   return (
     <div>
       {contextHolder}
-      <Card>
+      <Card className="card-promotion">
         <h2>แก้ไขข้อมูลเมนู</h2>
         <Divider />
 
@@ -204,13 +214,16 @@ function MenuEdit() {
           form={form}
           layout="vertical"
           onFinish={onFinish}
+          onFinishFailed={() => {
+            messageApi.error({content: <span className="front-1">กรุณาตรวจสอบข้อมูลและเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ</span>,});
+          }}
           autoComplete="off"
         >
           <Row gutter={[16, 0]}>
 
             {/* ส่วนอัปโหลดรูปภาพ */}
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-              <Form.Item label="รูปภาพเมนู" name="picture" valuePropName="fileList">
+              <Form.Item label={<span className="front-1">รูปเมนู</span>} name="picture" valuePropName="fileList">
                 <ImgCrop rotationSlider>
                   <Upload
                     fileList={fileList}
@@ -226,7 +239,7 @@ function MenuEdit() {
                   >
                     <div>
                       <PlusOutlined />
-                      <div style={{ marginTop: 8 }}>อัพโหลด</div>
+                      <div style={{ marginTop: 8 }} className="front-1">อัพโหลด</div>
                     </div>
                   </Upload>
                 </ImgCrop>
@@ -235,23 +248,23 @@ function MenuEdit() {
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
-                label="ชื่อ"
+                label={<span className="front-1">ชื่อ</span>}
                 name="name"
-                rules={[{ required: true, message: "กรุณากรอกชื่อ !" }]}
+                rules={[{ required: true, message: <span className="error-front">กรุณากรอกชื่อ !</span> }]}
               >
-                <Input />
+                <Input className="front-1" placeholder="กรุณากรอกชื่อ"/>
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 name="category_id"
-                label="ประเภท"
-                rules={[{ required: true, message: "กรุณาเลือกประเภท !" }]}
+                label={<span className="front-1">ประเภท</span>}
+                rules={[{ required: true, message: <span className="error-front">กรุณาเลือกประเภท !</span> }]}
               >
-                <Select allowClear>
+                <Select allowClear className="front-1" placeholder="กรุณาเลือกประเภท">
                   {category.map((item) => (
-                    <Option value={item.ID} key={item.ID}>
+                    <Option value={item.ID} key={item.ID} className="front-1">
                       {item.category}
                     </Option>
                   ))}
@@ -261,26 +274,27 @@ function MenuEdit() {
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
-                label="คำอธิบาย"
+                label={<span className="front-1">คำอธิบาย</span>}
                 name="description"
-                rules={[{ required: true, message: "กรุณากรอกคำอธิบาย !" }]}
+                rules={[{ required: true, message: <span className="error-front">กรุณากรอกคำอธิบาย !</span> }]}
               >
-                <Input />
+                <Input className="front-1" placeholder="กรุณากรอกคำอธิบาย"/>
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
-                label="ราคา"
+                label={<span className="front-1">ราคา</span>}
                 name="price"
-                rules={[{ required: true, message: "กรุณากรอกราคา !" }]}
+                rules={[{ required: true, message: <span className="error-front">กรุณากรอกราคา !</span> }]}
               >
                 <InputNumber
                   min={0}
                   max={9999}
                   defaultValue={0}
                   style={{ width: "100%" }}
-                  step={0.01}
+                  step={1}
+                  className="front-1"
                 />
               </Form.Item>
             </Col>
@@ -293,7 +307,7 @@ function MenuEdit() {
                   {
                     validator: async (_, menu_ingredients) => {
                       if (!menu_ingredients || menu_ingredients.length < 1) {
-                        return Promise.reject(new Error('กรุณาเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ!'));
+                        return Promise.reject(new Error('กรุณาเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ!') );
                       }
                     },
                   },
@@ -307,12 +321,12 @@ function MenuEdit() {
                           <Form.Item
                             {...restField}
                             name={[name, 'ingredients_id']}
-                            label="วัตถุดิบ"
-                            rules={[{ required: true, message: 'กรุณาเลือกวัตถุดิบ!' }]}
+                            label={<span className="front-1">วัตถุดิบ</span>}
+                            rules={[{ required: true, message: <span className="error-front">กรุณาเลือกวัตถุดิบ !</span> }]}
                           >
-                            <Select placeholder="เลือกวัตถุดิบ" showSearch>
+                            <Select placeholder="เลือกวัตถุดิบ" className="front-1" showSearch>
                               {ingredients.map((item) => (
-                                <Option value={item.ID} key={item.ID}>
+                                <Option value={item.ID} key={item.ID} className="front-1">
                                   {item.name}
                                 </Option>
                               ))}
@@ -324,25 +338,25 @@ function MenuEdit() {
                           <Form.Item
                             {...restField}
                             name={[name, 'quantity']}
-                            label="จำนวน"
+                            label={<span className="front-1">จำนวน</span>}
                             rules={[
-                              { required: true, message: 'กรุณากรอกจำนวน!' },
+                              { required: true, message: <span className="error-front">กรุณากรอกจำนวน !</span> },
                             ]}
                           >
-                            <Input placeholder="กรุณากรอกจำนวน" />
+                            <Input placeholder="กรุณากรอกจำนวน" className="front-1" />
                           </Form.Item>
                         </Col>
 
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                          <Button type="link" icon={<MinusCircleOutlined />} onClick={() => remove(name)}>
+                          <Button type="link" icon={<MinusCircleOutlined />} onClick={() => remove(name)} className="front-blue">
                             ลบ
-                          </Button>
+                          </Button >
                         </Col>
                       </Row>
                     ))}
 
                     <Form.Item>
-                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />} className="front-1">
                         เพิ่มวัตถุดิบ
                       </Button>
                     </Form.Item>
@@ -357,12 +371,12 @@ function MenuEdit() {
               <Form.Item>
                 <Space>
                   <Link to="/menus">
-                    <Button htmlType="button" style={{ marginRight: "10px" }}>
+                    <Button htmlType="button" style={{ marginRight: "10px" }} className="front-1">
                       ย้อนกลับ
                     </Button>
                   </Link>
 
-                  <Button type="primary" htmlType="submit" icon={<PlusOutlined />}>
+                  <Button type="primary" htmlType="submit" icon={<PlusOutlined />} className="front-white">
                     ตกลง
                   </Button>
                 </Space>
