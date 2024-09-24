@@ -30,5 +30,6 @@ type Member struct {
 	//MemberOrderHistory []MemberOrderHistory `gorm:"foreignKey:MemberID"`
 
 	Order []Order `gorm:"foreignKey:MemberID"`
+	PointsTransactions []PointsTransactions `gorm:"foreignKey:MemberID"`
 
 }

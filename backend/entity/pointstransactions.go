@@ -15,5 +15,7 @@ type PointsTransactions struct {
 	Member   Member `gorm:"foreignKey:MemberID"`
 	PromotionID *uint
 	Promotion   Promotion `gorm:"foreignKey:PromotionID"`
+	OrderID *uint
+	Order   Promotion `gorm:"foreignKey:OrderID"`
 
 }

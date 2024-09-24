@@ -98,7 +98,7 @@ func main() {
 		rounter.GET("/payment", payment.GetAll)
 
 		// r.PUT("/orderitem/:id", orderitem.Update)
-		// r.GET("/orderitem", orderitem.GetAll)
+		 r.GET("/orderitem", orderitem.GetAll)
 		// r.GET("/orderitem/:id", orderitem.Get)
 		// r.DELETE("/orderitem/:id", orderitem.Delete)
 		rounter.POST("/orderitem", orderitem.CreateOrderitem)

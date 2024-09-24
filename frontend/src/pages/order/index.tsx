@@ -53,6 +53,7 @@ function Order() {
       dataIndex: "promotion",
       render: (item) => Object.values(item.promotion_name),
     },
+
     {
       title: "",
       render: (record) => (
