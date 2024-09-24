@@ -7,5 +7,6 @@ export interface OrderItemInterface {
     name?:           string;   // ชื่อของเมนู
     price?:          number;       // ราคาของเมนู
     menu_id?:       number;
+    //phone_number?: string;
 
 }

@@ -28,6 +28,8 @@ import Order from "../../pages/order";
 import OrderCreate from "../../pages/order/create";
 import OrderEdit from "../../pages/order/edit";
 import ConfirmOrder from "../../pages/order/create/createorder";
+import QrPage from "../../pages/order/qrpage";
+
 
 import Member from "../../pages/member";
 import MemberCreate from "../../pages/member/create";
@@ -122,6 +124,7 @@ const FullLayout: React.FC = () => {
               <Route path="/order" element={<Order />} />
               <Route path="/order/create" element={<OrderCreate />} />
               <Route path="/order/create/createorder" element={<ConfirmOrder />} />
+              <Route path="/order/qrpage" element={<QrPage />} />
               <Route path="/order/edit/:id" element={<OrderEdit />} />
               <Route path="/promotion" element={<Promotion />} />
               <Route path="/promotion/create" element={<PromotionCreate />} />

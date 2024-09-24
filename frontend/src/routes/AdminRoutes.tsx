@@ -23,6 +23,8 @@ const Order = Loadable(lazy(() => import("../pages/order")));
 const CreateOrder = Loadable(lazy(() => import("../pages/order/create")));
 const EditOrder = Loadable(lazy(() => import("../pages/order/edit")));
 const ConfirmOrder = Loadable(lazy(() => import("../pages/order/create/createorder")));
+const QrPage = Loadable(lazy(() => import("../pages/order/qrpage")));
+
 
 const Member = Loadable(lazy(() => import("../pages/member")));
 const CreateMember = Loadable(lazy(() => import("../pages/member/create")));
@@ -96,6 +98,10 @@ const AdminRoutes = (isLoggedIn: boolean): RouteObject => {
           {
             path: "edit/:id",
             element: <EditOrder />,
+          },
+          {
+            path: "qrpage",
+            element: <QrPage />,
           },
         ],
       }

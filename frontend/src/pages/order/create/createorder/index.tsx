@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Space, Col, Row, Divider, Form, Select, Card, message ,Input } from 'antd';
+import { Table, Button, Space, Col, Row, Divider, Form, Select, Card, message, Input } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PromotionInterface } from '../../../../interfaces/Promotion';
 import { MenuInterface } from '../../../../interfaces/Menu';
@@ -8,7 +8,7 @@ import { OrdersweetInterface } from '../../../../interfaces/Ordersweet';
 import { OrderItemInterface } from '../../../../interfaces/OrderItem';
 import { PromotionTypeInterface } from '../../../../interfaces/Promotiontype';
 import { PaymentmethodInterface } from '../../../../interfaces/Paymentmethod';
-import { GetPromotion, GetPaymentMethods, CreateOrder, CreateOrderitem, GetPromotionType, GetCondition ,GetMember } from '../../../../services/https';
+import { GetPromotion, GetPaymentMethods, CreateOrder, CreateOrderitem, GetPromotionType, GetCondition, GetMember ,UpdateMemberById} from '../../../../services/https';
 import { OrderInterface } from '../../../../interfaces/Order';
 
 const { Option } = Select;
@@ -19,12 +19,18 @@ function OrderConfirm() {
   const [paymentMethods, setPaymentMethods] = useState<PaymentmethodInterface[]>([]);
   const [orderItems, setOrderItems] = useState<OrderItemInterface[]>([]);
   const [menu, setMenu] = useState<MenuInterface[]>([]);
+
+ 
+
   const [promotiontype, setPromotionType] = useState<PromotionTypeInterface[]>([]);
   const [ordersweet, setOrdersweet] = useState<OrdersweetInterface[]>([]);
   const [filteredPromotions, setFilteredPromotions] = useState<PromotionInterface[]>([]);
   const [conditions, setConditions] = useState<any[]>([]);
   const [phoneNumber, setPhoneNumber] = useState<string | undefined>(undefined); // เพิ่ม state สำหรับเบอร์โทรศัพท์
   const navigate = useNavigate();
+
+  
+
   const location = useLocation();
   const [selectedPromotionType, setSelectedPromotionType] = useState<number | undefined>(undefined);
 
@@ -93,9 +99,9 @@ function OrderConfirm() {
   };
 
   const getPromotionsForAllMenus = (menuIds: number[], promotionTypeId: number) => {
-    return promotions.filter(promotion => 
+    return promotions.filter(promotion =>
       promotion.promotion_type_id === promotionTypeId && // ต้องตรงกับประเภทโปรโมชั่น
-      conditions.some(condition => 
+      conditions.some(condition =>
         menuIds.includes(condition.menu_id) && condition.promotion_id === promotion.ID // เช็คว่า menu_id ใด ๆ ในเงื่อนไขตรงกับ promotion_id
       ) &&
       promotion.status_id !== 2 // เพิ่มเงื่อนไขให้ตรวจสอบ status_id ว่าไม่ใช่ Unactive
@@ -124,15 +130,15 @@ function OrderConfirm() {
   };
 
   const getPromotionsForMenu = (menuIds: number[], promotionTypeId: number) => {
-    return promotions.filter(promotion => 
+    return promotions.filter(promotion =>
       promotion.promotion_type_id === promotionTypeId && // ต้องตรงกับประเภทโปรโมชั่น
-      conditions.some(condition => 
+      conditions.some(condition =>
         menuIds.includes(condition.menu_id) && condition.promotion_id === promotion.ID // เช็คว่า menu_id ใด ๆ ในเงื่อนไขตรงกับ promotion_id
-      )&& 
+      ) &&
       promotion.status_id !== 2 // เช็ค menu_id กับ promotion_id
     );
   };
-  
+
   const handlePromotionTypeChange = (promotionTypeId: number) => {
     setSelectedPromotionType(promotionTypeId);
 
@@ -148,14 +154,15 @@ function OrderConfirm() {
       setFilteredPromotions([]);
     }
   };
-  
+
 
   const onFinish = async (values: { promotion_id: number; payment_method_id: number; promotion_type_id: number }) => {
     const isMemberValid = await getMember(phoneNumber!); // ตรวจสอบเบอร์โทรศัพท์และสถานะสมาชิก
     
-    if (!isMemberValid) {
+    // เช็ค promotion_type_id
+    if (values.promotion_type_id === 1 && !isMemberValid) {
       messageApi.open({ type: "error", content: "เบอร์โทรศัพท์ไม่ถูกต้องหรือต้องห้ามการสั่งซื้อ!" });
-      return; // หยุดการดำเนินการถ้าเบอร์ไม่ถูกต้องหรือ status_id เท่ากับ 2
+      return;
     }
   
     // รวมราคารวมของทุก orderitem เป็นราคาสุทธิ
@@ -167,13 +174,36 @@ function OrderConfirm() {
   
     if (selectedPromotion) {
       if (selectedPromotion.discount_type_id === 1) {
-        // ถ้า discount_type_id = 1 ให้นำ discount_value มาคำนวณเป็นเปอร์เซ็นต์
-        const discountPercentage = selectedPromotion.discount_value || 0; // สมมติว่า 0.2 หมายถึง 0.2%
-        aftertotalAmount = totalAmount - totalAmount * (discountPercentage / 100); // ลดราคาสุทธิด้วย 0.2%
-      } else if (selectedPromotion.discount_type_id === 3) {
-        // ถ้า discount_type_id = 3 ให้นำ discount_value มาลบออกจากราคาสุทธิ
-        const discountAmount = selectedPromotion.discount_value || 0; // สมมติว่า 10 หมายถึงลด 10 บาท
-        aftertotalAmount = totalAmount - discountAmount; // ลดราคาสุทธิด้วย 10 บาท
+        const discountPercentage = selectedPromotion.discount_value || 0; 
+        aftertotalAmount = totalAmount - totalAmount * (discountPercentage / 100); 
+      } else if (selectedPromotion.discount_type_id === 2) {
+        const discountAmount = selectedPromotion.discount_value || 0; 
+        aftertotalAmount = totalAmount - discountAmount; 
+      }
+    }
+  
+    let updatedPoints = 0;
+
+    if (isMemberValid) {
+      // ดึงข้อมูลสมาชิกที่ตรงกับเบอร์โทรศัพท์
+      const memberRes = await GetMember();
+      const member = memberRes.data.find((m: MemberInterface) => m.phone_number === phoneNumber);
+    
+      if (member) {
+        updatedPoints = member.points || 0; // ตั้งค่า point เดิมของสมาชิก
+    
+        // ถ้าโปรโมชั่นมี points_added ให้บวก point
+        if (selectedPromotion?.points_added && selectedPromotion.points_added !== 0) {
+          updatedPoints += selectedPromotion.points_added;
+        }
+    
+        // ถ้าโปรโมชั่นมี points_use ให้ลบ point
+        if (selectedPromotion?.points_use && selectedPromotion.points_use !== 0) {
+          updatedPoints -= selectedPromotion.points_use;
+        }
+    
+        // อัพเดต point ของสมาชิกโดยส่ง ID ที่ดึงมา
+        await UpdateMemberById(member.ID, { points: updatedPoints });
       }
     }
   
@@ -184,12 +214,11 @@ function OrderConfirm() {
       paymentmethod_id: values.payment_method_id,
       employee_id: Number(accountid),
       payment_amount: aftertotalAmount,
-      payment_amount_before: totalAmount,// ราคาสุทธิหลังจากหักส่วนลด
+      payment_amount_before: totalAmount,
+      ...(values.promotion_type_id === 1 && { phone_number: phoneNumber }), // รวมเฉพาะ phone_number หาก promotion_type_id เท่ากับ 1
     };
   
     try {
-      console.log("v",values)
-      console.log("o",orderPayload)
       const orderRes = await CreateOrder(orderPayload);
       if (orderRes && orderRes.status === 201) {
         const orderId = orderRes.data.data;
@@ -200,7 +229,14 @@ function OrderConfirm() {
         }));
   
         messageApi.open({ type: "success", content: "บันทึกข้อมูลออเดอร์สำเร็จ" });
-        setTimeout(() => navigate("/order"), 2000);
+  
+        if (values.payment_method_id === 2) {
+          // ถ้า payment_method_id เป็น 2 ให้เปลี่ยนเส้นทางไปหน้า QrPage
+          navigate("/order/qrpage");
+        } else {
+          // ถ้าไม่ใช่ payment_method_id 2 ให้เปลี่ยนเส้นทางไปที่หน้าออเดอร์ปกติ
+          setTimeout(() => navigate("/order"), 2000);
+        }
       } else {
         throw new Error(orderRes.data.error || "ไม่สามารถสร้างออเดอร์ได้");
       }
@@ -212,6 +248,11 @@ function OrderConfirm() {
   
   
   
+
+
+
+
+
   useEffect(() => {
     const storedOrderItems = localStorage.getItem("orderItems");
     if (storedOrderItems) {
@@ -255,7 +296,7 @@ function OrderConfirm() {
                 </Select>
               </Form.Item>
             </Col>
-            
+
             {/* เพิ่มช่องกรอกเบอร์โทรศัพท์ */}
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
@@ -280,25 +321,25 @@ function OrderConfirm() {
                 />
               </Form.Item>
             </Col>
-            
+
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-            <Form.Item
-              label="โปรโมชั่น"
-              name="promotion_id"
-              rules={[{ required: true, message: 'เลือกโปรโมชั่น !' }]}
-            >
-              <Select allowClear>
-                {filteredPromotions.length > 0 ? (
-                  filteredPromotions.map((item) => (
-                    <Option value={item.ID} key={item.ID}>
-                      {item.promotion_name} {/* แสดงชื่อโปรโมชั่น */}
-                    </Option>
-                  ))
-                ) : (
-                  <Option disabled key="no-promotions">ไม่มีโปรโมชั่นที่เลือก</Option>
-                )}
-              </Select>
-            </Form.Item>
+              <Form.Item
+                label="โปรโมชั่น"
+                name="promotion_id"
+                rules={[{ required: true, message: 'เลือกโปรโมชั่น !' }]}
+              >
+                <Select allowClear>
+                  {filteredPromotions.length > 0 ? (
+                    filteredPromotions.map((item) => (
+                      <Option value={item.ID} key={item.ID}>
+                        {item.promotion_name} {/* แสดงชื่อโปรโมชั่น */}
+                      </Option>
+                    ))
+                  ) : (
+                    <Option disabled key="no-promotions">ไม่มีโปรโมชั่นที่เลือก</Option>
+                  )}
+                </Select>
+              </Form.Item>
 
             </Col>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
@@ -318,6 +359,8 @@ function OrderConfirm() {
             </Col>
           </Row>
           <Row justify="end">
+
+
             <Col style={{ marginTop: '40px' }}>
               <Form.Item>
                 <Space>
@@ -364,15 +407,15 @@ function OrderConfirm() {
               return sweetItem ? sweetItem.order_sweet_name : 'ไม่พบระดับความหวาน';
             },
           },
-          {
-            title: 'โปรโมชั่น',
-            dataIndex: 'promotion_id',
-            key: 'promotion_id',
-            render: (text: number) => {
-              const promotionItem = promotions.find(item => item.ID === text);
-              return promotionItem ? promotionItem.promotion_name : 'ไม่พบโปรโมชั่น';
-            },
-          },
+          // {
+          //   title: 'โปรโมชั่น',
+          //   dataIndex: 'promotion_id',
+          //   key: 'promotion_id',
+          //   render: (text: number) => {
+          //     const promotionItem = promotions.find(item => item.ID === text);
+          //     return promotionItem ? promotionItem.promotion_name : 'ไม่พบโปรโมชั่น';
+          //   },
+          // },
           {
             title: 'การจัดการ',
             key: 'action',

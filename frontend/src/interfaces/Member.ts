@@ -13,4 +13,5 @@ export interface MemberInterface {
 	status_id?:		number;
 	GenderID?: 		number;
 	
+	
     }
