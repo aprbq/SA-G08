@@ -16,8 +16,6 @@ function Promotion() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [Promotion , setPromotion] = useState<PromotionInterface[]>([]);
   const [selectedMenu, setSelectedMenu] = useState<MenuInterface[]>([]);
-  const [searchText, setSearchText] = useState("");
-  const [filteredPromotion, setFilteredPromotion] = useState<PromotionInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
 
   const updatePromotionStatus = async (id: string) => {
@@ -259,20 +257,6 @@ function Promotion() {
     }
   };
 
-  const handleSearch = (value: string) => {
-    setSearchText(value);
-    if (value === "") {
-      setFilteredPromotion(Promotion); // คืนข้อมูลทั้งหมดถ้าค้นหาว่างเปล่า
-    } else {
-      const filtered = Promotion.filter((promo) =>
-        promo.promotion_name
-          ? promo.promotion_name.toLowerCase().includes(value.toLowerCase()) // ตรวจสอบว่า promotion_name ไม่เป็น undefined
-          : false // ถ้าเป็น undefined ให้ข้ามไป
-      );
-      setFilteredPromotion(filtered);
-    }
-  };
-
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -304,17 +288,6 @@ function Promotion() {
         </Col>
       </Row>
       <Divider />
-      <Row gutter={[16, 16]} style={{ marginBottom: "20px" }}>
-        <Col span={8}>
-          <Input
-            className=  "front-1"
-            placeholder="ค้นหาโปรโมชั่น"
-            prefix={<SearchOutlined />}
-            value={searchText}
-            onChange={(e) => handleSearch(e.target.value)} // เรียกใช้ handleSearch เมื่อมีการเปลี่ยนแปลง
-          />
-        </Col>
-      </Row>
       <div style={{ marginTop: 20 }}>
         <Table
           rowKey="ID"

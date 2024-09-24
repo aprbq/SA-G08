@@ -5,19 +5,19 @@ import {
   Col,
   Row,
   Divider,
-  Form,
   Input,
   Card,
   message,
   Table,
 } from "antd";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import type { ColumnsType } from "antd/es/table";
+import { OrderInterface } from '../../../interfaces/Order';
 import { GetOrder } from "../../../services/https"; // Import GetOrders service
-import { useNavigate, Link } from "react-router-dom";
-import dayjs from "dayjs";
+import {  Link } from "react-router-dom";
+
 
 function PromotionHistory() {
-  const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const [orders, setOrders] = useState<any[]>([]); // Store orders from API
   const [filteredOrders, setFilteredOrders] = useState<any[]>([]); // Store filtered results
@@ -49,24 +49,25 @@ function PromotionHistory() {
 
   const handleSearch = (value: string) => {
     setSearchText(value);
-    const filtered = orders.filter((order) =>
-      Object.values(order).some((val) =>
-        String(val as string | number).toLowerCase().includes(value.toLowerCase())
-      )
-    );
+    
+    const filtered = orders.filter((order) => {
+      const promotionName = order.promotion?.promotion_name || ""; // เข้าถึงชื่อโปรโมชั่น
+      return promotionName.toLowerCase().includes(value.toLowerCase());
+    });
+    
     setFilteredOrders(filtered);
   };
 
-  const columns = [
+  const columns: ColumnsType<OrderInterface> = [
     {
       title: "Order ID",
       dataIndex: "ID",
       key: "id",
     },
     {
-      title: "Promotion ID",
-      dataIndex: "promotion_id",
-      key: "promotion_id",
+      title: "Promotion Name",
+      dataIndex: "promotion",
+      render: (promotion) => promotion?.promotion_name, // เข้าถึงชื่อโปรโมชั่นโดยตรง
     },
     {
       title: "Order Date",
@@ -76,12 +77,6 @@ function PromotionHistory() {
         return new Date(order_date).toLocaleDateString(); // แสดงเฉพาะวันที่
       },
     },
-    {
-      title: "Total Amount",
-      dataIndex: "payment_amount",
-      key: "payment_amount",
-    },
-    // Add more columns as needed
   ];
 
   return (
@@ -95,7 +90,7 @@ function PromotionHistory() {
         <Row gutter={[16, 0]} style={{ marginBottom: "20px" }}>
           <Col span={12}>
             <Input
-              placeholder="Search Order History"
+              placeholder="Search Promotion History"
               prefix={<SearchOutlined />}
               value={searchText}
               onChange={(e) => handleSearch(e.target.value)}
@@ -103,12 +98,15 @@ function PromotionHistory() {
           </Col>
         </Row>
 
-        {/* Display Filtered Orders in a Table */}
         <Table
           columns={columns}
           dataSource={filteredOrders}
           rowKey="id"
-          pagination={{ pageSize: 10 }} // Optional: Adjust page size
+          pagination={{ pageSize: 10 }} 
+          className="custom-table" 
+          rowClassName={(record, index) => 
+            index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"
+          }
         />
 
         <Row justify="end">

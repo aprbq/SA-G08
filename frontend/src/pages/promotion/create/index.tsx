@@ -187,7 +187,7 @@ import {
                     },
                   ]}
                 >
-                  <Input className="front-1"/>
+                  <Input className="front-1" placeholder="Name"/>
                 </Form.Item>
               </Col>
 
@@ -198,11 +198,11 @@ import {
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกคำอธิบาย !",
+                      message: <span className="error-front">กรุณากรอกคำอธิบาย !</span>
                     },
                   ]}
                 >
-                  <Input className="front-1"/>
+                  <Input className="front-1" placeholder="Description"/>
                 </Form.Item>
               </Col>
 
@@ -213,7 +213,7 @@ import {
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกแต้ม !",
+                      message: <span className="error-front">กรุณากรอกแต้ม !</span>
                     },
                   ]}
                 >
@@ -235,7 +235,7 @@ import {
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกแต้ม !",
+                      message: <span className="error-front">กรุณากรอกแต้ม !</span>
                     },
                   ]}
                 >
@@ -257,7 +257,7 @@ import {
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกส่วนลด !",
+                      message: <span className="error-front">กรุณากรอกส่วนลด !</span>
                     },
                   ]}
                 >
@@ -276,9 +276,9 @@ import {
               <Form.Item
                 name="discount_type_id"
                 label={<span className="front-1">ประเภทส่วนลด</span>}
-                rules={[{ required: true, message: "กรุณาระบุประเภทส่วนลด !" }]}
+                rules={[{ required: true, message: <span className="error-front">กรุณาระบุประเภทส่วนลด !</span> }]}
               >
-                <Select allowClear className="front-1">
+                <Select allowClear className="front-1" placeholder="Select type">
                   {discounttype.map((item) => (
                     <Option value={item.ID} key={item.discount_type_name} className="front-1">
                       {item.discount_type_name}
@@ -292,9 +292,9 @@ import {
               <Form.Item
                 name="promotion_type_id"
                 label={<span className="front-1">สำหรับ</span>}
-                rules={[{ required: true, message: "กรุณาระบุประเภท !" }]}
+                rules={[{ required: true, message: <span className="error-front">กรุณาระบุประเภท !</span> }]}
               >
-                <Select allowClear className="front-1">
+                <Select allowClear className="front-1" placeholder="Select type">
                   {promotiontype.map((item) => (
                     <Option value={item.ID} key={item.ID} className="front-1">
                       {item.promotion_type_name}
@@ -308,9 +308,9 @@ import {
               <Form.Item
                 name="status_id"
                 label={<span className="front-1">สถานะ</span>}
-                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
+                rules={[{ required: true, message: <span className="error-front">กรุณากรอกสถานะ !</span> }]}
               >
-                <Select allowClear className="front-1">
+                <Select allowClear className="front-1" placeholder="Select status">
                   {status.map((item) => (
                     <Option value={item.ID} key={item.status_name} className="front-1">
                       {item.status_name}
@@ -321,7 +321,8 @@ import {
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Form.Item name="menu_id" label={<span className="front-1">เมนูสำหรับโปรโมชั่น</span>} rules={[{ required: true,message: "กรุณาระบุเมนู !" }]}>
+              <Form.Item name="menu_id" label={<span className="front-1">เมนูสำหรับโปรโมชั่น</span>} 
+                  rules={[{ required: true,message: <span className="error-front">กรุณาระบุเมนู !</span> }]}>
               <Select mode="multiple" placeholder="Select menus" className="front-1">
                 {menu.map((menu) => (
                 <Option key={menu.ID} value={menu.ID} className="front-1">
@@ -335,9 +336,10 @@ import {
               <Form.Item
                 label={<span className="front-1">วัน/เดือน/ปี เริ่มโปรโมชั่น</span>}
                 name="start_date"
-                rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี เริ่มโปรโมชั่น !" }]}
+                rules={[{ required: true, 
+                  message: <span className="error-front">กรุณาวันเริ่มโปรโมชั่น !</span> }]}
               >
-                <DatePicker style={{ width: "100%" }} />
+                <DatePicker style={{ width: "100%" }} className="front-1" />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={12} lg={6} xl={6}>
@@ -347,19 +349,19 @@ import {
                   rules={[
                     { 
                       required: true, 
-                      message: "กรุณาเลือกวัน/เดือน/ปี หมดโปรโมชั่น !" 
+                      message: <span className="error-front">กรุณาวันหมดโปรโมชั่น !</span> 
                     },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (!value || !getFieldValue('start_date') || value.isAfter(getFieldValue('start_date'))) {
                           return Promise.resolve();
                         }
-                        return Promise.reject(new Error('วันหมดโปรโมชั่นต้องมากกว่วันเริ่มโปรโมชั่น!'));
+                        return Promise.reject(<span className="error-front">วันหมดโปรโมชั่นต้องมากกว่าวันเริ่มโปรโมชั่น!</span>);
                       },
                     }),
                   ]}
                 >
-                  <DatePicker style={{ width: "100%" }} />
+                  <DatePicker style={{ width: "100%" }} className="front-1" />
                 </Form.Item>
             </Col>
           </Row>

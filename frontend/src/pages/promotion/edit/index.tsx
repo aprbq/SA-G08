@@ -71,16 +71,13 @@ import {
     const onFinish = async (values: any) => {
       console.log('ค่าของฟอร์ม:', values); // แสดงค่าของฟอร์ม
       try {
-        const { menu_id, start_date, end_date, ...promotionData } = values;
-    
-        // ฟอร์แมตวันที่ก่อนส่งใน payload ของโปรโมชั่น
-        const formattedStartDate = start_date?.$d ? start_date.$d.toISOString() : null;
-        const formattedEndDate = end_date?.$d ? end_date.$d.toISOString() : null;
+        const { menu_id, points_added, points_use, discount_value, ...promotionData } = values;
     
         const promotionPayload = {
           ...promotionData,
-          start_date: formattedStartDate,
-          end_date: formattedEndDate,
+          points_added: Number(points_added),
+          points_use: Number(points_use),
+          discount_value: Number(discount_value),
         };
     
         console.log('ข้อมูลโปรโมชั่นที่ส่ง:', promotionPayload);
@@ -103,8 +100,7 @@ import {
               menu_id: item, // ตรวจสอบให้แน่ใจว่า key นี้ตรงกับโครงสร้างข้อมูลฟอร์ม
             })),
           };
-          console.log('ppppp:', menu_idPayload);
-    
+
           const menu_idRes = await UpdateConditionById(id, menu_idPayload);
           console.log('ผลลัพธ์จากการอัปเดตเงื่อนไข:', menu_idRes); // เพิ่มการพิมพ์ผลลัพธ์จาก API
     
@@ -126,7 +122,7 @@ import {
           });
         }
       } catch (error) {
-        console.error('ข้อผิดพลาด:', error); // แสดงข้อผิดพลาดในคอนโซล
+        console.error('ข้อผิดพลาด:', error);
         messageApi.open({
           type: "error",
           content: "เกิดข้อผิดพลาดขณะอัปเดตโปรโมชั่น",
@@ -205,14 +201,6 @@ import {
       }
     };
 
-    const handleDiscountTypeChange = (value: number) => {
-      if (value === 2) {
-        setIsBogo(true); // If Bogo is selected, set to true
-      } else {
-        setIsBogo(false);
-      }
-    };
-
     useEffect(() => {
       getStatus();
       getPromotionType();
@@ -225,15 +213,15 @@ import {
     return (
       <div>
         {contextHolder}
-        <Card>
-          <h2 className="name-table">แก้ไขโปรโมชั่น</h2>
+        <Card className="card-promotion">
+          <h2 className="name-table">เพิ่มโปรโมชั่น</h2>
           <Divider />
   
           <Form
             name="basic"
             layout="vertical"
-            onFinish={onFinish}
             form={form}
+            onFinish={onFinish}
             autoComplete="off"
             initialValues={{
               points_added: 0,
@@ -245,119 +233,125 @@ import {
           <Row gutter={[16, 0]}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
-                  label="ชื่อ"
+                  label={<span className="front-1">ชื่อ</span>}
                   name="promotion_name"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกชื่อ !",
+                      message: <span className="error-front">กรุณากรอกชื่อ !</span>
                     },
                   ]}
                 >
-                  <Input />
+                  <Input className="front-1"/>
                 </Form.Item>
               </Col>
 
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
-                  label="คำอธิบาย"
+                  label={<span className="front-1">คำอธิบาย</span>}
                   name="description"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกคำอธิบาย !",
+                      message: <span className="error-front">กรุณากรอกคำอธิบาย !</span>
                     },
                   ]}
                 >
-                  <Input />
+                  <Input className="front-1"/>
                 </Form.Item>
               </Col>
 
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
-                  label="ได้แต้ม"
+                  label={<span className="front-1">ได้แต้ม</span>}
                   name="points_added"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกแต้ม !",
+                      message: <span className="error-front">กรุณากรอกแต้ม !</span>
                     },
                   ]}
                 >
-                  <InputNumber
+                  <Input
+                    className="front-1"
                     min={0}
-                    max={99}
+                    type="number"
                     defaultValue={0}
                     style={{ width: "100%" }}
-                  />
+                    onChange={(e) => form.setFieldsValue({ points_added: e.target.value })}
+                />
                 </Form.Item>
               </Col>
 
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
-                  label="ใช้แต้ม"
+                  label={<span className="front-1">ใช้แต้ม</span>}
                   name="points_use"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกแต้ม !",
+                      message: <span className="error-front">กรุณากรอกแต้ม !</span>
                     },
                   ]}
                 >
-                  <InputNumber
+                  <Input
+                    className="front-1"
                     min={0}
-                    max={99}
+                    type="number"
                     defaultValue={0}
                     style={{ width: "100%" }}
-                  />
+                    onChange={(e) => form.setFieldsValue({ points_use: e.target.value })}
+                />
                 </Form.Item>
               </Col>
 
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
-                  label="ส่วนลด"
+                  label={<span className="front-1">ส่วนลด</span>}
                   name="discount_value"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกส่วนลด !",
+                      message: <span className="error-front">กรุณากรอกส่วนลด !</span>
                     },
                   ]}
                 >
-                  <InputNumber
+                  <Input
+                    className="front-1"
                     min={0}
+                    type="number"
                     defaultValue={0}
                     style={{ width: "100%" }}
-                    step={1}
-                  />
+                    onChange={(e) => form.setFieldsValue({ discount_value: e.target.value })}
+                />
                 </Form.Item>
               </Col>
 
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 name="discount_type_id"
-                label="ประเภทส่วนลด"
-                rules={[{ required: true, message: "กรุณาระบุประเภทส่วนลด !" }]}
+                label={<span className="front-1">ประเภทส่วนลด</span>}
+                rules={[{ required: true, message: <span className="error-front">กรุณาระบุประเภทส่วนลด !</span> }]}
               >
-                <Select allowClear onChange={handleDiscountTypeChange}>
+                <Select allowClear className="front-1">
                   {discounttype.map((item) => (
-                    <Option value={item.ID} key={item.discount_type_name}>
+                    <Option value={item.ID} key={item.discount_type_name} className="front-1">
                       {item.discount_type_name}
                     </Option>
                   ))}
-                </Select>
+                </Select >
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 name="promotion_type_id"
-                label="สำหรับ"
-                rules={[{ required: true, message: "กรุณาระบุสำหรับ !" }]}
+                label={<span className="front-1">สำหรับ</span>}
+                rules={[{ required: true, message: <span className="error-front">กรุณาระบุประเภท !</span> }]}
               >
-                <Select allowClear>
+                <Select allowClear className="front-1">
                   {promotiontype.map((item) => (
-                    <Option value={item.ID} key={item.ID}>
+                    <Option value={item.ID} key={item.ID} className="front-1">
                       {item.promotion_type_name}
                     </Option>
                   ))}
@@ -368,12 +362,12 @@ import {
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 name="status_id"
-                label="สถานะ"
-                rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
+                label={<span className="front-1">สถานะ</span>}
+                rules={[{ required: true, message: <span className="error-front">กรุณากรอกสถานะ !</span> }]}
               >
-                <Select allowClear>
+                <Select allowClear className="front-1">
                   {status.map((item) => (
-                    <Option value={item.ID} key={item.status_name}>
+                    <Option value={item.ID} key={item.status_name} className="front-1">
                       {item.status_name}
                     </Option>
                   ))}
@@ -382,10 +376,11 @@ import {
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Form.Item name="menu_id" label="เมนูสำหรับโปรโมชั่น" rules={[{ required: true,message: "กรุณาระบุเมนู !" }]}>
-              <Select mode="multiple" placeholder="Select menus">
+              <Form.Item name="menu_id" label={<span className="front-1">เมนูสำหรับโปรโมชั่น</span>} 
+                  rules={[{ required: true,message: <span className="error-front">กรุณาระบุเมนู !</span> }]}>
+              <Select mode="multiple" placeholder="Select menus" className="front-1">
                 {menu.map((menu) => (
-                <Option key={menu.ID} value={menu.ID}>
+                <Option key={menu.ID} value={menu.ID} className="front-1">
                   {menu.name}
                 </Option>
                 ))}
@@ -394,33 +389,34 @@ import {
             </Col>  
             <Col xs={24} sm={24} md={12} lg={6} xl={6}>
               <Form.Item
-                label="วัน/เดือน/ปี เริ่มโปรโมชั่น"
+                label={<span className="front-1">วัน/เดือน/ปี เริ่มโปรโมชั่น</span>}
                 name="start_date"
-                rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี เริ่มโปรโมชั่น !" }]}
+                rules={[{ required: true, 
+                  message: <span className="error-front">กรุณาวันเริ่มโปรโมชั่น !</span> }]}
               >
-                <DatePicker style={{ width: "100%" }} />
+                <DatePicker style={{ width: "100%" }} className="front-1"/>
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={12} lg={6} xl={6}>
                 <Form.Item
-                  label="วัน/เดือน/ปี หมดโปรโมชั่น"
+                  label={<span className="front-1">วัน/เดือน/ปี หมดโปรโมชั่น</span>}
                   name="end_date"
                   rules={[
                     { 
                       required: true, 
-                      message: "กรุณาเลือกวัน/เดือน/ปี หมดโปรโมชั่น !" 
+                      message: <span className="error-front">กรุณาวันหมดโปรโมชั่น !</span> 
                     },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (!value || !getFieldValue('start_date') || value.isAfter(getFieldValue('start_date'))) {
                           return Promise.resolve();
                         }
-                        return Promise.reject(new Error('วันหมดโปรโมชั่นต้องมากกว่วันเริ่มโปรโมชั่น!'));
+                        return Promise.reject(<span className="error-front">วันหมดโปรโมชั่นต้องมากกว่าวันเริ่มโปรโมชั่น!</span>);
                       },
                     }),
                   ]}
                 >
-                  <DatePicker style={{ width: "100%" }} />
+                  <DatePicker style={{ width: "100%" }} className="front-1"/>
                 </Form.Item>
             </Col>
           </Row>
