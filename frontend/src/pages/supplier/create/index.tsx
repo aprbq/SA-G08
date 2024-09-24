@@ -77,7 +77,7 @@ import {
                       message: "กรุณากรอกชื่อที่มีแค่ตัวอักษรเท่านั้น !" 
                     },]}
                 >
-                  <Input className="front-1"/>
+                  <Input className="front-1" placeholder="Enter name"/>
                 </Form.Item>
               </Col>
 
@@ -88,7 +88,7 @@ import {
                   rules={[
                     { required: true, message: "กรุณากรอกที่อยู่ผู้ผลิต !",},]}
                 >
-                  <Input className="front-1"/>
+                  <Input className="front-1" placeholder="Enter address"/>
                 </Form.Item>
               </Col>
 
@@ -104,7 +104,7 @@ import {
                     },
                   ]}
                 >
-                  <Input className="front-1"/>
+                  <Input className="front-1" placeholder="Enter tel number"/>
                 </Form.Item>
               </Col>
 

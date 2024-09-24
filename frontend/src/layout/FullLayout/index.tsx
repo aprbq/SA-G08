@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "../../App.css";
-import { UserOutlined, DashboardOutlined, ShoppingOutlined, LogoutOutlined, StarOutlined ,} from "@ant-design/icons";
+import { UserOutlined, DashboardOutlined, ShoppingOutlined, LogoutOutlined, StarOutlined , AppstoreOutlined} from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, Button, message } from "antd";
 import logo from "../../assets/logocafe.png";
 import Dashboard from "../../pages/dashboard";
@@ -86,7 +86,7 @@ const FullLayout: React.FC = () => {
         <Menu.Item key="menu" icon={<ShoppingOutlined />}>
           <Link to="/menus">เมนู</Link>
         </Menu.Item>
-        <Menu.Item key="ingredient" icon={<ShoppingOutlined />}>
+        <Menu.Item key="ingredient" icon={<AppstoreOutlined />}>
           <Link to="/ingredient">วัตถุดิบ</Link>
         </Menu.Item>
         <Menu.Item key="Order" icon={<ShoppingOutlined />}>
