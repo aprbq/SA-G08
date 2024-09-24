@@ -88,7 +88,7 @@ func SetupDatabase() {
 
 	PaymentMoney := entity.Paymentmethod{PaymentMethods: "เงินสด"}
 	PaymentQR := entity.Paymentmethod{PaymentMethods: "QR Code"}
-	PaymentCard := entity.Paymentmethod{PaymentMethods: "Credit Card"}
+
 
 	RoleBarista := entity.Role{RoleName: "บาริสต้า"}
 	RoleCashier := entity.Role{RoleName: "แคชเชียร์ "}
@@ -141,7 +141,7 @@ func SetupDatabase() {
 
 	db.FirstOrCreate(&PaymentMoney, &entity.Paymentmethod{PaymentMethods: "เงินสด"})
 	db.FirstOrCreate(&PaymentQR, &entity.Paymentmethod{PaymentMethods: "QR Code"})
-	db.FirstOrCreate(&PaymentCard, &entity.Paymentmethod{PaymentMethods: "Credit Card"})
+
 
 	hashedPassword, _ := HashPassword("123456")
 	hashedPassword01, _ := HashPassword("111111")
