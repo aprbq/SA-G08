@@ -231,10 +231,11 @@ function OrderConfirm() {
         messageApi.open({ type: "success", content: "บันทึกข้อมูลออเดอร์สำเร็จ" });
   
         if (values.payment_method_id === 2) {
-          // ถ้า payment_method_id เป็น 2 ให้เปลี่ยนเส้นทางไปหน้า QrPage
-          navigate("/order/qrpage");
-        } else {
-          // ถ้าไม่ใช่ payment_method_id 2 ให้เปลี่ยนเส้นทางไปที่หน้าออเดอร์ปกติ
+          // ส่งราคา aftertotalAmount และ orderItems ไปยัง QrPage
+          navigate("/order/qrpage", { state: { totalAmount: aftertotalAmount, orderItems: orderItems } });
+        
+        }
+        else{
           setTimeout(() => navigate("/order"), 2000);
         }
       } else {

@@ -211,7 +211,12 @@ function OrderitemCreate() {
     <div>
       {contextHolder}
       <Card>
-        <h2>เพิ่มรายการสั่งซื้อ</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h2>เพิ่มรายการสั่งซื้อ</h2>
+          <Link to="/order">
+            <Button type="primary">ประวัติรายการสั่งซื้อ</Button>
+          </Link>
+        </div>
         <Divider />
         <Form form={form} name="basic" layout="vertical" onFinish={onFinish} autoComplete="off">
           <Row gutter={[16, 0]}>
