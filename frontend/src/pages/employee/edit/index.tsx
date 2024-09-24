@@ -157,7 +157,7 @@ function CustomerEdit() {
 
           <Col xs={12} sm={12} md={12} lg={12} xl={12} style={{ textAlign: "center" }}>
               <Form.Item
-                label="รูปเมนู"
+                label="รูปพนักงาน"
                 name="picture_employee"
                 valuePropName="fileList"
               >

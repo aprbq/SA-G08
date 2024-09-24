@@ -114,7 +114,7 @@ function CustomerCreate() {
     <div>
       {contextHolder}
       <Card className="card-ingredient">
-        <h2>เพิ่มข้อมูล ผู้ดูแลระบบ</h2>
+        <h2 className="front-1">เพิ่มข้อมูล ผู้ดูแลระบบ</h2>
         <Divider />
 
         <Form
@@ -127,7 +127,7 @@ function CustomerCreate() {
 
           <Col xs={12} sm={12} md={12} lg={12} xl={12} style={{ textAlign: "center" }}>
               <Form.Item
-                label="รูปเมนู"
+                label="รูปพนักงาน"
                 name="picture_employee"
                 valuePropName="fileList"
               >

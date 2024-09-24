@@ -81,7 +81,7 @@ const FullLayout: React.FC = () => {
           <Link to="/">แดชบอร์ด</Link>
         </Menu.Item>
         <Menu.Item key="employee" icon={<UserOutlined />}>
-          <Link to="/employee">ข้อมูลสมาชิก</Link>
+          <Link to="/employee">ข้อมูลพนักงาน</Link>
         </Menu.Item>
         <Menu.Item key="menu" icon={<ShoppingOutlined />}>
           <Link to="/menus">เมนู</Link>

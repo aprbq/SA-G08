@@ -77,13 +77,13 @@ body {
 .header {
   text-align: center;
   height: 75px;
-  background-color: #f5debc;
+  background-color: #5c2d06c5;
   background-position: center;
   background-size: cover;
   padding: 10px 20px;
   display: flex;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
   font-family: 'Arial', sans-serif;
   
 }
@@ -100,7 +100,7 @@ body {
 
 .text-head{
   width: 8000px;
-  color: #33210a !important;
+  color: #ffffff !important;
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
   font-family: "Mitr", sans-serif;
   font-weight: normal;
@@ -150,11 +150,9 @@ body {
   }
 }
 
-.bg{
-  background-color: #ffe8bf;/*พื้นหลังใต้แถบเลือกหน้า*/
-}
+
 .middle-bg{
-  background-color: #ffe8bf;/*พื้นหลังในหน้าต่างๆ*/
+  background-color: #ffffff60;/*พื้นหลังในหน้าต่างๆ*/
 }
 
 .confirm-button{
@@ -401,7 +399,7 @@ body {
   text-decoration: none;
 }
 .header-menu {
-  background-color: #f5d5a6; /* สีheadermenu แถบเลือกหน้า */
+  background-color: #c9b899!important; /* สีheadermenu แถบเลือกหน้า */
 }
 .header-menu .ant-menu-item {
   color: #5C2C06 !important;
@@ -417,14 +415,14 @@ body {
 }
 
 .header-menu .ant-menu-item:hover {
-  border-bottom: 4px solid #622a0f;/*997950*/
-  background-color: #f5d5a6!important; /*Hover color */
+  background-color: #ffffff8a!important; /*Hover color */
+  border-bottom: 4px solid #5C2C06;
 }
 
 .header-menu .ant-menu-item-active,
 .header-menu .ant-menu-item-selected {
-  background-color: #f5d5a6!important; /* Active/selected color 533f38*/
-  border-bottom: 4px solid #622a0f; /* Optional: adds a bottom border */
+  background-color: #ffffff8a!important; /* Active/selected color 533f38*/
+  border-bottom: 4px solid #5C2C06; /* Optional: adds a bottom border */
 }
 
 .header-menu .ant-menu-item-active a,
@@ -434,7 +432,7 @@ body {
 
 /* กำหนดสไตล์สำหรับหัวตาราง */
 .custom-table .ant-table-thead > tr > th {
-  background-color: #ffffff; /* เปลี่ยนสีพื้นหลังของหัวตาราง */
+  background-color: #9c7b3e98; /* เปลี่ยนสีพื้นหลังของหัวตาราง */
   color: rgb(0, 0, 0); /* เปลี่ยนสีข้อความในหัวตาราง */
   font-size: 16px; /* ขนาดตัวอักษรของหัวตาราง */
   font-family: "Mitr", sans-serif!important;
@@ -444,7 +442,7 @@ body {
 
 /* สไตล์สำหรับแถวของตาราง */
 .table-row-light {
-  background-color: #e7e7e7;
+  background-color: #b1986965;
   font-size: 14px;
    /* สีพื้นหลังของแถวที่เป็นสีอ่อน */
    font-family: "Mitr", sans-serif!important;
@@ -453,7 +451,7 @@ body {
 }
 
 .table-row-dark {
-  background-color: #e7e7e7;
+  background-color: #b1986965;
   font-size: 14px; /* สีพื้นหลังของแถวที่เป็นสีเข้ม */
   font-family: "Mitr", sans-serif!important;
   font-weight: normal!important;
