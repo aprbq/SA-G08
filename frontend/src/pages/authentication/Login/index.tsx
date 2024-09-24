@@ -32,7 +32,7 @@ function SignInPages() {
       <Flex justify="center" align="center" className="login">
         <Row className="images-logocafe">
           <img alt="logo"src={logo} className="images"/>
-        </Row>
+        </Row >
         <Card className="card-login" >
           <Row >
             <Col xs={24} sm={24} md={24} lg={24} xl={24}

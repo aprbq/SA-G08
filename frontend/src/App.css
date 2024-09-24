@@ -49,6 +49,29 @@ body {
 
 }
 
+.card-reg {
+  overflow-y: hidden;
+  background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+  border: 1px solid rgba(0, 0, 0, 0.1); /* Light border */
+  height: 600px; /* Allow height to adjust based on content */
+  width: 700px; /* Set a maximum width */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Shadow */
+  padding: 20px; /* Padding inside the card */
+}
+
+.card-login {
+  overflow-y: hidden;
+  background-color: rgba(255, 255, 255, 0.9); /* สีพื้นหลังขาวแบบโปร่งแสง */
+  border: 1px solid rgba(0, 0, 0, 0.1); /* เพิ่มกรอบสีอ่อน */
+  width: 100%;
+  height: 100%;
+  max-height: 600px;
+  width: 300px;
+  border-radius: 8px; /* ทำให้มุมกรอบมีความโค้งมน */
+  backdrop-filter: blur(5px); /* เบลอพื้นหลัง */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+}
 
 
 .header {

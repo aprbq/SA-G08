@@ -5,7 +5,6 @@ import {
   Form,
   Input,
   message,
-  Flex,
   Row,
   Col,
   Select,
@@ -14,25 +13,27 @@ import { useNavigate } from "react-router-dom";
 import { CreateEmployee } from "../../../services/https";
 import { EmployeeInterface } from "../../../interfaces/Employee";
 import { GenderInterface } from "../../../interfaces/Gender";
-import { GetGender } from "../../../services/https";
-import logo from "../../../assets/logo.png";
+import { RoleInterface } from "../../../interfaces/Role";
+import { GetGender,GetRole } from "../../../services/https";
+
 
 const { Option } = Select;
 
 function SignUpPages() {
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
+  const [role, setRole] = useState<RoleInterface[]>([]);
   const [gender, setGender] = useState<GenderInterface[]>([]);
 
   const onFinish = async (values: EmployeeInterface) => {
     let res = await CreateEmployee(values);
 
-    if (res.status == 201) {
+    if (res.status === 201) {
       messageApi.open({
         type: "success",
         content: res.data.message,
       });
-      setTimeout(function () {
+      setTimeout(() => {
         navigate("/");
       }, 2000);
     } else {
@@ -45,174 +46,147 @@ function SignUpPages() {
 
   const getGender = async () => {
     let res = await GetGender();
-  if (res.status == 200) {
+    if (res.status === 200) {
+      setGender(res.data);
+    } else {
+      setGender([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
+    }
+  };
 
-    setGender(res.data);
-
-  } else {
-
-    setGender([]);
-
-    messageApi.open({
-
-      type: "error",
-
-      content: res.data.error,
-
-    });
-
-  }
+  const getRole = async () => {
+    let res = await GetRole();
+    if (res.status == 200) {
+      setRole(res.data);
+    } else {
+      setRole([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
+    }
   };
 
   useEffect(() => {
     getGender();
+    getRole();
   }, []);
 
   return (
     <>
       {contextHolder}
-      <Flex justify="center" align="center" className="login">
-        <Card className="card-login" style={{ width: 600 }}>
-          <Row align={"middle"} justify={"center"}>
-            <Col xs={24} sm={24} md={24} lg={10} xl={10}>
-              <img alt="logo" src={logo} className="images-logo" />
-            </Col>
-            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-              <h2 className="header">Sign Up</h2>
-              <Form
-                name="basic"
-                layout="vertical"
-                onFinish={onFinish}
-                autoComplete="off"
-              >
-                <Row gutter={[16, 0]} align={"middle"}>
-                  <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+      <Row justify="center" align="middle" className="login">
+          <Card className="card-reg">
+            <Row align={"middle"} justify={"center"}>
+              <Col>
+                <h2 className="front-1">Sign Up</h2>
+                <Form
+                  name="basic"
+                  layout="vertical"
+                  onFinish={onFinish}
+                  autoComplete="off"
+                >
+                  <Row gutter={[6, 6]} align={"middle"}>
+                    <Col span={12} >
+                      <Form.Item
+                        label= {<span className="front-1">ชื่อจริง</span>}
+                        name="first_name"
+                        rules={[{ required: true, message: "กรุณากรอกชื่อ !" }]}
+                      >
+                        <Input className="front-1" placeholder="FirstName" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        label={<span className="front-1">นามสกุุล</span>}
+                        name="last_name"
+                        rules={[{ required: true, message: "กรุณากรอกนามสกุล !" }]}
+                      >
+                        <Input className="front-1" placeholder="LastName"/>
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        name="gender"
+                        label={<span className="front-1">เพศ</span>}
+                        rules={[{ required: true, message: "กรุณาระบุเพศ !" }]}
+                      >
+                        <Select allowClear className="front-1" placeholder="Select gender">
+                          {gender.map((item) => (
+                            <Option className="front-1" value={item.ID} key={item.gender_name}>
+                              {item.gender_name}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        label={<span className="front-1">อีเมล</span>}
+                        name="email"
+                        rules={[
+                          { type: "email", message: "รูปแบบอีเมลไม่ถูกต้อง !" },
+                          { required: true, message: "กรุณากรอกอีเมล !" },
+                        ]}
+                      >
+                        <Input className="front-1" placeholder="Gmail"/>
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        label={<span className="front-1">Username</span>}
+                        name="username"
+                        rules={[{ required: true, message: "กรุณากรอก username !" }]}
+                      >
+                        <Input className="front-1" placeholder="Username"/>
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        label={<span className="front-1">Password</span>}
+                        name="password"
+                        rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน !" }]}
+                      >
+                        <Input.Password className="front-1" placeholder="Password"/>
+                      </Form.Item>
+                    </Col>
+                    <Col span={24}>
                     <Form.Item
-                      label="ชื่อจริง"
-                      name="first_name"
-                      rules={[
-                        {
-                          required: true,
-                          message: "กรุณากรอกชื่อ !",
-                        },
-                      ]}
-                    >
-                      <Input />
-                    </Form.Item>
-                  </Col>
-
-                  <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                    <Form.Item
-                      label="นามกสุล"
-                      name="last_name"
-                      rules={[
-                        {
-                          required: true,
-                          message: "กรุณากรอกนามสกุล !",
-                        },
-                      ]}
-                    >
-                      <Input />
-                    </Form.Item>
-                  </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                    <Form.Item
-                      name="gender"
-                      label="เพศ"
+                      name="role_id"
+                      label={<span className="front-1">ตำแหน่งงาน</span>}
                       rules={[{ required: true, message: "กรุณาระบุเพศ !" }]}
                     >
-                      <Select allowClear>
-                        {gender.map((item) => (
-                          <Option value={item.ID} key={item.gender_name}>
-                            {item.gender_name}
+                      <Select allowClear className="front-1" placeholder="Select role">
+                        {role.map((item) => (
+                          <Option className="front-1" value={item.ID} key={item.role_name}>
+                            {item.role_name}
                           </Option>
                         ))}
                       </Select>
                     </Form.Item>
                   </Col>
-
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                    <Form.Item
-                      label="อีเมล"
-                      name="email"
-                      rules={[
-                        {
-                          type: "email",
-                          message: "รูปแบบอีเมลไม่ถูกต้อง !",
-                        },
-                        {
-                          required: true,
-                          message: "กรุณากรอกอีเมล !",
-                        },
-                      ]}
-                    >
-                      <Input />
-                    </Form.Item>
-                  </Col>
-
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                    <Form.Item
-                      label="Username"
-                      name="username"
-                      rules={[
-                        {
-                          required: true,
-                          message: "กรุณากรอก username !",
-                        },
-                      ]}
-                    >
-                      <Input />
-                    </Form.Item>
-                  </Col>
-
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                    <Form.Item
-                      label="รหัสผ่าน"
-                      name="password"
-                      rules={[
-                        {
-                          required: true,
-                          message: "กรุณากรอกรหัสผ่าน !",
-                        },
-                      ]}
-                    >
-                      <Input.Password />
-                    </Form.Item>
-                  </Col>
-                  <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                    <Form.Item
-                      label="ตำแหน่งงาน"
-                      name="role"
-                      rules={[
-                        {
-                          required: true,
-                          message: "กรุณากรอกตำแหน่งงาน !",
-                        },
-                      ]}
-                    >
-                      <Input />
-                    </Form.Item>
-                  </Col>
-
-                  <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                    <Form.Item>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        className="login-form-button"
-                        style={{ marginBottom: 20 }}
-                      >
-                        Sign up
-                      </Button>
-                      Or <a onClick={() => navigate("/")}>signin now !</a>
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Form>
-            </Col>
-          </Row>
-        </Card>
-      </Flex>
+                    <Col span={24}>
+                      <Form.Item>
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          className="login-form-button"
+                          style={{ marginBottom: 20 }}
+                        >
+                          Sign up
+                        </Button>
+                        Or <a onClick={() => navigate("/")}>signin now !</a>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Form>
+              </Col>
+            </Row>
+          </Card>
+      </Row>
     </>
   );
 }
