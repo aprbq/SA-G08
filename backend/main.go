@@ -57,7 +57,6 @@ func main() {
 		//  r.GET("/users", users.GetAll)
 		//  r.GET("/user/:id", users.Get)
 		//  r.DELETE("/user/:id", users.Delete)
-		rounter.GET("/role", role.GetAll)
 		rounter.PUT("/employee/:id", employee.Update)
 		rounter.GET("/employee", employee.GetAll)
 		rounter.GET("/employee/:id", employee.Get)
@@ -143,6 +142,7 @@ func main() {
 	}
 
 	r.GET("/gender", gender.GetAll)
+	r.GET("/role", role.GetAll)
 
 	r.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "API RUNNING... PORT: %s", PORT)
