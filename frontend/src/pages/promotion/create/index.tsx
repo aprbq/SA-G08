@@ -12,7 +12,7 @@ import {
     DatePicker,
     Select,
   } from "antd";
-  import { PlusOutlined } from "@ant-design/icons";
+  import { PlusOutlined,CheckOutlined,ExclamationCircleOutlined  } from "@ant-design/icons";
   import { PromotionInterface } from "../../../interfaces/Promotion";
   import { StatusInterface } from "../../../interfaces/Status";
   import { DiscountTypeInterface } from "../../../interfaces/Discounttype";
@@ -20,6 +20,7 @@ import {
   import { MenuInterface } from "../../../interfaces/Menu";
   import { CreatePromotion,GetStatus,GetDiscountType,GetPromotionType,GetMenu,CreateCondition } from "../../../services/https";
   import { useNavigate, Link } from "react-router-dom";
+  import { Modal } from "antd";
 
 
   const { Option } = Select;
@@ -36,63 +37,94 @@ import {
     const [form] = Form.useForm();
 
     const onFinish = async (values: PromotionInterface) => {
-      let payload = {
-        ...values,
-        "employee_id": Number(accountid),
-        "points_added": Number(values.points_added),
-        "points_use": Number(values.points_use),
-        "discount_value": Number(values.discount_value),
-        "menu_ids": values.menu_id, // ส่งค่า menu_id ที่เป็น array
-      };
-    
-      console.log(payload);
-      
-      try {
-        // สร้างโปรโมชั่น
-        let res = await CreatePromotion(payload);
-        console.log('CreatePromotion response:', res);
-        console.log('pay response:', payload);
-      
-        if (res && res.status === 201) {
-          // ดึง ID ของโปรโมชั่นหากต้องใช้ในการสร้างเงื่อนไข
-          const promotionId = res.data.data;
-          
-          // เตรียมข้อมูลเงื่อนไขหากจำเป็น
-          const conditionPayload = {
-            promotion_id: promotionId,
-            menu_ids: values.menu_id // ส่งค่า menu_id ที่เป็น array
+      Modal.confirm({
+        title: "ยืนยันการสร้างโปรโมชั่น",
+        content: "คุณแน่ใจหรือไม่ว่าต้องการบันทึกโปรโมชั่นนี้?",
+        okText: "ตกลง",
+        cancelText: "ยกเลิก",
+        icon: <CheckOutlined style={{color:"green"}}/>,
+        okButtonProps: { className: "confirm-button"  }, // Primary button
+        cancelButtonProps: { className: "back-button" },
+        className:"front-1",
+        onOk: async () => {
+          let payload = {
+            ...values,
+            "employee_id": Number(accountid),
+            "points_added": Number(values.points_added),
+            "points_use": Number(values.points_use),
+            "discount_value": Number(values.discount_value),
+            "menu_ids": values.menu_id, // ส่งค่า menu_id ที่เป็น array
           };
-      
-          // สร้างเงื่อนไข
-          let res1 = await CreateCondition(conditionPayload);
-          if (res1 && res1.status === 201) {
+        
+          console.log(payload);
+          
+          try {
+            // สร้างโปรโมชั่น
+            let res = await CreatePromotion(payload);
+            console.log('CreatePromotion response:', res);
+            console.log('pay response:', payload);
+          
+            if (res && res.status === 201) {
+              const promotionId = res.data.data;
+              
+              // สร้างเงื่อนไข
+              const conditionPayload = {
+                promotion_id: promotionId,
+                menu_ids: values.menu_id 
+              };
+          
+              let res1 = await CreateCondition(conditionPayload);
+              if (res1 && res1.status === 201) {
+                messageApi.open({
+                  type: "success",
+                  content: "บันทึกข้อมูลสำเร็จ",
+                });
+                setTimeout(() => {
+                  navigate("/promotion");
+                }, 2000);
+              } else {
+                throw new Error(res1.data.error || "ไม่สามารถสร้างเงื่อนไขได้");
+              }
+            } else {
+              throw new Error(res.data.error || "ไม่สามารถสร้างโปรโมชั่นได้");
+            }
+          } catch (error) {
+            let errorMessage = "เกิดข้อผิดพลาด !";
+            if (error instanceof Error) {
+              errorMessage = error.message;
+            } else if (typeof error === 'string') {
+              errorMessage = error;
+            }
+          
             messageApi.open({
-              type: "success",
-              content: "บันทึกข้อมูลสำเร็จ",
+              type: "error",
+              content: errorMessage,
             });
-            setTimeout(() => {
-              navigate("/promotion");
-            }, 2000);
-          } else {
-            throw new Error(res1.data.error || "ไม่สามารถสร้างเงื่อนไขได้");
           }
-        } else {
-          throw new Error(res.data.error || "ไม่สามารถสร้างโปรโมชั่นได้");
-        }
-      } catch (error) {
-        // ตรวจสอบประเภทของข้อผิดพลาด
-        let errorMessage = "เกิดข้อผิดพลาด !";
-        if (error instanceof Error) {
-          errorMessage = error.message;
-        } else if (typeof error === 'string') {
-          errorMessage = error;
-        }
-      
-        messageApi.open({
-          type: "error",
-          content: errorMessage,
-        });
-      }
+        },
+        onCancel() {
+          console.log("ยกเลิกการสร้างโปรโมชั่น");
+        },
+      });
+    };
+    
+    const onCancel = () => {
+      Modal.confirm({
+        title: "ยืนยันการยกเลิก",
+        content: "คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการสร้างโปรโมชั่นนี้?",
+        okText: "ตกลง",
+        cancelText: "ยกเลิก",
+        className:"front-1",
+        okButtonProps: { className: "confirm-button"  }, // Primary button
+        cancelButtonProps: { className: "back-button" },
+        icon: <ExclamationCircleOutlined style={{color:"red"}}/>,
+        onOk() {
+          navigate("/promotion");
+        },
+        onCancel() {
+          console.log("ยกเลิกการยกเลิก");
+        },
+      });
     };
 
     const getStatus = async () => {
@@ -370,8 +402,8 @@ import {
               <Col style={{ marginTop: "40px" }}>
                 <Form.Item>
                   <Space>
-                    <Link to="/promotion">
-                      <Button className="back-button" htmlType="button" style={{ marginRight: "10px" }}>
+                    <Link to="#">
+                      <Button className="back-button" htmlType="button" style={{ marginRight: "10px" }} onClick={onCancel}>
                         ย้อนกลับ
                       </Button>
                     </Link>
