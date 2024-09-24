@@ -1,7 +1,18 @@
-import { Col, Row, Card, Statistic, Table } from "antd";
-import { AuditOutlined, UserOutlined, PieChartOutlined, StockOutlined } from "@ant-design/icons";
+import { Col, Row, Card, Statistic } from "antd";
+import { 
+  AuditOutlined, 
+  UserOutlined, 
+  PieChartOutlined, 
+  StockOutlined 
+} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetRowMenu, GetRowIngredient, GetRowEmp, GetRowMember, GetRowPromotion  } from "../../services/https/index";
+import { 
+  GetRowMenu, 
+  GetRowIngredient, 
+  GetRowEmp, 
+  GetRowMember, 
+  GetRowPromotion  
+} from "../../services/https/index";
 import { useEffect, useState } from "react";
 
 interface DataType {
@@ -12,94 +23,37 @@ interface DataType {
   tags: string[];
 }
 
-
-const columns: ColumnsType<DataType> = [
-  {
-    title: "ลำดับ",
-    dataIndex: "ID",
-    key: "id",
-  },
-  {
-    title: "ชื่อ",
-    dataIndex: "FirstName",
-    key: "firstname",
-  },
-  {
-    title: "นามสกุุล",
-    dataIndex: "LastName",
-    key: "lastname",
-  },
-  {
-    title: "อีเมล",
-    dataIndex: "Email",
-    key: "email",
-  },
-  {
-    title: "ที่อยู่",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "เบอร์โทร",
-    dataIndex: "Phone",
-    key: "phone",
-  },
-];
-
-const data: DataType[] = [];
-
 export default function Index() {
-  const [rowMenu, setRowMenu] = useState<number>(0); // ตั้งค่าเริ่มต้นเป็น 0
-  const [rowIngredient, setRowIngredient] = useState<number>(0); // ตั้งค่าเริ่มต้นเป็น 0
+  const [rowMenu, setRowMenu] = useState<number>(0); 
+  const [rowIngredient, setRowIngredient] = useState<number>(0); 
   const [rowEmployee, setRowEmployee] = useState<number | undefined>(0);
   const [rowPromotion, setRowPromotion] = useState<number | undefined>(0);
   const [rowMember, setRowMember] = useState<number | undefined>(0);
 
   const getRowMenu = async () => {
     let res = await GetRowMenu();
-    if (res && res.status === 200) {
-      setRowMenu(res.data); // Assuming res.data is the count (a number)
-    } else {
-      setRowMenu(0); // Fallback to 0 if there's an error
-    }
+    setRowMenu(res?.status === 200 ? res.data : 0);
   };
 
   const getRowIngredient = async () => {
     let res = await GetRowIngredient();
-    if (res && res.status === 200) {
-      setRowIngredient(res.data); // Assuming res.data is the count (a number)
-    } else {
-      setRowIngredient(0); // Fallback to 0 if there's an error
-    }
+    setRowIngredient(res?.status === 200 ? res.data : 0);
   };
 
   const getRowEmployee = async () => {
     let res = await GetRowEmp();
-    if (res && res.status === 200) {
-      setRowEmployee(res.data); // Assuming res.data is the count (a number)
-    } else {
-      setRowEmployee(0); // Fallback to 0 if there's an error
-    }
+    setRowEmployee(res?.status === 200 ? res.data : 0);
   };
 
   const getRowPromotion = async () => {
     let res = await GetRowPromotion();
-    if (res && res.status === 200) {
-      setRowPromotion(res.data); // Assuming res.data is the count (a number)
-    } else {
-      setRowPromotion(0); // Fallback to 0 if there's an error
-    }
+    setRowPromotion(res?.status === 200 ? res.data : 0);
   };
 
   const getRowMember = async () => {
     let res = await GetRowMember();
-    if (res && res.status === 200) {
-      setRowMember(res.data); // Assuming res.data is the count (a number)
-    } else {
-      setRowMember(0); // Fallback to 0 if there's an error
-    }
+    setRowMember(res?.status === 200 ? res.data : 0);
   };
-  
 
   useEffect(() => {
     getRowMenu();
@@ -109,76 +63,97 @@ export default function Index() {
     getRowMember();
   }, []);
 
-  useEffect(() => {
-    console.log("row menu updated", rowMenu);
-    console.log("row ingredient updated", rowIngredient);
-    console.log("row member updated", rowMember);
-    console.log("row promotion updated", rowPromotion);
-    console.log("row employee updated", rowEmployee);
-  }, [rowMenu]);
-
   return (
-    <div style={{  minHeight: "100vh" }}>
+    <div className = "dashboard" >
       <Row gutter={[16, 16]}>
-        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-          <h2>แดชบอร์ด</h2>
+        <Col className = "name-das"xs={24}>
+          <h2 style={{ textAlign: "center", marginBottom: "20px" }}>แดชบอร์ด</h2>
         </Col>
-
-        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-          <Card className="bg-1">
+        <Col xs={24}>
+          <Card className="dashboard-card">
             <Row gutter={[16, 16]}>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Card
+              <Col xs={24} sm={12} lg={12}>
+                <Card className="dashboard-item"
                   bordered={false}
-                  style={{
+                  style={{ 
                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                    textAlign: "center",
                   }}
                 >
-                  <Statistic title="เมนู" value={`${rowMenu?.data || 0} เมนู`} prefix={<StockOutlined />} />
+                  <Statistic 
+                    title="เมนู"
+                    className="front-1" 
+                    value={`${rowMenu?.data || 0} เมนู`} 
+                    prefix={<StockOutlined />} 
+                  />
                 </Card>
               </Col>
-
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Card
+              <Col xs={24} sm={12} lg={12}>
+                <Card 
                   bordered={false}
-                  style={{
+                  className="dashboard-item"
+                  style={{ 
                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                    textAlign: "center",
                   }}
                 >
-                  <Statistic title="วัตถุดิบ" value={`${rowIngredient?.data || 0} อัน`} valueStyle={{ color: "black" }} prefix={<AuditOutlined />} />
+                  <Statistic 
+                    title="วัตถุดิบ" 
+                    className="front-1"
+                    value={`${rowIngredient?.data || 0} รายการ`} 
+                    prefix={<AuditOutlined />} 
+                  />
                 </Card>
               </Col>
-
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Card
+              <Col xs={24} sm={12} lg={6}>
+                <Card 
                   bordered={false}
-                  style={{
+                  style={{ 
+                    backgroundColor: "#83613f",
                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                    textAlign: "center",
                   }}
                 >
-                  <Statistic title="พนักงาน" value={`${rowEmployee?.data || 0} คน`} valueStyle={{ color: "black" }} prefix={<PieChartOutlined />} />
+                  <Statistic 
+                    title="พนักงาน" 
+                    className="front-1"
+                    value={`${rowEmployee?.data || 0} คน`} 
+                    prefix={<PieChartOutlined />} 
+                  />
                 </Card>
               </Col>
-
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Card
+              <Col xs={24} sm={12} lg={6}>
+                <Card 
                   bordered={false}
-                  style={{
+                  style={{ 
+                    backgroundColor: "#83613f",
                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                    textAlign: "center",
                   }}
                 >
-                  <Statistic title="สมาชิก" value={`${rowMember?.data || 0} คน`} valueStyle={{ color: "black" }} prefix={<UserOutlined />} />
+                  <Statistic 
+                    title="สมาชิก" 
+                    className="front-1"
+                    value={`${rowMember?.data || 0} คน`} 
+                    prefix={<UserOutlined />} 
+                  />
                 </Card>
               </Col>
-
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Card
+              <Col xs={24} sm={12} lg={6}>
+                <Card 
                   bordered={false}
-                  style={{
+                  style={{ 
+                    backgroundColor: "#83613f",
                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                    textAlign: "center",
                   }}
                 >
-                  <Statistic title="โปรโมชั่น" value={`${rowPromotion?.data || 0} โปรโมชั่น`} valueStyle={{ color: "black" }} prefix={<UserOutlined />} />
+                  <Statistic 
+                    title="โปรโมชั่น" 
+                    className="front-1"
+                    value={`${rowPromotion?.data || 0} โปรโมชั่น`} 
+                    prefix={<UserOutlined />} 
+                  />
                 </Card>
               </Col>
             </Row>

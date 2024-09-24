@@ -19,6 +19,43 @@ body {
 
 }
 
+.dashboard {
+
+  margin: 0;
+  height: 130px;
+  width: 100%;
+  background-color: #b19883;
+  background-image: url(..\src\assets\coffee-latte-with-cookies-coffiee-beans.jpg); /* ใส่ URL ของรูปภาพที่ต้องการ */
+  background-size: cover; /* ทำให้รูปภาพขยายให้เต็มพื้นที่ */
+  background-position: center; /* จัดตำแหน่งรูปภาพให้อยู่ตรงกลาง */
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px, rgba(0, 0, 0, 0.05) 0px 8px 24px; /* เพิ่มเงาเพื่อมิติ */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* การยกตัวขึ้นอย่างนุ่มนวล */
+
+}
+
+.dashboard-card {
+  margin: 0;
+  height: 400px;
+  width: 100%;
+  background-color: #f9e6d7a0; /* สีพื้นหลัง */
+  border: 0;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px, rgba(0, 0, 0, 0.05) 0px 8px 24px; /* เพิ่มเงาเพื่อมิติ */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* การยกตัวขึ้นอย่างนุ่มนวล */
+}
+
+.dashboard-item {
+  margin: 0;
+  height: 200px;
+  width: 100%;
+  background-color: #ccad8b; /* สีพื้นหลัง */
+  border: 0;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px, rgba(0, 0, 0, 0.05) 0px 8px 24px; /* เพิ่มเงาเพื่อมิติ */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* การยกตัวขึ้นอย่างนุ่มนวล */
+}
+
 .card-login {
   overflow-y: hidden;
   background-color: rgba(255, 255, 255, 0.9); /* สีพื้นหลังขาวแบบโปร่งแสง */
@@ -219,6 +256,14 @@ body {
   font-family: "Mitr", sans-serif;
   font-weight: normal;
   font-size: 22px;
+  font-style: normal;
+
+}
+.name-das{
+  color: #ffffff !important;
+  font-family: "Mitr", sans-serif;
+  font-weight: normal;
+  font-size: 28px;
   font-style: normal;
 
 }
