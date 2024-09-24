@@ -129,15 +129,7 @@ function OrderConfirm() {
     }
   };
 
-  const getPromotionsForMenu = (menuIds: number[], promotionTypeId: number) => {
-    return promotions.filter(promotion =>
-      promotion.promotion_type_id === promotionTypeId && // ต้องตรงกับประเภทโปรโมชั่น
-      conditions.some(condition =>
-        menuIds.includes(condition.menu_id) && condition.promotion_id === promotion.ID // เช็คว่า menu_id ใด ๆ ในเงื่อนไขตรงกับ promotion_id
-      ) &&
-      promotion.status_id !== 2 // เช็ค menu_id กับ promotion_id
-    );
-  };
+
 
   const handlePromotionTypeChange = (promotionTypeId: number) => {
     setSelectedPromotionType(promotionTypeId);
@@ -156,22 +148,31 @@ function OrderConfirm() {
   };
 
 
-  const onFinish = async (values: { promotion_id: number; payment_method_id: number; promotion_type_id: number }) => {
-    const isMemberValid = await getMember(phoneNumber!); // ตรวจสอบเบอร์โทรศัพท์และสถานะสมาชิก
+  async function getMemberByPhoneNumber(phoneNumber: string): Promise<MemberInterface | null> {
+    const memberRes = await GetMember(); // เรียก API หรือ Query ดึงข้อมูลสมาชิก
+    const member = memberRes.data.find((m: MemberInterface) => m.phone_number === phoneNumber); 
+    return member || null;
+  }
   
+  const onFinish = async (values: { promotion_id: number; payment_method_id: number; promotion_type_id: number }) => {
+    // ตรวจสอบว่า phoneNumber เป็น string เสมอ ถ้า undefined ให้ใช้ค่า default เป็น ""
+    const validPhoneNumber = phoneNumber || "";
+  
+    const isMemberValid = await getMember(validPhoneNumber); // ตรวจสอบเบอร์โทรศัพท์และสถานะสมาชิก
+    
     // เช็ค promotion_type_id
     if (values.promotion_type_id === 1 && !isMemberValid) {
       messageApi.open({ type: "error", content: "เบอร์โทรศัพท์ไม่ถูกต้องหรือต้องห้ามการสั่งซื้อ!" });
       return;
     }
-  
+    
     // รวมราคารวมของทุก orderitem เป็นราคาสุทธิ
     let totalAmount = orderItems.reduce((total, item) => total + (item.total_item || 0), 0);
     let aftertotalAmount;
-  
+    
     // ตรวจสอบโปรโมชั่น
     const selectedPromotion = promotions.find(promo => promo.ID === values.promotion_id);
-  
+    
     if (selectedPromotion) {
       if (selectedPromotion.discount_type_id === 1) {
         const discountPercentage = selectedPromotion.discount_value || 0; 
@@ -183,37 +184,45 @@ function OrderConfirm() {
     }
   
     let updatedPoints = 0;
+    let member_ID: number | undefined = undefined;
   
     if (isMemberValid) {
       // ดึงข้อมูลสมาชิกที่ตรงกับเบอร์โทรศัพท์
-      const memberRes = await GetMember();
-      const member = memberRes.data.find((m: MemberInterface) => m.phone_number === phoneNumber);
-  
+      const member = await getMemberByPhoneNumber(validPhoneNumber);
+      
       if (member) {
+        const memberID = member.ID?.toString(); // แปลง member.ID เป็น string ถ้ามีค่า
+        member_ID = member.ID;
+        console.log("naaa",memberID)
+        if (!memberID) {
+          messageApi.open({ type: "error", content: "ไม่สามารถดึงข้อมูลสมาชิกได้!" });
+          return;
+        }
+      
         updatedPoints = member.points || 0; // ตั้งค่า point เดิมของสมาชิก
-  
+      
         // ตรวจสอบว่าแต้มที่มีพอสำหรับใช้หรือไม่
         if (selectedPromotion?.points_use && selectedPromotion.points_use !== 0) {
           if (updatedPoints < selectedPromotion.points_use) {
-            // ถ้าแต้มไม่พอ ให้แสดงข้อความแจ้งเตือนและหยุดการทำงาน
             messageApi.open({ type: "error", content: "แต้มสะสมไม่พอสำหรับการใช้โปรโมชั่นนี้!" });
             return;
           } else {
-            // ถ้าแต้มพอ ให้ลบ point
             updatedPoints -= selectedPromotion.points_use;
           }
         }
-  
+      
         // ถ้าโปรโมชั่นมี points_added ให้บวก point
         if (selectedPromotion?.points_added && selectedPromotion.points_added !== 0) {
           updatedPoints += selectedPromotion.points_added;
         }
   
         // อัพเดต point ของสมาชิกโดยส่ง ID ที่ดึงมา
-        await UpdateMemberById(member.ID, { points: updatedPoints });
+        if(memberID){
+          await UpdateMemberById(memberID ,{ points: updatedPoints });
+        }
       }
     }
-  
+
     const accountid = localStorage.getItem("id");
     const orderPayload: OrderInterface = {
       promotion_id: values.promotion_id,
@@ -222,8 +231,11 @@ function OrderConfirm() {
       employee_id: Number(accountid),
       payment_amount: aftertotalAmount,
       payment_amount_before: totalAmount,
-      ...(values.promotion_type_id === 1 && { phone_number: phoneNumber }), // รวมเฉพาะ phone_number หาก promotion_type_id เท่ากับ 1
+      order_date: new Date().toISOString(), // เก็บเวลาปัจจุบัน
+      ...(member_ID !== undefined && { member_id: member_ID }),
+      ...(values.promotion_type_id === 1 && { phone_number: validPhoneNumber }), // รวมเฉพาะ phone_number หาก promotion_type_id เท่ากับ 1
     };
+    console.log("hee",orderPayload)
   
     try {
       const orderRes = await CreateOrder(orderPayload);
@@ -238,10 +250,8 @@ function OrderConfirm() {
         messageApi.open({ type: "success", content: "บันทึกข้อมูลออเดอร์สำเร็จ" });
   
         if (values.payment_method_id === 2) {
-          // ส่งราคา aftertotalAmount และ orderItems ไปยัง QrPage พร้อมกับการแสดง QR Code
           navigate("/order/qrpage", { state: { totalAmount: aftertotalAmount, orderItems: orderItems, showQRCode: true } });
         } else {
-          // ส่งไปยัง QrPage โดยไม่แสดง QR Code
           navigate("/order/qrpage", { state: { totalAmount: aftertotalAmount, orderItems: orderItems, showQRCode: false } });
         }
         
@@ -252,7 +262,6 @@ function OrderConfirm() {
       messageApi.open({ type: "error", content: error instanceof Error ? error.message : "เกิดข้อผิดพลาด !" });
     }
   };
-  
   
   
 
@@ -311,7 +320,6 @@ function OrderConfirm() {
                 name="phone_number"
                 rules={[
                   {
-                    required: selectedPromotionType === 1, // จำเป็นถ้าเลือก Member
                     message: 'กรุณากรอกเบอร์โทรศัพท์ !',
                   },
                   {
@@ -322,7 +330,6 @@ function OrderConfirm() {
               >
                 <Input
                   placeholder="กรอกเบอร์โทรศัพท์"
-                  disabled={selectedPromotionType !== 1} // ปิดการใช้งานถ้าไม่ใช่ Member
                   value={phoneNumber}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
                 />
