@@ -293,6 +293,7 @@ function Promotion() {
           rowKey="ID"
           columns={columns}
           dataSource={Promotion}
+          pagination={{ pageSize: 10 }}
           className="custom-table" 
           rowClassName={(record, index) => 
             index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"

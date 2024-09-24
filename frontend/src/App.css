@@ -138,13 +138,28 @@ body {
 }
 
 .confirm-button{
-  background-color: #06bb00;
-  border-radius: 22px;
+  background-color: #7a6038;
+  border-radius: 12px;
 }
+
+.confirm-button:hover {
+  border-color: #dadce0;
+  background-color: #cea870 !important;
+  box-shadow: rgba(224, 222, 86, 0.1) 0 1px 1px;
+  color: #202124;
+}
+
 
 .back-button{
   background-color: #e0e0e0;
-  border-radius: 22px;
+  border-radius: 12px;
+}
+
+.back-button:hover {
+  border-color: #e0e0e0!important;
+  background-color: #e0e0e0 !important;
+  box-shadow: rgba(224, 222, 86, 0.1) 0 1px 1px;
+  color: #ffffff!important;
 }
 
 

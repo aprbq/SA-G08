@@ -10,7 +10,7 @@ import {
   message,
   Table,
 } from "antd";
-import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import {  SearchOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { OrderInterface } from '../../../interfaces/Order';
 import { GetOrder } from "../../../services/https"; // Import GetOrders service
@@ -114,18 +114,9 @@ function PromotionHistory() {
             <Space>
               <Link to="/promotion">
                 <Button className="back-button" htmlType="button">
-                  ย้อนกลับ
+                  ออก
                 </Button>
               </Link>
-
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="confirm-button"
-                icon={<PlusOutlined />}
-              >
-                ตกลง
-              </Button>
             </Space>
           </Col>
         </Row>
@@ -135,3 +126,4 @@ function PromotionHistory() {
 }
 
 export default PromotionHistory;
+
