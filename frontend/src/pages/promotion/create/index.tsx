@@ -10,7 +10,6 @@ import {
     Card,
     message,
     DatePicker,
-    InputNumber,
     Select,
   } from "antd";
   import { PlusOutlined } from "@ant-design/icons";
@@ -148,13 +147,6 @@ import {
     }
     };
 
-    const handleDiscountTypeChange = (value: number) => {
-      if (value === 2) {
-        setIsBogo(true); // If Bogo is selected, set to true
-      } else {
-        setIsBogo(false);
-      }
-    };
 
     useEffect(() => {
       getStatus();
@@ -210,7 +202,7 @@ import {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input className="front-1"/>
                 </Form.Item>
               </Col>
 
@@ -286,13 +278,13 @@ import {
                 label={<span className="front-1">ประเภทส่วนลด</span>}
                 rules={[{ required: true, message: "กรุณาระบุประเภทส่วนลด !" }]}
               >
-                <Select allowClear onChange={handleDiscountTypeChange}>
+                <Select allowClear className="front-1">
                   {discounttype.map((item) => (
-                    <Option value={item.ID} key={item.discount_type_name}>
+                    <Option value={item.ID} key={item.discount_type_name} className="front-1">
                       {item.discount_type_name}
                     </Option>
                   ))}
-                </Select>
+                </Select >
               </Form.Item>
             </Col>
 
@@ -302,9 +294,9 @@ import {
                 label={<span className="front-1">สำหรับ</span>}
                 rules={[{ required: true, message: "กรุณาระบุประเภท !" }]}
               >
-                <Select allowClear>
+                <Select allowClear className="front-1">
                   {promotiontype.map((item) => (
-                    <Option value={item.ID} key={item.ID}>
+                    <Option value={item.ID} key={item.ID} className="front-1">
                       {item.promotion_type_name}
                     </Option>
                   ))}
@@ -318,9 +310,9 @@ import {
                 label={<span className="front-1">สถานะ</span>}
                 rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
               >
-                <Select allowClear>
+                <Select allowClear className="front-1">
                   {status.map((item) => (
-                    <Option value={item.ID} key={item.status_name}>
+                    <Option value={item.ID} key={item.status_name} className="front-1">
                       {item.status_name}
                     </Option>
                   ))}
@@ -330,9 +322,9 @@ import {
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item name="menu_id" label={<span className="front-1">เมนูสำหรับโปรโมชั่น</span>} rules={[{ required: true,message: "กรุณาระบุเมนู !" }]}>
-              <Select mode="multiple" placeholder="Select menus">
+              <Select mode="multiple" placeholder="Select menus" className="front-1">
                 {menu.map((menu) => (
-                <Option key={menu.ID} value={menu.ID}>
+                <Option key={menu.ID} value={menu.ID} className="front-1">
                   {menu.name}
                 </Option>
                 ))}

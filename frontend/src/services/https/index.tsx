@@ -454,40 +454,40 @@ async function GetOrdersweet() {
     .catch((e) => e.response);
 }
 
-// async function GetRowsMenu() {
-//   return await axios
-//     .get(`${apiUrl}/countmenu`, requestOptions)
-//     .then((res) => res)
-//     .catch((e) => e.response);
-// }
+async function GetRowMenu() {
+  return await axios
+    .get(`${apiUrl}/countmenu`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 
-// async function GetRowsEm() {
-//   return await axios
-//     .get(`${apiUrl}/countemployee`, requestOptions)
-//     .then((res) => res)
-//     .catch((e) => e.response);
-// }
+async function GetRowEmp() {
+  return await axios
+    .get(`${apiUrl}/countemployee`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 
-// async function GetRowMembers() {
-//   return await axios
-//     .get(`${apiUrl}/countmember`, requestOptions)
-//     .then((res) => res)
-//     .catch((e) => e.response);
-// }
+async function GetRowMember() {
+  return await axios
+    .get(`${apiUrl}/countmember`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 
-// async function GetRowIngredients() {
-//   return await axios
-//     .get(`${apiUrl}/countingredient`, requestOptions)
-//     .then((res) => res)
-//     .catch((e) => e.response);
-// }
+async function GetRowIngredient() {
+  return await axios
+    .get(`${apiUrl}/countingredient`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 
-// async function GetRowPromotions() {
-//   return await axios
-//     .get(`${apiUrl}/countpromotion`, requestOptions)
-//     .then((res) => res)
-//     .catch((e) => e.response);
-// }
+async function GetRowPromotion() {
+  return await axios
+    .get(`${apiUrl}/countpromotion`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 
 
 
@@ -558,11 +558,11 @@ export {
   CreateSupplier,
   GetUnits,
 
-  // GetRowsMenu,
-  // GetRowsEm,
-  // GetRowMembers,
-  // GetRowIngredients,
-  // GetRowPromotions,
+  GetRowMenu,
+  GetRowEmp,
+  GetRowMember,
+  GetRowIngredient,
+  GetRowPromotion,
   
 
 };

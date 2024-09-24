@@ -74,8 +74,9 @@ function Ingredients() {
           <Button
           onClick={() => navigate(`/ingredient/edit/${record.ID}`)}
             type="primary" 
-            className='btn-1'
+            className='btn-ok'
             icon={<EditOutlined />}
+            shape="circle"
           >
           </Button>
           <Button type="primary" className="btn-delete" icon={<DeleteOutlined />}

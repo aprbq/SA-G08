@@ -4,14 +4,13 @@ import (
 	"net/http"
 
 	"example.com/sa-67-example/config"
-	"example.com/sa-67-example/controller/unit"
-	"example.com/sa-67-example/controller/supplier"
 	"example.com/sa-67-example/controller/category"
 	"example.com/sa-67-example/controller/class"
 	"example.com/sa-67-example/controller/condition"
 	"example.com/sa-67-example/controller/discounttype"
 	"example.com/sa-67-example/controller/employee"
 	"example.com/sa-67-example/controller/gender"
+	"example.com/sa-67-example/controller/get"
 	"example.com/sa-67-example/controller/ingredients"
 	"example.com/sa-67-example/controller/menuingredient"
 	"example.com/sa-67-example/controller/menus"
@@ -21,9 +20,11 @@ import (
 	"example.com/sa-67-example/controller/payment"
 	"example.com/sa-67-example/controller/promotion"
 	"example.com/sa-67-example/controller/promotiontype"
+	"example.com/sa-67-example/controller/role"
 	"example.com/sa-67-example/controller/status"
 	"example.com/sa-67-example/controller/stock"
-	"example.com/sa-67-example/controller/role"
+	"example.com/sa-67-example/controller/supplier"
+	"example.com/sa-67-example/controller/unit"
 
 	//"example.com/sa-67-example/controller/payment"
 	"example.com/sa-67-example/controller/member"
@@ -132,6 +133,12 @@ func main() {
 		rounter.GET("/member", member.GetAll)
 		rounter.GET("/member/:id", member.Get)
 		rounter.DELETE("/member/:id", member.Delete)
+
+		r.GET("/countmenu", get.CountRowMenu)
+		r.GET("/countingredient", get.CountRowIngredient)
+		r.GET("/countmember", get.CountRowMember)
+		r.GET("/countemployee", get.CountRowEmp)
+		r.GET("/countpromotion", get.CountRowPromotion)
 
 	}
 
