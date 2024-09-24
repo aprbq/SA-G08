@@ -15,7 +15,7 @@ import {
 } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
-import { GetMenuById, UpdateMenuById, GetCategory, GetStock, GetMenuIngredientById, UpdateMenuIngredientById, GetIngredients } from "../../../services/https/index";
+import { GetMenuById, UpdateMenuById, GetCategory, GetStock, GetMenuIngredientById, UpdateMenuIngredientById, GetIngredients , GetUnits} from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 
@@ -28,6 +28,7 @@ function MenuEdit() {
   const [messageApi, contextHolder] = message.useMessage();
   const [category, setCategory] = useState<any[]>([]);
   const [stock, setStock] = useState<any[]>([]);
+  const [units, setUnits] = useState<any[]>([]);
   const [ingredients, setIngredients] = useState<any[]>([]);
   const [fileList, setFileList] = useState<any[]>([]); // State for image file list
   const [form] = Form.useForm();
@@ -195,10 +196,25 @@ function MenuEdit() {
     }
   };
 
+  const getUnit = async () => {
+    let res = await GetUnits(); // Fetch units from the API
+    if (res.status === 200) {
+      setUnits(res.data);
+    } else {
+      setUnits([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+        className: "front-1",
+      });
+    }
+  };
+
   useEffect(() => {
     getMenuById(id);
     getCategory();
     getStock();
+    getUnit();
     getIngredients();
   }, [id]);
 
@@ -295,6 +311,7 @@ function MenuEdit() {
                   style={{ width: "100%" }}
                   step={1}
                   className="front-1"
+                  placeholder="กรุณากรอกราคา"
                 />
               </Form.Item>
             </Col>
@@ -325,11 +342,14 @@ function MenuEdit() {
                             rules={[{ required: true, message: <span className="error-front">กรุณาเลือกวัตถุดิบ !</span> }]}
                           >
                             <Select placeholder="เลือกวัตถุดิบ" className="front-1" showSearch>
-                              {ingredients.map((item) => (
-                                <Option value={item.ID} key={item.ID} className="front-1">
-                                  {item.name}
-                                </Option>
-                              ))}
+                              {ingredients.map((item) => {
+                                const unit = units.find((u) => u.ID === item.unit_id); // Find the unit
+                                return (
+                                  <Option value={item.ID} key={item.ID} className="front-1">
+                                    {item.name} {unit ? `(${unit.unit})` : ''} {/* Display the unit */}
+                                  </Option>
+                                );
+                              })}
                             </Select>
                           </Form.Item>
                         </Col>
@@ -343,7 +363,15 @@ function MenuEdit() {
                               { required: true, message: <span className="error-front">กรุณากรอกจำนวน !</span> },
                             ]}
                           >
-                            <Input placeholder="กรุณากรอกจำนวน" className="front-1" />
+                            <InputNumber
+                              min={0}
+                              max={9999}
+                              defaultValue={0}
+                              style={{ width: "100%" }}
+                              step={1}
+                              className="front-1"
+                              placeholder="กรุณากรอกจำนวน"
+                            />
                           </Form.Item>
                         </Col>
 

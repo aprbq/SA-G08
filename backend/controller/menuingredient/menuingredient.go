@@ -97,6 +97,7 @@ func Get(c *gin.Context) {
 			"ingredients_id": ingredient.IngredientsID,
 			"quantity":       ingredient.Quantity,
 			"name":           ingredient.Ingredients.Name, // Assuming Ingredient has a Name field
+			"unit_id": ingredient.Ingredients.UnitID,
 		})
 	}
 

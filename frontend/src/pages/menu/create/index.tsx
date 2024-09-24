@@ -268,90 +268,94 @@ function MenuCreate() {
                   style={{ width: "100%" }}
                   step={1}
                   className="front-1"
+                  placeholder="กรุณากรอกราคา"
                 />
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-            <Form.List
-  name="menu_ingredients"
-  rules={[
-    {
-      validator: async (_, menu_ingredients) => {
-        if (!menu_ingredients || menu_ingredients.length < 1) {
-          return Promise.reject(new Error('กรุณาเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ!'));
-        }
-      },
-    },
-  ]}
->
-  {(fields, { add, remove }) => (
-    <>
-      {fields.map(({ key, name, ...restField }) => (
-        <Row key={key} gutter={[16, 0]} align="middle">
-          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-            <Form.Item
-              {...restField}
-              name={[name, 'ingredients_id']}
-              label={<span className="front-1">วัตถุดิบ</span>}
-              rules={[{ required: true, message: <span className="error-front">กรุณาเลือกวัตถุดิบ !</span> }]}
-            >
-              <Select placeholder="เลือกวัตถุดิบ" className="front-1" showSearch>
-                {ingredients.map((item) => {
-                  const unit = units.find((u) => u.ID === item.unit_id); // Find the unit
-                  return (
-                    <Option value={item.ID} key={item.ID} className="front-1">
-                      {item.name} {unit ? `(${unit.unit})` : ''} {/* Display the unit */}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-          </Col>
+              <Form.List
+                name="menu_ingredients"
+                rules={[
+                  {
+                    validator: async (_, menu_ingredients) => {
+                      if (!menu_ingredients || menu_ingredients.length < 1) {
+                        return Promise.reject(new Error('กรุณาเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ!'));
+                      }
+                    },
+                  },
+                ]}
+              >
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Row key={key} gutter={[16, 0]} align="middle">
+                        <Col xs={12} sm={12} md={8} lg={8} xl={8}>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'ingredients_id']}
+                            label={<span className="front-1">วัตถุดิบ</span>}
+                            rules={[{ required: true, message: <span className="error-front">กรุณาเลือกวัตถุดิบ !</span> }]}
+                          >
+                            <Select placeholder="เลือกวัตถุดิบ" className="front-1" showSearch>
+                              {ingredients.map((item) => {
+                                const unit = units.find((u) => u.ID === item.unit_id); // Find the unit
+                                return (
+                                  <Option value={item.ID} key={item.ID} className="front-1">
+                                    {item.name} {unit ? `(${unit.unit})` : ''} {/* Display the unit */}
+                                  </Option>
+                                );
+                              })}
+                            </Select>
+                          </Form.Item>
+                        </Col>
 
-          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-            <Form.Item
-              {...restField}
-              name={[name, 'quantity']}
-              label={<span className="front-1">จำนวน</span>}
-              rules={[{ required: true, message: <span className="error-front">กรุณากรอกจำนวน !</span> }]}
-            >
-              <InputNumber
-                min={1}
-                style={{ width: '100%' }}
-                className="front-1"
-                placeholder="กรุณากรอกจำนวน"
-              />
-            </Form.Item>
-          </Col>
+                        <Col xs={12} sm={12} md={8} lg={8} xl={8}>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'quantity']}
+                            label={<span className="front-1">จำนวน</span>}
+                            rules={[{ required: true, message: <span className="error-front">กรุณากรอกจำนวน !</span> }]}
+                          >
+                            <InputNumber
+                              min={0}
+                              max={9999}
+                              defaultValue={0}
+                              style={{ width: "100%" }}
+                              step={1}
+                              className="front-1"
+                              placeholder="กรุณากรอกจำนวน"
+                            />
+                          </Form.Item>
+                        </Col>
 
-          <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-            <Button
-              type="link"
-              icon={<MinusCircleOutlined />}
-              onClick={() => remove(name)}
-              className="front-blue"
-            >
-              ลบ
-            </Button>
-          </Col>
-        </Row>
-      ))}
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                          <Button
+                            type="link"
+                            icon={<MinusCircleOutlined />}
+                            onClick={() => remove(name)}
+                            className="front-blue"
+                          >
+                            ลบ
+                          </Button>
+                        </Col>
+                      </Row>
+                    ))}
 
-      <Form.Item>
-        <Button
-          type="dashed"
-          onClick={() => add()}
-          block
-          icon={<PlusOutlined />}
-          className="front-1"
-        >
-          เพิ่มวัตถุดิบ
-        </Button>
-      </Form.Item>
-    </>
-  )}
-</Form.List>
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                        className="front-1"
+                      >
+                        เพิ่มวัตถุดิบ
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
 
 
 
