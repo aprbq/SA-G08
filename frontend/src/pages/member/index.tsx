@@ -155,8 +155,8 @@ function Member() {
               <Button
             type="primary"
             className="btn-delete"
-            icon={<EditOutlined />}
-            onClick={() => Updatememberpointsbyid(record.ID,-50)}
+            icon={<DeleteOutlined />}
+            onClick={() => navigate(`/member/memberorderhistory/${record.ID}`)}
             />
             )}
           </>

@@ -34,6 +34,7 @@ import QrPage from "../../pages/order/qrpage";
 import Member from "../../pages/member";
 import MemberCreate from "../../pages/member/create";
 import MemberEdit from "../../pages/member/edit";
+import MemberHistory from "../../pages/member/memberorderhistory";
 
 const { Header, Content, Footer } = Layout;
 
@@ -133,6 +134,7 @@ const FullLayout: React.FC = () => {
               <Route path="/member" element={<Member />} />
               <Route path="/member/create" element={<MemberCreate />} />
               <Route path="/member/edit/:id" element={<MemberEdit />} />
+              <Route path="/member/memberorderhistory/:id" element={<MemberHistory />} />
             </Routes>
           </div>
         </Content>
