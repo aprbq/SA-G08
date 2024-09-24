@@ -17,8 +17,9 @@ import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { MenuInterface } from "../../../interfaces/Menu";
 import { CategoryInterface } from "../../../interfaces/Category";
 import { StockInterface } from "../../../interfaces/Stock";
+import { UnitInterface } from "../../../interfaces/Unit";
 import { IngredientInterface } from "../../../interfaces/Ingredient";
-import { CreateMenu, CreateMenuIngredient, GetCategory, GetStock, GetIngredients } from "../../../services/https/index";
+import { CreateMenu, CreateMenuIngredient, GetCategory, GetStock, GetIngredients, GetUnits } from "../../../services/https/index";
 import { useNavigate, Link } from "react-router-dom";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 import ImgCrop from "antd-img-crop";
@@ -31,6 +32,7 @@ function MenuCreate() {
   const [messageApi, contextHolder] = message.useMessage();
   const [category, setCategory] = useState<CategoryInterface[]>([]);
   const [stock, setStock] = useState<StockInterface[]>([]);
+  const [units, setUnits] = useState<UnitInterface[]>([]);
   const [ingredients, setIngredients] = useState<IngredientInterface[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
@@ -70,7 +72,7 @@ function MenuCreate() {
       messageApi.open({
         type: "success",
         content: res.data.message,
-        className:"front-1"
+        className: "front-1"
       });
 
       // Extract menu ID from the response
@@ -92,7 +94,7 @@ function MenuCreate() {
         messageApi.open({
           type: "success",
           content: "เมนูและวัตถุดิบถูกเพิ่มเรียบร้อยแล้ว!",
-          className:"front-1"
+          className: "front-1"
         });
         setTimeout(() => {
           navigate("/menus");
@@ -101,14 +103,14 @@ function MenuCreate() {
         messageApi.open({
           type: "error",
           content: ingredientsRes.data.error || "ไม่สามารถเพิ่มวัตถุดิบได้",
-          className:"front-1"
+          className: "front-1"
         });
       }
     } else {
       messageApi.open({
         type: "error",
         content: res.data.error || "ไม่สามารถสร้างเมนูได้",
-        className:"front-1"
+        className: "front-1"
       });
     }
   };
@@ -122,7 +124,7 @@ function MenuCreate() {
       messageApi.open({
         type: "error",
         content: res.data.error,
-        className:"front-1"
+        className: "front-1"
       });
     }
   };
@@ -136,7 +138,7 @@ function MenuCreate() {
       messageApi.open({
         type: "error",
         content: res.data.error,
-        className:"front-1"
+        className: "front-1"
       });
     }
   };
@@ -150,7 +152,21 @@ function MenuCreate() {
       messageApi.open({
         type: "error",
         content: res.data.error,
-        className:"front-1"
+        className: "front-1"
+      });
+    }
+  };
+
+  const getUnit = async () => {
+    let res = await GetUnits(); // Fetch units from the API
+    if (res.status === 200) {
+      setUnits(res.data);
+    } else {
+      setUnits([]);
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+        className: "front-1",
       });
     }
   };
@@ -159,6 +175,7 @@ function MenuCreate() {
     getCategory();
     getStock();
     getIngredients();
+    getUnit();
     console.log(accountid);
   }, [accountid]);
 
@@ -170,7 +187,7 @@ function MenuCreate() {
         <Divider />
 
         <Form name="basic" layout="vertical" onFinish={onFinish} onFinishFailed={() => {
-          messageApi.error({content: <span className="front-1">กรุณาตรวจสอบข้อมูลและเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ</span>,});
+          messageApi.error({ content: <span className="front-1">กรุณาตรวจสอบข้อมูลและเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ</span>, });
         }} autoComplete="off">
           <Row gutter={[16, 0]}>
 
@@ -195,7 +212,7 @@ function MenuCreate() {
                   >
                     <div>
                       <PlusOutlined />
-                      <div style={{ marginTop: 8 }}  className="front-1">อัพโหลด</div>
+                      <div style={{ marginTop: 8 }} className="front-1">อัพโหลด</div>
                     </div>
                   </Upload>
                 </ImgCrop>
@@ -208,7 +225,7 @@ function MenuCreate() {
                 name="name"
                 rules={[{ required: true, message: <span className="error-front">กรุณากรอกชื่อ !</span> }]}
               >
-                <Input className="front-1" placeholder="กรุณากรอกชื่อ"/>
+                <Input className="front-1" placeholder="กรุณากรอกชื่อ" />
               </Form.Item>
             </Col>
 
@@ -234,7 +251,7 @@ function MenuCreate() {
                 name="description"
                 rules={[{ required: true, message: <span className="error-front">กรุณากรอกคำอธิบาย !</span> }]}
               >
-                <Input className="front-1" placeholder="กรุณากรอกคำอธิบาย"/>
+                <Input className="front-1" placeholder="กรุณากรอกคำอธิบาย" />
               </Form.Item>
             </Col>
 
@@ -256,77 +273,86 @@ function MenuCreate() {
             </Col>
 
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-              <Form.List
-                name="menu_ingredients"
-                rules={[
-                  {
-                    validator: async (_, menu_ingredients) => {
-                      if (!menu_ingredients || menu_ingredients.length < 1) {
-                        return Promise.reject(new Error('กรุณาเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ!'));
-                      }
-                    },
-                  },
-                ]}
-              >
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, ...restField }) => (
-                      <Row key={key} gutter={[16, 0]} align="middle">
-                        <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-                        <Form.Item
-                            {...restField}
-                            name={[name, 'ingredients_id']}
-                            label={<span className="front-1">วัตถุดิบ</span>}
-                            rules={[{ required: true, message: <span className="error-front">กรุณาเลือกวัตถุดิบ !</span> }]}
-                          >
-                            <Select placeholder="เลือกวัตถุดิบ" className="front-1" showSearch>
-                              {ingredients.map((item) => (
-                                <Option value={item.ID} key={item.ID} className="front-1">
-                                  {item.name}
-                                </Option>
-                              ))}
-                            </Select>
-                          </Form.Item>
-                        </Col>
+            <Form.List
+  name="menu_ingredients"
+  rules={[
+    {
+      validator: async (_, menu_ingredients) => {
+        if (!menu_ingredients || menu_ingredients.length < 1) {
+          return Promise.reject(new Error('กรุณาเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ!'));
+        }
+      },
+    },
+  ]}
+>
+  {(fields, { add, remove }) => (
+    <>
+      {fields.map(({ key, name, ...restField }) => (
+        <Row key={key} gutter={[16, 0]} align="middle">
+          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
+            <Form.Item
+              {...restField}
+              name={[name, 'ingredients_id']}
+              label={<span className="front-1">วัตถุดิบ</span>}
+              rules={[{ required: true, message: <span className="error-front">กรุณาเลือกวัตถุดิบ !</span> }]}
+            >
+              <Select placeholder="เลือกวัตถุดิบ" className="front-1" showSearch>
+                {ingredients.map((item) => {
+                  const unit = units.find((u) => u.ID === item.unit_id); // Find the unit
+                  return (
+                    <Option value={item.ID} key={item.ID} className="front-1">
+                      {item.name} {unit ? `(${unit.unit})` : ''} {/* Display the unit */}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+          </Col>
 
-                        <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-                          <Form.Item
-                            {...restField}
-                            name={[name, 'quantity']}
-                            label={<span className="front-1">จำนวน</span>}
-                            rules={[{ required: true, message: <span className="error-front">กรุณากรอกจำนวน !</span> }]}
-                          >
-                            <Input style={{ width: '100%' }} className="front-1" placeholder="กรุณากรอกจำนวน"/>
-                          </Form.Item>
-                        </Col>
+          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
+            <Form.Item
+              {...restField}
+              name={[name, 'quantity']}
+              label={<span className="front-1">จำนวน</span>}
+              rules={[{ required: true, message: <span className="error-front">กรุณากรอกจำนวน !</span> }]}
+            >
+              <InputNumber
+                min={1}
+                style={{ width: '100%' }}
+                className="front-1"
+                placeholder="กรุณากรอกจำนวน"
+              />
+            </Form.Item>
+          </Col>
 
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                          <Button
-                            type="link"
-                            icon={<MinusCircleOutlined />}
-                            onClick={() => remove(name)}
-                            className="front-blue"
-                          >
-                            ลบ
-                          </Button>
-                        </Col>
-                      </Row>
-                    ))}
+          <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+            <Button
+              type="link"
+              icon={<MinusCircleOutlined />}
+              onClick={() => remove(name)}
+              className="front-blue"
+            >
+              ลบ
+            </Button>
+          </Col>
+        </Row>
+      ))}
 
-                    <Form.Item>
-                      <Button
-                        type="dashed"
-                        onClick={() => add()}
-                        block
-                        icon={<PlusOutlined />}
-                        className="front-1"
-                      >
-                        เพิ่มวัตถุดิบ
-                      </Button>
-                    </Form.Item>
-                  </>
-                )}
-              </Form.List>
+      <Form.Item>
+        <Button
+          type="dashed"
+          onClick={() => add()}
+          block
+          icon={<PlusOutlined />}
+          className="front-1"
+        >
+          เพิ่มวัตถุดิบ
+        </Button>
+      </Form.Item>
+    </>
+  )}
+</Form.List>
+
 
 
             </Col>

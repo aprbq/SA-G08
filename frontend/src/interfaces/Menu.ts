@@ -9,7 +9,7 @@ export interface MenuInterface {
 	employee_id?: number;
 	menu_ingredients?: {
 		ingredient_id: number;
-		quantity: string;
+		quantity: number;
 	  }[];
 	condition?: {
 	menu_id: number;
