@@ -231,13 +231,14 @@ function OrderConfirm() {
         messageApi.open({ type: "success", content: "บันทึกข้อมูลออเดอร์สำเร็จ" });
   
         if (values.payment_method_id === 2) {
-          // ส่งราคา aftertotalAmount และ orderItems ไปยัง QrPage
-          navigate("/order/qrpage", { state: { totalAmount: aftertotalAmount, orderItems: orderItems } });
+          // ส่งราคา aftertotalAmount และ orderItems ไปยัง QrPage พร้อมกับการแสดง QR Code
+          navigate("/order/qrpage", { state: { totalAmount: aftertotalAmount, orderItems: orderItems, showQRCode: true } });
+        } else {
+          // ส่งไปยัง QrPage โดยไม่แสดง QR Code
+          navigate("/order/qrpage", { state: { totalAmount: aftertotalAmount, orderItems: orderItems, showQRCode: false } });
+        }
         
-        }
-        else{
-          setTimeout(() => navigate("/order"), 2000);
-        }
+        
       } else {
         throw new Error(orderRes.data.error || "ไม่สามารถสร้างออเดอร์ได้");
       }
