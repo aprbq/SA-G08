@@ -249,6 +249,15 @@ body {
 
 }
 
+
+.error-front {
+  color: #ff0000 !important;
+  font-family: "Mitr", sans-serif !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  font-size: 14px;
+}
+
 .front-1,
 .front-1.ant-input-number {
   color: #000000 !important;
@@ -429,6 +438,18 @@ body {
   box-shadow: 0 4px 12px rgba(228, 170, 112, 0.3); /* Soft, warm peach shadow */
   width: 100%; /* Make the card take the full width */
   max-width: 625px; /* Set a max width */
+  margin: 0 auto; /* Center the card */
+}
+
+.card-promotion {
+  background-color: #FEF6E4; /* Light cream with warmth */
+  padding: 24px;
+  font-family: "Mitr", sans-serif!important;
+  border-radius: 12px;
+  border: 1px solid #F0E0D0; /* Subtle, warm border */
+  box-shadow: 0 4px 12px rgba(228, 170, 112, 0.3); /* Soft, warm peach shadow */
+  width: 100%; /* Make the card take the full width */
+  max-width: 1000px; /* Set a max width */
   margin: 0 auto; /* Center the card */
 }
 

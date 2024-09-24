@@ -34,11 +34,15 @@ import {
     const [menu, setMenu] = useState<MenuInterface[]>([]);
     const [isBogo, setIsBogo] = useState(false);
     const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
+    const [form] = Form.useForm();
 
     const onFinish = async (values: PromotionInterface) => {
       let payload = {
         ...values,
         "employee_id": Number(accountid),
+        "points_added": Number(values.points_added),
+        "points_use": Number(values.points_use),
+        "discount_value": Number(values.discount_value),
         "menu_ids": values.menu_id, // ส่งค่า menu_id ที่เป็น array
       };
     
@@ -163,7 +167,7 @@ import {
     return (
       <div>
         {contextHolder}
-        <Card>
+        <Card className="card-promotion">
           <h2 className="name-table">เพิ่มโปรโมชั่น</h2>
           <Divider />
   
@@ -182,22 +186,22 @@ import {
           <Row gutter={[16, 0]}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
-                  label="ชื่อ"
+                  label={<span className="front-1">ชื่อ</span>}
                   name="promotion_name"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณากรอกชื่อ !",
+                      message: <span className="error-front">กรุณากรอกชื่อ !</span>
                     },
                   ]}
                 >
-                  <Input />
+                  <Input className="front-1"/>
                 </Form.Item>
               </Col>
 
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
-                  label="คำอธิบาย"
+                  label={<span className="front-1">คำอธิบาย</span>}
                   name="description"
                   rules={[
                     {
@@ -212,7 +216,7 @@ import {
 
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
-                  label="ได้แต้ม"
+                  label={<span className="front-1">ได้แต้ม</span>}
                   name="points_added"
                   rules={[
                     {
@@ -221,18 +225,20 @@ import {
                     },
                   ]}
                 >
-                  <InputNumber
+                  <Input
+                    className="front-1"
                     min={0}
-                    max={99}
+                    type="number"
                     defaultValue={0}
                     style={{ width: "100%" }}
-                  />
+                    onChange={(e) => form.setFieldsValue({ points_added: e.target.value })}
+                />
                 </Form.Item>
               </Col>
 
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
-                  label="ใช้แต้ม"
+                  label={<span className="front-1">ใช้แต้ม</span>}
                   name="points_use"
                   rules={[
                     {
@@ -241,18 +247,20 @@ import {
                     },
                   ]}
                 >
-                  <InputNumber
+                  <Input
+                    className="front-1"
                     min={0}
-                    max={99}
+                    type="number"
                     defaultValue={0}
                     style={{ width: "100%" }}
-                  />
+                    onChange={(e) => form.setFieldsValue({ points_use: e.target.value })}
+                />
                 </Form.Item>
               </Col>
 
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
-                  label="ส่วนลด"
+                  label={<span className="front-1">ส่วนลด</span>}
                   name="discount_value"
                   rules={[
                     {
@@ -261,19 +269,21 @@ import {
                     },
                   ]}
                 >
-                  <InputNumber
+                  <Input
+                    className="front-1"
                     min={0}
+                    type="number"
                     defaultValue={0}
                     style={{ width: "100%" }}
-                    step={1}
-                  />
+                    onChange={(e) => form.setFieldsValue({ discount_value: e.target.value })}
+                />
                 </Form.Item>
               </Col>
 
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 name="discount_type_id"
-                label="ประเภทส่วนลด"
+                label={<span className="front-1">ประเภทส่วนลด</span>}
                 rules={[{ required: true, message: "กรุณาระบุประเภทส่วนลด !" }]}
               >
                 <Select allowClear onChange={handleDiscountTypeChange}>
@@ -289,8 +299,8 @@ import {
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 name="promotion_type_id"
-                label="สำหรับ"
-                rules={[{ required: true, message: "กรุณาระบุสำหรับ !" }]}
+                label={<span className="front-1">สำหรับ</span>}
+                rules={[{ required: true, message: "กรุณาระบุประเภท !" }]}
               >
                 <Select allowClear>
                   {promotiontype.map((item) => (
@@ -305,7 +315,7 @@ import {
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 name="status_id"
-                label="สถานะ"
+                label={<span className="front-1">สถานะ</span>}
                 rules={[{ required: true, message: "กรุณาระบุสถานะ !" }]}
               >
                 <Select allowClear>
@@ -319,7 +329,7 @@ import {
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Form.Item name="menu_id" label="เมนูสำหรับโปรโมชั่น" rules={[{ required: true,message: "กรุณาระบุเมนู !" }]}>
+              <Form.Item name="menu_id" label={<span className="front-1">เมนูสำหรับโปรโมชั่น</span>} rules={[{ required: true,message: "กรุณาระบุเมนู !" }]}>
               <Select mode="multiple" placeholder="Select menus">
                 {menu.map((menu) => (
                 <Option key={menu.ID} value={menu.ID}>
@@ -331,7 +341,7 @@ import {
             </Col>  
             <Col xs={24} sm={24} md={12} lg={6} xl={6}>
               <Form.Item
-                label="วัน/เดือน/ปี เริ่มโปรโมชั่น"
+                label={<span className="front-1">วัน/เดือน/ปี เริ่มโปรโมชั่น</span>}
                 name="start_date"
                 rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี เริ่มโปรโมชั่น !" }]}
               >
@@ -340,7 +350,7 @@ import {
             </Col>
             <Col xs={24} sm={24} md={12} lg={6} xl={6}>
                 <Form.Item
-                  label="วัน/เดือน/ปี หมดโปรโมชั่น"
+                  label={<span className="front-1">วัน/เดือน/ปี หมดโปรโมชั่น</span>}
                   name="end_date"
                   rules={[
                     { 
