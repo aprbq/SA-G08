@@ -433,6 +433,31 @@ async function UpdateMemberStatusById(id: string, status_id: number,end_date:Dat
     .then((res) => res)
     .catch((e) => e.response);
 }
+
+async function UpdateMemberPointsById(id: string, pointsDelta: number) {
+  const currentPoints = await axios
+    .get(`${apiUrl}/member/${id}`, requestOptions)
+    .then((res) => res.data.points)
+    .catch((e) => {
+      console.error(e.response);
+      return null;
+    });
+
+  if (currentPoints === null) {
+    throw new Error('Failed to fetch current points.');
+  }
+  const updatedPoints = currentPoints + pointsDelta;
+
+  return await axios
+    .put(
+      `${apiUrl}/member/${id}`,
+      { points: updatedPoints },  
+      requestOptions
+    )
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 async function DeleteMemberById(id: string) {
   return await axios
     .delete(`${apiUrl}/member/${id}`, requestOptions)
@@ -550,6 +575,7 @@ export {
   DeleteMemberById,
   CreateMember,
   UpdateMemberStatusById,
+  UpdateMemberPointsById,
 
   GetSuppliers,
   GetSupplierById,
@@ -563,6 +589,7 @@ export {
   GetRowMember,
   GetRowIngredient,
   GetRowPromotion,
+
   
 
 };

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message ,Modal,Card,Statistic, Input} from "antd";
 import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { GetMember, DeleteMemberById ,UpdateMemberStatusById} from "../../services/https/index";
+import { GetMember, DeleteMemberById ,UpdateMemberStatusById,UpdateMemberPointsById} from "../../services/https/index";
 import { MemberInterface } from "../../interfaces/Member";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
@@ -145,6 +145,24 @@ function Member() {
           </>
         ),
       },
+      {
+        title: "",
+        render: (record) => (
+          <>
+            {myId == record?.ID ? (
+              <></>
+            ) : (
+              <Button
+            type="primary"
+            className="btn-delete"
+            icon={<EditOutlined />}
+            onClick={() => Updatememberpointsbyid(record.ID,-50)}
+            />
+            )}
+          </>
+        ),
+      },
+      
   ];
 
 
@@ -167,6 +185,21 @@ function Member() {
   const updateMemberStatusById = async (id: string ) => {
     const currentdate = new Date();
     let res = await UpdateMemberStatusById(id,2,currentdate);
+    if (res.status == 200) {
+      messageApi.open({
+        type: "success",
+        content: res.data.message,
+      });
+      await getMember();
+    } else {
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
+    }
+  };
+  const Updatememberpointsbyid = async (id: string ,pointsDelta: number) => {
+    let res = await UpdateMemberPointsById(id,pointsDelta);
     if (res.status == 200) {
       messageApi.open({
         type: "success",
