@@ -107,11 +107,7 @@ function IngredientsCreate() {
   return (
     <div>
       {contextHolder}
-      <Row gutter={[16, 16]} justify="center" style={{ marginBottom: "20px" }}>
-        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-          <h1 className="heading-style">เพิ่มข้อมูลวัตถุดิบ</h1>
-        </Col>
-      </Row>
+      
       <Card className="card-ingredient">
         <Form
           name="basic"
@@ -120,6 +116,11 @@ function IngredientsCreate() {
           onFinish={onFinish}
           autoComplete="off"
         >
+          <Row gutter={[16, 16]} justify="center" style={{ marginBottom: "20px" }}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+              <h1 className="heading-style">เพิ่มข้อมูลวัตถุดิบ</h1>
+            </Col>
+          </Row>
           <Row gutter={[16, 16]} justify="center" style={{ marginTop: "0px" }}>
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
@@ -129,7 +130,7 @@ function IngredientsCreate() {
                   { pattern: /^[a-zA-Zก-ฮะ-์\s]+$/, message: "กรุณากรอกเฉพาะตัวอักษรภาษาไทยหรือภาษาอังกฤษเท่านั้น !" }
                 ]}
               >
-                <Input className="front-1" />
+                <Input className="front-1" placeholder="Enter name"/>
               </Form.Item>
             </Col>
             
@@ -139,7 +140,7 @@ function IngredientsCreate() {
                 name="class_id"
                 rules={[{ required: true, message: "กรุณาเลือกประเภท !" }]}
               >
-                <Select className="front-1" allowClear>
+                <Select className="front-1" placeholder="Choose type" allowClear>
                   {classes.map((item) => (
                     <Option value={item.ID} key={item.class}>
                       {item.class}
@@ -156,6 +157,7 @@ function IngredientsCreate() {
                 rules={[{ required: true, message: "กรุณากรอกจำนวน !" }]}
               >
                 <Input
+                  placeholder="Qty"
                   className="front-1"
                   min={0}
                   type="number"
@@ -170,9 +172,9 @@ function IngredientsCreate() {
               <Form.Item
                 label={<span className="front-1">หน่วย</span>}
                 name="unit_id"
-                rules={[{ required: true, message: "กรุณากรอกหน่วย !" }]}
+                rules={[{ required: true, message: "กรุณาเลือกหน่วย !" }]}
               >
-                <Select className="front-1" allowClear>
+                <Select className="front-1" placeholder="Choose unit" allowClear>
                   {unit.map((item) => (
                     <Option value={item.ID} key={item.ID}>
                       {item.unit}
@@ -189,6 +191,7 @@ function IngredientsCreate() {
                 rules={[{ required: true, message: "กรุณากรอกราคาต่อหน่วย !" }]}
               >
                 <Input
+                  placeholder="Description"
                   min={1}
                   className="front-1"
                   type="number"
@@ -203,9 +206,9 @@ function IngredientsCreate() {
               <Form.Item
                 label={<span className="front-1">ผู้ผลิต</span>}
                 name="suppliers_id"
-                rules={[{ required: true, message: "กรุณากรอกชื่อผู้ผลิต !" }]}
+                rules={[{ required: true, message: "กรุณาเลือกชื่อผู้ผลิต !" }]}
               >
-                <Select className="front-1" allowClear>
+                <Select className="front-1" placeholder="Choose supplier" allowClear>
                   {supplier.map((item) => (
                     <Option value={item.ID} key={item.name}>
                       {item.name}
@@ -219,7 +222,7 @@ function IngredientsCreate() {
               <Form.Item
                 label={<span className="front-1">วันหมดอายุ</span>}
                 name="exp_date"
-                rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี หมดอายุ !" }]}
+                rules={[{ required: true, message: "กรุณาเลือกวันหมดอายุ !" }]}
               >
                 <DatePicker style={{ width: "100%" }} className="front-1" 
                   disabledDate={(current) => current && current < moment().startOf('day')}
