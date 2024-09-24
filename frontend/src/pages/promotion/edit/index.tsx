@@ -10,18 +10,16 @@ import {
     Card,
     message,
     DatePicker,
-    InputNumber,
     Select,
   } from "antd";
-  import { PlusOutlined } from "@ant-design/icons";
-  import { PromotionInterface } from "../../../interfaces/Promotion";
+  import { PlusOutlined,CheckOutlined,ExclamationCircleOutlined } from "@ant-design/icons";
   import { StatusInterface } from "../../../interfaces/Status";
   import { DiscountTypeInterface } from "../../../interfaces/Discounttype";
   import { PromotionTypeInterface } from "../../../interfaces/Promotiontype";
   import { MenuInterface } from "../../../interfaces/Menu";
-  import { ConditionInterface } from "../../../interfaces/Condition";
   import { UpdateConditionById,GetStatus,GetDiscountType,GetPromotionType,GetMenu,GetPromotionById, UpdatePromotionById,GetConditionById } from "../../../services/https";
   import { useNavigate, Link, useParams } from "react-router-dom";
+  import { Modal } from "antd";
   import dayjs from "dayjs";
 
 
@@ -35,9 +33,8 @@ import {
     const [promotiontype, setPromotionType] = useState<PromotionTypeInterface[]>([]);
     const [discounttype, setDiscountType] = useState<DiscountTypeInterface[]>([]);
     const [menu, setMenu] = useState<MenuInterface[]>([]);
-    const [condition, setCondition] = useState<ConditionInterface[]>([]);
-    const [promotion, setPromotion] = useState<PromotionInterface[]>([]);
-    const [isBogo, setIsBogo] = useState(false);
+    
+
 
     const [form] = Form.useForm();
     const getPromotionById = async (id: string) => {
@@ -69,8 +66,19 @@ import {
     };
 
     const onFinish = async (values: any) => {
+      Modal.confirm({
+        title: "ยืนยันการสร้างโปรโมชั่น",
+        content: "คุณแน่ใจหรือไม่ว่าต้องการบันทึกการแก้โปรโมชั่นนี้?",
+        okText: "ตกลง",
+        cancelText: "ยกเลิก",
+        icon: <CheckOutlined style={{color:"green"}}/>,
+        okButtonProps: { className: "confirm-button"  }, // Primary button
+        cancelButtonProps: { className: "back-button" },
+        className:"front-1",
+        onOk: async () => {
       console.log('ค่าของฟอร์ม:', values); // แสดงค่าของฟอร์ม
       try {
+
         const { menu_id, points_added, points_use, discount_value, ...promotionData } = values;
     
         const promotionPayload = {
@@ -128,7 +136,31 @@ import {
           content: "เกิดข้อผิดพลาดขณะอัปเดตโปรโมชั่น",
         });
       }
-    };
+    },
+    onCancel() {
+      console.log("ยกเลิกการสร้างโปรโมชั่น");
+    },
+    });
+  };
+
+  const onCancel = () => {
+    Modal.confirm({
+      title: "ยืนยันการยกเลิก",
+      content: "คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการแก้โปรโมชั่นนี้?",
+      okText: "ตกลง",
+      cancelText: "ยกเลิก",
+      className:"front-1",
+      okButtonProps: { className: "confirm-button"  }, // Primary button
+      cancelButtonProps: { className: "back-button" },
+      icon: <ExclamationCircleOutlined style={{color:"red"}}/>,
+      onOk() {
+        navigate("/promotion");
+      },
+      onCancel() {
+        console.log("ยกเลิกการยกเลิก");
+      },
+    });
+  };
     
     
     
@@ -425,8 +457,8 @@ import {
               <Col style={{ marginTop: "40px" }}>
                 <Form.Item>
                   <Space>
-                    <Link to="/promotion">
-                      <Button className="back-button" htmlType="button" style={{ marginRight: "10px" }}>
+                    <Link to="#">
+                      <Button className="back-button" htmlType="button" style={{ marginRight: "10px" }} onClick={onCancel}>
                         ย้อนกลับ
                       </Button>
                     </Link>

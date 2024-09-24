@@ -59,6 +59,7 @@ func SignUp(c *gin.Context) {
 		FirstName: payload.FirstName,
 		LastName:  payload.LastName,
 		Email:     payload.Email,
+		Username: payload.Username,
 		Password:  hashedPassword,
 		PictureEmployee:   payload.PictureEmployee,
 		GenderID:  payload.GenderID,

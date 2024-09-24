@@ -20,6 +20,7 @@ import { CreateEmployee,GetGender,GetRole } from "../../../services/https";
 import { useNavigate, Link } from "react-router-dom";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 import ImgCrop from "antd-img-crop";
+import { Modal } from "antd";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 const { Option } = Select;
@@ -121,13 +122,14 @@ function CustomerCreate() {
           name="basic"
           layout="vertical"
           onFinish={onFinish}
+          className="front-1"
           autoComplete="off"
         >
           <Row gutter={[16, 0]}>
 
           <Col xs={12} sm={12} md={12} lg={12} xl={12} style={{ textAlign: "center" }}>
               <Form.Item
-                label="รูปพนักงาน"
+                label={<span className="front-1">รูปพนักงาน</span>}
                 name="picture_employee"
                 valuePropName="fileList"
               >
@@ -147,7 +149,7 @@ function CustomerCreate() {
                   {fileList.length < 1 && ( // ตรวจสอบว่ามีไฟล์อัพโหลดแล้วหรือไม่ ถ้ามีแล้วจะไม่แสดงปุ่มอัพโหลด
                     <div>
                       <PlusOutlined />
-                      <div style={{ marginTop: 8 }}>อัพโหลด</div>
+                      <div style={{ marginTop: 8 }}className="front-1">อัพโหลด</div>
                     </div>
                   )}
                 </Upload>
@@ -156,7 +158,7 @@ function CustomerCreate() {
             </Col>
           <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                     <Form.Item
-                      label="ชื่อจริง"
+                      label={<span className="front-1">ชื่อจริง</span>}
                       name="first_name"
                       rules={[
                         {
@@ -165,13 +167,13 @@ function CustomerCreate() {
                         },
                       ]}
                     >
-                      <Input />
+                      <Input className="front-1" placeholder="First name"/>
                     </Form.Item>
                   </Col>
 
                   <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                     <Form.Item
-                      label="นามกสุล"
+                      label={<span className="front-1">นามสกุล</span>}
                       name="last_name"
                       rules={[
                         {
@@ -180,18 +182,18 @@ function CustomerCreate() {
                         },
                       ]}
                     >
-                      <Input />
+                      <Input className="front-1" placeholder="Last name"/>
                     </Form.Item>
                   </Col>
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <Form.Item
                       name="gender_id"
-                      label="เพศ"
+                      label={<span className="front-1">เพศ</span>}
                       rules={[{ required: true, message: "กรุณาระบุเพศ !" }]}
                     >
-                      <Select allowClear>
+                      <Select allowClear className="front-1" placeholder="Select gender">
                         {gender.map((item) => (
-                          <Option value={item.ID} key={item.gender_name}>
+                          <Option value={item.ID} key={item.gender_name} className="front-1">
                             {item.gender_name}
                           </Option>
                         ))}
@@ -201,7 +203,7 @@ function CustomerCreate() {
 
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <Form.Item
-                      label="อีเมล"
+                      label={<span className="front-1">อีเมล</span>}
                       name="email"
                       rules={[
                         {
@@ -214,13 +216,13 @@ function CustomerCreate() {
                         },
                       ]}
                     >
-                      <Input />
+                      <Input className="front-1" placeholder="Email"/>
                     </Form.Item>
                   </Col>
 
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <Form.Item
-                      label="Username"
+                      label={<span className="front-1">Username</span>}
                       name="username"
                       rules={[
                         {
@@ -229,13 +231,13 @@ function CustomerCreate() {
                         },
                       ]}
                     >
-                      <Input />
+                      <Input className="front-1" placeholder="Username"/>
                     </Form.Item>
                   </Col>
 
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <Form.Item
-                      label="รหัสผ่าน"
+                      label={<span className="front-1">Password</span>}
                       name="password"
                       rules={[
                         {
@@ -244,12 +246,12 @@ function CustomerCreate() {
                         },
                       ]}
                     >
-                      <Input.Password />
+                      <Input.Password className="front-1" placeholder="Password"/>
                     </Form.Item>
                   </Col>
                   <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                     <Form.Item
-                      label="ตำแหน่งงาน"
+                      label={<span className="front-1">ตำแหน่งงาน</span>}
                       name="role_id"
                       rules={[
                         {
@@ -258,9 +260,9 @@ function CustomerCreate() {
                         },
                       ]}
                     >
-                     <Select allowClear>
+                     <Select allowClear className="front-1" placeholder="Select role">
                         {role.map((item) => (
-                          <Option value={item.ID} key={item.role_name}>
+                          <Option value={item.ID} key={item.role_name} className="front-1">
                             {item.role_name}
                           </Option>
                         ))}
@@ -274,7 +276,7 @@ function CustomerCreate() {
               <Form.Item>
                 <Space>
                   <Link to="/employee">
-                    <Button htmlType="button" style={{ marginRight: "10px" }}>
+                    <Button htmlType="button" className="back-button" style={{ marginRight: "10px" }}>
                       ยกเลิก
                     </Button>
                   </Link>
@@ -282,6 +284,7 @@ function CustomerCreate() {
                   <Button
                     type="primary"
                     htmlType="submit"
+                    className="confirm-button"
                     icon={<PlusOutlined />}
                   >
                     ยืนยัน

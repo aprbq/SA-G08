@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message, Modal,List, Typography,Input } from "antd";
-import { PlusOutlined, DeleteOutlined , EditOutlined,HistoryOutlined,EyeOutlined,SearchOutlined} from "@ant-design/icons";
+import { Space, Table, Button, Col, Row, Divider, message, Modal,List, Typography} from "antd";
+import { PlusOutlined, DeleteOutlined , EditOutlined,HistoryOutlined,EyeOutlined,ExclamationCircleOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetPromotion, DeletePromotionById,GetConditionById,UpdatePromotionById } from "../../services/https/index";
 import { PromotionInterface } from "../../interfaces/Promotion";
@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 
 const { confirm } = Modal;
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 function Promotion() {
   const navigate = useNavigate();
@@ -199,9 +199,10 @@ function Promotion() {
       title: "คุณแน่ใจหรือว่าต้องการลบ'โปรโมชั่น'",
       content: "การลบจะไม่สามารถยกเลิกได้",
       okText: "ยืนยัน",
-      okType: "danger",
       cancelText: "ยกเลิก",
-      className:  "front-1",
+      okButtonProps: { className: "confirm-button"  }, // Primary button
+      cancelButtonProps: { className: "back-button" },
+      icon: <ExclamationCircleOutlined style={{color:"red"}}/>,
       onOk() {
         deletePromotionById(id);
       },

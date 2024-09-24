@@ -10,12 +10,11 @@ import {
   message,
   Table,
 } from "antd";
-import {  SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { OrderInterface } from '../../../interfaces/Order';
 import { GetOrder } from "../../../services/https"; // Import GetOrders service
-import {  Link } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 
 function PromotionHistory() {
   const [messageApi, contextHolder] = message.useMessage();
@@ -51,7 +50,7 @@ function PromotionHistory() {
     setSearchText(value);
     
     const filtered = orders.filter((order) => {
-      const promotionName = order.promotion?.promotion_name || ""; // เข้าถึงชื่อโปรโมชั่น
+      const promotionName = order.promotion?.promotion_name || ""; // Access promotion name
       return promotionName.toLowerCase().includes(value.toLowerCase());
     });
     
@@ -67,14 +66,14 @@ function PromotionHistory() {
     {
       title: "Promotion Name",
       dataIndex: "promotion",
-      render: (promotion) => promotion?.promotion_name, // เข้าถึงชื่อโปรโมชั่นโดยตรง
+      render: (promotion) => promotion?.promotion_name||"ลบแล้ว", // Access promotion name directly
     },
     {
       title: "Order Date",
       dataIndex: "order_date",
       key: "order_date",
       render: (order_date: string) => {
-        return new Date(order_date).toLocaleDateString(); // แสดงเฉพาะวันที่
+        return new Date(order_date).toLocaleDateString(); // Show only date
       },
     },
   ];
@@ -82,14 +81,15 @@ function PromotionHistory() {
   return (
     <div>
       {contextHolder}
-      <Card>
+      <Card className="card-promotion">
         <h2 className="name-table">ประวัติการใช้งาน</h2>
         <Divider />
 
         {/* Search Input for Promotion History */}
         <Row gutter={[16, 0]} style={{ marginBottom: "20px" }}>
-          <Col span={12}>
+          <Col span={12} className="front-1">
             <Input
+              className="front-1"
               placeholder="Search Promotion History"
               prefix={<SearchOutlined />}
               value={searchText}
@@ -98,11 +98,18 @@ function PromotionHistory() {
           </Col>
         </Row>
 
+        {/* Display Count of Filtered Orders */}
+        <Row style={{ marginBottom: "20px" }}>
+          <Col>
+            <h4 className="front-1">จำนวนข้อมูลประวัติตามชื่อ: {filteredOrders.length} รายการ</h4>
+          </Col>
+        </Row>
+
         <Table
           columns={columns}
           dataSource={filteredOrders}
           rowKey="id"
-          pagination={{ pageSize: 10 }} 
+          pagination={{ pageSize: 10 }}
           className="custom-table" 
           rowClassName={(record, index) => 
             index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"
@@ -126,4 +133,3 @@ function PromotionHistory() {
 }
 
 export default PromotionHistory;
-

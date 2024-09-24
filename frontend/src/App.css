@@ -152,7 +152,8 @@ body {
 
 
 .middle-bg{
-  background-color: #ffffff60;/*พื้นหลังในหน้าต่างๆ*/
+  background-color: #e3d0b6;/*พื้นหลังในหน้าต่างๆ*/
+  
 }
 
 .confirm-button{
@@ -181,71 +182,11 @@ body {
 }
 
 
-.btn-history {
-  appearance: none;
-  background-color: #FFFFFF;
-  border-width: 0;
-  box-sizing: border-box;
-  color: #000000;
-  cursor: pointer;
-  display: inline-block;
-  font-family: Clarkson,Helvetica,sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0;
-  line-height: 1em;
-  margin: 0;
-  opacity: 1;
-  outline: 0;
-  padding: 1.5em 2.2em;
-  position: relative;
-  text-align: center;
-  text-decoration: none;
-  text-rendering: geometricprecision;
-  text-transform: uppercase;
-  transition: opacity 300ms cubic-bezier(.694, 0, 0.335, 1),background-color 100ms cubic-bezier(.694, 0, 0.335, 1),color 100ms cubic-bezier(.694, 0, 0.335, 1);
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  vertical-align: baseline;
-  white-space: nowrap;
-}
-
-.btn-history {
-  background-color: #f8f9fa;
-  border: 1px solid #f8f9fa;
-  border-radius: 4px;
-  color: #3c4043;
-  cursor: pointer;
-  font-family: arial,sans-serif;
-  font-size: 14px;
-  height: 25px;
-  line-height: 27px;
-  min-width: 54px;
-  padding: 0 16px;
-  text-align: center;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: pre;
-
-}
-
-.btn-history:hover {
-  border-color: #dadce0;
-  box-shadow: rgba(224, 222, 86, 0.1) 0 1px 1px;
-  color: #202124;
-}
-
-.btn-history:focus {
-  border-color: #4285f4;
-  outline: none;
-}
 
 .btn-1 {
   outline: none;
   box-shadow: none;
-  background: #000;
+  background: #463120;
   color: #fff;
   border-radius: 4px;
   transition: all .25s ease;
@@ -266,7 +207,7 @@ body {
 .btn-1:hover {
   background: #fff !important;
   color: #000 !important;
-  transform: translate(-2px, -2px);
+  transform: translate(-1px, -1px);
 }
 .btn-1:active {
   background: #ddd !important; /* Slightly different color when active */
@@ -277,7 +218,7 @@ body {
   color: #000000 !important;
   font-family: "Mitr", sans-serif;
   font-weight: normal;
-  font-size: 18px;
+  font-size: 22px;
   font-style: normal;
 
 }
@@ -355,8 +296,8 @@ body {
 }
 
 .btn-3:hover {
-  background-color: #000000 !important;
-  color: #ffffff!important; /* Lighter shade on hover */
+  background-color: #bebebe !important;
+  color: #000000!important; /* Lighter shade on hover */
 }
 
 .btn-3:focus {
@@ -399,35 +340,42 @@ body {
   text-decoration: none;
 }
 .header-menu {
-  background-color: #c9b899!important; /* สีheadermenu แถบเลือกหน้า */
+  background-color: #af8960!important; /* สีheadermenu แถบเลือกหน้า */
 }
 .header-menu .ant-menu-item {
-  color: #5C2C06 !important;
+  color: #ffffff !important;
   font-family: "Mitr", sans-serif;
   font-weight: normal;
   font-size: 18px;
   font-style: normal;
+  border-radius: 12px!important;
 }
 
 .header-menu .ant-menu-item a {
   color: inherit; /* Inherit color from parent */
   text-decoration: none;
+  border-radius: 12px!important;
+  
 }
 
 .header-menu .ant-menu-item:hover {
-  background-color: #ffffff8a!important; /*Hover color */
+  background-color: #ffffffbe!important; /*Hover color */
   border-bottom: 4px solid #5C2C06;
+  border-radius: 12px!important;
+  color: #5C2C06 !important;
 }
 
 .header-menu .ant-menu-item-active,
 .header-menu .ant-menu-item-selected {
-  background-color: #ffffff8a!important; /* Active/selected color 533f38*/
+  background-color: #ffffffbe!important; /* Active/selected color 533f38*/
   border-bottom: 4px solid #5C2C06; /* Optional: adds a bottom border */
+  border-radius: 12px !important;
+  color: #5C2C06!important;
 }
 
 .header-menu .ant-menu-item-active a,
 .header-menu .ant-menu-item-selected a {
-  color: #5C2C06;
+  color: #5C2C06!important;
 }
 
 /* กำหนดสไตล์สำหรับหัวตาราง */

@@ -118,14 +118,14 @@ export default function Index() {
   }, [rowMenu]);
 
   return (
-    <div style={{ backgroundColor: "#ffe8bf", minHeight: "100vh" }}>
+    <div style={{  minHeight: "100vh" }}>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={24} md={24} lg={24} xl={24}>
           <h2>แดชบอร์ด</h2>
         </Col>
 
         <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-          <Card style={{ backgroundColor: "#F5F5F5" }}>
+          <Card className="bg-1">
             <Row gutter={[16, 16]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Card
@@ -183,14 +183,6 @@ export default function Index() {
               </Col>
             </Row>
           </Card>
-        </Col>
-
-        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-          <h3>ผู้ใช้งานล่าสุด</h3>
-        </Col>
-
-        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-          <Table columns={columns} dataSource={data} />
         </Col>
       </Row>
     </div>

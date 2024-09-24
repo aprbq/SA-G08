@@ -99,8 +99,8 @@ const FullLayout: React.FC = () => {
           <Link to="/member">สมาชิก</Link>
         </Menu.Item>
       </Menu>
-        <Content className="bg" style={{ margin: "0px", paddingTop: "20px"}}>
-          <Breadcrumb style={{ margin: "0px 0" }} />
+        <Content className="middle-bg" style={{ margin: "0px", paddingTop: "0px"}}>
+          <Breadcrumb className="middle-bg" style={{ margin: "0px", height:"0px"}} />
           <div
             className="middle-bg"
             style={{
