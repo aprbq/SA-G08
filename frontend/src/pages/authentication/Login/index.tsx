@@ -30,8 +30,11 @@ function SignInPages() {
     <>
       {contextHolder}
       <Flex justify="center" align="center" className="login">
-        <Card className="card-login" style={{ width: 550, padding: "1px" }}>
-          <Row align={"middle"} justify={"center"} style={{ height: "450px", overflow: "hidden" }}>
+        <Row className="images-logocafe">
+          <img alt="logo"src={logo} className="images"/>
+        </Row>
+        <Card className="card-login" >
+          <Row >
             <Col xs={24} sm={24} md={24} lg={24} xl={24}
             style={{
               display: "flex",          // ใช้ Flexbox
@@ -40,12 +43,6 @@ function SignInPages() {
               marginBottom: "0px"       // กำหนดระยะห่างด้านล่างทั้งหมด
             }}
             >
-            <img
-                alt="logo"
-                style={{ width: "30%", marginBottom: "0px" }}
-                src={logo}
-                className="images-logocafe"
-              />
               <div className = "text-head">
                 <h2 style={{ marginBottom: "0px" }}>BIG DOOK CAFE</h2> 
               </div>

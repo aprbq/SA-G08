@@ -248,35 +248,6 @@ function CustomerEdit() {
                     </Form.Item>
                   </Col>
 
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                    <Form.Item
-                      label="Username"
-                      name="username"
-                      rules={[
-                        {
-                          required: true,
-                          message: "กรุณากรอก username !",
-                        },
-                      ]}
-                    >
-                      <Input />
-                    </Form.Item>
-                  </Col>
-
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                    <Form.Item
-                      label="รหัสผ่าน"
-                      name="password"
-                      rules={[
-                        {
-                          required: true,
-                          message: "กรุณากรอกรหัสผ่าน !",
-                        },
-                      ]}
-                    >
-                      <Input.Password />
-                    </Form.Item>
-                  </Col>
                   <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                     <Form.Item
                       label="ตำแหน่งงาน"

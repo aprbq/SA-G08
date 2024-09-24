@@ -7,20 +7,48 @@ body {
 
 }
 
-
 .login {
 
   margin: 0;
-
   height: 100vh;
+  width: 100%;
+  background-color: #b19883;
+  background-image: url(..\src\assets\coffee-latte-with-cookies-coffiee-beans.jpg); /* ใส่ URL ของรูปภาพที่ต้องการ */
+  background-size: cover; /* ทำให้รูปภาพขยายให้เต็มพื้นที่ */
+  background-position: center; /* จัดตำแหน่งรูปภาพให้อยู่ตรงกลาง */
+
+}
+
+.card-login {
+  overflow-y: hidden;
+  background-color: rgba(255, 255, 255, 0.9); /* สีพื้นหลังขาวแบบโปร่งแสง */
+  border: 1px solid rgba(0, 0, 0, 0.1); /* เพิ่มกรอบสีอ่อน */
+  width: 100%;
+  height: 100%;
+  max-height: 600px;
+  max-width: 300px;
+  border-radius: 8px; /* ทำให้มุมกรอบมีความโค้งมน */
+  backdrop-filter: blur(5px); /* เบลอพื้นหลัง */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+}
+
+
+
+.images-logocafe {
+  
+  width: 40%;
+  height: 60%;
+  object-fit: contain;
+  position: center;
+
+}
+
+.login-form-button {
 
   width: 100%;
 
-  /* overflow: scroll; */
-
-  background-color: #F5F5F5;
-
 }
+
 
 
 .header {
@@ -56,37 +84,6 @@ body {
   font-size: 25px;
   font-style: normal;
   text-align: left;
-}
-
-
-.card-login {
-
-  overflow-y: hidden;
-
-  width: 70%;
-
-  height: auto;
-
-  max-height: 550px;
-
-}
-
-.images-logo {
-
-  width: 100%;
-
-  height: auto;
-
-  max-height: 400px;
-
-  object-fit: contain;
-
-}
-
-.login-form-button {
-
-  width: 100%;
-
 }
 
 
