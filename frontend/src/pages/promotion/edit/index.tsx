@@ -226,13 +226,14 @@ import {
       <div>
         {contextHolder}
         <Card>
-          <h2 className="name-table">เพิ่มโปรโมชั่น</h2>
+          <h2 className="name-table">แก้ไขโปรโมชั่น</h2>
           <Divider />
   
           <Form
             name="basic"
             layout="vertical"
             onFinish={onFinish}
+            form={form}
             autoComplete="off"
             initialValues={{
               points_added: 0,

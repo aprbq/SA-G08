@@ -5,7 +5,6 @@ import { MenuInterface } from '../../../interfaces/Menu';
 import { OrdersweetInterface } from '../../../interfaces/Ordersweet';
 import { OrderItemInterface } from '../../../interfaces/OrderItem';
 import { PromotionInterface } from '../../../interfaces/Promotion';
-import { PromotionTypeInterface } from '../../../interfaces/Promotiontype';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { GetMenu, GetOrdersweet, GetPromotion } from '../../../services/https';
 
@@ -16,7 +15,6 @@ function OrderitemCreate() {
   const [menu, setMenu] = useState<MenuInterface[]>([]);
   const [ordersweet, setOrdersweet] = useState<OrdersweetInterface[]>([]);
   const [orderItems, setOrderItems] = useState<OrderItemInterface[]>([]);
-  // const [promotiontype, setPromotiontype] = useState<PromotionTypeInterface[]>([]);
   const [selectedMenuPrice, setSelectedMenuPrice] = useState<number>(0);
   const location = useLocation();
   const [form] = Form.useForm();
@@ -47,16 +45,15 @@ function OrderitemCreate() {
   const onFinish = (values: OrderItemInterface) => {
     const selectedMenu = menu.find((item) => item.ID === values.menu_id);
   
-  // ตรวจสอบว่าสินค้า out of stock หรือไม่
-  if (selectedMenu?.stock_id === 2) {
-    messageApi.open({
-      type: 'error',
-      content: 'สินค้าไม่พร้อมจำหน่าย',
-    });
-    return; // ยกเลิกการบันทึก order item
-  }
+    // ตรวจสอบว่าสินค้า out of stock หรือไม่
+    if (selectedMenu?.stock_id === 2) {
+      messageApi.open({
+        type: 'error',
+        content: 'สินค้าไม่พร้อมจำหน่าย',
+      });
+      return; // ยกเลิกการบันทึก order item
+    }
 
-    
     addOrderItem(values);
     form.resetFields();
   };
@@ -103,7 +100,6 @@ function OrderitemCreate() {
   };
 
   const getPromotions = async () => {
-    // ฟังก์ชันเพื่อดึงโปรโมชั่น
     try {
       let res = await GetPromotion(); // เพิ่มฟังก์ชันที่ดึงโปรโมชั่น
       if (res.status === 200) {
@@ -272,11 +268,6 @@ function OrderitemCreate() {
             <Col style={{ marginTop: '40px' }}>
               <Form.Item>
                 <Space>
-                  <Link to="/order">
-                    <Button className="back-button" htmlType="button" style={{ marginRight: '10px' }}>
-                      ยกเลิก
-                    </Button>
-                  </Link>
                   <Button
                     type="primary"
                     htmlType="submit"
