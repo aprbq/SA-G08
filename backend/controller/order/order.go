@@ -191,6 +191,13 @@ func CreateOrder(c *gin.Context) {
 		return
 	}
 
+	var member entity.Member
+	db.First(&member, order.MemberID)
+	if member.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "member not found"})
+		return
+	}
+
 	// สร้าง Order
 	newOrder := entity.Order{
 		OrderDate:      order.OrderDate,
@@ -202,6 +209,8 @@ func CreateOrder(c *gin.Context) {
 		Promotion:      &promotion,
 		PaymentmethodID: order.PaymentmethodID,
 		Paymentmethod:  &paymentmethod,
+		MemberID: order.MemberID,
+		Member:  &member,
 	}
 
 	// บันทึก Order
@@ -226,7 +235,7 @@ func CreateOrder(c *gin.Context) {
 func GetAll(c *gin.Context) {
 	var orders []entity.Order
 	db := config.DB()
-	results := db.Preload("Paymentmethod").Preload("Promotion").Preload("Employee").Preload("Orderitem").Preload("MemberOrderHistory").Find(&orders)
+	results := db.Preload("Paymentmethod").Preload("Promotion").Preload("Employee").Preload("Orderitem").Preload("Member").Find(&orders)
 
 	if results.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
@@ -239,7 +248,7 @@ func Get(c *gin.Context) {
 	ID := c.Param("id")
 	var order entity.Order
 	db := config.DB()
-	results := db.Preload("Paymentmethod").Preload("Promotion").Preload("Employee").Preload("Orderitem").Preload("MemberOrderHistory").Find(&order, ID)
+	results := db.Preload("Paymentmethod").Preload("Promotion").Preload("Employee").Preload("Orderitem").Preload("Member").Find(&order, ID)
 
 	if results.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})

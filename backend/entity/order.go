@@ -23,5 +23,8 @@ type Order struct {
 
 	Orderitem []Orderitem `gorm:"foreignKey:OrderID"`
 
-	MemberOrderHistory []MemberOrderHistory `gorm:"foreignKey:OrderID"`
+	//MemberOrderHistory []MemberOrderHistory `gorm:"foreignKey:OrderID"`
+
+	MemberID 	uint		`json:"member_id"`
+	Member    	*Member   	`gorm:"foreignKey: MemberID" json:"member"`
 }

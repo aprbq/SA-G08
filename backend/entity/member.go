@@ -27,5 +27,8 @@ type Member struct {
 	GenderID uint    `json:"gender_id"`
 	Gender   Gender `gorm:"foreignKey:GenderID" json: "gender"`
 	
-	MemberOrderHistory []MemberOrderHistory `gorm:"foreignKey:MemberID"`
+	//MemberOrderHistory []MemberOrderHistory `gorm:"foreignKey:MemberID"`
+
+	Order []Order `gorm:"foreignKey:MemberID"`
+
 }

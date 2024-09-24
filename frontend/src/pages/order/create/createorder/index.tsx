@@ -158,7 +158,7 @@ function OrderConfirm() {
 
   const onFinish = async (values: { promotion_id: number; payment_method_id: number; promotion_type_id: number }) => {
     const isMemberValid = await getMember(phoneNumber!); // ตรวจสอบเบอร์โทรศัพท์และสถานะสมาชิก
-    
+  
     // เช็ค promotion_type_id
     if (values.promotion_type_id === 1 && !isMemberValid) {
       messageApi.open({ type: "error", content: "เบอร์โทรศัพท์ไม่ถูกต้องหรือต้องห้ามการสั่งซื้อ!" });
@@ -183,25 +183,32 @@ function OrderConfirm() {
     }
   
     let updatedPoints = 0;
-
+  
     if (isMemberValid) {
       // ดึงข้อมูลสมาชิกที่ตรงกับเบอร์โทรศัพท์
       const memberRes = await GetMember();
       const member = memberRes.data.find((m: MemberInterface) => m.phone_number === phoneNumber);
-    
+  
       if (member) {
         updatedPoints = member.points || 0; // ตั้งค่า point เดิมของสมาชิก
-    
+  
+        // ตรวจสอบว่าแต้มที่มีพอสำหรับใช้หรือไม่
+        if (selectedPromotion?.points_use && selectedPromotion.points_use !== 0) {
+          if (updatedPoints < selectedPromotion.points_use) {
+            // ถ้าแต้มไม่พอ ให้แสดงข้อความแจ้งเตือนและหยุดการทำงาน
+            messageApi.open({ type: "error", content: "แต้มสะสมไม่พอสำหรับการใช้โปรโมชั่นนี้!" });
+            return;
+          } else {
+            // ถ้าแต้มพอ ให้ลบ point
+            updatedPoints -= selectedPromotion.points_use;
+          }
+        }
+  
         // ถ้าโปรโมชั่นมี points_added ให้บวก point
         if (selectedPromotion?.points_added && selectedPromotion.points_added !== 0) {
           updatedPoints += selectedPromotion.points_added;
         }
-    
-        // ถ้าโปรโมชั่นมี points_use ให้ลบ point
-        if (selectedPromotion?.points_use && selectedPromotion.points_use !== 0) {
-          updatedPoints -= selectedPromotion.points_use;
-        }
-    
+  
         // อัพเดต point ของสมาชิกโดยส่ง ID ที่ดึงมา
         await UpdateMemberById(member.ID, { points: updatedPoints });
       }
@@ -238,7 +245,6 @@ function OrderConfirm() {
           navigate("/order/qrpage", { state: { totalAmount: aftertotalAmount, orderItems: orderItems, showQRCode: false } });
         }
         
-        
       } else {
         throw new Error(orderRes.data.error || "ไม่สามารถสร้างออเดอร์ได้");
       }
@@ -246,7 +252,6 @@ function OrderConfirm() {
       messageApi.open({ type: "error", content: error instanceof Error ? error.message : "เกิดข้อผิดพลาด !" });
     }
   };
-  
   
   
   

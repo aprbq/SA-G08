@@ -267,6 +267,7 @@ func SetupDatabase() {
 		EmployeeID:      1,
 		PromotionID:     1,
 		PaymentmethodID: 1,
+		MemberID: 2,
 	}
 	
 	db.FirstOrCreate(Order, &entity.Order{
