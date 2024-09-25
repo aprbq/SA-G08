@@ -50,7 +50,7 @@ func SetupDatabase() {
 		&entity.Order{},
 		&entity.Orderitem{},
 		&entity.OrderHasMenu{},
-		&entity.MemberOrderHistory{},
+		//&entity.MemberOrderHistory{},
 	)
 
 	GenderMale := entity.Gender{GenderName: "Male"}

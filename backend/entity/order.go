@@ -11,6 +11,7 @@ type Order struct {
 	OrderDate  	time.Time 	`json:"order_date"`
 	PaymentAmount float32 `json:"payment_amount"`
 	PaymentAmountBefore float32 `json:"payment_amount_before"`
+	PointsTransactions int `json:"points_transactions"`
 
 	EmployeeID uint      `json:"employee_id"`
 	Employee   *Employee `gorm:"foreignKey:EmployeeID" json:"employee"`
@@ -22,7 +23,7 @@ type Order struct {
 	Paymentmethod    	*Paymentmethod   	`gorm:"foreignKey:PaymentmethodID" json:"paymentmethod"`
 
 	Orderitem []Orderitem `gorm:"foreignKey:OrderID"`
-	PointsTransactions []PointsTransactions `gorm:"foreignKey:OrderID"`
+	//PointsTransactions []PointsTransactions `gorm:"foreignKey:OrderID"`
 
 	//MemberOrderHistory []MemberOrderHistory `gorm:"foreignKey:OrderID"`
 

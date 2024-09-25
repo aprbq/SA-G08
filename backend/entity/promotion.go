@@ -18,7 +18,7 @@ type Promotion struct {
 
 	Order []Order `gorm:"foreignKey:PromotionID"`
 	Condition []Condition `gorm:"foreignKey:PromotionID"`
-	PointsTransactions []PointsTransactions `gorm:"foreignKey:PromotionID"`
+	//PointsTransactions []PointsTransactions `gorm:"foreignKey:PromotionID"`
 
 	DiscountTypeID uint          `json:"discount_type_id"`
 	DiscountType   DiscountType `gorm:"foreignKey:DiscountTypeID" json: "discount_type"`

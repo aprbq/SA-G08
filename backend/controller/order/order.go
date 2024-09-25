@@ -203,6 +203,7 @@ func CreateOrder(c *gin.Context) {
 		OrderDate:      order.OrderDate,
 		PaymentAmount:  order.PaymentAmount,
 		PaymentAmountBefore:  order.PaymentAmountBefore,
+		PointsTransactions: order.PointsTransactions,
 		EmployeeID:     order.EmployeeID,
 		Employee:       &employee,
 		PromotionID:    order.PromotionID,
@@ -211,6 +212,7 @@ func CreateOrder(c *gin.Context) {
 		Paymentmethod:  &paymentmethod,
 		MemberID: order.MemberID,
 		Member:  &member,
+		
 	}
 
 	// บันทึก Order

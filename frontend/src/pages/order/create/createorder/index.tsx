@@ -184,6 +184,7 @@ function OrderConfirm() {
     }
   
     let updatedPoints = 0;
+    let transacPoints = 0;
     let member_ID: number | undefined = undefined;
   
     if (isMemberValid) {
@@ -207,13 +208,16 @@ function OrderConfirm() {
             messageApi.open({ type: "error", content: "แต้มสะสมไม่พอสำหรับการใช้โปรโมชั่นนี้!" });
             return;
           } else {
+            
             updatedPoints -= selectedPromotion.points_use;
+            transacPoints = selectedPromotion.points_use*(-1);
           }
         }
       
         // ถ้าโปรโมชั่นมี points_added ให้บวก point
         if (selectedPromotion?.points_added && selectedPromotion.points_added !== 0) {
           updatedPoints += selectedPromotion.points_added;
+          transacPoints = selectedPromotion.points_added;
         }
   
         // อัพเดต point ของสมาชิกโดยส่ง ID ที่ดึงมา
@@ -232,6 +236,7 @@ function OrderConfirm() {
       payment_amount: aftertotalAmount,
       payment_amount_before: totalAmount,
       order_date: new Date().toISOString(), // เก็บเวลาปัจจุบัน
+      points_transactions: transacPoints,
       ...(member_ID !== undefined && { member_id: member_ID }),
       ...(values.promotion_type_id === 1 && { phone_number: validPhoneNumber }), // รวมเฉพาะ phone_number หาก promotion_type_id เท่ากับ 1
     };

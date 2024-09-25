@@ -8,4 +8,5 @@ export interface OrderInterface {
     promotion_type_id?: number;
     payment_amount_before?: number;
     member_id?: number;
+    points_transactions?: number;
 }

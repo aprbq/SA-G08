@@ -223,7 +223,7 @@ function OrderitemCreate() {
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 name="menu_id"
-                label="ชื่อเมนู"
+                label={<span className="front-1">ชื่อเมนู</span>}
                 rules={[{ required: true, message: 'เลือกเมนู !' }]}
               >
                 <Select allowClear onChange={handleMenuChange}>
@@ -237,14 +237,14 @@ function OrderitemCreate() {
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Form.Item label="ราคาของเมนู">
+              <Form.Item label={<span className="front-1">ราคาของเมนู</span>}>
                 <Input value={selectedMenuPrice ? `${selectedMenuPrice} บาท` : ''} readOnly />
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
-                label="จำนวน"
+                label={<span className="front-1">จำนวน</span>}
                 name="order_quantity"
                 rules={[{ required: true, message: 'ระบุจำนวน !' }]}
               >
@@ -254,7 +254,7 @@ function OrderitemCreate() {
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
-                label="ระดับความหวาน"
+                label={<span className="front-1">ระดับความหวาน</span>}
                 name="ordersweet_id"
                 rules={[{ required: true, message: 'ระบุความหวาน !' }]}
               >
