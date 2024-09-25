@@ -49,7 +49,7 @@ func SetupDatabase() {
 		&entity.Member{},
 		&entity.Order{},
 		&entity.Orderitem{},
-		&entity.OrderHasMenu{},
+		
 		//&entity.MemberOrderHistory{},
 	)
 
