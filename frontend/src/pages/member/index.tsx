@@ -11,16 +11,9 @@ function Member() {
   const navigate = useNavigate();
   const [member , setMember] = useState<MemberInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-  
   const [searchId, setSearchId] = useState<string>("");
-
   const activeMembers = member.filter((m) => m.Status.status_name === "Active");
-
-  // const inactiveMembers = ;
-
   const myId = localStorage.getItem("id");
-  
-  // const [messageApi, contextHolder] = message.useMessage();
   const columns: ColumnsType<MemberInterface> = [
     {
       title: "ลำดับ",
@@ -82,9 +75,7 @@ function Member() {
       title: "วันสิ้นสุดการเป็นสมาชิก",
       key: "end_date",
       render: (record) => {
-        // แสดงค่า end_date ใน console
         console.log("end_date:", record.end_date);
-    
         return record.end_date === "0001-01-01T00:00:00Z"
           ? <>ยังไม่ยกเลิก</>
           : <>{dayjs(record.end_date).format("DD/MM/YYYY")}</>;
@@ -95,14 +86,12 @@ function Member() {
       dataIndex: "points",
       key: "points",
     },
-
     {
       title: "เพศ",
       dataIndex: "Gender",
       key: "gender",
       render: (item) => Object.values(item.gender_name),
     },
-
     {
       title: "แก้ไขข้อมูล",
       render: (record) => (
@@ -122,24 +111,17 @@ function Member() {
       title: "ดูประวัติการซื้อ",
       render: (record) => (
         <>
-          {/* {myId == record?.ID ? (
-            <></>
-          ) : ( */}
             <Button
           type="default"
           className=  "front-1"
-          // className="btn-delete"
           icon={<EyeOutlined />}
           onClick={() => navigate(`/member/memberorderhistory/${record.ID}`)}
           >
           ดูประวัติการซื้อ
         </Button>
-          
-           {/* )}  */}
         </>
       ),
     },
-
     {
         title: "ยกเลิกสมาชิก",
         render: (record) => (
@@ -152,7 +134,6 @@ function Member() {
             className="btn-delete"
             icon={<EditOutlined />}
             onClick={() => showCancelConfirm(record.ID)}
-            
             />
           )} 
           </>
@@ -175,11 +156,7 @@ function Member() {
           </>
         ),
       },
-      
-      
   ];
-
-
   const deleteMemberById = async (id: string) => {
     let res = await DeleteMemberById(id);
     if (res.status == 200) {
@@ -195,7 +172,6 @@ function Member() {
       });
     }
   };
-
   const updateMemberStatusById = async (id: string ) => {
     const currentdate = new Date();
     let res = await UpdateMemberStatusById(id,2,currentdate);
@@ -227,7 +203,6 @@ function Member() {
       });
     }
   };
-
   const showDeleteConfirm = (id: string) => {
     confirm({
       title: "คุณแน่ใจหรือว่าต้องการลบข้อมูลสมาชิกลูกค้านี้?",
@@ -251,7 +226,6 @@ function Member() {
       okType: "danger",
       cancelText: "ยกเลิก",
       onOk() {
-         // สร้างวันที่และเวลาปัจจุบัน
         updateMemberStatusById(id);
       },
       onCancel() {
@@ -259,7 +233,6 @@ function Member() {
       },
     });
   };
-
   const getMember = async () => {
     let res = await GetMember();
     if (res.status == 200) {
@@ -275,16 +248,12 @@ function Member() {
   useEffect(() => {
     getMember();
   }, []);
-
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchId(e.target.value); // อัปเดตการค้นหา
   };
-
   const filteredMembers = member.filter((m) =>
     m.ID.toString().includes(searchId) // กรองสมาชิกตาม ID
   );
-
-
   return (
     <div style={{ backgroundColor: "#e3d0b6", minHeight: "100vh" }}>
       {contextHolder}

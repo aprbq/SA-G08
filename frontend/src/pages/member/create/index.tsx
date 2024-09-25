@@ -16,25 +16,16 @@ import {
   import { PlusOutlined } from "@ant-design/icons";
   import { MemberInterface } from "../../../interfaces/Member";
   import { StatusInterface } from "../../../interfaces/Status";
-  // import { DiscountTypeInterface } from "../../../interfaces/Discounttype";
-  // import { PromotionTypeInterface } from "../../../interfaces/Promotiontype";
   import { GenderInterface } from "../../../interfaces/Gender";
   import { CreateMember,GetStatus,GetGender } from "../../../services/https";
   import { useNavigate, Link } from "react-router-dom";
-
-
   const { Option } = Select;
-
   function MemberCreate() {
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const [status, setStatus] = useState<StatusInterface[]>([]);
-    // const [promotiontype, setPromotionType] = useState<PromotionTypeInterface[]>([]);
-    // const [discounttype, setDiscountType] = useState<DiscountTypeInterface[]>([]);
     const [gender, setGender] = useState<GenderInterface[]>([]);
-
     const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
-
     const onFinish = async (values: MemberInterface) => {
       let payload = {
         ...values,
@@ -58,7 +49,6 @@ import {
         });
       }
     };
-
     const getStatus = async () => {
       let res = await GetStatus();
     if (res.status == 200) {
@@ -71,7 +61,6 @@ import {
       });
     }
     };
-
     const getGender = async () => {
       let res = await GetGender();
     if (res.status == 200) {
@@ -84,13 +73,11 @@ import {
       });
     }
     };
-
     useEffect(() => {
       getStatus();
       getGender();
       console.log(accountid)
     }, []);
-  
     return (
       <div>
         {contextHolder}
@@ -278,5 +265,4 @@ import {
       </div>
     );
   }
-  
   export default MemberCreate;
