@@ -147,8 +147,8 @@ function Order() {
         </Col>
         <Col span={12} style={{ textAlign: "end" }}>
           <Space>
-            <Button className="btn-1" type="primary" onClick={() => navigate('/order/create')}>
-              สร้างออเดอร์
+            <Button className="btn-1" type="primary" onClick={() => navigate('/member/')}>
+              ย้อนกลับ
             </Button>
           </Space>
         </Col>

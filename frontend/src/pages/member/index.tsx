@@ -135,7 +135,7 @@ function Member() {
           ดูประวัติการซื้อ
         </Button>
           
-          {/* )} */}
+           {/* )}  */}
         </>
       ),
     },
@@ -144,7 +144,9 @@ function Member() {
         title: "",
         render: (record) => (
           <>
-             
+            {record?.ID === 1 ? (
+            <></>
+            ) : (
               <Button
             type="primary"
             className="btn-delete"
@@ -152,7 +154,7 @@ function Member() {
             onClick={() => showCancelConfirm(record.ID)}
             
             />
-            
+          )} 
           </>
         ),
       },
@@ -160,14 +162,16 @@ function Member() {
         title: "",
         render: (record) => (
           <>
-            
+            {record?.ID === 1 ? (
+            <></>
+            ) : (
               <Button
             type="primary"
             className="btn-delete"
             icon={<DeleteOutlined />}
             onClick={() => showDeleteConfirm(record.ID)}
             />
-          
+          )} 
           </>
         ),
       },

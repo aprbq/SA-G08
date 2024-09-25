@@ -152,7 +152,7 @@ func SetupDatabase() {
 		FirstName: "Software",
 		LastName:  "Analysis",
 		Email:     "sa67@gmail.com",
-		Username:  "nahee",
+		Username:  "Adminroot",
 		Password:  hashedPassword,
 		RoleID:      1,
 		GenderID:  1,
@@ -230,21 +230,21 @@ func SetupDatabase() {
 	})
 	TestDate, _ := time.Parse("2006-01-02", "1999-05-05")
 	Member := &entity.Member{
-		FristName:   "Sut",
-		LastName:    "SAcafetestmember",
-		Email:       "Satest.gmail.com",
-		PhoneNumber: "191",
+		FristName:   "NonMember",
+		LastName:    "Root",
+		Email:       "Nonmember.gmail.com",
+		PhoneNumber: "0000000001",
 		DateOfBirth: TestDate,
 		StartDate:   TestDate,
 		EndDate:     TestDate,
 		Points:      20,
 		StatusID:    1,
 		GenderID:    1,
-		EmployeeID:  2,
+		EmployeeID:  1,
 	}
 
 	db.FirstOrCreate(Member, &entity.Member{
-		FristName: "Sut",
+		FristName: "NonMember",
 	})
 
 	//TestDate, _ := time.Parse("2006-01-02", "1999-05-05")
@@ -267,7 +267,7 @@ func SetupDatabase() {
 		EmployeeID:      1,
 		PromotionID:     1,
 		PaymentmethodID: 1,
-		MemberID: 2,
+		MemberID: 1,
 	}
 	
 	db.FirstOrCreate(Order, &entity.Order{
