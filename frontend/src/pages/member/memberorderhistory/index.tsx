@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 const { confirm } = Modal;
 const { Text } = Typography;
 
-function Order() {
+function MemberOrderHistory() {
   const { id } = useParams<{ id: string }>();  // ดึง id จาก URL
   const navigate = useNavigate();
   const [orders, setOrders] = useState<OrderInterface[]>([]);
@@ -188,4 +188,4 @@ function Order() {
   );
 }
 
-export default Order;
+export default MemberOrderHistory;
