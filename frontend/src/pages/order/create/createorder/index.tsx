@@ -10,6 +10,7 @@ import { PromotionTypeInterface } from '../../../../interfaces/Promotiontype';
 import { PaymentmethodInterface } from '../../../../interfaces/Paymentmethod';
 import { GetPromotion, GetPaymentMethods, CreateOrder, CreateOrderitem, GetPromotionType, GetCondition, GetMember ,UpdateMemberById} from '../../../../services/https';
 import { OrderInterface } from '../../../../interfaces/Order';
+import { PlusOutlined ,DeleteOutlined} from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -297,7 +298,7 @@ function OrderConfirm() {
   return (
     <div>
       {contextHolder}
-      <Card>
+      <Card className='card-promotion'>
         <h2>ยืนยันการสั่งซื้อ</h2>
         <Divider />
         <Form layout="vertical" onFinish={onFinish}>
@@ -305,12 +306,14 @@ function OrderConfirm() {
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
                 name="promotion_type_id"
-                label="สำหรับ"
+                label={<span className="front-1">สำหรับ</span>}
                 rules={[{ required: true, message: "กรุณาระบุสำหรับ !" }]}
               >
-                <Select allowClear onChange={handlePromotionTypeChange}>
+                <Select allowClear 
+                  className="front-1"
+                  onChange={handlePromotionTypeChange}>
                   {promotiontype.map((item) => (
-                    <Option value={item.ID} key={item.promotion_type_name}>
+                    <Option value={item.ID} key={item.promotion_type_name} className="front-1">
                       {item.promotion_type_name}
                     </Option>
                   ))}
@@ -321,7 +324,7 @@ function OrderConfirm() {
             {/* เพิ่มช่องกรอกเบอร์โทรศัพท์ */}
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
-                label="เบอร์โทรศัพท์"
+                label={<span className="front-1">เบอร์โทรศัพท์</span>}
                 name="phone_number"
                 rules={[
                   {
@@ -334,6 +337,7 @@ function OrderConfirm() {
                 ]}
               >
                 <Input
+                  className="front-1"
                   placeholder="กรอกเบอร์โทรศัพท์"
                   value={phoneNumber}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
@@ -343,14 +347,14 @@ function OrderConfirm() {
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
-                label="โปรโมชั่น"
+                label={<span className="front-1">โปรโมชั่น</span>}
                 name="promotion_id"
                 rules={[{ required: true, message: 'เลือกโปรโมชั่น !' }]}
               >
-                <Select allowClear>
+                <Select allowClear className="front-1">
                   {filteredPromotions.length > 0 ? (
                     filteredPromotions.map((item) => (
-                      <Option value={item.ID} key={item.ID}>
+                      <Option value={item.ID} key={item.ID} className="front-1">
                         {item.promotion_name} {/* แสดงชื่อโปรโมชั่น */}
                       </Option>
                     ))
@@ -363,13 +367,13 @@ function OrderConfirm() {
             </Col>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
-                label="ช่องทางการจ่ายเงิน"
+                label={<span className="front-1">ช่องทางการชำระเงิน</span>}
                 name="payment_method_id"
                 rules={[{ required: true, message: 'เลือกช่องทางการจ่ายเงิน !' }]}
               >
-                <Select allowClear>
+                <Select allowClear className="front-1">
                   {paymentMethods.map((item) => (
-                    <Option value={item.ID} key={item.ID}>
+                    <Option value={item.ID} key={item.ID} className="front-1">
                       {item.payment_methods}
                     </Option>
                   ))}
@@ -446,8 +450,10 @@ function OrderConfirm() {
             title: 'การจัดการ',
             key: 'action',
             render: (_: undefined, record: OrderItemInterface) => (
-              <Button type="link" onClick={() => removeOrderItem(record)}>
-                ยกเลิก
+              <Button type="primary"
+              className="btn-delete"
+              icon={<DeleteOutlined />}onClick={() => removeOrderItem(record)}>
+                
               </Button>
             ),
           },

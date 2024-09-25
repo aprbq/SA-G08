@@ -253,6 +253,18 @@ body {
   
 }
 
+.confirm2-button{
+  background-color: #cea870;
+  border-radius: 12px;
+}
+
+.confirm2-button:hover {
+  border-color: #dadce0;
+  background-color: #cea870 !important;
+  box-shadow: rgba(224, 222, 86, 0.1) 0 1px 1px;
+  color: #000000;
+}
+
 .btn-1:hover {
   background: #fff !important;
   color: #000 !important;

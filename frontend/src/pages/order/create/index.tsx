@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, Col, Row, Divider, Form, InputNumber, Select, Card, message, Input } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined ,DeleteOutlined} from '@ant-design/icons';
 import { MenuInterface } from '../../../interfaces/Menu';
 import { OrdersweetInterface } from '../../../interfaces/Ordersweet';
 import { OrderItemInterface } from '../../../interfaces/OrderItem';
@@ -162,8 +162,11 @@ function OrderitemCreate() {
       title: 'การจัดการ',
       key: 'action',
       render: (_: undefined, record: OrderItemInterface) => (
-        <Button type="link" onClick={() => removeOrderItem(record)}>
-          ยกเลิก
+        <Button
+        type="primary"
+        className="btn-delete"
+        icon={<DeleteOutlined />} onClick={() => removeOrderItem(record)}>
+          
         </Button>
       ),
     },
@@ -210,7 +213,7 @@ function OrderitemCreate() {
   return (
     <div>
       {contextHolder}
-      <Card>
+      <Card className='card-promotion'>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2>เพิ่มรายการสั่งซื้อ</h2>
           <Link to="/order">
@@ -228,19 +231,21 @@ function OrderitemCreate() {
                 label={<span className="front-1">ชื่อเมนู</span>}
                 rules={[{ required: true, message: 'เลือกเมนู !' }]}
               >
-                <Select allowClear onChange={handleMenuChange}>
+                <Select allowClear className="front-1" onChange={handleMenuChange}>
                   {menu.map((item) => (
-                    <Option value={item.ID} key={item.ID}>
+                    <Option value={item.ID} key={item.ID} className="front-1">
                       {item.name}
                     </Option>
                   ))}
-                </Select>
+                </Select >
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item label={<span className="front-1">ราคาของเมนู</span>}>
-                <Input value={selectedMenuPrice ? `${selectedMenuPrice} บาท` : ''} readOnly />
+                <Input 
+                  className="front-1"
+                  value={selectedMenuPrice ? `${selectedMenuPrice} บาท` : ''} readOnly />
               </Form.Item>
             </Col>
 
@@ -250,7 +255,9 @@ function OrderitemCreate() {
                 name="order_quantity"
                 rules={[{ required: true, message: 'ระบุจำนวน !' }]}
               >
-                <InputNumber min={0} max={99} defaultValue={0} style={{ width: '100%' }} />
+                <InputNumber 
+                  className="front-1"
+                  min={0} max={99} defaultValue={0} style={{ width: '100%' }} />
               </Form.Item>
             </Col>
 
@@ -260,9 +267,9 @@ function OrderitemCreate() {
                 name="ordersweet_id"
                 rules={[{ required: true, message: 'ระบุความหวาน !' }]}
               >
-                <Select allowClear>
+                <Select allowClear className="front-1">
                   {ordersweet.map((item) => (
-                    <Option value={item.ID} key={item.ID}>
+                    <Option value={item.ID} key={item.ID} className="front-1">
                       {item.order_sweet_name}
                     </Option>
                   ))}
