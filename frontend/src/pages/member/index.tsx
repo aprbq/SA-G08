@@ -104,7 +104,7 @@ function Member() {
     },
 
     {
-      title: "",
+      title: "แก้ไขข้อมูล",
       render: (record) => (
         <>
           <Button
@@ -119,7 +119,7 @@ function Member() {
     },
 
     {
-      title: "",
+      title: "ดูประวัติการซื้อ",
       render: (record) => (
         <>
           {/* {myId == record?.ID ? (
@@ -141,7 +141,7 @@ function Member() {
     },
 
     {
-        title: "",
+        title: "ยกเลิกสมาชิก",
         render: (record) => (
           <>
             {record?.ID === 1 ? (
@@ -159,7 +159,7 @@ function Member() {
         ),
       },
       {
-        title: "",
+        title: "ลบ",
         render: (record) => (
           <>
             {record?.ID === 1 ? (
@@ -343,7 +343,7 @@ function Member() {
               <Typography.Text style={{ color: "black", fontWeight: "bold" }}>
               Unactive Members
                 </Typography.Text>
-              <Statistic  value={member.length-activeMembers.length} valueStyle={{ color: "black" }} titleStyle={{ color: "black", fontWeight: "bold" }}  />
+              <Statistic  value={member.length-activeMembers.length} valueStyle={{ color: "black" }}   />
             </Card>
         </Col>
       </Row>

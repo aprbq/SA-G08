@@ -55,22 +55,28 @@ function MemberOrderHistory() {
       dataIndex: "promotion",
       render: (item) => Object.values(item.promotion_name),
     },
-    // {
-    //   title: "เลขสมาชิก",
-    //   dataIndex: "member_id",
-    //   render: (item) => Object.values(item.member_id),
-    // },
     {
-      title: "",
-      render: (record) => (
-        <Button
-          type="primary"
-          className="btn-delete"
-          icon={<DeleteOutlined />}
-          onClick={() => showDeleteConfirm(record.ID)}
-        ></Button>
-      ),
+      title: "จำนวนแต้มที่เปลี่ยนแปลง",
+      dataIndex: "points_transactions",
+      key: "points_transactions",
+      render: (amount) => `${amount.toFixed(2)} แต้ม`,
     },
+    // {
+    //   title: "จำนวนแต้มที่เปลี่ยนแปลง",
+    //   dataIndex: "points_transactions",
+    //   render: (item) => Object.values(item.points_transactions),
+    // },
+    // {
+    //   title: "",
+    //   render: (record) => (
+    //     <Button
+    //       type="primary"
+    //       className="btn-delete"
+    //       icon={<DeleteOutlined />}
+    //       onClick={() => showDeleteConfirm(record.ID)}
+    //     ></Button>
+    //   ),
+    // },
   ];
 
   const deleteOrderById = async (id: string) => {
