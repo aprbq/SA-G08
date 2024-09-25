@@ -218,6 +218,18 @@ body {
   color: #ffffff!important;
 }
 
+.next-button{
+  background-color: #b9935e;
+  border-radius: 12px;
+}
+
+.next-button:hover {
+  border-color: #ffffff!important;
+  background-color: #8c4a0d !important;
+  box-shadow: rgba(224, 222, 86, 0.1) 0 1px 1px;
+  color: #ffffff!important;
+}
+
 
 
 .btn-1 {

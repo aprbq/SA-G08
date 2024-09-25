@@ -383,10 +383,14 @@ function OrderConfirm() {
             <Col style={{ marginTop: '40px' }}>
               <Form.Item>
                 <Space>
-                  <Button type="primary" onClick={goToBackPage}>
+                  <Button 
+                    className = "back-button"
+                    type="primary" onClick={goToBackPage}>
                     ย้อนกลับ
                   </Button>
-                  <Button type="primary" htmlType="submit">
+                  <Button 
+                    className = "confirm-button"
+                    type="primary" htmlType="submit">
                     ยืนยันออเดอร์
                   </Button>
                 </Space>
@@ -396,7 +400,10 @@ function OrderConfirm() {
         </Form>
 
         <Divider />
-        <Table columns={[
+        <Table className="custom-table" 
+          rowClassName={(record, index) => 
+            index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"
+          } columns={[
           {
             title: 'ชื่อเมนู',
             dataIndex: 'menu_id',

@@ -143,7 +143,12 @@ function Order() {
         </Col>
       </Row>
       <Divider />
-      <Table
+      <Table 
+        className="custom-table" 
+        rowClassName={(record, index) => 
+          index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"
+        }
+
         rowKey="ID"
         columns={columns}
         dataSource={orders}
