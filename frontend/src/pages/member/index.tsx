@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, Divider, message ,Modal,Card,Statistic, Input} from "antd";
-import { PlusOutlined, DeleteOutlined , EditOutlined} from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined , EditOutlined,EyeOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetMember, DeleteMemberById ,UpdateMemberStatusById,UpdateMemberPointsById} from "../../services/https/index";
 import { MemberInterface } from "../../interfaces/Member";
@@ -81,7 +81,14 @@ function Member() {
     {
       title: "วันสิ้นสุดการเป็นสมาชิก",
       key: "end_date",
-      render: (record) => <>{dayjs(record.end_date).format("DD/MM/YYYY")}</>,
+      render: (record) => {
+        // แสดงค่า end_date ใน console
+        console.log("end_date:", record.end_date);
+    
+        return record.end_date === "0001-01-01T00:00:00Z"
+          ? <>ยังไม่ยกเลิก</>
+          : <>{dayjs(record.end_date).format("DD/MM/YYYY")}</>;
+      },
     },
     {
       title: "แต้ม",
@@ -110,13 +117,34 @@ function Member() {
         </>
       ),
     },
+
+    {
+      title: "",
+      render: (record) => (
+        <>
+          {/* {myId == record?.ID ? (
+            <></>
+          ) : ( */}
+            <Button
+          type="default"
+          className=  "front-1"
+          // className="btn-delete"
+          icon={<EyeOutlined />}
+          onClick={() => navigate(`/member/memberorderhistory/${record.ID}`)}
+          >
+          ดูประวัติการซื้อ
+        </Button>
+          
+          {/* )} */}
+        </>
+      ),
+    },
+
     {
         title: "",
         render: (record) => (
           <>
-            {myId == record?.ID ? (
-              <></>
-            ) : (
+             
               <Button
             type="primary"
             className="btn-delete"
@@ -124,7 +152,7 @@ function Member() {
             onClick={() => showCancelConfirm(record.ID)}
             
             />
-            )}
+            
           </>
         ),
       },
@@ -132,36 +160,18 @@ function Member() {
         title: "",
         render: (record) => (
           <>
-            {myId == record?.ID ? (
-              <></>
-            ) : (
+            
               <Button
             type="primary"
             className="btn-delete"
             icon={<DeleteOutlined />}
             onClick={() => showDeleteConfirm(record.ID)}
             />
-            )}
+          
           </>
         ),
       },
-      {
-        title: "",
-        render: (record) => (
-          <>
-            {myId == record?.ID ? (
-              <></>
-            ) : (
-              <Button
-            type="primary"
-            className="btn-delete"
-            icon={<DeleteOutlined />}
-            onClick={() => navigate(`/member/memberorderhistory/${record.ID}`)}
-            />
-            )}
-          </>
-        ),
-      },
+      
       
   ];
 
@@ -272,7 +282,7 @@ function Member() {
 
 
   return (
-    <div style={{ backgroundColor: "#ffe8bf", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "#e3d0b6", minHeight: "100vh" }}>
       {contextHolder}
       <Row>
         <Col span={12}>
@@ -334,15 +344,15 @@ function Member() {
 
       <Divider />
       <div style={{ marginTop: 20 }}>
-        <Table
-          rowKey="ID"
-          columns={columns}
-          dataSource={filteredMembers}
-          // style={{ width: "100%", overflow: "scroll" }}
-          rowClassName={(record, index) => 
-            index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"
-          }
-        />
+      <Table
+        rowKey="ID"
+        columns={columns}
+        dataSource={filteredMembers}
+        className="custom-table"
+        style={{ width: "100%", overflowX: "auto" }}
+        rowClassName="table-row-light table-row-hover"
+        scroll={{ x: 'max-content' }} 
+      />
       </div>
     </div>
   );

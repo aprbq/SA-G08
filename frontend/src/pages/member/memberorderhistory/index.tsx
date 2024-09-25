@@ -55,6 +55,11 @@ function Order() {
       dataIndex: "promotion",
       render: (item) => Object.values(item.promotion_name),
     },
+    // {
+    //   title: "เลขสมาชิก",
+    //   dataIndex: "member_id",
+    //   render: (item) => Object.values(item.member_id),
+    // },
     {
       title: "",
       render: (record) => (
@@ -111,7 +116,7 @@ function Order() {
     let res = await GetOrder();
     if (res.status === 200) {
       if (id) {
-        const filteredOrders = res.data.filter((order: OrderInterface) => order.ID.toString() === id); // กรองตาม id
+        const filteredOrders = res.data.filter((order: OrderInterface) => order.member_id.toString() === id); // กรองตาม id
         setOrders(filteredOrders);
       } else {
         setOrders(res.data);  // แสดงทั้งหมดถ้าไม่มี id

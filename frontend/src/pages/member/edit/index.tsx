@@ -119,7 +119,7 @@ import {
     return (
       <div>
         {contextHolder}
-        <Card>
+        <Card className="card-promotion">
           <h2>แก้ไขข้อมูลสมาชิก</h2>
           <Divider />
   
@@ -184,9 +184,10 @@ import {
                   label="เบอร์โทรศัพท์"
                   name="phone_number"
                   rules={[
+                    { required: true, message: "กรุณากรอกเบอร์โทรศัพท์ !" },
                     {
-                      required: true,
-                      message: "กรุณากรอกเบอร์โทรศัพท์ !",
+                      pattern: /^[0-9]{10}$/,
+                      message: 'กรุณากรอกเบอร์โทรศัพท์ที่ถูกต้อง (10 หลัก)',
                     },
                   ]}
                 >
@@ -248,25 +249,7 @@ import {
                 </Select>
               </Form.Item>
             </Col>
-            <Col xs={24} sm={24} md={12} lg={6} xl={6}>
-              <Form.Item
-                label="วัน/เดือน/ปี สมัคร"
-                name="start_date"
-                rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี สมัคร !" }]}
-              >
-                <DatePicker style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={6} xl={6}>
-              <Form.Item
-                label="วัน/เดือน/ปี ยกเลิก"
-                name="end_date"
-                rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี ยกเลิก !" }]}
-              >
-                <DatePicker style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={6} xl={6}>
+            <Col xs={24} sm={24} md={24} lg={12} xl={12}>
               <Form.Item
                 label="วัน/เดือน/ปี เกิด"
                 name="date_of_birth"
@@ -275,6 +258,25 @@ import {
                 <DatePicker style={{ width: "100%" }} />
               </Form.Item>
             </Col>
+            <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+              <Form.Item
+                label="วัน/เดือน/ปี สมัคร"
+                name="start_date"
+                rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี สมัคร !" }]}
+              >
+                <DatePicker style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+              <Form.Item
+                label="วัน/เดือน/ปี ยกเลิก"
+                name="end_date"
+                // rules={[{ required: true, message: "กรุณาเลือกวัน/เดือน/ปี ยกเลิก !" }]}
+              >
+                <DatePicker style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+            
           </Row>
           
             <Row justify="end">
