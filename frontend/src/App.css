@@ -332,6 +332,22 @@ body {
   
 }
 
+.btn-edit {
+  outline: none;
+  box-shadow: none;
+  background: #2BAF2B;
+  color: #000;
+  border-radius: 4px;
+  transition: all .25s ease;
+  font-family: "Mitr", sans-serif;
+}
+
+.btn-edit:hover {
+  background: #39e439 !important;
+  color: #000 !important;
+  transform: translate(-1px, -1px);
+}
+
 .btn-delete:hover {
   background: #D9D9D9 !important;
   color: #000 !important;
@@ -536,18 +552,17 @@ h1 {
   outline: none;
   box-shadow: none;
   background: #ffffff;
-  color: #000000;
+  color: #463120;
   border-radius: 4px;
   transition: all .25s ease;
   font-family: "Mitr", sans-serif;
   
 }
 .button-normal:hover {
-  background: #000000 !important;
+  background: #463120 !important;
   color: #ffffff !important;
   transform: translate(-2px, -2px);
 }
-
 .button-back {
   background: transparent; /* ทำให้พื้นหลังโปร่งใส */
   border: none; /* ลบขอบ */
