@@ -46,7 +46,7 @@ function IngredientsCreate() {
     if (res.status == 201) {
       messageApi.open({
         type: "success",
-        content: "create ingredient successfully",
+        content: "Create ingredient successfully",
       });
       setTimeout(function () {
         navigate("/ingredient");
@@ -54,7 +54,7 @@ function IngredientsCreate() {
     } else {
       messageApi.open({
         type: "error",
-        content: "create ingredient error",
+        content: "Create ingredient Error",
       });
     }
   };
@@ -107,7 +107,6 @@ function IngredientsCreate() {
   return (
     <div>
       {contextHolder}
-      
       <Card className="card-ingredient">
         <Form
           name="basic"
@@ -133,7 +132,6 @@ function IngredientsCreate() {
                 <Input className="front-1" placeholder="Enter name"/>
               </Form.Item>
             </Col>
-            
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label={<span className="front-1">ประเภท</span>}
@@ -142,14 +140,13 @@ function IngredientsCreate() {
               >
                 <Select className="front-1" placeholder="Choose type" allowClear>
                   {classes.map((item) => (
-                    <Option value={item.ID} key={item.class}>
+                    <Option value={item.ID} key={item.class} className="front-1">
                       {item.class}
                     </Option>
                   ))}
                 </Select>
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label={<span className="front-1">จำนวน</span>}
@@ -167,7 +164,6 @@ function IngredientsCreate() {
                 />
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label={<span className="front-1">หน่วย</span>}
@@ -176,14 +172,13 @@ function IngredientsCreate() {
               >
                 <Select className="front-1" placeholder="Choose unit" allowClear>
                   {unit.map((item) => (
-                    <Option value={item.ID} key={item.ID}>
+                    <Option value={item.ID} key={item.ID} className="front-1">
                       {item.unit}
                     </Option>
                   ))}
                 </Select>
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label={<span className="front-1">ราคาต่อหน่วย</span>}
@@ -201,7 +196,6 @@ function IngredientsCreate() {
                 />
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label={<span className="front-1">ผู้ผลิต</span>}
@@ -210,14 +204,13 @@ function IngredientsCreate() {
               >
                 <Select className="front-1" placeholder="Choose supplier" allowClear>
                   {supplier.map((item) => (
-                    <Option value={item.ID} key={item.name}>
+                    <Option value={item.ID} key={item.name} className="front-1">
                       {item.name}
                     </Option>
                   ))}
                 </Select>
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label={<span className="front-1">วันหมดอายุ</span>}
@@ -230,7 +223,6 @@ function IngredientsCreate() {
               </Form.Item>
             </Col>
           </Row>
-
           <Row justify="center">
             <Col style={{ marginTop: "40px" }}>
               <Form.Item>
@@ -240,7 +232,6 @@ function IngredientsCreate() {
                       ย้อนกลับ
                     </Button>
                   </Link>
-
                   <Button
                     type="primary"
                     className="button-ok"

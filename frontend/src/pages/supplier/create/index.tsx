@@ -4,25 +4,20 @@ import {
     Button,
     Col,
     Row,
-    Divider,
     Form,
     Input,
     Card,
     message,
-    DatePicker,
-    InputNumber,
-    Select,
   } from "antd";
   import { PlusOutlined } from "@ant-design/icons";
   import { SupplierInterface } from "../../../interfaces/Supplier";
   import { CreateSupplier } from "../../../services/https";
   import { useNavigate, Link } from "react-router-dom";
 
-  
+
   function SupplierCreate() {
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
-
     const onFinish = async (values: SupplierInterface) => {
       let payload = {
         ...values,
@@ -65,7 +60,6 @@ import {
             onFinish={onFinish}
             autoComplete="off"
           >
-            
               <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <Form.Item
                   label={<span className="front-1">ชื่อ</span>}
@@ -73,14 +67,13 @@ import {
                   rules={[
                     { required: true, message: "กรุณากรอกชื่อผู้ผลิต !" },
                     { 
-                      pattern: /^[a-zA-Z\sก-ฮา-์]*$/, // อนุญาตเฉพาะตัวอักษรภาษาอังกฤษและภาษาไทย พร้อมช่องว่าง
+                      pattern: /^[a-zA-Z\sก-ฮา-์]*$/,
                       message: "กรุณากรอกชื่อที่มีแค่ตัวอักษรเท่านั้น !" 
                     },]}
                 >
                   <Input className="front-1" placeholder="Enter name"/>
                 </Form.Item>
               </Col>
-
               <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <Form.Item
                   label={<span className="front-1">ที่อยู่ผู้ผลิต</span>}
@@ -91,7 +84,6 @@ import {
                   <Input className="front-1" placeholder="Enter address"/>
                 </Form.Item>
               </Col>
-
               <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <Form.Item
                   label={<span className="front-1">เบอร์โทร</span>}
@@ -107,8 +99,6 @@ import {
                   <Input className="front-1" placeholder="Enter tel number"/>
                 </Form.Item>
               </Col>
-
-  
             <Row justify="center">
               <Col style={{ marginTop: "40px" }}>
                 <Form.Item>

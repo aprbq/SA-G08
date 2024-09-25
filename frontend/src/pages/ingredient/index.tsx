@@ -6,17 +6,15 @@ import { GetIngredients, DeleteIngredientsById } from "../../services/https/inde
 import { IngredientInterface } from "../../interfaces/Ingredient";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-
 import "./ingredient.css"
-
 const { confirm } = Modal;
 
 function Ingredients() {
   const navigate = useNavigate();
   const [ingredients, setIngredients] = useState<IngredientInterface[]>([]);
-  const [filteredIngredients, setFilteredIngredients] = useState<IngredientInterface[]>([]); // State สำหรับวัตถุดิบที่กรอง
+  const [filteredIngredients, setFilteredIngredients] = useState<IngredientInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const [searchText, setSearchText] = useState<string>(""); // State สำหรับ input ค้นหา
+  const [searchText, setSearchText] = useState<string>("");
 
   const columns: ColumnsType<IngredientInterface> = [
     {
@@ -57,7 +55,7 @@ function Ingredients() {
       render: (item) => Object.values(item.name),
     },
     {
-      title: "วัน/เดือน/ปี หมดอายุ",
+      title: "วันหมดอายุ",
       key: "exp_date",
       render: (record) => <>{dayjs(record.exp_date).format("DD/MM/YYYY")}</>,
     },
@@ -73,7 +71,7 @@ function Ingredients() {
         <>
           <Button
             onClick={() => navigate(`/ingredient/edit/${record.ID}`)}
-            className='btn-ok'
+            className='btn-edit'
             icon={<EditOutlined />}
             shape="circle"
           />
@@ -90,7 +88,6 @@ function Ingredients() {
 
   const deleteIngredientsById = async (id: string) => {
     let res = await DeleteIngredientsById(id);
-
     if (res.status == 200) {
       messageApi.open({
         type: "success",
@@ -126,7 +123,7 @@ function Ingredients() {
     let res = await GetIngredients();
     if (res.status == 200) {
       setIngredients(res.data);
-      setFilteredIngredients(res.data); // เริ่มต้นให้ข้อมูลที่กรองเป็นข้อมูลทั้งหมด
+      setFilteredIngredients(res.data);
     } else {
       setIngredients([]);
       messageApi.open({
@@ -143,8 +140,7 @@ function Ingredients() {
   const handleSearch = (value: string) => {
     setSearchText(value);
     const filtered = ingredients.filter((ingredient) => {
-      // ตรวจสอบว่า ingredient.name มีค่าหรือไม่
-      return ingredient.name?.toLowerCase().includes(value.toLowerCase()); // ใช้ optional chaining
+      return ingredient.name?.toLowerCase().includes(value.toLowerCase());
     });
     setFilteredIngredients(filtered);
   };
@@ -174,12 +170,12 @@ function Ingredients() {
       </Row>
 
       <Divider />
-      {/* Search Input for Ingredients */}
+      { }
       <Row gutter={[16, 0]} style={{ marginBottom: "20px" }}>
         <Col span={6}>
           <Input
             className='input'
-            placeholder="ค้นหาวัตถุดิบ"
+            placeholder="Search Ingredient"
             prefix={<SearchOutlined />}
             value={searchText}
             onChange={(e) => handleSearch(e.target.value)}

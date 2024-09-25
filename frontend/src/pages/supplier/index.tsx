@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message, Modal } from "antd";
-import { PlusOutlined, DeleteOutlined , EditOutlined, LeftOutlined } from "@ant-design/icons";
+import { Space, Table, Button, Col, Row, Divider, message, Modal, Input } from "antd";
+import { PlusOutlined, DeleteOutlined , EditOutlined, LeftOutlined, SearchOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetSuppliers, DeleteSupplierById } from "../../services/https/index";
 import { SupplierInterface } from "../../interfaces/Supplier";
 import { Link, useNavigate } from "react-router-dom";
-
 const { confirm } = Modal;
 
 function Supplier() {
   const navigate = useNavigate();
-  const [supplier , setSupplier] = useState<SupplierInterface[]>([]);
+  const [supplier, setSupplier] = useState<SupplierInterface[]>([]);
+  const [filteredSupplier, setFilteredSupplier] = useState<SupplierInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
+  const [searchText, setSearchText] = useState<string>("");
 
   const columns: ColumnsType<SupplierInterface> = [
     {
@@ -20,21 +21,18 @@ function Supplier() {
       key: "id",
       className:  "front-1",
     },
-
     {
       title: "ชื่อ",
       dataIndex: "name",
       key: "name",
       className:  "front-1",
     },
-
     {
       title: "ที่อยู่ผู้ผลิต",
       dataIndex: "address",
       key: "address",
       className:  "front-1",
     },
-
     {
       title: "เบอร์โทร",
       dataIndex: "tel",
@@ -47,15 +45,15 @@ function Supplier() {
       render: (record) => (
         <>
           <Button
-          onClick={() => navigate(`/supplier/edit/${record.ID}`)}
-            type="primary" 
-            className='btn-1'
+            onClick={() => navigate(`/supplier/edit/${record.ID}`)}
+            type="primary"
+            className='btn-edit'
+            shape="circle"
             icon={<EditOutlined />}
-          >
-          </Button>
+          />
           <Button type="primary" className="btn-delete" icon={<DeleteOutlined />}
-              onClick={() => showDeleteConfirm(record.ID)}
-            ></Button>
+            onClick={() => showDeleteConfirm(record.ID)}
+          />
         </>
       ),
     },
@@ -64,7 +62,7 @@ function Supplier() {
   const deleteSupplierById = async (id: string) => {
     let res = await DeleteSupplierById(id);
 
-    if (res.status == 200) {
+    if (res.status === 200) {
       messageApi.open({
         type: "success",
         content: res.data.message,
@@ -92,14 +90,17 @@ function Supplier() {
       onCancel() {
         console.log("ยกเลิกการลบ");
       },
-    })};
+    });
+  };
 
   const getSupplier = async () => {
     let res = await GetSuppliers();
-    if (res.status == 200) {
+    if (res.status === 200) {
       setSupplier(res.data);
+      setFilteredSupplier(res.data);
     } else {
       setSupplier([]);
+      setFilteredSupplier([]);
       messageApi.open({
         type: "error",
         content: res.data.error,
@@ -107,6 +108,16 @@ function Supplier() {
     }
   };
 
+  const handleSearch = (value: string) => {
+    setSearchText(value);
+    const filteredData = supplier.filter((item) => {
+      return (item.name?.toLowerCase() || "").includes(value.toLowerCase()) ||
+             (item.address?.toLowerCase() || "").includes(value.toLowerCase()) ||
+             (item.tel || "").includes(value);
+    });
+    setFilteredSupplier(filteredData);
+  };
+  
   useEffect(() => {
     getSupplier();
   }, []);
@@ -116,9 +127,9 @@ function Supplier() {
       {contextHolder}
       <Row>
         <Col span={12}>
-        <Link to="/ingredient">
-        <Button className="button-back" icon={<LeftOutlined />}/>
-        </Link>
+          <Link to="/ingredient">
+            <Button className="button-back" icon={<LeftOutlined />}/>
+          </Link>
           <h1 className="title">จัดการข้อมูลผู้ผลิต</h1>
         </Col>
         <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
@@ -132,14 +143,27 @@ function Supplier() {
         </Col>
       </Row>
       <Divider />
+      { }
+      <Row gutter={[16, 0]} style={{ marginBottom: "20px" }}>
+        <Col span={6}>
+          <Input
+            className='input'
+            placeholder="Search Supplier"
+            prefix={<SearchOutlined />}
+            value={searchText}
+            onChange={(e) => handleSearch(e.target.value)}
+          />
+        </Col>
+      </Row>
       <div className="card-data" style={{ marginTop: 20 }}>
         <Table
           rowKey="ID"
           columns={columns}
-          dataSource={supplier}
+          dataSource={filteredSupplier}
         />
       </div>
     </div>
   );
 }
+
 export default Supplier;

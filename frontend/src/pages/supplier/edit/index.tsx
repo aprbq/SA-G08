@@ -1,17 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Space,
   Button,
   Col,
   Row,
-  Divider,
   Form,
   Input,
   Card,
   message,
-  DatePicker,
-  InputNumber,
-  Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { SupplierInterface } from "../../../interfaces/Supplier";
@@ -21,10 +17,8 @@ import { useNavigate, Link, useParams } from "react-router-dom";
 
 function IngredientEdit() {
   const navigate = useNavigate();
-  //let { id } = useParams();
   const { id } = useParams<{ id: any }>();
   const [messageApi, contextHolder] = message.useMessage();
-  const [supplier, setSupplier] = useState<SupplierInterface[]>([]);
   const [form] = Form.useForm();
 
   const getSupplierById = async (id: string) => {
@@ -38,7 +32,7 @@ function IngredientEdit() {
     } else {
       messageApi.open({
         type: "error",
-        content: "ไม่พบข้อมูลวัตถุดิบ",
+        content: "ไม่พบข้อมูลผู้ผลิต",
       });
       setTimeout(() => {
         navigate("/supplier");
@@ -67,7 +61,6 @@ function IngredientEdit() {
       });
     }
   };
-
 
   useEffect(() => {
     getSupplierById(id);
@@ -106,7 +99,6 @@ function IngredientEdit() {
                   >
                     <Input className="front-1" />
                   </Form.Item>
-
                 </Col>
                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                   <Form.Item
@@ -136,11 +128,7 @@ function IngredientEdit() {
                     <Input className="front-1" />
                   </Form.Item>
                 </Col>
-
               </Row>
-
-
-
               <Row justify="space-between">
                 <Col style={{ marginTop: "40px" }}>
                   <Form.Item>

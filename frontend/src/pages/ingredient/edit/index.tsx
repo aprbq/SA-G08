@@ -4,7 +4,6 @@ import {
   Button,
   Col,
   Row,
-  Divider,
   Form,
   Input,
   Card,
@@ -21,7 +20,6 @@ import { GetClass, GetIngredientsById, UpdateIngredientsById, GetSuppliers, GetU
 import { useNavigate, Link, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import moment from 'moment';
-
 const { Option } = Select;
 
 function IngredientEdit() {
@@ -58,7 +56,6 @@ function IngredientEdit() {
   };
 
   const onFinish = async (values: IngredientInterface) => {
-    // Convert string inputs to numbers
     const price = Number(values.quantity) * Number(values.unit_price);
     const payload = {
       ...values,
@@ -71,7 +68,7 @@ function IngredientEdit() {
     if (res.status === 200) {
       messageApi.open({
         type: "success",
-        content: "update successsfully",
+        content: "Update ingredient Successsfully",
       });
       setTimeout(() => {
         navigate("/ingredient");
@@ -79,7 +76,7 @@ function IngredientEdit() {
     } else {
       messageApi.open({
         type: "error",
-        content: "error update",
+        content: "Update ingredient Error",
       });
     }
   };
@@ -156,7 +153,6 @@ function IngredientEdit() {
                 <Input className="front-1" />
               </Form.Item>
             </Col>
-            
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label={<span className="front-1">ประเภท</span>}
@@ -165,14 +161,13 @@ function IngredientEdit() {
               >
                 <Select className="front-1" allowClear>
                   {Class.map((item) => (
-                    <Option value={item.ID} key={item.class}>
+                    <Option value={item.ID} key={item.class} className="front-1">
                       {item.class}
                     </Option>
                   ))}
                 </Select>
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label={<span className="front-1">จำนวน</span>}
@@ -189,7 +184,6 @@ function IngredientEdit() {
                 />
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label={<span className="front-1">หน่วย</span>}
@@ -198,14 +192,13 @@ function IngredientEdit() {
               >
                 <Select className="front-1" allowClear>
                   {unit.map((item) => (
-                    <Option value={item.ID} key={item.ID}>
+                    <Option value={item.ID} key={item.ID} className="front-1">
                       {item.unit}
                     </Option>
                   ))}
                 </Select>
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label={<span className="front-1">ราคาต่อหน่วย</span>}
@@ -222,7 +215,6 @@ function IngredientEdit() {
                 />
               </Form.Item>
             </Col>
-            
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label={<span className="front-1">ผู้ผลิต</span>}
@@ -231,14 +223,13 @@ function IngredientEdit() {
               >
                 <Select className="front-1" allowClear>
                   {supplier.map((item) => (
-                    <Option value={item.ID} key={item.name}>
+                    <Option value={item.ID} key={item.name} className="front-1">
                       {item.name}
                     </Option>
                   ))}
                 </Select>
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 label={<span className="front-1">วันหมดอายุ</span>}
@@ -252,7 +243,6 @@ function IngredientEdit() {
               </Form.Item>
             </Col>
           </Row>
-
           <Row justify="center">
             <Col style={{ marginTop: "40px" }}>
               <Form.Item>
@@ -262,7 +252,6 @@ function IngredientEdit() {
                       ย้อนกลับ
                     </Button>
                   </Link>
-
                   <Button
                     type="primary"
                     className="button-ok"
