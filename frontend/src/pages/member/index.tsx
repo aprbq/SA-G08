@@ -307,7 +307,8 @@ function Member() {
             <Card bordered={false}
                   style={{
                     backgroundColor: "#dafafa",
-                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                    margin: "0 10px" 
                   }}
                 >
               <Statistic title="Total Members" value={member.length} valueStyle={{ color: "black" }}  />
@@ -318,6 +319,7 @@ function Member() {
                   style={{
                     backgroundColor: "#e4f3d8",
                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                    margin: "0 10px" 
                   }}
                 >
               <Statistic title="Active Members"  value={activeMembers.length} valueStyle={{ color: "black" }}  />
@@ -328,6 +330,7 @@ function Member() {
                   style={{
                     backgroundColor: "#fc9994",
                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                    margin: "0 10px" 
                   }}
                 >
               <Statistic title="Unactive Members" value={member.length-activeMembers.length} valueStyle={{ color: "black" }}  />
