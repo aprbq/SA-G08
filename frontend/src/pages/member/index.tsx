@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message ,Modal,Card,Statistic, Input} from "antd";
+import { Space, Table, Button, Col, Row, Divider, message ,Modal,Card,Statistic, Input,Typography } from "antd";
 import { PlusOutlined, DeleteOutlined , EditOutlined,EyeOutlined} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { GetMember, DeleteMemberById ,UpdateMemberStatusById,UpdateMemberPointsById} from "../../services/https/index";
@@ -311,7 +311,11 @@ function Member() {
                     margin: "0 10px" 
                   }}
                 >
-              <Statistic title="Total Members" value={member.length} valueStyle={{ color: "black" }}  />
+                <Typography.Text style={{ color: "black", fontWeight: "bold" }}>
+                    Total Members
+                </Typography.Text>
+                <Statistic 
+                  value={member.length} valueStyle={{ color: "black" }}  />
             </Card>
         </Col>
         <Col span={5}>
@@ -322,7 +326,10 @@ function Member() {
                     margin: "0 10px" 
                   }}
                 >
-              <Statistic title="Active Members"  value={activeMembers.length} valueStyle={{ color: "black" }}  />
+              <Typography.Text style={{ color: "black", fontWeight: "bold" }}>
+              Active Members
+                </Typography.Text>
+              <Statistic   value={activeMembers.length} valueStyle={{ color: "black" }}  />
             </Card>
         </Col>
         <Col span={5}>
@@ -333,7 +340,10 @@ function Member() {
                     margin: "0 10px" 
                   }}
                 >
-              <Statistic title="Unactive Members" value={member.length-activeMembers.length} valueStyle={{ color: "black" }}  />
+              <Typography.Text style={{ color: "black", fontWeight: "bold" }}>
+              Unactive Members
+                </Typography.Text>
+              <Statistic  value={member.length-activeMembers.length} valueStyle={{ color: "black" }} titleStyle={{ color: "black", fontWeight: "bold" }}  />
             </Card>
         </Col>
       </Row>
