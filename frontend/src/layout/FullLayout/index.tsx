@@ -102,7 +102,7 @@ const FullLayout: React.FC = () => {
         <img src={logo} alt="Logo" />
       </div>
       <div className = "text-head">
-          <h2>BIG DOOK CAFE</h2>
+          <h2>CAFE IN(e)</h2>
       </div>
       <div className="employee-info" style={{ display: 'flex', alignItems: 'center' }}>
   {/* Display employee picture and other info */}

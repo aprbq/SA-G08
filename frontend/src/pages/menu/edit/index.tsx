@@ -222,7 +222,7 @@ function MenuEdit() {
     <div>
       {contextHolder}
       <Card className="card-promotion">
-        <h2>แก้ไขข้อมูลเมนู</h2>
+        <h2 className="heading-menu">แก้ไขข้อมูลเมนู</h2>
         <Divider />
 
         <Form

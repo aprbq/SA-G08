@@ -183,7 +183,7 @@ function MenuCreate() {
     <div>
       {contextHolder}
       <Card className="card-promotion">
-        <h2>เพิ่มข้อมูลเมนู</h2>
+        <h2 className="heading-menu">เพิ่มข้อมูลเมนู</h2>
         <Divider />
 
         <Form name="basic" layout="vertical" onFinish={onFinish} onFinishFailed={() => {

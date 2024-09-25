@@ -522,6 +522,13 @@ async function GetRowPromotion() {
     .catch((e) => e.response);
 }
 
+async function GetRowOrder() {
+  return await axios
+    .get(`${apiUrl}/countorder`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 
 
 export {
@@ -597,6 +604,7 @@ export {
   GetRowEmp,
   GetRowMember,
   GetRowIngredient,
+  GetRowOrder,
   GetRowPromotion,
 
   

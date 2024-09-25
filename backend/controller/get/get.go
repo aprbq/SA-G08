@@ -69,3 +69,15 @@ func CountRowPromotion(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": count})
 }
+
+func CountRowOrder(c *gin.Context) {
+	var count int64
+	db := config.DB()
+
+	if err := db.Table("orders").Count(&count).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": count})
+}

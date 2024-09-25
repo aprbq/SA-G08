@@ -547,6 +547,16 @@ body {
   line-height: 1.2; /* Improved readability with line height */
 }
 
+.heading-menu {
+  text-align: center;
+  color: #6d3617; /* Warm orange for consistency */
+  font-weight: bold;
+  font-family: "Mitr", sans-serif!important;;
+  font-size: 2rem; /* Slightly larger font size for emphasis */
+  margin: 20px 0; /* Balanced margin for spacing */
+  line-height: 1.2; /* Improved readability with line height */
+}
+
 h1 {
   color: #ff0000 !important;
   font-family: "Mitr", sans-serif!important;

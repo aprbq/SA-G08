@@ -11,7 +11,8 @@ import {
   GetRowIngredient, 
   GetRowEmp, 
   GetRowMember, 
-  GetRowPromotion  
+  GetRowPromotion,
+  GetRowOrder  
 } from "../../services/https/index";
 import { useEffect, useState } from "react";
 
@@ -29,6 +30,7 @@ export default function Index() {
   const [rowEmployee, setRowEmployee] = useState<number | undefined>(0);
   const [rowPromotion, setRowPromotion] = useState<number | undefined>(0);
   const [rowMember, setRowMember] = useState<number | undefined>(0);
+  const [rowOrder, setRowOrder] = useState<number | undefined>(0);
 
   const getRowMenu = async () => {
     let res = await GetRowMenu();
@@ -55,14 +57,23 @@ export default function Index() {
     setRowMember(res?.status === 200 ? res.data : 0);
   };
 
+  const getRowOrder = async () => {
+    let res = await GetRowOrder();
+    setRowOrder(res?.status === 200 ? res.data : 0);
+  };
+
   useEffect(() => {
     getRowMenu();
     getRowIngredient();
     getRowEmployee();
     getRowPromotion();
     getRowMember();
+    getRowOrder();
   }, []);
 
+  useEffect(() => {
+    console.log("hee", rowOrder)
+  }, []);
   return (
     <div className = "dashboard" >
       <Row gutter={[16, 16]}>
@@ -152,6 +163,23 @@ export default function Index() {
                     title="โปรโมชั่น" 
                     className="front-1"
                     value={`${rowPromotion?.data || 0} โปรโมชั่น`} 
+                    prefix={<UserOutlined />} 
+                  />
+                </Card>
+              </Col>
+              <Col xs={24} sm={12} lg={6}>
+                <Card 
+                  bordered={false}
+                  style={{ 
+                    backgroundColor: "#83613f",
+                    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                    textAlign: "center",
+                  }}
+                >
+                  <Statistic 
+                    title="ออเดอร์" 
+                    className="front-1"
+                    value={`${rowOrder?.data || 0} ออเดอร์`} 
                     prefix={<UserOutlined />} 
                   />
                 </Card>

@@ -138,6 +138,7 @@ func main() {
 		r.GET("/countmember", get.CountRowMember)
 		r.GET("/countemployee", get.CountRowEmp)
 		r.GET("/countpromotion", get.CountRowPromotion)
+		r.GET("/countorder", get.CountRowOrder)
 
 	}
 
