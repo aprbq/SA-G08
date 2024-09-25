@@ -86,11 +86,17 @@ function CustomerEdit() {
   };
 
   const onFinish = async (values: EmployeeInterface) => {
+
+    const imagePayload = {
+      picture_employee: fileList[0]?.url || fileList[0]?.thumbUrl || "", // Use the uploaded image URL
+    };
+    console.log("a",imagePayload);
+
     let payload = {
       ...values,
     };
 
-    const res = await UpdateEmployeeById(id, payload);
+    const res = await UpdateEmployeeById(id, {...payload,...imagePayload});
     if (res.status == 200) {
       messageApi.open({
         type: "success",
