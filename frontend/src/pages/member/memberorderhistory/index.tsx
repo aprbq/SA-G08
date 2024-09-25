@@ -12,7 +12,7 @@ const { confirm } = Modal;
 const { Text } = Typography;
 
 function MemberOrderHistory() {
-  const { id } = useParams<{ id: string }>();  // ดึง id จาก URL
+  const { id } = useParams<{ id: string }>();  
   const navigate = useNavigate();
   const [orders, setOrders] = useState<OrderInterface[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
@@ -30,7 +30,7 @@ function MemberOrderHistory() {
       title: "วันที่สั่งซื้อ",
       dataIndex: "order_date",
       key: "order_date",
-      render: (date) => dayjs(date).format("DD/MM/YYYY"), // แสดงวันที่ในรูปแบบที่ต้องการ
+      render: (date) => dayjs(date).format("DD/MM/YYYY"), 
     },
     {
       title: "ราคารวมของเมนู",
@@ -61,71 +61,15 @@ function MemberOrderHistory() {
       key: "points_transactions",
       render: (amount) => `${amount.toFixed(2)} แต้ม`,
     },
-    // {
-    //   title: "จำนวนแต้มที่เปลี่ยนแปลง",
-    //   dataIndex: "points_transactions",
-    //   render: (item) => Object.values(item.points_transactions),
-    // },
-    // {
-    //   title: "",
-    //   render: (record) => (
-    //     <Button
-    //       type="primary"
-    //       className="btn-delete"
-    //       icon={<DeleteOutlined />}
-    //       onClick={() => showDeleteConfirm(record.ID)}
-    //     ></Button>
-    //   ),
-    // },
   ];
-
-  const deleteOrderById = async (id: string) => {
-    try {
-      let res = await DeleteOrderById(id);
-      if (res.status === 200) {
-        messageApi.open({
-          type: "success",
-          content: res.data.message,
-        });
-        await getOrders(); // รีเฟรชรายการ
-      } else {
-        messageApi.open({
-          type: "error",
-          content: res.data.error,
-        });
-      }
-    } catch (error) {
-      messageApi.open({
-        type: "error",
-        content: "เกิดข้อผิดพลาดในการลบออเดอร์",
-      });
-    }
-  };
-
-  const showDeleteConfirm = (id: string) => {
-    confirm({
-      title: "คุณแน่ใจหรือว่าต้องการลบออเดอร์นี้?",
-      content: "การลบจะไม่สามารถยกเลิกได้",
-      okText: "ยืนยัน",
-      okType: "danger",
-      cancelText: "ยกเลิก",
-      onOk() {
-        deleteOrderById(id);
-      },
-      onCancel() {
-        console.log("ยกเลิกการลบ");
-      },
-    });
-  };
-
   const getOrders = async () => {
     let res = await GetOrder();
     if (res.status === 200) {
       if (id) {
-        const filteredOrders = res.data.filter((order: OrderInterface) => order.member_id.toString() === id); // กรองตาม id
+        const filteredOrders = res.data.filter((order: OrderInterface) => order.member_id.toString() === id); 
         setOrders(filteredOrders);
       } else {
-        setOrders(res.data);  // แสดงทั้งหมดถ้าไม่มี id
+        setOrders(res.data);  
       }
     } else {
       setOrders([]);
@@ -135,15 +79,12 @@ function MemberOrderHistory() {
       });
     }
   };
-
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
   useEffect(() => {
-    getOrders();  // เรียกใช้ getOrders เมื่อ component โหลดหรือ id เปลี่ยน
-  }, [id]);  // ใช้ id เป็น dependency
-
+    getOrders(); 
+  }, [id]);  
   return (
     <>
       {contextHolder}
@@ -193,5 +134,4 @@ function MemberOrderHistory() {
     </>
   );
 }
-
 export default MemberOrderHistory;

@@ -20,10 +20,7 @@ import {
   import { GetGender,GetStatus,GetMemberById, UpdateMemberById } from "../../../services/https";
   import { useNavigate, Link, useParams } from "react-router-dom";
   import dayjs from "dayjs";
-
-
   const { Option } = Select;
-
   function MemberEdit() {
     const navigate = useNavigate();
     const { id } = useParams<{ id: any }>();
@@ -31,7 +28,6 @@ import {
     const [status, setStatus] = useState<StatusInterface[]>([]);
     const [gender, setGender] = useState<GenderInterface[]>([]);
     const [member, setMember] = useState<MemberInterface[]>([]);
-
     const [form] = Form.useForm();
     const getMemberById = async (id: string) => {
       let res = await GetMemberById(id);
@@ -59,7 +55,6 @@ import {
         }, 2000);
       }
     };
-
     const onFinish = async (values: MemberInterface) => {
       let payload = {
         ...values,
@@ -82,7 +77,6 @@ import {
         });
       }
     };
-
     const getStatus = async () => {
       let res = await GetStatus();
     if (res.status == 200) {
@@ -95,7 +89,6 @@ import {
       });
     }
     };
-
     const getGender = async () => {
       let res = await GetGender();
       console.log("API Response for Menu:", res);
@@ -109,13 +102,11 @@ import {
       });
     }
     };
-
     useEffect(() => {
       getStatus();
       getGender();
       getMemberById(id);
     }, [id]);
-  
     return (
       <div>
         {contextHolder}
@@ -276,9 +267,7 @@ import {
                 <DatePicker style={{ width: "100%" }} />
               </Form.Item>
             </Col>
-            
-          </Row>
-          
+          </Row> 
             <Row justify="end">
               <Col style={{ marginTop: "40px" }}>
                 <Form.Item>
@@ -306,5 +295,4 @@ import {
       </div>
     );
   }
-  
   export default MemberEdit;
