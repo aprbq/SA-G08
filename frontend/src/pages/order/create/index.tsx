@@ -19,7 +19,7 @@ function OrderitemCreate() {
   const location = useLocation();
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  
+
   // สถานะสำหรับโปรโมชั่น
   const [promotions, setPromotions] = useState<PromotionInterface[]>([]);
   const [filteredPromotions, setFilteredPromotions] = useState<PromotionInterface[]>([]);
@@ -44,7 +44,7 @@ function OrderitemCreate() {
 
   const onFinish = (values: OrderItemInterface) => {
     const selectedMenu = menu.find((item) => item.ID === values.menu_id);
-  
+
     // ตรวจสอบว่าสินค้า out of stock หรือไม่
     if (selectedMenu?.stock_id === 2) {
       messageApi.open({
@@ -172,7 +172,7 @@ function OrderitemCreate() {
   const removeOrderItem = (itemToRemove: OrderItemInterface) => {
     const updatedOrderItems = orderItems.filter(item => item !== itemToRemove);
     setOrderItems(updatedOrderItems);
-  
+
     messageApi.open({
       type: 'success',
       content: 'ยกเลิกรายการสำเร็จ',
@@ -180,7 +180,7 @@ function OrderitemCreate() {
   };
 
   const getPromotionsForMenu = (menuId: number) => {
-    return promotions.filter(promotion => 
+    return promotions.filter(promotion =>
       promotion.menu?.includes(menuId) && promotion.promotion_type_id === 1 // เปลี่ยน 1 เป็น promotion_type_id ที่ต้องการ
     );
   };
@@ -214,7 +214,9 @@ function OrderitemCreate() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2>เพิ่มรายการสั่งซื้อ</h2>
           <Link to="/order">
-            <Button type="primary">ประวัติรายการสั่งซื้อ</Button>
+            <Button 
+              className = "btn-1"
+              type="primary">ประวัติรายการสั่งซื้อ</Button>
           </Link>
         </div>
         <Divider />
@@ -272,16 +274,19 @@ function OrderitemCreate() {
           <Row justify="end">
             <Col style={{ marginTop: '40px' }}>
               <Form.Item>
-                <Space>
+                <Space direction="vertical"> {/* ใช้ direction="vertical" เพื่อจัดเรียงในแนวตั้ง */}
                   <Button
+
                     type="primary"
                     htmlType="submit"
-                    className="confirm-button"
+                    className="next-button" 
                     icon={<PlusOutlined />}
                   >
                     ตกลง
                   </Button>
                   <Button
+                    
+                    className="confirm-button"
                     type="primary"
                     onClick={goToNextPage}
                   >
@@ -291,13 +296,23 @@ function OrderitemCreate() {
               </Form.Item>
             </Col>
           </Row>
+
         </Form>
 
         <Divider />
-        <Table columns={columns} dataSource={orderItems} rowKey="ID" />
+        <Table
+          columns={columns}
+          dataSource={orderItems} rowKey="ID"
+          className="custom-table"
+          rowClassName={(record, index) =>
+            index % 2 === 0 ? "table-row-light table-row-hover" : "table-row-dark table-row-hover"
+          }
+
+        />
       </Card>
     </div>
   );
 }
+
 
 export default OrderitemCreate;
