@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect,useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "../../App.css";
 import { UserOutlined, DashboardOutlined, ShoppingOutlined, LogoutOutlined, StarOutlined , AppstoreOutlined} from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, Button, message } from "antd";
+import { Breadcrumb, Layout, Menu, Button, message , Avatar} from "antd";
 import logo from "../../assets/logocafe.png";
 import Dashboard from "../../pages/dashboard";
 import Employee from "../../pages/employee";
@@ -35,12 +35,16 @@ import Member from "../../pages/member";
 import MemberCreate from "../../pages/member/create";
 import MemberEdit from "../../pages/member/edit";
 import MemberHistory from "../../pages/member/memberorderhistory";
-
+import { GetEmployeeById, DeleteEmployeeById } from "../../services/https/index";
+import { EmployeeInterface } from "../../interfaces/Employee";
 const { Header, Content, Footer } = Layout;
 
 const FullLayout: React.FC = () => {
   const page = localStorage.getItem("page");
   const [messageApi, contextHolder] = message.useMessage();
+  const [employeeData, setEmployeeData] = useState<EmployeeInterface[]>([]);
+  const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
+  
 
   const setCurrentPage = (val: string) => {
     localStorage.setItem("page", val);
@@ -54,6 +58,41 @@ const FullLayout: React.FC = () => {
     }, 2000);
   };
 
+  const getEmployeeById = async (id: string) => {
+    let res = await GetEmployeeById(id);
+    console.log("res",res.data)
+    if (res.status == 200) {
+        setEmployeeData(res.data);
+        console.log("emdata",employeeData)
+        console.log("a",setEmployeeData(res.data))
+    } else {
+      messageApi.error("Employee ID not found");
+    }
+  };
+
+// const fetchEmployeeData = async () => {
+//       // Get the logged-in employee's ID from localStorage (or other storage)
+//       const employeeId = localStorage.getItem("id"); // Assuming employee_id is stored in localStorage during login
+//       console.log("Employee ID",employeeId)
+//       if (employeeId) {
+//         const data = await GetEmployeeById(employeeId);
+//         if (data) {
+//           setEmployeeData(data);
+//         } else {
+//           messageApi.error("Failed to fetch employee data");
+//         }
+//       } else {
+//         messageApi.error("Employee ID not found");
+//       }
+//     };
+
+
+  useEffect(() => {
+    getEmployeeById(accountid);
+    // fetchEmployeeData();
+    // console.log("Data",employeeData)
+  }, []);
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
   {contextHolder}
@@ -65,11 +104,27 @@ const FullLayout: React.FC = () => {
       <div className = "text-head">
           <h2>BIG DOOK CAFE</h2>
       </div>
-      <div className = "logout" >
-        <Button className="btn-3" onClick={Logout} icon={<LogoutOutlined />}>
-          ออกจากระบบ
-        </Button>
-      </div>
+      <div className="employee-info" style={{ display: 'flex', alignItems: 'center' }}>
+  {/* Display employee picture and other info */}
+  {employeeData && (
+    <>
+      <Link to={`/employee/edit/${employeeData.ID}`}>
+        <Avatar
+          src={employeeData.picture_employee}
+          alt="Employee"
+          size="large"
+          style={{ marginRight: 10, cursor: 'pointer' }} // Add cursor pointer to indicate clickability
+        />
+      </Link>
+      <span style={{ marginRight: 10 }}>{employeeData.first_name}</span>
+      <span style={{ marginRight: 10 }}>{employeeData.last_name}</span>
+      <Button className="btn-3" onClick={Logout} icon={<LogoutOutlined />}>
+        ออกจากระบบ
+      </Button>
+    </>
+  )}
+</div>
+
     </Header>
     <Menu
         theme="dark"

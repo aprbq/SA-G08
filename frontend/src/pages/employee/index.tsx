@@ -65,32 +65,6 @@ function Employee() {
       render: (item) => Object.values(item.role_name),
     },
 
-    {
-      title: "",
-      render: (record) => (
-        <>
-          <Button
-            type="primary"
-            icon={<EditOutlined />}
-            className="btn-1"
-            onClick={() => navigate(`/employee/edit/${record.ID}`)}
-            style={{ marginRight: "8px" }}
-          >
-            แก้ไขข้อมูล
-          </Button>
-          {myId == record?.ID ? (
-            <></>
-          ) : (
-            <Button
-              className="btn-delete"
-              icon={<DeleteOutlined />}
-              onClick={() => deleteEmployeeById(record.ID)}
-            ></Button>
-          )}
-        </>
-      ),    
-    },
-
   ];
 
   const deleteEmployeeById = async (id: string) => {
