@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { message } from 'antd';
 import { OrderItemInterface } from '../../../interfaces/OrderItem';
 import { MenuInterface } from "../../../interfaces/Menu";
-import { GetMenu, GetOrderitem } from '../../../services/https/index';
+import { OrdersweetInterface } from '../../../interfaces/Ordersweet';
+import { GetMenu, GetOrderitem, GetOrdersweet } from '../../../services/https/index';
 
 interface OrderItem {
   menu_name: string; // เปลี่ยนเป็นชื่อฟิลด์ที่คุณมีใน order item
@@ -12,9 +13,11 @@ interface OrderItem {
 
 function QrPage() {
   const location = useLocation();
+  const navigate = useNavigate(); // ใช้ useNavigate แทน useHistory
   const [messageApi, contextHolder] = message.useMessage();
   const [menus, setMenu] = useState<MenuInterface[]>([]);
   const [orderitem, setOrderitem] = useState<OrderItemInterface[]>([]);
+  const [ordersweet, setOrdersweet] = useState<OrdersweetInterface[]>([]);
   const { totalAmount, orderItems, showQRCode } = location.state as { 
     totalAmount: number; 
     orderItems: OrderItem[]; 
@@ -38,6 +41,23 @@ function QrPage() {
     }
   };
 
+  const getOrdersweet = async () => {
+    try {
+      let res = await GetOrdersweet();
+      if (res.status === 200) {
+        setOrdersweet(res.data);
+      } else {
+        setOrdersweet([]);
+        messageApi.open({
+          type: 'error',
+          content: 'ไม่สามารถดึงข้อมูลระดับความหวานได้',
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching ordersweet data:", error);
+    }
+  };
+
   const getMenu = async () => {
     let res = await GetMenu();
     if (res.status === 200) {
@@ -51,9 +71,15 @@ function QrPage() {
     }
   };
 
+  const handleFinishOrder = () => {
+    setOrderitem([]); // เคลียร์ orderitem
+    navigate('/Order/create'); // นำทางไปยังหน้า /Order/create
+  };
+
   useEffect(() => {
     getOrderitem();
     getMenu();
+    getOrdersweet();
   }, []);
 
   return (
@@ -70,7 +96,7 @@ function QrPage() {
               const matchedMenu = menus.find(menu => menu.ID === item.menu_id);
               return (
                 <li key={index}>
-                  {matchedMenu ? matchedMenu.name : 'ไม่พบเมนู'} - {item.order_quantity} ชิ้น
+                  {matchedMenu ? matchedMenu.name : 'ไม่พบเมนู'} - {item.order_quantity} แก้ว
                 </li>
               );
             })}
@@ -84,6 +110,8 @@ function QrPage() {
           <img style={{ height: "400px" }} src="/public/images/qr1.png" alt="QR Code" className="qr-image" />
         </div>
       )}
+
+      <button onClick={handleFinishOrder}>รายการเสร็จสิ้น</button>
     </div>
   );
 }
