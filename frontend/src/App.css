@@ -146,6 +146,18 @@ body {
   text-align: left;
 }
 
+.text-head-login{
+  width: 8000px;
+  color: #2f2b2b !important;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  font-family: "Mitr", sans-serif;
+  font-weight: normal;
+  font-size: 25px;
+  font-style: normal;
+  text-align: left;
+}
+
+
 
 .add-button {
   background-color: #b80303;

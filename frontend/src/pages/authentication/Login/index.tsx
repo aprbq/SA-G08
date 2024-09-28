@@ -43,7 +43,7 @@ function SignInPages() {
               marginBottom: "0px"       // กำหนดระยะห่างด้านล่างทั้งหมด
             }}
             >
-              <div className = "text-head">
+              <div className = "text-head-login">
                 <h2 style={{ marginBottom: "0px" }}>CAFE IN(e)</h2> 
               </div>
             </Col>
