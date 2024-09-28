@@ -1,8 +1,8 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "../../App.css";
-import { UserOutlined, DashboardOutlined, ShoppingOutlined, LogoutOutlined, StarOutlined , AppstoreOutlined} from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, Button, message , Avatar} from "antd";
+import { UserOutlined, DashboardOutlined, ShoppingOutlined, LogoutOutlined, StarOutlined, AppstoreOutlined } from "@ant-design/icons";
+import { Breadcrumb, Layout, Menu, Button, message, Avatar } from "antd";
 import logo from "../../assets/logocafe.png";
 import Dashboard from "../../pages/dashboard";
 import Employee from "../../pages/employee";
@@ -44,7 +44,7 @@ const FullLayout: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [employeeData, setEmployeeData] = useState<EmployeeInterface[]>([]);
   const [accountid, setAccountID] = useState<any>(localStorage.getItem("id"));
-  
+
 
   const setCurrentPage = (val: string) => {
     localStorage.setItem("page", val);
@@ -60,102 +60,83 @@ const FullLayout: React.FC = () => {
 
   const getEmployeeById = async (id: string) => {
     let res = await GetEmployeeById(id);
-    console.log("res",res.data)
+    console.log("res", res.data)
     if (res.status == 200) {
-        setEmployeeData(res.data);
-        console.log("emdata",employeeData)
-        console.log("a",setEmployeeData(res.data))
+      setEmployeeData(res.data);
+      console.log("emdata", employeeData)
+      console.log("a", setEmployeeData(res.data))
     } else {
       messageApi.error("Employee ID not found");
     }
   };
 
-// const fetchEmployeeData = async () => {
-//       // Get the logged-in employee's ID from localStorage (or other storage)
-//       const employeeId = localStorage.getItem("id"); // Assuming employee_id is stored in localStorage during login
-//       console.log("Employee ID",employeeId)
-//       if (employeeId) {
-//         const data = await GetEmployeeById(employeeId);
-//         if (data) {
-//           setEmployeeData(data);
-//         } else {
-//           messageApi.error("Failed to fetch employee data");
-//         }
-//       } else {
-//         messageApi.error("Employee ID not found");
-//       }
-//     };
-
-
   useEffect(() => {
     getEmployeeById(accountid);
-    // fetchEmployeeData();
-    // console.log("Data",employeeData)
   }, []);
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-  {contextHolder}
-  <Layout>
-    <Header className="header">
-      <div className="header-logo">
-        <img src={logo} alt="Logo" />
-      </div>
-      <div className = "text-head">
-          <h2>CAFE IN(e)</h2>
-      </div>
-      <div className="employee-info" style={{ display: 'flex', alignItems: 'center' }}>
-  {/* Display employee picture and other info */}
-  {employeeData && (
-    <>
-      <Link to={`/employee/edit/${employeeData.ID}`}>
-        <Avatar
-          src={employeeData.picture_employee}
-          alt="Employee"
-          size="large"
-          style={{ marginRight: 10, cursor: 'pointer' }} // Add cursor pointer to indicate clickability
-        />
-      </Link>
-      <span style={{ marginRight: 10 }}>{employeeData.first_name}</span>
-      <span style={{ marginRight: 10 }}>{employeeData.last_name}</span>
-      <Button className="btn-3" onClick={Logout} icon={<LogoutOutlined />}>
-        ออกจากระบบ
-      </Button>
-    </>
-  )}
-</div>
+      {contextHolder}
+      <Layout>
+        <Header className="header">
+          <div className="header-logo">
+            <img src={logo} alt="Logo" />
+          </div>
+          <div className="text-head">
+            <h2>CAFE IN(e)</h2>
+          </div>
+          <div className="employee-info" style={{ display: 'flex', alignItems: 'center' }}>
+            {/* Display employee picture and other info */}
+            {employeeData && (
+              <>
+                <Link to={`/employee/edit/${employeeData.ID}`}>
+                  <Avatar
+                    src={employeeData.picture_employee}
+                    alt="Employee"
+                    size="large"
+                    style={{ marginRight: 10, cursor: 'pointer' }} // Add cursor pointer to indicate clickability
+                  />
+                </Link>
+                <span style={{ marginRight: 10 }}>{employeeData.first_name}</span>
+                <span style={{ marginRight: 10 }}>{employeeData.last_name}</span>
+                <Button className="btn-3" onClick={Logout} icon={<LogoutOutlined />}>
+                  ออกจากระบบ
+                </Button>
+              </>
+            )}
+          </div>
 
-    </Header>
-    <Menu
-        theme="dark"
-        mode="horizontal"
-        onClick={({ key }) => setCurrentPage(key)}
-        className="header-menu"
-      >
-        <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
-          <Link to="/">แดชบอร์ด</Link>
-        </Menu.Item>
-        <Menu.Item key="employee" icon={<UserOutlined />}>
-          <Link to="/employee">ข้อมูลพนักงาน</Link>
-        </Menu.Item>
-        <Menu.Item key="menu" icon={<ShoppingOutlined />}>
-          <Link to="/menus">เมนู</Link>
-        </Menu.Item>
-        <Menu.Item key="ingredient" icon={<AppstoreOutlined />}>
-          <Link to="/ingredient">วัตถุดิบ</Link>
-        </Menu.Item>
-        <Menu.Item key="Order" icon={<ShoppingOutlined />}>
-          <Link to="/Order/create">รายการสั่งซื้อ</Link>
-        </Menu.Item>
-        <Menu.Item key="promotion" icon={<StarOutlined />}>
-          <Link to="/promotion">โปรโมชั่น</Link>
-        </Menu.Item>
-        <Menu.Item key="member" icon={<UserOutlined />}>
-          <Link to="/member">สมาชิก</Link>
-        </Menu.Item>
-      </Menu>
-        <Content className="middle-bg" style={{ margin: "0px", paddingTop: "0px"}}>
-          <Breadcrumb className="middle-bg" style={{ margin: "0px", height:"0px"}} />
+        </Header>
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          onClick={({ key }) => setCurrentPage(key)}
+          className="header-menu"
+        >
+          <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
+            <Link to="/">แดชบอร์ด</Link>
+          </Menu.Item>
+          <Menu.Item key="employee" icon={<UserOutlined />}>
+            <Link to="/employee">ข้อมูลพนักงาน</Link>
+          </Menu.Item>
+          <Menu.Item key="menu" icon={<ShoppingOutlined />}>
+            <Link to="/menus">เมนู</Link>
+          </Menu.Item>
+          <Menu.Item key="ingredient" icon={<AppstoreOutlined />}>
+            <Link to="/ingredient">วัตถุดิบ</Link>
+          </Menu.Item>
+          <Menu.Item key="Order" icon={<ShoppingOutlined />}>
+            <Link to="/Order/create">รายการสั่งซื้อ</Link>
+          </Menu.Item>
+          <Menu.Item key="promotion" icon={<StarOutlined />}>
+            <Link to="/promotion">โปรโมชั่น</Link>
+          </Menu.Item>
+          <Menu.Item key="member" icon={<UserOutlined />}>
+            <Link to="/member">สมาชิก</Link>
+          </Menu.Item>
+        </Menu>
+        <Content className="middle-bg" style={{ margin: "0px", paddingTop: "0px" }}>
+          <Breadcrumb className="middle-bg" style={{ margin: "0px", height: "0px" }} />
           <div
             className="middle-bg"
             style={{

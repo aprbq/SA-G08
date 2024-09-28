@@ -1,11 +1,12 @@
 package employee
 
 import (
-    "net/http"
+	"log"
+	"net/http"
 
-    "github.com/gin-gonic/gin"
-    "example.com/sa-67-example/config"
-    "example.com/sa-67-example/entity"
+	"example.com/sa-67-example/config"
+	"example.com/sa-67-example/entity"
+	"github.com/gin-gonic/gin"
 )
 
 // GetAll retrieves all users along with their associated gender
@@ -24,6 +25,8 @@ func GetAll(c *gin.Context) {
 // Get retrieves a single user by ID along with their associated gender
 func Get(c *gin.Context) {
     ID := c.Param("id")
+    log.Println("Received ID:", ID)
+    
     var employee entity.Employee
     db := config.DB()
     results := db.Preload("Gender").Preload("Role").First(&employee, ID)
@@ -69,7 +72,7 @@ func Delete(c *gin.Context) {
     id := c.Param("id")
     db := config.DB()
 
-    if tx := db.Exec("DELETE FROM employee WHERE id = ?", id); tx.RowsAffected == 0 {
+    if tx := db.Exec("DELETE FROM employees WHERE id = ?", id); tx.RowsAffected == 0 {
         c.JSON(http.StatusBadRequest, gin.H{"error": "id not found"})
         return
     }

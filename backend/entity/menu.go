@@ -1,24 +1,23 @@
 package entity
 
 import (
-	
 	"gorm.io/gorm"
 )
 
 type Menu struct {
 	gorm.Model
-	Name 		string    	`json:"name"`
-	Description  	string    	`json:"description"`
-	Price  		float32    	`json:"price"`
-	Picture     string      `gorm:"type:longtext" json:"picture"`
-	
-	CategoryID  	uint     	`json:"category_id"`
-	Category    	Category   	`gorm:"foreignKey: CategoryID"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float32 `json:"price"`
+	Picture     string  `gorm:"type:longtext" json:"picture"`
 
-	StockID 	uint    `json:"stock_id"`
-	Stock   	Stock `gorm:"foreignKey:StockID" json: "stock"`
+	CategoryID uint     `json:"category_id"`
+	Category   Category `gorm:"foreignKey: CategoryID"`
 
-	EmployeeID uint      `json:"employee_id"`
+	StockID uint  `json:"stock_id"`
+	Stock   Stock `gorm:"foreignKey:StockID" json: "stock"`
+
+	EmployeeID uint     `json:"employee_id"`
 	Employee   Employee `gorm:"foreignKey:EmployeeID" json: "employee"`
 
 	MenuIngredients []MenuIngredient `json:"menu_ingredients" gorm:"foreignKey:MenuID"`

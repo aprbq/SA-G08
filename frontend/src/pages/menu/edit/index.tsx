@@ -15,7 +15,7 @@ import {
 } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
-import { GetMenuById, UpdateMenuById, GetCategory, GetStock, GetMenuIngredientById, UpdateMenuIngredientById, GetIngredients , GetUnits} from "../../../services/https/index";
+import { GetMenuById, UpdateMenuById, GetCategory, GetStock, GetMenuIngredientById, UpdateMenuIngredientById, GetIngredients, GetUnits } from "../../../services/https/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 
@@ -51,7 +51,7 @@ function MenuEdit() {
       messageApi.open({
         type: "error",
         content: "ไม่พบข้อมูล",
-        className:"front-1"
+        className: "front-1"
       });
       setTimeout(() => {
         navigate("/menus");
@@ -73,7 +73,7 @@ function MenuEdit() {
       messageApi.open({
         type: "error",
         content: "ไม่สามารถดึงข้อมูลวัตถุดิบได้",
-        className:"front-1"
+        className: "front-1"
       });
     }
   };
@@ -92,7 +92,7 @@ function MenuEdit() {
         messageApi.open({
           type: "success",
           content: menuRes.data.message,
-          className:"front-1"
+          className: "front-1"
         });
 
         const ingredientsPayload = {
@@ -109,11 +109,11 @@ function MenuEdit() {
           messageApi.open({
             type: "success",
             content: "อัปเดตส่วนประกอบเมนูสำเร็จ",
-            className:"front-1"
+            className: "front-1"
           });
         } else {
           throw new Error("อัปเดตส่วนประกอบเมนูไม่สำเร็จ");
-          className:"front-1"
+          className: "front-1"
         }
 
         setTimeout(() => {
@@ -123,14 +123,14 @@ function MenuEdit() {
         messageApi.open({
           type: "error",
           content: menuRes.data.error,
-          className:"front-1"
+          className: "front-1"
         });
       }
     } catch (error) {
       messageApi.open({
         type: "error",
         content: "เกิดข้อผิดพลาดขณะอัปเดตเมนู",
-        className:"front-1"
+        className: "front-1"
       });
     }
   };
@@ -163,7 +163,7 @@ function MenuEdit() {
       messageApi.open({
         type: "error",
         content: res.data.error,
-        className:"front-1"
+        className: "front-1"
       });
     }
   };
@@ -177,7 +177,7 @@ function MenuEdit() {
       messageApi.open({
         type: "error",
         content: res.data.error,
-        className:"front-1"
+        className: "front-1"
       });
     }
   };
@@ -191,7 +191,7 @@ function MenuEdit() {
       messageApi.open({
         type: "error",
         content: res.data.error,
-        className:"front-1"
+        className: "front-1"
       });
     }
   };
@@ -231,7 +231,7 @@ function MenuEdit() {
           layout="vertical"
           onFinish={onFinish}
           onFinishFailed={() => {
-            messageApi.error({content: <span className="front-1">กรุณาตรวจสอบข้อมูลและเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ</span>,});
+            messageApi.error({ content: <span className="front-1">กรุณาตรวจสอบข้อมูลและเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ</span>, });
           }}
           autoComplete="off"
         >
@@ -268,7 +268,7 @@ function MenuEdit() {
                 name="name"
                 rules={[{ required: true, message: <span className="error-front">กรุณากรอกชื่อ !</span> }]}
               >
-                <Input className="front-1" placeholder="กรุณากรอกชื่อ"/>
+                <Input className="front-1" placeholder="กรุณากรอกชื่อ" />
               </Form.Item>
             </Col>
 
@@ -294,7 +294,7 @@ function MenuEdit() {
                 name="description"
                 rules={[{ required: true, message: <span className="error-front">กรุณากรอกคำอธิบาย !</span> }]}
               >
-                <Input className="front-1" placeholder="กรุณากรอกคำอธิบาย"/>
+                <Input className="front-1" placeholder="กรุณากรอกคำอธิบาย" />
               </Form.Item>
             </Col>
 
@@ -324,7 +324,7 @@ function MenuEdit() {
                   {
                     validator: async (_, menu_ingredients) => {
                       if (!menu_ingredients || menu_ingredients.length < 1) {
-                        return Promise.reject(new Error('กรุณาเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ!') );
+                        return Promise.reject(new Error('กรุณาเพิ่มวัตถุดิบอย่างน้อยหนึ่งรายการ!'));
                       }
                     },
                   },

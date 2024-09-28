@@ -44,7 +44,7 @@ function SignInPages() {
             }}
             >
               <div className = "text-head">
-                <h2 style={{ marginBottom: "0px" }}>BIG DOOK CAFE</h2> 
+                <h2 style={{ marginBottom: "0px" }}>CAFE IN(e)</h2> 
               </div>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>

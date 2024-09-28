@@ -1,7 +1,7 @@
 export interface MenuInterface {
 	ID?: number;
 	name?: string;
-	description?:   string;
+	description?: string;
 	price?: number;
 	picture?: string;
 	category_id?: number;
@@ -10,9 +10,8 @@ export interface MenuInterface {
 	menu_ingredients?: {
 		ingredient_id: number;
 		quantity: number;
-	  }[];
-	condition?: {
-	menu_id: number;
 	}[];
-  }
-  
+	condition?: {
+		menu_id: number;
+	}[];
+}

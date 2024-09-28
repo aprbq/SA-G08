@@ -121,7 +121,7 @@ func SetupDatabase() {
 	db.FirstOrCreate(&StockOut, &entity.Stock{Stock: "Out of stock"})
 
 	db.FirstOrCreate(&UnitGram, &entity.Unit{Unit: "Gram"})
-	db.FirstOrCreate(&UnitLit, &entity.Unit{Unit: "Lit"})
+	db.FirstOrCreate(&UnitLit, &entity.Unit{Unit: "mL"})
 
 	db.FirstOrCreate(&PromotionTypeMember, &entity.PromotionType{PromotionTypeName: "Member"})
 	db.FirstOrCreate(&PromotionTypeAll, &entity.PromotionType{PromotionTypeName: "All"})
@@ -151,7 +151,7 @@ func SetupDatabase() {
 	Employee := &entity.Employee{
 		FirstName: "Software",
 		LastName:  "Analysis",
-		Email:     "sa67@gmail.com",
+		Email:     "sa@gmail.com",
 		Username:  "Adminroot",
 		Password:  hashedPassword,
 		RoleID:      1,
@@ -179,8 +179,8 @@ func SetupDatabase() {
 	}
 
 	Ingre := &entity.Ingredients{
-		Name:       "Nom",
-		Quantity:   10,
+		Name:       "เมล็ดกาแฟ",
+		Quantity:   10000,
 		UnitID:      1,
 		UnitPrice:  80,
 		Price:      800,
@@ -190,12 +190,12 @@ func SetupDatabase() {
 		EmployeeID: 1,
 	}
 	db.FirstOrCreate(Ingre, &entity.Ingredients{
-		Name: "Nom",
+		Name: "เมล็ดกาแฟ",
 	})
 
 	Menu := &entity.Menu{
-		Name:        "Espresso",
-		Description: "ajh",
+		Name:        "Espresso shot",
+		Description: "เอสเพรสโซ่ 1shot 30cc",
 		Price:       45,
 		CategoryID:  1,
 		StockID:     1,
@@ -203,31 +203,16 @@ func SetupDatabase() {
 		EmployeeID:  1,
 	}
 	db.FirstOrCreate(Menu, &entity.Menu{
-		Name: "Espresso",
+		Name: "Espresso shot",
 	})
 
 	MenuIngredient := &entity.MenuIngredient{
 		MenuID:        1,
 		IngredientsID: 1,
-		Quantity:      10,
+		Quantity:      7,
 	}
 	db.FirstOrCreate(MenuIngredient, &entity.MenuIngredient{})
-	Promotion := &entity.Promotion{
-		PromotionName:   "a",
-		Description:     "a",
-		StartDate:       exp_date,
-		EndDate:         exp_date,
-		PointsAdded:     1,
-		PointsUse:       1,
-		PromotionTypeID: 1,
-		DiscountValue:   1,
-		DiscountTypeID:  1,
-		StatusID:        1,
-		EmployeeID:      1,
-	}
-	db.FirstOrCreate(Promotion, &entity.Promotion{
-		PromotionName: "a",
-	})
+	
 	TestDate, _ := time.Parse("2006-01-02", "1999-05-05")
 	Member := &entity.Member{
 		FristName:   "NonMember",
@@ -261,20 +246,6 @@ func SetupDatabase() {
 	// 	PaymentAmount: 50,
 	// })
 
-	Order := &entity.Order{
-		OrderDate:       exp_date,
-		PaymentAmount:   50,
-		EmployeeID:      1,
-		PromotionID:     1,
-		PaymentmethodID: 1,
-		MemberID: 1,
-	}
 	
-	db.FirstOrCreate(Order, &entity.Order{
-		EmployeeID:      1,
-		PromotionID:     1,
-		PaymentmethodID: 1,
-		// เพิ่มฟิลด์อื่น ๆ ที่จำเป็นที่คุณต้องการตรวจสอบ
-	})
 	
 }
