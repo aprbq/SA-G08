@@ -22,8 +22,5 @@ type Orderitem struct {
 
 	 MenuID  	uint		`json:"menu_id"`
 	 Menu    	*Ordersweet   	`gorm:"foreignKey:MenuID" json:"menu"`
-
-	
-	// OrderHasMenu []OrderHasMenu `gorm:"foreignKey:OrderitemID"`
 	
 }

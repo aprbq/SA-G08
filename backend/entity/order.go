@@ -23,9 +23,6 @@ type Order struct {
 	Paymentmethod    	*Paymentmethod   	`gorm:"foreignKey:PaymentmethodID" json:"paymentmethod"`
 
 	Orderitem []Orderitem `gorm:"foreignKey:OrderID"`
-	//PointsTransactions []PointsTransactions `gorm:"foreignKey:OrderID"`
-
-	//MemberOrderHistory []MemberOrderHistory `gorm:"foreignKey:OrderID"`
 
 	MemberID 	uint		`json:"member_id"`
 	Member    	*Member   	`gorm:"foreignKey: MemberID" json:"member"`
