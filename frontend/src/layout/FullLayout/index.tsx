@@ -97,8 +97,8 @@ const FullLayout: React.FC = () => {
                     style={{ marginRight: 10, cursor: 'pointer' }} // Add cursor pointer to indicate clickability
                   />
                 </Link>
-                <span style={{ marginRight: 10 }}>{employeeData.first_name}</span>
-                <span style={{ marginRight: 10 }}>{employeeData.last_name}</span>
+                <span className = "front-white" style={{ marginRight: 10 }}>{employeeData.first_name}</span>
+                <span className = "front-white" style={{ marginRight: 10 }}>{employeeData.last_name}</span>
                 <Button className="btn-3" onClick={Logout} icon={<LogoutOutlined />}>
                   ออกจากระบบ
                 </Button>
