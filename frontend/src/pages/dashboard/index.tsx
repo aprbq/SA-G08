@@ -1,4 +1,5 @@
 import { Col, Row, Card, Statistic } from "antd";
+import { Link } from "react-router-dom";
 import { 
   AuditOutlined, 
   UserOutlined, 
@@ -84,6 +85,7 @@ export default function Index() {
           <Card className="dashboard-card">
             <Row gutter={[16, 16]}>
               <Col xs={24} sm={12} lg={12}>
+              <Link to ="/menus">
                 <Card className="dashboard-item"
                   bordered={false}
                   style={{ 
@@ -98,8 +100,10 @@ export default function Index() {
                     prefix={<StockOutlined />} 
                   />
                 </Card>
+                </Link>
               </Col>
               <Col xs={24} sm={12} lg={12}>
+              <Link to ="/ingredient">
                 <Card 
                   bordered={false}
                   className="dashboard-item"
@@ -115,8 +119,10 @@ export default function Index() {
                     prefix={<AuditOutlined />} 
                   />
                 </Card>
+                </Link>
               </Col>
               <Col xs={24} sm={12} lg={6}>
+              <Link to ="/employee">
                 <Card 
                   bordered={false}
                   style={{ 
@@ -132,6 +138,7 @@ export default function Index() {
                     prefix={<PieChartOutlined />} 
                   />
                 </Card>
+                </Link>
               </Col>
               <Col xs={24} sm={12} lg={6}>
                 <Card 
@@ -150,7 +157,9 @@ export default function Index() {
                   />
                 </Card>
               </Col>
+              
               <Col xs={24} sm={12} lg={6}>
+              <Link to = "/promotion">
                 <Card 
                   bordered={false}
                   style={{ 
@@ -166,8 +175,10 @@ export default function Index() {
                     prefix={<UserOutlined />} 
                   />
                 </Card>
+                </Link>
               </Col>
               <Col xs={24} sm={12} lg={6}>
+              <Link to = "/order">
                 <Card 
                   bordered={false}
                   style={{ 
@@ -183,6 +194,7 @@ export default function Index() {
                     prefix={<UserOutlined />} 
                   />
                 </Card>
+                </Link>
               </Col>
             </Row>
           </Card>
