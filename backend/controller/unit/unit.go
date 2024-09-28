@@ -1,9 +1,9 @@
 package unit
 
 import (
-	"github.com/gin-gonic/gin"
 	"example.com/sa-67-example/config"
-    "example.com/sa-67-example/entity"
+	"example.com/sa-67-example/entity"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
 )
@@ -34,11 +34,11 @@ func GetUnits(c *gin.Context) {
 	c.JSON(http.StatusOK, unit)
 }
 func GetAll(c *gin.Context) {
-    db := config.DB()
-    var class []entity.Class
-    db.Find(&class)
+	db := config.DB()
+	var class []entity.Class
+	db.Find(&class)
 
-    c.JSON(http.StatusOK, &class)
+	c.JSON(http.StatusOK, &class)
 }
 func GetUnit(c *gin.Context) {
 	db := config.DB()

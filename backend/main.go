@@ -68,6 +68,7 @@ func main() {
 		rounter.POST("/ingredients", ingredients.CreateIngredient)
 		rounter.DELETE("/ingredients/:id", ingredients.Delete)
 		rounter.GET("/class", class.GetAll)
+		rounter.POST("/class", class.CreateClass)
 
 		rounter.POST("/unit", unit.CreateUnit)
 		rounter.GET("/unit", unit.GetUnits)

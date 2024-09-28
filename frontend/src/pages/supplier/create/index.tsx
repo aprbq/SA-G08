@@ -66,9 +66,9 @@ import {
                   name="name"
                   rules={[
                     { required: true, message: "กรุณากรอกชื่อผู้ผลิต !" },
-                    { 
-                      pattern: /^[a-zA-Z\sก-ฮา-์]*$/,
-                      message: "กรุณากรอกชื่อที่มีแค่ตัวอักษรเท่านั้น !" 
+                    {
+                      pattern: /^[a-zA-Z\sก-ฮา-์.]*$/,
+                      message: "กรุณากรอกชื่อที่มีแค่ตัวอักษรและจุดเท่านั้น!"
                     },]}
                 >
                   <Input className="front-1" placeholder="Enter name"/>
